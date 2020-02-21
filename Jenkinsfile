@@ -1,5 +1,4 @@
 pipeline {
-    agent any
     def maven_home
     def workspace
     stages {
