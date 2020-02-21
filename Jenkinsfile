@@ -1,8 +1,8 @@
 pipeline {
     stages {
         stage('Init') {
-            def maven_home = tool 'maven_3.6.3'
-            def workspace = pwd()
+            maven_home = tool 'maven_3.6.3'
+            workspace = pwd()
         }
         stage('Build') {
             steps {
