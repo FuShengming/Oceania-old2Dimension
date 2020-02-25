@@ -34,7 +34,7 @@ class HelloWorldControllerTest {
                 .andReturn().getResponse().getContentAsString(); //将相应的数据转换为字符
 
         System.out.println(responseString);
-        Assert.assertEquals(responseString, "Hello O2D!");
+        Assert.assertEquals("Hello O2D!", responseString);
     }
 
 }
