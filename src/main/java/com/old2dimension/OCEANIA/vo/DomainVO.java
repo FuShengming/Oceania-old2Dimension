@@ -2,8 +2,8 @@ package com.old2dimension.OCEANIA.vo;
 
 import java.util.ArrayList;
 
-public class DomainForm {
+public class DomainVO {
     private int verticesNum;
-    ArrayList<EdgeForm> edgeForms;
+    ArrayList<EdgeVO> edgeVOS;
     int id;
 }

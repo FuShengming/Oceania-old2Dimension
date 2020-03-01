@@ -5,7 +5,7 @@ import com.old2dimension.OCEANIA.po.Weight;
 
 import java.util.ArrayList;
 
-public class EdgeForm {
+public class EdgeVO {
     private Vertex start;
     private Vertex end;
     private ArrayList<Weight> weights;
