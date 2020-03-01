@@ -8,6 +8,6 @@ public class PathVO {
     private ArrayList<Edge> edges;
 
     public String toString() {
-        return null;
+        return "";
     }
 }
