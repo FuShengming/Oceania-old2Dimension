@@ -1,5 +1,6 @@
-package com.old2dimension.OCEANIA;
+package com.old2dimension.OCEANIA.controller;
 
+import com.old2dimension.OCEANIA.OceaniaApplication;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
