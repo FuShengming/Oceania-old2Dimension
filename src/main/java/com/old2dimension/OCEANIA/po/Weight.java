@@ -15,4 +15,11 @@ public abstract class Weight {
     public String getWeightName() {
         return weightName;
     }
+
+    public Weight() {
+    }
+
+    public Weight(double weightValue) {
+        this.weightValue = weightValue;
+    }
 }

@@ -1,7 +1,5 @@
 package com.old2dimension.OCEANIA.controller;
 
-import com.old2dimension.OCEANIA.bl.GraphCaculate;
-
 import com.old2dimension.OCEANIA.blImpl.GraphCalculateImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +13,7 @@ public class HelloWorldController {
     //Hello World
     @GetMapping("/hello")
     public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-        graphCalculateImpl.initializeGraph();
+//        graphCalculateImpl.initializeGraph();
         return String.format("Hello %s!", name);
     }
 

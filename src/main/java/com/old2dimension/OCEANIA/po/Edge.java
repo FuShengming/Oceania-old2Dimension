@@ -45,14 +45,29 @@ public class Edge {
     }
 
     public Weight getWeight(String name) {
-        for(Weight w:weights){
+        for (Weight w : weights) {
 
-            if(w.getWeightName().equals(name)){
+            if (w.getWeightName().equals(name)) {
                 return w;
             }
         }
-        System.out.println("没有名字为"+name+"的阈值");
+        System.out.println("没有名字为" + name + "的阈值");
         return null;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Edge)) return false;
+        return ((Edge) obj).getId() == this.getId();
+    }
+
+    public boolean passFilter(ArrayList<Weight> thresholds) {
+        for (Weight threshold : thresholds) {
+            for (Weight weight : this.weights) {
+                if (!weight.weightName.equals(threshold.weightName)) continue;
+                if (weight.weightValue < threshold.weightValue) return false;
+            }
+        }
+        return true;
+    }
 }
