@@ -4,9 +4,10 @@ import java.util.ArrayList;
 
 public class Domain {
     private ArrayList<Vertex> vertices;
-    private ArrayList<Edge> edges;
-    private int id;
 
+    private ArrayList<Edge> edges;
+
+    private int id;
 
     public int getId() {
         return id;
@@ -16,9 +17,25 @@ public class Domain {
         this.id = id;
     }
 
+    public ArrayList<Vertex> getVertices() {
+        return vertices;
+    }
 
-    public Domain(int verticesNum) {
-        vertices = new ArrayList<>();
-        edges = new ArrayList<>();
+    public void setVertices(ArrayList<Vertex> vertices) {
+        this.vertices = vertices;
+    }
+
+    public ArrayList<Edge> getEdges() {
+        return edges;
+    }
+
+    public void setEdges(ArrayList<Edge> edges) {
+        this.edges = edges;
+    }
+
+
+    public Domain(ArrayList<Vertex> vertexes,ArrayList<Edge> edges) {
+        setEdges(edges);
+        setVertices(vertexes);
     }
 }
