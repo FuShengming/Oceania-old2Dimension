@@ -22,23 +22,25 @@ public class GraphCalculateImpl implements GraphCaculate {
    public ArrayList<Edge> allEdges;
    public DomainSet domainSet;
 
-    public GraphCalculateImpl(){
-        initializeGraph();
+    public GraphCalculateImpl( ){
+
     }
     public ResponseVO findPath(FuncInfoForm func1, FuncInfoForm func2){return new ResponseVO();}
     public ResponseVO getConnectedDomains(ArrayList<WeightForm> weightForms){return new ResponseVO();}
     public ResponseVO getAmbiguousFuncInfos(String funcName){return new ResponseVO();}
 
-    public void initializeGraph(){
-        Set<String> lines = new HashSet<String>();
+    public void initializeGraph(String filename ){
+        ArrayList<String> lines = new ArrayList<String>();
         try {
-            FileReader fr = new FileReader("call_dependencies.txt");
+            FileReader fr = new FileReader(filename);
             BufferedReader bf = new BufferedReader(fr);
             String str;
             // 按行读取字符串
             while ((str = bf.readLine()) != null) {
                // System.out.println(str.substring(2));
-                lines.add(str.substring(2));
+                String curData=str.substring(2);
+                if(!lines.contains(curData))
+                    lines.add(curData);
             }
             bf.close();
             fr.close();
@@ -109,7 +111,7 @@ public class GraphCalculateImpl implements GraphCaculate {
             e.addWeight(curCloseness);
         }
 
-        System.out.println(vertexList.size());
+        //System.out.println(vertexList.size());
 
     }
     private Vertex str2Vertex(String curString){
