@@ -1,6 +1,8 @@
 package com.old2dimension.OCEANIA.blImpl;
 
 import com.old2dimension.OCEANIA.po.*;
+import com.old2dimension.OCEANIA.vo.ResponseVO;
+import com.old2dimension.OCEANIA.vo.WeightForm;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,25 +13,26 @@ class GraphCalculateImplTest {
 
     private static ArrayList<Edge> edges;
     private static GraphCalculateImpl graphCalculate;
+    private static ArrayList<WeightForm> weights;
 
     @BeforeAll
     static void initialize() {
         /* Use case
-            v0 → v1
-             ↓    ↓
-       v2 → v3 → v4
-        ↑    ↓
-       v5 ← v6
-       edge start   end closeness
-       e0   v0      v1  2/3
-       e1   v0      v3  2/4
-       e2   v1      v4  2/3
-       e3   v2      v3  2/3
-       e4   v3      v4  2/4
-       e5   v3      v6  2/3
-       e6   v5      v2  2/2
-       e7   v6      v5  2/2
-    */
+                v0 → v1
+                 ↓    ↓
+           v2 → v3 → v4
+            ↑    ↓
+           v5 ← v6
+           edge start   end closeness
+           e0   v0      v1  2/3
+           e1   v0      v3  2/4
+           e2   v1      v4  2/3
+           e3   v2      v3  2/3
+           e4   v3      v4  2/4
+           e5   v3      v6  2/3
+           e6   v5      v2  2/2
+           e7   v6      v5  2/2
+        */
         ArrayList<Vertex> vertices = new ArrayList<>();
         for (int i = 0; i <= 6; i++) {
             Vertex vertex = new Vertex();
@@ -67,6 +70,9 @@ class GraphCalculateImplTest {
         edges.get(7).setEnd(vertices.get(5));
         edges.get(7).addWeight(new Closeness(2.0 / 2));
         graphCalculate = new GraphCalculateImpl();
+        graphCalculate.allEdges = edges;
+        weights = new ArrayList<>();
+        weights.add(new WeightForm("closeness", 0.55));
     }
 
     @Test
@@ -79,9 +85,15 @@ class GraphCalculateImplTest {
 
     @Test
     void filterByWeights2() {
-        ArrayList<Weight> weights = new ArrayList<>();
-        weights.add(new Closeness(0.6));
         DomainSet domainSet = graphCalculate.filterByWeights(edges, weights);
         Assert.assertEquals(2, domainSet.getDomainSetSize());
+    }
+
+    @Test
+    void getConnectedDomains() {
+        ResponseVO responseVO = graphCalculate.getConnectedDomains(weights);
+        Assert.assertEquals(2, ((DomainSet) responseVO.getContent()).getDomainSetSize());
+        Assert.assertEquals(4, ((DomainSet) responseVO.getContent()).getDomains().get(0).getVertices().size());
+        Assert.assertEquals(3, ((DomainSet) responseVO.getContent()).getDomains().get(1).getVertices().size());
     }
 }

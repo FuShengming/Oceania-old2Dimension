@@ -29,7 +29,15 @@ public class GraphCalculateImpl implements GraphCalculate {
     }
 
     public ResponseVO getConnectedDomains(ArrayList<WeightForm> weightForms) {
-        return new ResponseVO();
+        try {
+            domainSet = filterByWeights(allEdges, weightForms);
+            domainSet.sortByVerticesNum();
+            return ResponseVO.buildSuccess(domainSet);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseVO.buildFailure("连通域生成失败");
+        }
+
     }
 
     public ResponseVO getAmbiguousFuncInfos(String funcName) {
@@ -149,9 +157,9 @@ public class GraphCalculateImpl implements GraphCalculate {
      * input: 连通域集合、阈值集合
      * output: 连通域集合
      */
-    public DomainSet filterByWeights(ArrayList<Edge> edges, ArrayList<Weight> thresholds) {
+    public DomainSet filterByWeights(ArrayList<Edge> edges, ArrayList<WeightForm> thresholds) {
         DomainSet filteredDomainSet = new DomainSet();
-        filteredDomainSet.setThresholds(new ArrayList<>());
+        filteredDomainSet.setThresholds(thresholds);
         ArrayList<Domain> domains = new ArrayList<>();
         int index = 0;
         for (Edge edge : edges) {

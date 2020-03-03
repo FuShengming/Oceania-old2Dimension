@@ -19,7 +19,8 @@ public abstract class Weight {
     public Weight() {
     }
 
-    public Weight(double weightValue) {
+    public Weight(String weightName, double weightValue) {
+        this.weightName = weightName;
         this.weightValue = weightValue;
     }
 }

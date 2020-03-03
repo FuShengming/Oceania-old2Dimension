@@ -1,5 +1,7 @@
 package com.old2dimension.OCEANIA.po;
 
+import com.old2dimension.OCEANIA.vo.WeightForm;
+
 import java.util.ArrayList;
 
 public class Edge {
@@ -57,11 +59,11 @@ public class Edge {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Edge)) return false;
+        if (!(obj instanceof Edge)) return false;
         return ((Edge) obj).getId() == this.getId();
     }
 
-    public boolean passFilter(ArrayList<Weight> thresholds) {
+    public boolean passFilter(ArrayList<WeightForm> thresholds) {
         for (Weight threshold : thresholds) {
             for (Weight weight : this.weights) {
                 if (!weight.weightName.equals(threshold.weightName)) continue;

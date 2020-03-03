@@ -6,7 +6,7 @@ public class Closeness extends Weight {
     }
 
     public Closeness(double weightValue) {
-        super(weightValue);
         this.weightName = "closeness";
+        this.weightValue = weightValue;
     }
 }
