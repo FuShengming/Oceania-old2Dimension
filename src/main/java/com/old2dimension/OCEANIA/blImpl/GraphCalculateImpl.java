@@ -1,6 +1,7 @@
 package com.old2dimension.OCEANIA.blImpl;
 
 import com.old2dimension.OCEANIA.bl.GraphCaculate;
+import com.old2dimension.OCEANIA.bl.GraphForBL;
 import com.old2dimension.OCEANIA.po.*;
 import com.old2dimension.OCEANIA.vo.FuncInfoForm;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Component
-public class GraphCalculateImpl implements GraphCaculate {
+public class GraphCalculateImpl implements GraphCaculate, GraphForBL {
 
    public AdjacencyMatrix adMatrix ;
    public ArrayList<Edge> allEdges;
@@ -130,5 +131,10 @@ public class GraphCalculateImpl implements GraphCaculate {
         Vertex end=e.getEnd();
         return 2.0/(end.getInDegree()+start.getOutDegree());
 
+    }
+
+    @Override
+    public AdjacencyMatrix getAdjacencyMatrix() {
+        return this.adMatrix;
     }
 }
