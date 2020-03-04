@@ -1,14 +1,27 @@
 package com.old2dimension.OCEANIA.vo;
 
+import com.old2dimension.OCEANIA.po.Vertex;
+
 import java.util.ArrayList;
 
 public class FuncInfoForm {
     String belongPackage;
     String belongClass;
     String funcName;
-    ArrayList<String> args;
+    String[] args;
     int id;
 
+    public FuncInfoForm() {
+
+    }
+
+    public FuncInfoForm(Vertex vertex) {
+        this.belongPackage = vertex.getBelongPackage();
+        this.belongClass = vertex.getBelongClass();
+        this.funcName = vertex.getFuncName();
+        this.args = vertex.getArgs();
+        this.id = vertex.getId();
+    }
 
     public String getBelongPackage() {
         return belongPackage;
@@ -34,11 +47,11 @@ public class FuncInfoForm {
         this.funcName = funcName;
     }
 
-    public ArrayList<String> getArgs() {
+    public String[] getArgs() {
         return args;
     }
 
-    public void setArgs(ArrayList<String> args) {
+    public void setArgs(String[] args) {
         this.args = args;
     }
 
