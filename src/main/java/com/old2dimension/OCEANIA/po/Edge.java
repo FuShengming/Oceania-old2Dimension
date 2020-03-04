@@ -40,11 +40,18 @@ public class Edge {
     }
 
 
-    public void setWeight(Weight weight) {
-
+    public void addWeight(Weight weight) {
+        weights.add(weight);
     }
 
     public Weight getWeight(String name) {
+        for(Weight w:weights){
+
+            if(w.getWeightName().equals(name)){
+                return w;
+            }
+        }
+        System.out.println("没有名字为"+name+"的阈值");
         return null;
     }
 
