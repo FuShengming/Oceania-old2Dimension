@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.Mapping;
 
 import java.util.ArrayList;
 @Component
-public interface GraphCaculate {
+public interface GraphCalculate {
     public ResponseVO findPath(FuncInfoForm func1,FuncInfoForm func2);
     public ResponseVO getConnectedDomains(ArrayList<WeightForm> weightForms);
     public ResponseVO getAmbiguousFuncInfos(String funcName);
