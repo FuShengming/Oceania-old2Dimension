@@ -1,5 +1,6 @@
-package com.old2dimension.OCEANIA.blImpl;
+package com.old2dimension.OCEANIA.blImpl.GraphCalculateImplTest;
 
+import com.old2dimension.OCEANIA.blImpl.GraphCalculateImpl;
 import com.old2dimension.OCEANIA.po.*;
 import com.old2dimension.OCEANIA.vo.DomainSetVO;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
@@ -10,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-class GraphCalculateImplTest {
+class ConnectedDomain {
 
     private static ArrayList<Edge> edges;
     private static GraphCalculateImpl graphCalculate;
