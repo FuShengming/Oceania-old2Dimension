@@ -18,13 +18,14 @@ import java.util.*;
 @Component
 public class GraphCalculateImpl implements GraphCaculate {
 
-   public AdjacencyMatrix adMatrix ;
-   public ArrayList<Edge> allEdges;
-   public DomainSet domainSet;
+    public AdjacencyMatrix adMatrix ;
+    public ArrayList<Edge> allEdges;
+    public DomainSet domainSet;
+    public ArrayList<Vertex> allVertexes;
 
-    public GraphCalculateImpl( ){
-
+    public GraphCalculateImpl(){
     }
+
     public ResponseVO findPath(FuncInfoForm func1, FuncInfoForm func2){return new ResponseVO();}
     public ResponseVO getConnectedDomains(ArrayList<WeightForm> weightForms){return new ResponseVO();}
     public ResponseVO getAmbiguousFuncInfos(String funcName){return new ResponseVO();}
@@ -85,7 +86,7 @@ public class GraphCalculateImpl implements GraphCaculate {
         }
         adMatrix=new AdjacencyMatrix(vertexList.size());
         allEdges=edgeList;
-
+        allVertexes=vertexList;
         //---初始化邻接矩阵---
         for(Edge curEdge : edgeList){
             adMatrix.setMatrix(curEdge.getStart().getId(),curEdge.getEnd().getId(),true);
