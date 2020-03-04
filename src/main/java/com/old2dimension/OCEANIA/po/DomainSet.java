@@ -1,35 +1,57 @@
 package com.old2dimension.OCEANIA.po;
 
+import com.old2dimension.OCEANIA.vo.WeightForm;
+
 import java.util.ArrayList;
 
 public class DomainSet {
-    private ArrayList<Weight> thresholds;
+    private ArrayList<WeightForm> thresholds;
     private ArrayList<Domain> domains;
 
     public int getDomainSetSize() {
-       return domains.size();
+        return domains.size();
     }
-    public ArrayList<Weight> getThresholds() {
+
+    public ArrayList<WeightForm> getThresholds() {
         return thresholds;
     }
 
-    public void addWeight(Weight weight){
-        for(Weight w:thresholds){
-            if(w.getWeightName().equals(weight.getWeightName())){w.setWeightValue(weight.getWeightValue());
+    public void addThreshold(WeightForm weight) {
+        for (WeightForm w : thresholds) {
+            if (w.getWeightName().equals(weight.getWeightName())) {
+                w.setWeightValue(weight.getWeightValue());
                 return;
             }
         }
         thresholds.add(weight);
     }
 
-    public void setThresholds(ArrayList<Weight> thresholds) {
+    public void addThreshold(Weight weight) {
+        for (WeightForm w : thresholds) {
+            if (w.getWeightName().equals(weight.getWeightName())) {
+                w.setWeightValue(weight.getWeightValue());
+                return;
+            }
+        }
+        thresholds.add(new WeightForm(weight));
+    }
+
+    public void setThresholds(ArrayList<WeightForm> thresholds) {
         this.thresholds = thresholds;
     }
 
     public ArrayList<Domain> getDomains() {
         return domains;
     }
+
     public void setDomains(ArrayList<Domain> domains) {
         this.domains = domains;
+    }
+
+    public void sortByVerticesNum() {
+        this.domains.sort((o1, o2) -> {
+            if (o1.getVertices() == null || o2.getVertices() == null) return 0;
+            return o2.getVertices().size() - o1.getVertices().size();
+        });
     }
 }

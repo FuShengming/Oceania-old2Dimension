@@ -64,4 +64,10 @@ public class Vertex {
     public void setOutDegree(int outDegree) {
         this.outDegree = outDegree;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Vertex)) return false;
+        return ((Vertex) obj).getId() == this.getId();
+    }
 }
