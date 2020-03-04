@@ -7,9 +7,10 @@ import java.util.ArrayList;
 public class Edge {
     private Vertex start;
     private Vertex end;
-    private ArrayList<Weight> weights;
-    private int id;
 
+    private ArrayList<Weight> weights;
+
+    private int id;
 
     public Edge() {
         weights = new ArrayList<>();
@@ -57,6 +58,10 @@ public class Edge {
         return null;
     }
 
+    public ArrayList<Weight> getWeights() {
+        return weights;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Edge)) return false;
@@ -64,10 +69,10 @@ public class Edge {
     }
 
     public boolean passFilter(ArrayList<WeightForm> thresholds) {
-        for (Weight threshold : thresholds) {
+        for (WeightForm threshold : thresholds) {
             for (Weight weight : this.weights) {
-                if (!weight.weightName.equals(threshold.weightName)) continue;
-                if (weight.weightValue < threshold.weightValue) return false;
+                if (!weight.getWeightName().equals(threshold.getWeightName())) continue;
+                if (weight.getWeightValue() < threshold.getWeightValue()) return false;
             }
         }
         return true;

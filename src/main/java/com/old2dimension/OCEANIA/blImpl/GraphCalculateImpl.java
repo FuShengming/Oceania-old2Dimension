@@ -2,6 +2,7 @@ package com.old2dimension.OCEANIA.blImpl;
 
 import com.old2dimension.OCEANIA.bl.GraphCalculate;
 import com.old2dimension.OCEANIA.po.*;
+import com.old2dimension.OCEANIA.vo.DomainSetVO;
 import com.old2dimension.OCEANIA.vo.FuncInfoForm;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
 import com.old2dimension.OCEANIA.vo.WeightForm;
@@ -32,12 +33,11 @@ public class GraphCalculateImpl implements GraphCalculate {
         try {
             domainSet = filterByWeights(allEdges, weightForms);
             domainSet.sortByVerticesNum();
-            return ResponseVO.buildSuccess(domainSet);
+            return ResponseVO.buildSuccess(new DomainSetVO(domainSet));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseVO.buildFailure("连通域生成失败");
         }
-
     }
 
     public ResponseVO getAmbiguousFuncInfos(String funcName) {

@@ -1,6 +1,7 @@
 package com.old2dimension.OCEANIA.blImpl;
 
 import com.old2dimension.OCEANIA.po.*;
+import com.old2dimension.OCEANIA.vo.DomainSetVO;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
 import com.old2dimension.OCEANIA.vo.WeightForm;
 import org.junit.Assert;
@@ -92,8 +93,8 @@ class GraphCalculateImplTest {
     @Test
     void getConnectedDomains() {
         ResponseVO responseVO = graphCalculate.getConnectedDomains(weights);
-        Assert.assertEquals(2, ((DomainSet) responseVO.getContent()).getDomainSetSize());
-        Assert.assertEquals(4, ((DomainSet) responseVO.getContent()).getDomains().get(0).getVertices().size());
-        Assert.assertEquals(3, ((DomainSet) responseVO.getContent()).getDomains().get(1).getVertices().size());
+        Assert.assertEquals(2, ((DomainSetVO) responseVO.getContent()).getDomainVOs().size());
+        Assert.assertEquals(4, ((DomainSetVO) responseVO.getContent()).getDomainVOs().get(0).getVerticesNum());
+        Assert.assertEquals(3, ((DomainSetVO) responseVO.getContent()).getDomainVOs().get(1).getVerticesNum());
     }
 }

@@ -17,13 +17,23 @@ public class DomainSet {
     }
 
     public void addThreshold(WeightForm weight) {
-        for (Weight w : thresholds) {
+        for (WeightForm w : thresholds) {
             if (w.getWeightName().equals(weight.getWeightName())) {
                 w.setWeightValue(weight.getWeightValue());
                 return;
             }
         }
         thresholds.add(weight);
+    }
+
+    public void addThreshold(Weight weight) {
+        for (WeightForm w : thresholds) {
+            if (w.getWeightName().equals(weight.getWeightName())) {
+                w.setWeightValue(weight.getWeightValue());
+                return;
+            }
+        }
+        thresholds.add(new WeightForm(weight));
     }
 
     public void setThresholds(ArrayList<WeightForm> thresholds) {
