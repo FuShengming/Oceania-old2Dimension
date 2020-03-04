@@ -19,10 +19,9 @@ public class GraphCalculateImpl implements GraphCalculate {
     public AdjacencyMatrix adMatrix;
     public ArrayList<Edge> allEdges;
     public DomainSet domainSet;
+    public ArrayList<Vertex> allVertexes;
 
     public GraphCalculateImpl() {
-        initializeGraph();
-        domainSet = filterByWeights(allEdges, new ArrayList<>());
     }
 
     public ResponseVO findPath(FuncInfoForm func1, FuncInfoForm func2) {
@@ -44,16 +43,18 @@ public class GraphCalculateImpl implements GraphCalculate {
         return new ResponseVO();
     }
 
-    public void initializeGraph() {
-        Set<String> lines = new HashSet<String>();
+    public void initializeGraph(String filename ){
+        ArrayList<String> lines = new ArrayList<String>();
         try {
-            FileReader fr = new FileReader("call_dependencies.txt");
+            FileReader fr = new FileReader(filename);
             BufferedReader bf = new BufferedReader(fr);
             String str;
             // 按行读取字符串
             while ((str = bf.readLine()) != null) {
                 // System.out.println(str.substring(2));
-                lines.add(str.substring(2));
+                String curData=str.substring(2);
+                if(!lines.contains(curData))
+                    lines.add(curData);
             }
             bf.close();
             fr.close();
@@ -95,9 +96,9 @@ public class GraphCalculateImpl implements GraphCalculate {
             edgeList.add(curEdge);
             indexOfEdge++;
         }
-        adMatrix = new AdjacencyMatrix(vertexList.size());
-        allEdges = edgeList;
-
+        adMatrix=new AdjacencyMatrix(vertexList.size());
+        allEdges=edgeList;
+        allVertexes=vertexList;
         //---初始化邻接矩阵---
         for (Edge curEdge : edgeList) {
             adMatrix.setMatrix(curEdge.getStart().getId(), curEdge.getEnd().getId(), true);
@@ -127,7 +128,7 @@ public class GraphCalculateImpl implements GraphCalculate {
             e.addWeight(curCloseness);
         }
 
-        System.out.println(vertexList.size());
+        //System.out.println(vertexList.size());
 
     }
 
