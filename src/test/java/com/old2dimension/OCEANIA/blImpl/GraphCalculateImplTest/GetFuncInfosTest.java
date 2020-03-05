@@ -18,7 +18,7 @@ public class GetFuncInfosTest {
     @Test
     public void getFuncInfosTest(){
         graphCalculate.initializeGraph("src/test/resource/test_dependency_data.txt");
-        Assert.assertEquals(graphCalculate.getAmbiguousFuncInfos("testRegularAge").size(), 1);
+        Assert.assertEquals(graphCalculate.getAmbiguousFuncInfos("Age").size(), 3);
 
     }
 }
