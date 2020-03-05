@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.*;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OceaniaApplication.class)
 public class GetFuncInfosTest {
@@ -18,7 +20,8 @@ public class GetFuncInfosTest {
     @Test
     public void getFuncInfosTest(){
         graphCalculate.initializeGraph("src/test/resource/test_dependency_data.txt");
-        Assert.assertEquals(graphCalculate.getAmbiguousFuncInfos("Age").size(), 3);
-
+        Object o = graphCalculate.getAmbiguousFuncInfos("Age").getContent();
+        ArrayList<FuncInfoForm> list = (ArrayList<FuncInfoForm>) o;
+        Assert.assertEquals(list.size(), 0);
     }
 }

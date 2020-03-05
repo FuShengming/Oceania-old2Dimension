@@ -39,8 +39,8 @@ public class GraphCalculateImpl implements GraphCalculate {
         }
     }
 
-    public HashSet<FuncInfoForm> getAmbiguousFuncInfos(String message) {
-        HashSet<FuncInfoForm> res = new HashSet<FuncInfoForm>();
+    public ResponseVO getAmbiguousFuncInfos(String message) {
+        ArrayList<FuncInfoForm> res = new ArrayList<FuncInfoForm>();
         for (Vertex v : allVertexes) {
             String checkMes = v.getBelongClass() + ":" + v.getFuncName();
 
@@ -55,8 +55,7 @@ public class GraphCalculateImpl implements GraphCalculate {
                 res.add(funcInfoForm);
             }
         }
-        return res;
-
+        return ResponseVO.buildSuccess(res);
     }
 
     public void initializeGraph(String filename ){
