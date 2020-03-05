@@ -39,8 +39,96 @@ public class GraphCalculateImpl implements GraphCalculate {
         }
     }
 
-    public ResponseVO getAmbiguousFuncInfos(String funcName) {
-        return new ResponseVO();
+    public HashSet<FuncInfoForm> getAmbiguousFuncInfos(String funcName) {
+        String pkgAndClassAndFunc = funcName;
+        String pkgAndClass = null;
+        String pkg = null;
+        String className = null;
+        String fName = null;
+        String param = null;
+        if (funcName.charAt(funcName.length() - 1) == ')') {
+            param = funcName.substring(funcName.indexOf("(") + 1, funcName.length() - 1).trim();
+            pkgAndClassAndFunc = pkgAndClassAndFunc.substring(0, funcName.indexOf("("));
+        }
+        //输入时类和方法间是.还是:
+        if (pkgAndClassAndFunc.indexOf(":") != -1) {
+            fName = pkgAndClassAndFunc.substring(pkgAndClassAndFunc.indexOf(":") + 1);
+            pkgAndClass = pkgAndClassAndFunc.substring(0, pkgAndClassAndFunc.indexOf(":"));
+            if (pkgAndClass.lastIndexOf(".") != -1) {
+                className = pkgAndClass.substring(pkgAndClass.lastIndexOf(".") + 1);
+                pkg = pkgAndClass.substring(0, pkgAndClass.lastIndexOf("."));
+            } else {
+                className = pkgAndClass;
+                pkg = null;
+            }
+        } else if (pkgAndClassAndFunc.lastIndexOf(".") != -1){
+            fName = pkgAndClassAndFunc.substring(pkgAndClassAndFunc.indexOf(".") + 1);
+            pkgAndClass = pkgAndClassAndFunc.substring(0, pkgAndClassAndFunc.indexOf("."));
+            if (pkgAndClass.lastIndexOf(".") != -1) {
+                className = pkgAndClass.substring(pkgAndClass.lastIndexOf(".") + 1);
+                pkg = pkgAndClass.substring(0, pkgAndClass.lastIndexOf("."));
+            } else {
+                className = pkgAndClass;
+                pkg = null;
+            }
+        } else {
+            fName = pkgAndClassAndFunc;
+            className = null;
+            pkg = null;
+        }
+
+        HashSet<FuncInfoForm> res = new HashSet<FuncInfoForm>();
+        for (Vertex v : allVertexes) {
+            String vPkg = v.getBelongPackage();
+            String vClass = v.getBelongClass();
+            String vName = v.getFuncName();
+            String[] vArgs = v.getArgs();
+
+            boolean isSame = true;
+            if (!(vName.equals(fName)))
+                isSame = false;
+            if (!((className == null) || (className.equals(vClass))))
+                isSame = false;
+            if (pkg != null) {
+                if (pkg.length() > vPkg.length()) {
+                    isSame = false;
+                } else {
+                    String part = vPkg.substring(vPkg.length() - pkg.length());
+                    if (!(pkg.equals(part)))
+                        isSame = false;
+                }
+            }
+            //处理参数方面
+            if (param != null) {
+                String[] args = param.split(",");
+                if (args.length != vArgs.length) {
+                    isSame = false;
+                } else {
+                    for (int i = 0; i < args.length; i++) {
+                        if (args[i].trim().length() > vArgs[i].length()) {
+                            isSame = false;
+                        } else {
+                            String part = vArgs[i].substring(vArgs[i].length() - args[i].trim().length());
+                            if (!(args[i].trim().equals(part)))
+                                isSame = false;
+                        }
+                    }
+                }
+            }
+
+            if (isSame) {
+                FuncInfoForm funcInfoForm = new FuncInfoForm();
+                funcInfoForm.setBelongPackage(v.getBelongPackage());
+                funcInfoForm.setBelongClass(v.getBelongClass());
+                funcInfoForm.setFuncName(v.getFuncName());
+                funcInfoForm.setId(v.getId());
+                funcInfoForm.setArgs(v.getArgs());
+
+                res.add(funcInfoForm);
+            }
+        }
+        return res;
+
     }
 
     public void initializeGraph(String filename ){
