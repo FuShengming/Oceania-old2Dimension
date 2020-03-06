@@ -14,6 +14,7 @@ public class HelloWorldController {
     @GetMapping("/hello")
     public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
         graphCalculateImpl.initializeGraph("call_dependencies_update.txt");
+
         return String.format("Hello %s!", name);
     }
 
