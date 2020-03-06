@@ -1,5 +1,6 @@
-package com.old2dimension.OCEANIA.blImpl;
+package com.old2dimension.OCEANIA.blImpl.GraphCalculateImplTest;
 import com.old2dimension.OCEANIA.OceaniaApplication;
+import com.old2dimension.OCEANIA.blImpl.GraphCalculateImpl;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
