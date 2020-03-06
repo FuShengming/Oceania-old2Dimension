@@ -44,6 +44,9 @@ public class GraphCalculateImpl implements GraphCalculate {
     }
 
     public void initializeGraph(String filename ){
+        Scanner inputScan=new Scanner(System.in);
+        String as=inputScan.nextLine();
+        System.out.println(as);
         ArrayList<String> lines = new ArrayList<String>();
         try {
             FileReader fr = new FileReader(filename);

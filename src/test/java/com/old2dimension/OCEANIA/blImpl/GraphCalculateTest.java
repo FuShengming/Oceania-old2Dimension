@@ -18,8 +18,6 @@ public class GraphCalculateTest {
       Assert.assertEquals(graphCalculate.allEdges.size(),7);
       Assert.assertEquals(graphCalculate.adMatrix.getVerticesNum(),9);
       Assert.assertEquals(graphCalculate.allEdges.get(0).getWeight("closeness").getWeightValue(),0.3333333333333333,0.0000000000000001);
-
-
     }
 
 }
