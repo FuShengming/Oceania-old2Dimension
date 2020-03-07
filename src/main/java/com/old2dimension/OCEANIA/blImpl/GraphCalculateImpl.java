@@ -195,4 +195,14 @@ public class GraphCalculateImpl implements GraphCalculate, GraphForBL {
     public AdjacencyMatrix getAdjacencyMatrix() {
         return this.adMatrix;
     }
+
+    @Override
+    public ArrayList<Vertex> getAllVertexes() {
+        return this.allVertexes;
+    }
+
+    @Override
+    public ArrayList<Edge> getAllEdges() {
+        return this.allEdges;
+    }
 }
