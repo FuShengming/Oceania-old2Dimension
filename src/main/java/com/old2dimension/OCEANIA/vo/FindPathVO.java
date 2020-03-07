@@ -8,10 +8,6 @@ public class FindPathVO {
         return pathNum;
     }
 
-    /*
-     * 建议直接用PathVO的ArrayList
-     * 这个类可能会删除
-     */
     private int pathNum;
 
     private ArrayList<PathVO> pathVOS;
@@ -38,5 +34,16 @@ public class FindPathVO {
             s += p.toString();
         }
         return s;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof FindPathVO) || ((FindPathVO) obj).pathVOS.size() != pathVOS.size()) return false;
+        for (PathVO pathVO : pathVOS) {
+            if (!((FindPathVO) obj).pathVOS.contains(pathVO)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

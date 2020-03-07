@@ -25,6 +25,15 @@ public class PathBLImplTest {
 
     @BeforeClass
     public static void initialize() {
+
+        /*
+        * V4  ←  V1   →   V5  →  V0
+        *               ↗      ↙
+        *        ↓    ↗      ↙
+        *           ↗      ↙
+        *        V2   →   V3  →  V6
+        * */
+
         ArrayList<Vertex> vertices = new ArrayList<>();
         for (int i = 0; i <= 6; i++) {
             Vertex vertex = new Vertex();
@@ -32,7 +41,7 @@ public class PathBLImplTest {
             vertices.add(vertex);
         }
         edges = new ArrayList<>();
-        for (int i = 0; i <= 6; i++) {
+        for (int i = 0; i <= 7; i++) {
             Edge edge = new Edge();
             edge.setId(i);
             edges.add(edge);
@@ -45,21 +54,24 @@ public class PathBLImplTest {
         edges.get(2).setEnd(vertices.get(6));
         edges.get(3).setStart(vertices.get(1));
         edges.get(3).setEnd(vertices.get(4));
-        edges.get(4).setStart(vertices.get(1));
+        edges.get(4).setStart(vertices.get(0));
         edges.get(4).setEnd(vertices.get(3));
         edges.get(5).setStart(vertices.get(2));
         edges.get(5).setEnd(vertices.get(5));
         edges.get(6).setStart(vertices.get(5));
         edges.get(6).setEnd(vertices.get(0));
+        edges.get(7).setStart(vertices.get(1));
+        edges.get(7).setEnd(vertices.get(5));
 
         AdjacencyMatrix adjacencyMatrix = new AdjacencyMatrix(7);
         adjacencyMatrix.setMatrix(1, 2, true);
         adjacencyMatrix.setMatrix(2, 3, true);
         adjacencyMatrix.setMatrix(3, 6, true);
         adjacencyMatrix.setMatrix(1, 4, true);
-        adjacencyMatrix.setMatrix(1, 3, true);
+        adjacencyMatrix.setMatrix(0, 3, true);
         adjacencyMatrix.setMatrix(2, 5, true);
         adjacencyMatrix.setMatrix(5, 0, true);
+        adjacencyMatrix.setMatrix(1, 5, true);
         GraphCalculateImpl graphCalculate = new GraphCalculateImpl();
         graphCalculate.allEdges = edges;
         graphCalculate.allVertexes = vertices;
@@ -77,7 +89,30 @@ public class PathBLImplTest {
         FuncInfoForm f1 = new FuncInfoForm(v1);
         FuncInfoForm f3 = new FuncInfoForm(v3);
         FindPathVO paths = pathBL.findPath(f1, f3);
+        Assert.assertEquals(3, paths.getPathNum());
+    }
+
+    @Test
+    public void findPath2() throws Exception {
+        Vertex v1 = new Vertex();
+        v1.setId(1);
+        Vertex v3 = new Vertex();
+        v3.setId(0);
+        FuncInfoForm f1 = new FuncInfoForm(v1);
+        FuncInfoForm f3 = new FuncInfoForm(v3);
+        FindPathVO paths = pathBL.findPath(f1, f3);
         Assert.assertEquals(2, paths.getPathNum());
     }
 
+    @Test
+    public void findPath3() throws Exception {
+        Vertex v1 = new Vertex();
+        v1.setId(2);
+        Vertex v3 = new Vertex();
+        v3.setId(4);
+        FuncInfoForm f1 = new FuncInfoForm(v1);
+        FuncInfoForm f3 = new FuncInfoForm(v3);
+        FindPathVO paths = pathBL.findPath(f1, f3);
+        Assert.assertEquals(0, paths.getPathNum());
+    }
 }

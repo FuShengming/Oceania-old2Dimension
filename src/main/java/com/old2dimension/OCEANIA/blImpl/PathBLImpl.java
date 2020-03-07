@@ -3,30 +3,24 @@ package com.old2dimension.OCEANIA.blImpl;
 import com.old2dimension.OCEANIA.bl.GraphForBL;
 import com.old2dimension.OCEANIA.bl.PathBL;
 import com.old2dimension.OCEANIA.po.AdjacencyMatrix;
-import com.old2dimension.OCEANIA.po.DomainSet;
 import com.old2dimension.OCEANIA.po.Edge;
 import com.old2dimension.OCEANIA.po.Vertex;
 import com.old2dimension.OCEANIA.vo.FindPathVO;
 import com.old2dimension.OCEANIA.vo.FuncInfoForm;
 import com.old2dimension.OCEANIA.vo.PathVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class PathBLImpl implements PathBL {
-    private final GraphForBL graphForBL;
-    private final AdjacencyMatrix adjacencyMatrix;
-    private final ArrayList<Vertex> vertexes;
-    private final ArrayList<Edge> edges;
-    private boolean[] visited;
-    private ArrayList<Edge> stack;
+    private final AdjacencyMatrix adjacencyMatrix; // 邻接矩阵
+    private final ArrayList<Vertex> vertexes; // 顶点集合
+    private final ArrayList<Edge> edges; // 边集合
+    private boolean[] visited; // 记录顶点是否已经被访问过的数组
+    private ArrayList<Edge> stack; // 堆栈，用于存储访问过的边
 
     public PathBLImpl(GraphForBL graphForBL) {
-        this.graphForBL = graphForBL;
         this.adjacencyMatrix = graphForBL.getAdjacencyMatrix();
         this.vertexes = graphForBL.getAllVertexes();
         this.edges = graphForBL.getAllEdges();
@@ -34,8 +28,10 @@ public class PathBLImpl implements PathBL {
 
     @Override
     public FindPathVO findPath(FuncInfoForm startVertex, FuncInfoForm endVertex) {
+        // --- 初始化数组和栈 ---
         visited = new boolean[adjacencyMatrix.getVerticesNum()];
         stack = new ArrayList<>();
+
         Vertex start = null, end = null;
         for (Vertex v : vertexes) {
             if (v.getId() == startVertex.getId()) {
@@ -45,16 +41,27 @@ public class PathBLImpl implements PathBL {
                 end = v;
             }
         }
+
+        // --- 使用深度遍历查找路径 ---
         ArrayList<PathVO> result = findPathDFS(start, end);
+
         FindPathVO findPathVO = new FindPathVO();
         findPathVO.setPathVOS(result);
         findPathVO.setPathNum(result.size());
         return findPathVO;
     }
 
+    /**
+     * 深度遍历查找所有路径
+     * @param start 起始顶点
+     * @param end 终止顶点
+     * @return
+     */
     private ArrayList<PathVO> findPathDFS(Vertex start, Vertex end) {
         visited[start.getId()] = true;
         ArrayList<PathVO> paths = new ArrayList<>();
+
+        // --- 遍历邻接矩阵 ---
         for (int i = 0; i < adjacencyMatrix.getVerticesNum(); i++) {
             if (adjacencyMatrix.getMatrix(start.getId(), i) && !visited[i]) {
                 stack.add(getEdgeByVertex(start, vertexes.get(i)));
@@ -71,9 +78,17 @@ public class PathBLImpl implements PathBL {
                 pop(stack);
             }
         }
+
+        visited[start.getId()] = false;
         return paths;
     }
 
+    /**
+     * 通过顶点id找到对应的边
+     * @param start
+     * @param end
+     * @return
+     */
     private Edge getEdgeByVertex(Vertex start, Vertex end) {
         for (Edge e : edges) {
             if (e.getStart().getId() == start.getId() && e.getEnd().getId() == end.getId()) {
@@ -83,19 +98,11 @@ public class PathBLImpl implements PathBL {
         return null;
     }
 
-    private ArrayList<PathVO> integrate(PathVO path, ArrayList<PathVO> pathList) {
-        if (path == null) {
-            return pathList;
-        }
-        if (pathList == null) {
-            ArrayList<PathVO> p = new ArrayList<>();
-            p.add(path);
-            return p;
-        }
-        pathList.add(path);
-        return pathList;
-    }
-
+    /**
+     * 边出栈
+     * @param paths
+     * @return
+     */
     private ArrayList<Edge> pop(ArrayList<Edge> paths) {
         if (paths.size() == 0) {
             return paths;
