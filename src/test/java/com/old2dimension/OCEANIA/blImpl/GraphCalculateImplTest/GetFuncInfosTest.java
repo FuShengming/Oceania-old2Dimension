@@ -22,6 +22,6 @@ public class GetFuncInfosTest {
         graphCalculate.initializeGraph("src/test/resource/test_dependency_data.txt");
         Object o = graphCalculate.getAmbiguousFuncInfos("Age").getContent();
         ArrayList<FuncInfoForm> list = (ArrayList<FuncInfoForm>) o;
-        Assert.assertEquals(list.size(), 0);
+        Assert.assertEquals(3, list.size());
     }
 }

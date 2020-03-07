@@ -24,7 +24,7 @@ public class OceaniaRunner implements ApplicationRunner {
         //------打印顶点、边和连通域数目-----
         printGraphInfo(graphCalculate);
         //------紧密度阈值过滤------
-        closenessFilter(graphCalculate);
+       // closenessFilter(graphCalculate);
 
     }
 
@@ -40,15 +40,13 @@ public class OceaniaRunner implements ApplicationRunner {
         graphCalculate.initializeGraph(filename);
         graphCalculate.getConnectedDomains(initialWeights);
     }
-    public void printGraphInfo(GraphCalculateImpl graphCalculate) throws Exception{
-        try {
+    public void printGraphInfo(GraphCalculateImpl graphCalculate){
+
             System.out.println("图中顶点数为：" + (graphCalculate.allVertexes.size() + ""));
             System.out.println("图中边数目为：" + (graphCalculate.allEdges.size() + ""));
             System.out.println("图中连通域个数为：" + (graphCalculate.domainSet.getDomainSetSize() + ""));
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+
+
     }
 
     public void closenessFilter(GraphCalculateImpl graphCalculate) throws NumberFormatException{

@@ -60,8 +60,7 @@ public class GraphCalculateImpl implements GraphCalculate {
     }
 
     public void initializeGraph(String filename) {
-        System.out.println("开始进行图初始化...");
-        System.out.println("正在读取依赖文件...");
+
         ArrayList<String> lines = new ArrayList<String>();
         try {
             FileReader fr = new FileReader(filename);
@@ -79,10 +78,10 @@ public class GraphCalculateImpl implements GraphCalculate {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("文件读取完毕！");
+
         // 对ArrayList中存储的字符串进行处理
 
-        System.out.println("正在初始化点和边...");
+
         ArrayList<Vertex> vertexList = new ArrayList<Vertex>();
         Map<String, Vertex> vertexMap = new HashMap<String, Vertex>();
         ArrayList<Edge> edgeList = new ArrayList<Edge>();
@@ -116,18 +115,16 @@ public class GraphCalculateImpl implements GraphCalculate {
             edgeList.add(curEdge);
             indexOfEdge++;
         }
-        System.out.println("点和边初始化完毕！");
+
         adMatrix = new AdjacencyMatrix(vertexList.size());
         allEdges = edgeList;
         allVertexes = vertexList;
         //---初始化邻接矩阵---
-        System.out.println("正在初始化邻接矩阵...");
+
         for (Edge curEdge : edgeList) {
             adMatrix.setMatrix(curEdge.getStart().getId(), curEdge.getEnd().getId(), true);
         }
-        System.out.println("邻接矩阵初始化完毕！");
-        //--初始化出度入度--
-        System.out.println("正在初始化出度、入度、依赖紧密度...");
+
         for (Vertex curVertex : vertexList) {
             int id = curVertex.getId();
             int inDegree = 0;
@@ -150,7 +147,7 @@ public class GraphCalculateImpl implements GraphCalculate {
             curCloseness.setWeightValue(calculateCloseness(e));
             e.addWeight(curCloseness);
         }
-        System.out.println("初始化完毕！");
+
         //System.out.println(vertexList.size());
 
     }
