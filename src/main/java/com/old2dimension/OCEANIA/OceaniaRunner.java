@@ -57,7 +57,7 @@ public class OceaniaRunner implements ApplicationRunner {
                 System.out.print("请输入用于过滤的紧密度阈值(非负小数或整数)：");
                 String closenessStr = sc.nextLine();
                 closeness = Double.parseDouble(closenessStr);
-                System.out.println("紧密度阈值必须大于零！");
+                if(closeness<0)System.out.println("紧密度阈值必须大于等于零！");
             }
 
             WeightForm weightForm=new WeightForm();
