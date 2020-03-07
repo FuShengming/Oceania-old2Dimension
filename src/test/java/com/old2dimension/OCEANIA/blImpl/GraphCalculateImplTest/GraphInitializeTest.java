@@ -14,11 +14,18 @@ public class GraphInitializeTest {
     @Autowired
     GraphCalculateImpl graphCalculate;
     @Test
-    public void graphInitializeTest(){
+    public void graphInitializeTest1(){
       graphCalculate.initializeGraph("src/test/resource/test_dependency_data.txt");
       Assert.assertEquals(graphCalculate.allEdges.size(),7);
       Assert.assertEquals(graphCalculate.adMatrix.getVerticesNum(),9);
       Assert.assertEquals(graphCalculate.allEdges.get(0).getWeight("closeness").getWeightValue(),0.3333333333333333,0.0000000000000001);
+    }
+@Test
+    public void graphInitializeTest2(){
+        graphCalculate.initializeGraph("src/test/resource/runner_test_dependency_data.txt");
+        Assert.assertEquals(graphCalculate.allEdges.size(),14);
+        Assert.assertEquals(graphCalculate.adMatrix.getVerticesNum(),16);
+        Assert.assertEquals(graphCalculate.allEdges.get(0).getWeight("closeness").getWeightValue(),0.6666666666666666,0.0000000000000001);
     }
 
 }
