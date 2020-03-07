@@ -88,7 +88,7 @@ public class PathBLImplTest {
         v3.setId(3);
         FuncInfoForm f1 = new FuncInfoForm(v1);
         FuncInfoForm f3 = new FuncInfoForm(v3);
-        FindPathVO paths = pathBL.findPath(f1, f3);
+        FindPathVO paths = (FindPathVO)pathBL.findPath(f1, f3).getContent();
         Assert.assertEquals(3, paths.getPathNum());
     }
 
@@ -100,7 +100,7 @@ public class PathBLImplTest {
         v3.setId(0);
         FuncInfoForm f1 = new FuncInfoForm(v1);
         FuncInfoForm f3 = new FuncInfoForm(v3);
-        FindPathVO paths = pathBL.findPath(f1, f3);
+        FindPathVO paths = (FindPathVO)pathBL.findPath(f1, f3).getContent();
         Assert.assertEquals(2, paths.getPathNum());
     }
 
@@ -112,7 +112,7 @@ public class PathBLImplTest {
         v3.setId(4);
         FuncInfoForm f1 = new FuncInfoForm(v1);
         FuncInfoForm f3 = new FuncInfoForm(v3);
-        FindPathVO paths = pathBL.findPath(f1, f3);
+        FindPathVO paths = (FindPathVO)pathBL.findPath(f1, f3).getContent();
         Assert.assertEquals(0, paths.getPathNum());
     }
 }

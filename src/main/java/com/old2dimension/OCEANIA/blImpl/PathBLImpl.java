@@ -8,6 +8,7 @@ import com.old2dimension.OCEANIA.po.Vertex;
 import com.old2dimension.OCEANIA.vo.FindPathVO;
 import com.old2dimension.OCEANIA.vo.FuncInfoForm;
 import com.old2dimension.OCEANIA.vo.PathVO;
+import com.old2dimension.OCEANIA.vo.ResponseVO;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class PathBLImpl implements PathBL {
     }
 
     @Override
-    public FindPathVO findPath(FuncInfoForm startVertex, FuncInfoForm endVertex) {
+    public ResponseVO findPath(FuncInfoForm startVertex, FuncInfoForm endVertex) {
         // --- 初始化数组和栈 ---
         visited = new boolean[adjacencyMatrix.getVerticesNum()];
         stack = new ArrayList<>();
@@ -43,19 +44,22 @@ public class PathBLImpl implements PathBL {
         }
 
         // --- 使用深度遍历查找路径 ---
-        ArrayList<PathVO> result = findPathDFS(start, end);
-
-        FindPathVO findPathVO = new FindPathVO();
-        findPathVO.setPathVOS(result);
-        findPathVO.setPathNum(result.size());
-        return findPathVO;
+        try {
+            ArrayList<PathVO> result = findPathDFS(start, end);
+            FindPathVO findPathVO = new FindPathVO();
+            findPathVO.setPathVOS(result);
+            findPathVO.setPathNum(result.size());
+            return ResponseVO.buildSuccess(findPathVO);
+        } catch (Exception e) {
+            return ResponseVO.buildFailure("未能找到路径");
+        }
     }
 
     /**
      * 深度遍历查找所有路径
      * @param start 起始顶点
      * @param end 终止顶点
-     * @return
+     * @return 返回ArrayList
      */
     private ArrayList<PathVO> findPathDFS(Vertex start, Vertex end) {
         visited[start.getId()] = true;
