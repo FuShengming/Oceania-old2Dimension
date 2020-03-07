@@ -39,8 +39,23 @@ public class GraphCalculateImpl implements GraphCalculate {
         }
     }
 
-    public ResponseVO getAmbiguousFuncInfos(String funcName) {
-        return new ResponseVO();
+    public ResponseVO getAmbiguousFuncInfos(String message) {
+        ArrayList<FuncInfoForm> res = new ArrayList<FuncInfoForm>();
+        for (Vertex v : allVertexes) {
+            String checkMes = v.getBelongClass() + ":" + v.getFuncName();
+
+            if (checkMes.contains(message)) {
+                FuncInfoForm funcInfoForm = new FuncInfoForm();
+                funcInfoForm.setBelongPackage(v.getBelongPackage());
+                funcInfoForm.setBelongClass(v.getBelongClass());
+                funcInfoForm.setFuncName(v.getFuncName());
+                funcInfoForm.setId(v.getId());
+                funcInfoForm.setArgs(v.getArgs());
+
+                res.add(funcInfoForm);
+            }
+        }
+        return ResponseVO.buildSuccess(res);
     }
 
     public void initializeGraph(String filename ){
