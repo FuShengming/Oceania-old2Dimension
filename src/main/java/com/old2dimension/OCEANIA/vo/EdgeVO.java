@@ -3,6 +3,7 @@ package com.old2dimension.OCEANIA.vo;
 import com.old2dimension.OCEANIA.po.Edge;
 import com.old2dimension.OCEANIA.po.Weight;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class EdgeVO {
@@ -55,5 +56,11 @@ public class EdgeVO {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getEdgeString(){
+        BigDecimal bd=new BigDecimal(weights.get(0).getWeightValue()+"");
+
+        return start.getClassNameAndFunc()+" -- " + (bd.setScale(4,BigDecimal.ROUND_DOWN))+" --> "+end.getClassNameAndFunc();
     }
 }

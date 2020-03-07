@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 class ConnectedDomain {
@@ -16,6 +17,7 @@ class ConnectedDomain {
     private static ArrayList<Edge> edges;
     private static GraphCalculateImpl graphCalculate;
     private static ArrayList<WeightForm> weights;
+    private static AdjacencyMatrix adjacencyMatrix;
 
     @BeforeAll
     static void initialize() {
@@ -72,27 +74,31 @@ class ConnectedDomain {
         edges.get(7).setEnd(vertices.get(5));
         edges.get(7).addWeight(new Closeness(2.0 / 2));
         graphCalculate = new GraphCalculateImpl();
+        graphCalculate.allVertexes = vertices;
         graphCalculate.allEdges = edges;
+        adjacencyMatrix = new AdjacencyMatrix(7);
+        adjacencyMatrix.setMatrix(0, 1, true);
+        adjacencyMatrix.setMatrix(0, 3, true);
+        adjacencyMatrix.setMatrix(1, 4, true);
+        adjacencyMatrix.setMatrix(2, 3, true);
+        adjacencyMatrix.setMatrix(3, 4, true);
+        adjacencyMatrix.setMatrix(3, 6, true);
+        adjacencyMatrix.setMatrix(5, 2, true);
+        adjacencyMatrix.setMatrix(6, 5, true);
+        graphCalculate.adMatrix = adjacencyMatrix;
         weights = new ArrayList<>();
         weights.add(new WeightForm("closeness", 0.55));
     }
 
     @Test
-    void filterByWeights1() {
-        DomainSet domainSet = graphCalculate.filterByWeights(edges, new ArrayList<>());
-        Assert.assertEquals(1, domainSet.getDomainSetSize());
-        Assert.assertEquals(7, domainSet.getDomains().get(0).getVertices().size());
-        Assert.assertEquals(8, domainSet.getDomains().get(0).getEdges().size());
+    void getConnectedDomains1() {
+        ResponseVO responseVO = graphCalculate.getConnectedDomains(new ArrayList<>());
+        Assert.assertEquals(1, ((DomainSetVO) responseVO.getContent()).getDomainVOs().size());
+        Assert.assertEquals(7, ((DomainSetVO) responseVO.getContent()).getDomainVOs().get(0).getVerticesNum());
     }
 
     @Test
-    void filterByWeights2() {
-        DomainSet domainSet = graphCalculate.filterByWeights(edges, weights);
-        Assert.assertEquals(2, domainSet.getDomainSetSize());
-    }
-
-    @Test
-    void getConnectedDomains() {
+    void getConnectedDomains2() {
         ResponseVO responseVO = graphCalculate.getConnectedDomains(weights);
         Assert.assertEquals(2, ((DomainSetVO) responseVO.getContent()).getDomainVOs().size());
         Assert.assertEquals(4, ((DomainSetVO) responseVO.getContent()).getDomainVOs().get(0).getVerticesNum());
