@@ -20,6 +20,7 @@ public class GraphCalculateImpl implements GraphCalculate {
     public ArrayList<Edge> allEdges;
     public DomainSet domainSet;
     public ArrayList<Vertex> allVertexes;
+    private boolean[][] visited;
 
     public GraphCalculateImpl() {
     }
@@ -30,7 +31,7 @@ public class GraphCalculateImpl implements GraphCalculate {
 
     public ResponseVO getConnectedDomains(ArrayList<WeightForm> weightForms) {
         try {
-            domainSet = filterByWeights(allEdges, weightForms);
+            domainSet = filterByWeights(weightForms);
             domainSet.sortByVerticesNum();
             return ResponseVO.buildSuccess(new DomainSetVO(domainSet));
         } catch (Exception e) {
@@ -58,7 +59,7 @@ public class GraphCalculateImpl implements GraphCalculate {
         return ResponseVO.buildSuccess(res);
     }
 
-    public void initializeGraph(String filename ){
+    public void initializeGraph(String filename) {
         System.out.println("开始进行图初始化...");
         System.out.println("正在读取依赖文件...");
         ArrayList<String> lines = new ArrayList<String>();
@@ -69,8 +70,8 @@ public class GraphCalculateImpl implements GraphCalculate {
             // 按行读取字符串
             while ((str = bf.readLine()) != null) {
                 // System.out.println(str.substring(2));
-                String curData=str.substring(2);
-                if(!lines.contains(curData))
+                String curData = str.substring(2);
+                if (!lines.contains(curData))
                     lines.add(curData);
             }
             bf.close();
@@ -116,9 +117,9 @@ public class GraphCalculateImpl implements GraphCalculate {
             indexOfEdge++;
         }
         System.out.println("点和边初始化完毕！");
-        adMatrix=new AdjacencyMatrix(vertexList.size());
-        allEdges=edgeList;
-        allVertexes=vertexList;
+        adMatrix = new AdjacencyMatrix(vertexList.size());
+        allEdges = edgeList;
+        allVertexes = vertexList;
         //---初始化邻接矩阵---
         System.out.println("正在初始化邻接矩阵...");
         for (Edge curEdge : edgeList) {
@@ -180,28 +181,24 @@ public class GraphCalculateImpl implements GraphCalculate {
      * input: 连通域集合、阈值集合
      * output: 连通域集合
      */
-    public DomainSet filterByWeights(ArrayList<Edge> edges, ArrayList<WeightForm> thresholds) {
+    private DomainSet filterByWeights(ArrayList<WeightForm> thresholds) {
         DomainSet filteredDomainSet = new DomainSet();
         filteredDomainSet.setThresholds(thresholds);
         ArrayList<Domain> domains = new ArrayList<>();
         int index = 0;
-        for (Edge edge : edges) {
-            if (!edge.passFilter(thresholds)) continue;
-            boolean connected = false;
-            for (Domain domain : domains) {
-                if (domain.contains(edge.getStart()) || domain.contains(edge.getEnd())) {
-                    domain.addEdges(edge);
-                    if (!domain.contains(edge.getStart())) domain.addVertex(edge.getStart());
-                    if (!domain.contains(edge.getEnd())) domain.addVertex(edge.getEnd());
-                    connected = true;
-                    break;
-                }
+        visited = new boolean[allVertexes.size()][allVertexes.size()];
+        for (int i = 0; i < allVertexes.size(); i++) {
+            for (int j = 0; j < allVertexes.size(); j++) {
+                visited[i][j] = false;
             }
-            if (!connected) {
+        }
+
+        for (int i = 0; i < allVertexes.size(); i++) {
+            for (int j = 0; j < allVertexes.size(); j++) {
+                if (visited[i][j]) continue;
                 Domain domain = new Domain(new ArrayList<>(), new ArrayList<>());
-                domain.addEdges(edge);
-                domain.addVertex(edge.getStart());
-                domain.addVertex(edge.getEnd());
+                generateDomain(domain, i, j, thresholds);
+                if (domain.getEdges().size() == 0) continue;
                 domain.setId(index);
                 index++;
                 domains.add(domain);
@@ -209,5 +206,31 @@ public class GraphCalculateImpl implements GraphCalculate {
         }
         filteredDomainSet.setDomains(domains);
         return filteredDomainSet;
+    }
+
+    private Edge findEdge(ArrayList<Edge> edges, int startId, int EndId) {
+        for (Edge edge : edges) {
+            if (edge.getStart().getId() == startId && edge.getEnd().getId() == EndId)
+                return edge;
+        }
+        return null;
+    }
+
+    private void generateDomain(Domain domain, int startId, int endId, ArrayList<WeightForm> thresholds) {
+        if (visited[startId][endId]) return;
+        visited[startId][endId] = true;
+        if (!adMatrix.getMatrix(startId, endId)) return;
+        Edge edge = findEdge(allEdges, startId, endId);
+        assert edge != null;
+        if (!edge.passFilter(thresholds)) return;
+        domain.addEdges(edge);
+        if (!domain.contains(edge.getStart())) domain.addVertex(edge.getStart());
+        if (!domain.contains(edge.getEnd())) domain.addVertex(edge.getEnd());
+        for (int i = 0; i < allVertexes.size(); i++) {
+            generateDomain(domain, endId, i, thresholds);
+            generateDomain(domain, startId, i, thresholds);
+            generateDomain(domain, i, startId, thresholds);
+            generateDomain(domain, i, endId, thresholds);
+        }
     }
 }

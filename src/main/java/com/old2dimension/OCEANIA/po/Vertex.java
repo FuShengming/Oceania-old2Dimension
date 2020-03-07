@@ -67,7 +67,7 @@ public class Vertex {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Vertex)) return false;
+        if (!(obj instanceof Vertex)) return false;
         return ((Vertex) obj).getId() == this.getId();
     }
 }
