@@ -15,7 +15,7 @@ public class FuncInfoForm {
 
     }
 
-    FuncInfoForm(Vertex vertex) {
+    public FuncInfoForm(Vertex vertex) {
         this.belongPackage = vertex.getBelongPackage();
         this.belongClass = vertex.getBelongClass();
         this.funcName = vertex.getFuncName();
@@ -64,13 +64,22 @@ public class FuncInfoForm {
     }
 
     public String getClassNameAndFunc(){
-        String res=getBelongClass()+":"+getFuncName()+"(";
+        return  getBelongClass()+":"+getFuncName()+"("+getArgsString(args)+")";
+    }
+
+    public String getFullName(){
+       return belongPackage+"."+getBelongClass()+":"+getFuncName()+"("+getArgsString(args)+")";
+    }
+
+    private String getArgsString(String [] args){
+        String res="";
         for(int i = 0; i<args.length ; i++){
             if(i!=args.length-1){res += (args[i]+", ");}
-            else{ res += (args[i]+")");}
+            else{ res += (args[i]);}
         }
         return res;
     }
+
     @Override
     public boolean equals(Object obj){
         if(this ==obj){//如果是引用同一个实例

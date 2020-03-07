@@ -26,9 +26,9 @@ public class GraphCalculateImpl implements GraphCalculate {
     public GraphCalculateImpl() {
     }
 
-    public ResponseVO findPath(FuncInfoForm func1, FuncInfoForm func2) {
-        return new ResponseVO();
-    }
+  //  public ResponseVO findPath(FuncInfoForm func1, FuncInfoForm func2) {
+//        return new ResponseVO();
+//    }
 
     public ResponseVO getConnectedDomains(ArrayList<WeightForm> weightForms) {
         try {
