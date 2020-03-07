@@ -35,7 +35,7 @@ public class OceaniaRunner implements ApplicationRunner {
        // closenessFilter(graphCalculate);
 
         //------路径查找------
-        findPath();
+        //findPath();
 
     }
 
