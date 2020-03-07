@@ -1,7 +1,6 @@
 package com.old2dimension.OCEANIA.blImpl;
 
 
-import com.old2dimension.OCEANIA.bl.GraphForBL;
 import com.old2dimension.OCEANIA.bl.GraphCalculate;
 import com.old2dimension.OCEANIA.po.*;
 import com.old2dimension.OCEANIA.vo.DomainSetVO;
@@ -16,7 +15,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Component
-public class GraphCalculateImpl implements GraphCalculate, GraphForBL {
+public class GraphCalculateImpl implements GraphCalculate {
 
     public AdjacencyMatrix adMatrix;
     public ArrayList<Edge> allEdges;
@@ -191,18 +190,4 @@ public class GraphCalculateImpl implements GraphCalculate, GraphForBL {
         return filteredDomainSet;
     }
 
-    @Override
-    public AdjacencyMatrix getAdjacencyMatrix() {
-        return this.adMatrix;
-    }
-
-    @Override
-    public ArrayList<Vertex> getAllVertexes() {
-        return this.allVertexes;
-    }
-
-    @Override
-    public ArrayList<Edge> getAllEdges() {
-        return this.allEdges;
-    }
 }

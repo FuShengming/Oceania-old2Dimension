@@ -1,6 +1,5 @@
 package com.old2dimension.OCEANIA.blImpl;
 
-import com.old2dimension.OCEANIA.bl.GraphForBL;
 import com.old2dimension.OCEANIA.bl.PathBL;
 import com.old2dimension.OCEANIA.po.AdjacencyMatrix;
 import com.old2dimension.OCEANIA.po.Edge;
@@ -21,10 +20,10 @@ public class PathBLImpl implements PathBL {
     private boolean[] visited; // 记录顶点是否已经被访问过的数组
     private ArrayList<Edge> stack; // 堆栈，用于存储访问过的边
 
-    public PathBLImpl(GraphForBL graphForBL) {
-        this.adjacencyMatrix = graphForBL.getAdjacencyMatrix();
-        this.vertexes = graphForBL.getAllVertexes();
-        this.edges = graphForBL.getAllEdges();
+    public PathBLImpl(GraphCalculateImpl graphCalculate) {
+        this.adjacencyMatrix = graphCalculate.adMatrix;
+        this.vertexes = graphCalculate.allVertexes;
+        this.edges = graphCalculate.allEdges;
     }
 
     @Override
