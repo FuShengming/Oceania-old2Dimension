@@ -25,7 +25,7 @@ public class OceaniaRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception{
 
-        //-----初始化方法-----
+        //-----以下为初始化方法-----
         initializeGraph(graphCalculate,"call_dependencies_update.txt");
         pathBL=new PathBLImpl(graphCalculate);
 
