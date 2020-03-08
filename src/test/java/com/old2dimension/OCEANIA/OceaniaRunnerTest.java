@@ -25,7 +25,7 @@ public class OceaniaRunnerTest {
         System.setOut(new PrintStream(outContent));
         oceaniaRunner.initializeGraph(graphCalculate,"src/test/resources/runner_test_dependency_data.txt");
         oceaniaRunner.printGraphInfo(graphCalculate);
-        Assert.assertEquals("图中顶点数为：16\r\n图中边数目为：14\r\n图中连通域个数为：4\r\n",outContent.toString());
+        Assert.assertEquals("图中顶点数为：16\r\n图中边数目为：14\r\n图中连通域个数为：4\r\n".replaceAll("[\\t\\n\\r]", ""),outContent.toString().replaceAll("[\\t\\n\\r]", ""));
     }
     @Test
     public void OceaniaRunnerTest2(){
@@ -58,8 +58,8 @@ public class OceaniaRunnerTest {
                         "连通域顶点数：2\r\n" +
                         "Node1: Class1:Func11()\r\n" +
                         "Node2: Class1:Func14()\r\n\r\n" +
-                        "Edge1: Class1:Func11() -- 1.0000 --> Class1:Func14()\r\n"
-                ,outContent.toString());
+                        "Edge1: Class1:Func11() -- 1.0000 --> Class1:Func14()\r\n".replaceAll("[\\t\\n\\r]", "")
+                ,outContent.toString().replaceAll("[\\t\\n\\r]", ""));
     }
     @Test
     public void OceaniaRunnerTest3(){
@@ -112,8 +112,8 @@ public class OceaniaRunnerTest {
                         "Node1: Class1:Func8()\r\n" +
                         "Node2: Class1:Func9()\r\n" +
                         "\r\n" +
-                        "Edge1: Class1:Func8() -- 1.0000 --> Class1:Func9()\r\n"
-                ,outContent.toString());
+                        "Edge1: Class1:Func8() -- 1.0000 --> Class1:Func9()\r\n".replaceAll("[\\t\\n\\r]", "")
+                ,outContent.toString().replaceAll("[\\t\\n\\r]", ""));
     }
 
     @Test
@@ -149,8 +149,8 @@ public class OceaniaRunnerTest {
                         "连通域顶点数：2\r\n" +
                         "Node1: Class1:Func11()\r\n" +
                         "Node2: Class1:Func14()\r\n\r\n" +
-                        "Edge1: Class1:Func11() -- 1.0000 --> Class1:Func14()\r\n"
+                        "Edge1: Class1:Func11() -- 1.0000 --> Class1:Func14()\r\n".replaceAll("[\\t\\n\\r]", "")
 
-                ,outContent.toString());
+                ,outContent.toString().replaceAll("[\\t\\n\\r]", ""));
     }
 }
