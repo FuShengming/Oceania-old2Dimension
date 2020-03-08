@@ -23,7 +23,7 @@ public class OceaniaRunnerTest {
     public void OceaniaRunnerTest1(){
         final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
-        oceaniaRunner.initializeGraph(graphCalculate,"src/test/resource/runner_test_dependency_data.txt");
+        oceaniaRunner.initializeGraph(graphCalculate,"src/test/resources/runner_test_dependency_data.txt");
         oceaniaRunner.printGraphInfo(graphCalculate);
         Assert.assertEquals("图中顶点数为：16\r\n图中边数目为：14\r\n图中连通域个数为：4\r\n",outContent.toString());
     }
@@ -35,7 +35,7 @@ public class OceaniaRunnerTest {
         final ByteArrayInputStream inContent =new ByteArrayInputStream(inString.getBytes());
         System.setIn(inContent);
 
-        oceaniaRunner.initializeGraph(graphCalculate,"src/test/resource/runner_test_dependency_data.txt");
+        oceaniaRunner.initializeGraph(graphCalculate,"src/test/resources/runner_test_dependency_data.txt");
         oceaniaRunner.closenessFilter(graphCalculate);
         Assert.assertEquals("请输入用于过滤的紧密度阈值(非负小数或整数)：-------连通域1-------\r\n" +
                 "连通域顶点数：3\r\n" +
@@ -69,7 +69,7 @@ public class OceaniaRunnerTest {
         final ByteArrayInputStream inContent =new ByteArrayInputStream(inString.getBytes());
         System.setIn(inContent);
 
-        oceaniaRunner.initializeGraph(graphCalculate,"src/test/resource/runner_test_dependency_data.txt");
+        oceaniaRunner.initializeGraph(graphCalculate,"src/test/resources/runner_test_dependency_data.txt");
         oceaniaRunner.closenessFilter(graphCalculate);
         Assert.assertEquals("请输入用于过滤的紧密度阈值(非负小数或整数)：-------连通域1-------\r\n" +
                         "连通域顶点数：5\r\n" +
@@ -124,7 +124,7 @@ public class OceaniaRunnerTest {
         final ByteArrayInputStream inContent =new ByteArrayInputStream(inString.getBytes());
         System.setIn(inContent);
 
-        oceaniaRunner.initializeGraph(graphCalculate,"src/test/resource/runner_test_dependency_data.txt");
+        oceaniaRunner.initializeGraph(graphCalculate,"src/test/resources/runner_test_dependency_data.txt");
         oceaniaRunner.closenessFilter(graphCalculate);
         Assert.assertEquals("请输入用于过滤的紧密度阈值(非负小数或整数)："+"紧密度阈值必须大于等于0！\r\n"+
                         "请输入用于过滤的紧密度阈值(非负小数或整数)："+"紧密度阈值必须小于等于1！\r\n"+

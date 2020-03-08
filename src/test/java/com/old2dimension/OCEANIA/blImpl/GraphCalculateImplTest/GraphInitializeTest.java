@@ -36,7 +36,7 @@ public class GraphInitializeTest {
         final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
         graphCalculate.initializeGraph("");
-        Assert.assertEquals("文件读取失败\r\n",outContent.toString());
+        Assert.assertEquals("文件读取失败",outContent.toString().replaceAll("[\\t\\n\\r]", ""));
 
     }
 
