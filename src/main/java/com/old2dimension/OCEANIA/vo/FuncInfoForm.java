@@ -62,4 +62,33 @@ public class FuncInfoForm {
     public void setId(int id) {
         this.id = id;
     }
+
+    public String getClassNameAndFunc(){
+        return  getBelongClass()+":"+getFuncName()+"("+getArgsString(args)+")";
+    }
+
+    public String getFullName(){
+        return belongPackage+"."+getBelongClass()+":"+getFuncName()+"("+getArgsString(args)+")";
+    }
+
+    private String getArgsString(String [] args){
+        String res="";
+        for(int i = 0; i<args.length ; i++){
+            if(i!=args.length-1){res += (args[i]+", ");}
+            else{ res += (args[i]);}
+        }
+        return res;
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if(this ==obj){//如果是引用同一个实例
+            return true;
+        } if (obj != null && obj instanceof FuncInfoForm) {
+            FuncInfoForm u = (FuncInfoForm) obj;
+            return this.id==u.id;
+        }else{
+            return false;
+        }
+    }
 }
