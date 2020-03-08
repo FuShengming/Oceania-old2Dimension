@@ -8,6 +8,8 @@ public class Edge {
     private Vertex start;
     private Vertex end;
 
+
+
     private ArrayList<Weight> weights;
 
     private int id;

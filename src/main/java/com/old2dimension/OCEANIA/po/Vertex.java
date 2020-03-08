@@ -65,6 +65,23 @@ public class Vertex {
         this.outDegree = outDegree;
     }
 
+
+    public String getClassNameAndFunc(){
+        return  getBelongClass()+":"+getFuncName()+"("+getArgsString(args)+")";
+    }
+
+    public String getFullName(){
+        return belongPackage+"."+getBelongClass()+":"+getFuncName()+"("+getArgsString(args)+")";
+    }
+    private String getArgsString(String [] args){
+        String res="";
+        for(int i = 0; i<args.length ; i++){
+            if(i!=args.length-1){res += (args[i]+", ");}
+            else{ res += (args[i]);}
+        }
+        return res;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Vertex)) return false;

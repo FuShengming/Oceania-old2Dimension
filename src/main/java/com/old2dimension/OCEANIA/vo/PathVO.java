@@ -5,6 +5,10 @@ import com.old2dimension.OCEANIA.po.Edge;
 import java.util.ArrayList;
 
 public class PathVO {
+    public ArrayList<Edge> getEdges() {
+        return edges;
+    }
+
     private ArrayList<Edge> edges;
 
     public PathVO() {
@@ -18,6 +22,7 @@ public class PathVO {
     public String toString() {
         return "";
     }
+
 
     @Override
     public boolean equals(Object obj) {
