@@ -19,7 +19,7 @@ public class GetFuncInfosTest {
     GraphCalculateImpl graphCalculate;
     @Test
     public void getFuncInfosTest(){
-        graphCalculate.initializeGraph("src/test/resource/test_dependency_data.txt");
+        graphCalculate.initializeGraph("src/test/resources/test_dependency_data.txt");
         Assert.assertEquals(3, ((ArrayList<FuncInfoForm>) graphCalculate.getAmbiguousFuncInfos("Age").getContent()).size());
         Assert.assertEquals("AgeFactorTest:testRegularAge()", ((ArrayList<FuncInfoForm>) graphCalculate.getAmbiguousFuncInfos("Age").getContent()).get(0).getClassNameAndFunc());
         Assert.assertEquals(9, ((ArrayList<FuncInfoForm>) graphCalculate.getAmbiguousFuncInfos("").getContent()).size());
