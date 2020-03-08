@@ -26,8 +26,8 @@ public class OceaniaRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception{
 
         //-----以下为初始化方法-----
-//        initializeGraph(graphCalculate,"call_dependencies_update.txt");
-//        pathBL=new PathBLImpl(graphCalculate);
+        initializeGraph(graphCalculate,"call_dependencies_update.txt");
+        pathBL=new PathBLImpl(graphCalculate);
 //
 //        //--------以下为输入输出函数-----
 //        //------打印顶点、边和连通域数目-----
@@ -37,7 +37,7 @@ public class OceaniaRunner implements ApplicationRunner {
        // closenessFilter(graphCalculate);
 
         //------路径查找------
-        //findPath();
+        findPath();
 
     }
 
@@ -113,12 +113,12 @@ public class OceaniaRunner implements ApplicationRunner {
     public void findPath(){
         FuncInfoForm start= null;
         FuncInfoForm end= null;
-        System.out.println("请输入起点类/函数名：");
+        System.out.println("请输入起点类/函数/参数名：");
         Scanner sc=new Scanner(System.in);
         String nodeStr=sc.nextLine();
         start=getAmbiguousFunc(nodeStr, sc);
         if(start!=null){
-            System.out.println("请输入终点类/函数名：");
+            System.out.println("请输入终点类/函数/参数名：");
             nodeStr=sc.nextLine();
             end=getAmbiguousFunc(nodeStr, sc);
             if(end != null){

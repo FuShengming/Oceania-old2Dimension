@@ -73,7 +73,7 @@ public class Vertex {
     public String getFullName(){
         return belongPackage+"."+getBelongClass()+":"+getFuncName()+"("+getArgsString(args)+")";
     }
-    private String getArgsString(String [] args){
+    public String getArgsString(String [] args){
         String res="";
         for(int i = 0; i<args.length ; i++){
             if(i!=args.length-1){res += (args[i]+", ");}

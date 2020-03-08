@@ -44,7 +44,7 @@ public class GraphCalculateImpl implements GraphCalculate {
     public ResponseVO getAmbiguousFuncInfos(String message) {
         ArrayList<FuncInfoForm> res = new ArrayList<FuncInfoForm>();
         for (Vertex v : allVertexes) {
-            String checkMes = v.getBelongClass() + ":" + v.getFuncName();
+            String checkMes = v.getBelongClass() + ":" + v.getFuncName()+"("+v.getArgsString(v.getArgs())+")";
 
             if (checkMes.contains(message)) {
                 FuncInfoForm funcInfoForm = new FuncInfoForm();
