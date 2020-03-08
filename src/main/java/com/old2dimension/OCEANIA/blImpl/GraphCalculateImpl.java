@@ -77,7 +77,7 @@ public class GraphCalculateImpl implements GraphCalculate {
             bf.close();
             fr.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("文件读取失败");
         }
 
         // 对ArrayList中存储的字符串进行处理
