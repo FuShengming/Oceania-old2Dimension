@@ -1,5 +1,6 @@
 package com.old2dimension.OCEANIA;
 
+import com.old2dimension.OCEANIA.bl.PathBL;
 import com.old2dimension.OCEANIA.blImpl.GraphCalculateImpl;
 import com.old2dimension.OCEANIA.blImpl.PathBLImpl;
 import com.old2dimension.OCEANIA.po.Edge;
@@ -37,7 +38,7 @@ public class OceaniaRunner implements ApplicationRunner {
 //        closenessFilter(graphCalculate);
 //
 //        ------路径查找------
-//       findPath();
+//       findPath(pathBL);
 
     }
 
@@ -110,7 +111,7 @@ public class OceaniaRunner implements ApplicationRunner {
 
     }
 
-    public void findPath(){
+    public void findPath(PathBL pathBL){
         FuncInfoForm start= null;
         FuncInfoForm end= null;
         System.out.println("请输入起点类/函数/参数名：");

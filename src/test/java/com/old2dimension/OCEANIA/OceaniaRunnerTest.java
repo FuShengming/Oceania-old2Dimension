@@ -1,6 +1,8 @@
 package com.old2dimension.OCEANIA;
 
+import com.old2dimension.OCEANIA.bl.PathBL;
 import com.old2dimension.OCEANIA.blImpl.GraphCalculateImpl;
+import com.old2dimension.OCEANIA.blImpl.PathBLImpl;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +21,8 @@ public class OceaniaRunnerTest {
     OceaniaRunner oceaniaRunner;
     @Autowired
     GraphCalculateImpl graphCalculate;
+    @Autowired
+    PathBLImpl pathBL;
     @Test
     public void OceaniaRunnerTest1(){
         final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -152,5 +156,46 @@ public class OceaniaRunnerTest {
                         "Edge1: Class1:Func11() -- 1.0000 --> Class1:Func14()".replaceAll("[\\n\\r]", "")
 
                 ,outContent.toString().replaceAll("[\\n\\r]", ""));
+    }
+
+    @Test
+    public void OceaniaRunnerTest5(){
+        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        String inString1="getAvailableHospitals\r\n" +
+                "1\r\n" +
+                "getConnection\r\n" +
+                "2\n";
+        final ByteArrayInputStream inContent =new ByteArrayInputStream(inString1.getBytes());
+        System.setIn(inContent);
+        oceaniaRunner.initializeGraph(graphCalculate,"call_dependencies_update.txt");
+        pathBL = new PathBLImpl(graphCalculate);
+        oceaniaRunner.findPath(pathBL);
+        Assert.assertEquals("请输入起点类/函数/参数名：" +
+                        "1. edu.ncsu.csc.itrust.action.ManageHospitalAssignmentsAction:getAvailableHospitals(java.lang.String)" +
+                        "" +
+                        "请输入你所选择的节点序号（不超过序号范围的正整数）：" +
+                        "请输入终点类/函数/参数名：" +
+                        "1. edu.ncsu.csc.itrust.dao.DAOFactory:getConnection()" +
+                        "2. edu.ncsu.csc.itrust.dao.IConnectionDriver:getConnection()" +
+                        "" +
+                        "请输入你所选择的节点序号（不超过序号范围的正整数）：" +
+                        "SOURCE NODE: ManageHospitalAssignmentsAction:getAvailableHospitals(java.lang.String)" +
+                        "TARGET NODE: IConnectionDriver:getConnection()" +
+                        "" +
+                        "共有2条路径:" +
+                        "" +
+                        "PATH 1:ManageHospitalAssignmentsAction:getAvailableHospitals(java.lang.String) -- 0.4 -->" +
+                        "HospitalsDAO:getAllHospitals()-- 0.008403361344537815 -->" +
+                        "DAOFactory:getConnection()-- 1.0 -->" +
+                        "IConnectionDriver:getConnection()" +
+                        "" +
+                        "PATH 2:ManageHospitalAssignmentsAction:getAvailableHospitals(java.lang.String) -- 0.3333333333333333 -->" +
+                        "PersonnelDAO:getHospitals(long)-- 0.008403361344537815 -->" +
+                        "DAOFactory:getConnection()-- 1.0 -->" +
+                        "IConnectionDriver:getConnection()" +
+                        ""
+                ,outContent.toString().replaceAll("[\\t\\n\\r]", ""));
     }
 }
