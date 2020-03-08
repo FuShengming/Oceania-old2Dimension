@@ -1,21 +1,22 @@
-#Group_old2Dimension Project Oceania iteration 1
+# Group_old2Dimension Project Oceania iteration 1
 
 
 本项目为南京大学2020年春软件工程与计算三课程项目
 
-##小组成员
+## 小组成员
+
 171250640 付圣铭
 171250532 苗朗宁
 171250559 王煜霄
 171250638 葛闰
 
-##项目说明
+## 项目说明
 
-###开发框架
+### 开发框架
 
 本项目因考虑后续（迭代二迭代三）的开发，使用了springboot框架。
 
-###使用与相关功能代码说明
+### 使用与相关功能代码说明
 
 本项目为maven项目，使用前请先用maven导入相关依赖再运行springboot。
 
@@ -38,7 +39,7 @@ GraphCalculateImpl实现了从文件读数据并完成图的初始化、重名�
 
 在使用本项目时可以在OceaniaRunner类中的run()方法中调用这三个方法，run()方法即为迭代一的入口。注意，这三个方法的使用要放在run()方法中的初始化相关代码之后。
 
-###关于测试的说明
+### 关于测试的说明
 
 本项目因为考虑后续开发而使用了springboot框架，并采取了ApplicationRunner自动触发运行的方式。这使得在运行测试时OceaniaRunner中的run()方法也会被执行。此时若run()方法中的输入输出函数有需要控制台输入的（如输入紧密度阈值、输入函数名查找路径）会导致输入等待。故在进行测试时	请将OceaniaRunner.run()中有关控制台输入方法调用注释掉（在本项目中即为closenessFilter(GraphCalculateImpl graphCalculate)方法和findPath()方法），之后再运行测试。
 
