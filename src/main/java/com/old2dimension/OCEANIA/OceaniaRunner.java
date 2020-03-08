@@ -24,20 +24,20 @@ public class OceaniaRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception{
-
-        //-----以下为初始化方法-----
-        initializeGraph(graphCalculate,"call_dependencies_update.txt");
-        pathBL=new PathBLImpl(graphCalculate);
 //
-//        //--------以下为输入输出函数-----
-//        //------打印顶点、边和连通域数目-----
-//        printGraphInfo(graphCalculate);
-
-        //------紧密度阈值过滤------
-       // closenessFilter(graphCalculate);
-
-        //------路径查找------
-        findPath();
+//        //-----以下为初始化方法-----
+//        initializeGraph(graphCalculate,"call_dependencies_update.txt");
+//        pathBL=new PathBLImpl(graphCalculate);
+////
+////        //--------以下为输入输出函数-----
+////        //------打印顶点、边和连通域数目-----
+////        printGraphInfo(graphCalculate);
+//
+//        //------紧密度阈值过滤------
+//       // closenessFilter(graphCalculate);
+//
+//        //------路径查找------
+//        findPath();
 
     }
 

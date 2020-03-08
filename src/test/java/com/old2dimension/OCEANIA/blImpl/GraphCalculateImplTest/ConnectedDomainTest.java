@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-class ConnectedDomain {
+class ConnectedDomainTest {
 
     private static ArrayList<Edge> edges;
     private static GraphCalculateImpl graphCalculate;
