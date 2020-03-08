@@ -43,20 +43,95 @@ public class GraphCalculateImpl implements GraphCalculate {
 
     public ResponseVO getAmbiguousFuncInfos(String message) {
         ArrayList<FuncInfoForm> res = new ArrayList<FuncInfoForm>();
-        for (Vertex v : allVertexes) {
-            String checkMes = v.getBelongClass() + ":" + v.getFuncName()+"("+v.getArgsString(v.getArgs())+")";
+        boolean have1 = false;
+        boolean have2 = false;
+        boolean noParam = false;
+        String[] args = null;
+        String param = null;
+        String mes = null;
 
-            if (checkMes.contains(message)) {
+        if (message.contains("(")) {
+            have1 = true;
+            param = message.substring(message.indexOf("(") + 1, message.length() - 1);
+            if (param.length() == 0) {
+                noParam = true;
+            } else {
+                args = param.split(",");
+            }
+            mes = message.substring(0, message.indexOf("("));
+            if (mes.contains(":")) {
+                int colon = mes.indexOf(":");
+                mes = mes.substring(0, colon) + "." + mes.substring(colon + 1);
+            }
+        } else {
+            if (message.contains(",")) {
+                have2 = true;
+                args = message.split(",");
+            } else {
+                if (message.contains(":")) {
+                    int colon = message.indexOf(":");
+                    message = message.substring(0, colon) + "." + message.substring(colon + 1);
+                }
+            }
+        }
+
+        for (Vertex v : allVertexes) {
+            boolean isPossible = false;
+            if (!have1) {
+                if (have2) {
+                    String[] vArgs = v.getArgs();
+                    if (vArgs.length >= args.length) {
+                        for (int i = 0;i < vArgs.length - args.length + 1; i++) {
+                            boolean check = true;
+                            for (int j = 0; j < args.length; j++) {
+                                if (!(vArgs[i + j].contains(args[j].trim())))
+                                    check = false;
+                            }
+                            if (check)
+                                isPossible = true;
+                        }
+                    }
+                } else {
+                    String check = v.getBelongPackage() + "." + v.getBelongClass() + "." + v.getFuncName();
+                    for (int i = 0; i < v.getArgs().length; i++) {
+                        check += " " + v.getArgs()[i];
+                    }
+                    if (check.contains(message))
+                        isPossible = true;
+                }
+            } else {
+                String check = v.getBelongPackage() + "." + v.getBelongClass() + "." + v.getFuncName();
+                if (check.contains(mes)) {
+                    if (noParam) {
+                        isPossible = true;
+                    } else {
+                        String[] vArgs = v.getArgs();
+                        if (vArgs.length >= args.length) {
+                            for (int i = 0;i < vArgs.length - args.length + 1; i++) {
+                                boolean check2 = true;
+                                for (int j = 0; j < args.length; j++) {
+                                    if (!(vArgs[i + j].contains(args[j].trim())))
+                                        check2 = false;
+                                }
+                                if (check2)
+                                    isPossible = true;
+                            }
+                        }
+                    }
+                }
+            }
+            if (isPossible) {
                 FuncInfoForm funcInfoForm = new FuncInfoForm();
                 funcInfoForm.setBelongPackage(v.getBelongPackage());
                 funcInfoForm.setBelongClass(v.getBelongClass());
-                funcInfoForm.setFuncName(v.getFuncName());
                 funcInfoForm.setId(v.getId());
+                funcInfoForm.setFuncName(v.getFuncName());
                 funcInfoForm.setArgs(v.getArgs());
 
                 res.add(funcInfoForm);
             }
         }
+
         return ResponseVO.buildSuccess(res);
     }
 
