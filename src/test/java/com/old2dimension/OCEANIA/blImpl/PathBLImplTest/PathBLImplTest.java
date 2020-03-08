@@ -9,23 +9,19 @@ import com.old2dimension.OCEANIA.po.Vertex;
 import com.old2dimension.OCEANIA.vo.FindPathVO;
 import com.old2dimension.OCEANIA.vo.FuncInfoForm;
 import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
+
 
 import java.util.ArrayList;
 
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = OceaniaApplication.class)
 public class PathBLImplTest {
 
     private static ArrayList<Edge> edges;
     private static PathBLImpl pathBL;
 
-    @BeforeClass
+    @BeforeAll
     public static void initialize() {
 
         /*

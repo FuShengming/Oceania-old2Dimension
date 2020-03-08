@@ -1,5 +1,6 @@
 package com.old2dimension.OCEANIA;
 
+import com.old2dimension.OCEANIA.bl.PathBL;
 import com.old2dimension.OCEANIA.blImpl.GraphCalculateImpl;
 import com.old2dimension.OCEANIA.blImpl.PathBLImpl;
 import com.old2dimension.OCEANIA.po.Edge;
@@ -24,20 +25,20 @@ public class OceaniaRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception{
-
-        //-----以下为初始化方法-----
-//        initializeGraph(graphCalculate,"call_dependencies_update.txt");
-//        pathBL=new PathBLImpl(graphCalculate);
 //
-//        //--------以下为输入输出函数-----
-//        //------打印顶点、边和连通域数目-----
+//        -----以下为初始化方法-----
+ //       initializeGraph(graphCalculate,"call_dependencies_update.txt");
+ //       pathBL=new PathBLImpl(graphCalculate);
+//
+//        --------以下为输入输出函数-----
+//        ------打印顶点、边和连通域数目-----
 //        printGraphInfo(graphCalculate);
-
-        //------紧密度阈值过滤------
-       // closenessFilter(graphCalculate);
-
-        //------路径查找------
-        //findPath();
+//
+//        ------紧密度阈值过滤------
+//        closenessFilter(graphCalculate);
+//
+//        ------路径查找------
+//       findPath(pathBL);
 
     }
 
@@ -110,15 +111,15 @@ public class OceaniaRunner implements ApplicationRunner {
 
     }
 
-    public void findPath(){
+    public void findPath(PathBL pathBL){
         FuncInfoForm start= null;
         FuncInfoForm end= null;
-        System.out.println("请输入起点类/函数名：");
+        System.out.println("请输入起点类/函数/参数名：");
         Scanner sc=new Scanner(System.in);
         String nodeStr=sc.nextLine();
         start=getAmbiguousFunc(nodeStr, sc);
         if(start!=null){
-            System.out.println("请输入终点类/函数名：");
+            System.out.println("请输入终点类/函数/参数名：");
             nodeStr=sc.nextLine();
             end=getAmbiguousFunc(nodeStr, sc);
             if(end != null){
@@ -140,7 +141,7 @@ public class OceaniaRunner implements ApplicationRunner {
                 System.out.println("共有"+paths.size()+"条路径:\n");
                 int minLength=paths.get(0).getEdges().size();
                 int pathsSize=paths.size();
-                for(int j=1 ; j<=pathsSize&&paths.get(j-1).getEdges().size()<=minLength; j++){
+                for(int j=1 ; j<=pathsSize; j++){
                     PathVO curPath=paths.get(j-1);
                     System.out.println("PATH "+j+":"+getPathString(curPath));
                 }

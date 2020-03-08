@@ -19,23 +19,23 @@ import org.springframework.web.context.WebApplicationContext;
 @WebAppConfiguration
 class HelloWorldControllerTest {
 
-    private MockMvc mockMvc;
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @BeforeEach
-    public void setUp(){
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
-
-    @Test
-    public void hello() throws Exception {
-        String responseString = mockMvc.perform(MockMvcRequestBuilders.get("/hello?name=O2D"))//请求的url,请求的方法是get
-                .andReturn().getResponse().getContentAsString(); //将相应的数据转换为字符
-
-        System.out.println(responseString);
-        Assert.assertEquals("Hello O2D!", responseString);
-    }
+//    private MockMvc mockMvc;
+//
+//    @Autowired
+//    private WebApplicationContext webApplicationContext;
+//
+//    @BeforeEach
+//    public void setUp(){
+//        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+//    }
+//
+//    @Test
+//    public void hello() throws Exception {
+//        String responseString = mockMvc.perform(MockMvcRequestBuilders.get("/hello?name=O2D"))//请求的url,请求的方法是get
+//                .andReturn().getResponse().getContentAsString(); //将相应的数据转换为字符
+//
+//        System.out.println(responseString);
+//        Assert.assertEquals("Hello O2D!", responseString);
+//    }
 
 }
