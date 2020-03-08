@@ -20,8 +20,9 @@ public class GetFuncInfosTest {
     @Test
     public void getFuncInfosTest(){
         graphCalculate.initializeGraph("src/test/resource/test_dependency_data.txt");
-        Object o = graphCalculate.getAmbiguousFuncInfos("Age").getContent();
-        ArrayList<FuncInfoForm> list = (ArrayList<FuncInfoForm>) o;
-        Assert.assertEquals(3, list.size());
+        Assert.assertEquals(3, ((ArrayList<FuncInfoForm>) graphCalculate.getAmbiguousFuncInfos("Age").getContent()).size());
+        Assert.assertEquals("AgeFactorTest:testRegularAge()", ((ArrayList<FuncInfoForm>) graphCalculate.getAmbiguousFuncInfos("Age").getContent()).get(0).getClassNameAndFunc());
+        Assert.assertEquals(9, ((ArrayList<FuncInfoForm>) graphCalculate.getAmbiguousFuncInfos("").getContent()).size());
+        Assert.assertEquals(0, ((ArrayList<FuncInfoForm>) graphCalculate.getAmbiguousFuncInfos("rua").getContent()).size());
     }
 }
