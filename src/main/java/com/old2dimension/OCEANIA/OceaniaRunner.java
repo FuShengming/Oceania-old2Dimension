@@ -140,7 +140,7 @@ public class OceaniaRunner implements ApplicationRunner {
                 System.out.println("共有"+paths.size()+"条路径:\n");
                 int minLength=paths.get(0).getEdges().size();
                 int pathsSize=paths.size();
-                for(int j=1 ; j<=pathsSize&&paths.get(j-1).getEdges().size()<=minLength; j++){
+                for(int j=1 ; j<=pathsSize; j++){
                     PathVO curPath=paths.get(j-1);
                     System.out.println("PATH "+j+":"+getPathString(curPath));
                 }
