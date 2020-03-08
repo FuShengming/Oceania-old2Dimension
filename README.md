@@ -41,6 +41,6 @@ GraphCalculateImpl实现了从文件读数据并完成图的初始化、重名�
 
 ### 关于测试的说明
 
-本项目因为考虑后续开发而使用了springboot框架，并采取了ApplicationRunner自动触发运行的方式。这使得在运行测试时OceaniaRunner中的run()方法也会被执行。此时若run()方法中的输入输出函数有需要控制台输入的（如输入紧密度阈值、输入函数名查找路径）会导致输入等待。故在进行测试时	请将OceaniaRunner.run()中有关控制台输入方法调用注释掉（在本项目中即为closenessFilter(GraphCalculateImpl graphCalculate)方法和findPath()方法），之后再运行测试。
+本项目因为考虑后续开发而使用了springboot框架，为了满足迭代一直接从控制台输入输出的要求，选择ApplicationRunner自动触发运行的方式。这使得在运行测试时OceaniaRunner中的run()方法也会被执行。此时若run()方法中的输入输出函数有需要控制台输入的（如输入紧密度阈值、输入函数名查找路径）会导致输入等待。故在进行测试时，为防止输入输出错误，请将OceaniaRunner.run()中的所有代码注释掉之后再运行测试。因为测试代码本身和功能代码是分离的，故也不会影响到项目的后续发布。在后续的迭代二中使用前后端开发之后就会避免这个问题。
 
 
