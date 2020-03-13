@@ -32,6 +32,7 @@
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
 
+		<!-- junit -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -55,6 +56,8 @@
 			<version>5.5.0-M1</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- GraphQL -->
 		<dependency>
 			<groupId>com.graphql-java-kickstart</groupId>
 			<artifactId>graphql-spring-boot-starter</artifactId>
@@ -64,6 +67,18 @@
 			<groupId>com.graphql-java-kickstart</groupId>
 			<artifactId>graphiql-spring-boot-starter</artifactId>
 			<version>6.0.1</version>
+		</dependency>
+
+		<!-- WebJars -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jquery</artifactId>
+			<version>3.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap</artifactId>
+			<version>4.4.1-1</version>
 		</dependency>
     </dependencies>
 
