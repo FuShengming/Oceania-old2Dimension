@@ -254,7 +254,7 @@ public class GraphCalculateImpl implements GraphCalculate {
      * input: 连通域集合、阈值集合
      * output: 连通域集合
      */
-    private DomainSet filterByWeights(ArrayList<WeightForm> thresholds) {
+    public DomainSet filterByWeights(ArrayList<WeightForm> thresholds) {
         DomainSet filteredDomainSet = new DomainSet();
         filteredDomainSet.setThresholds(thresholds);
         ArrayList<Domain> domains = new ArrayList<>();
