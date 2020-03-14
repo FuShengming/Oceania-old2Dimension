@@ -27,18 +27,18 @@ public class OceaniaRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception{
 //
 //        -----以下为初始化方法-----
- //       initializeGraph(graphCalculate,"call_dependencies_update.txt");
- //       pathBL=new PathBLImpl(graphCalculate);
-//
+        initializeGraph(graphCalculate,"call_dependencies_update.txt");
+        pathBL=new PathBLImpl(graphCalculate);
+
 //        --------以下为输入输出函数-----
 //        ------打印顶点、边和连通域数目-----
-//        printGraphInfo(graphCalculate);
-//
+        printGraphInfo(graphCalculate);
+
 //        ------紧密度阈值过滤------
-//        closenessFilter(graphCalculate);
-//
+        closenessFilter(graphCalculate);
+
 //        ------路径查找------
-//       findPath(pathBL);
+       findPath(pathBL);
 
     }
 
@@ -65,6 +65,8 @@ public class OceaniaRunner implements ApplicationRunner {
     }
 
     public void closenessFilter(GraphCalculateImpl graphCalculate) throws NumberFormatException{
+        System.out.println();
+        System.out.println("--------连通域过滤--------");
         try {
             Scanner sc = new Scanner(System.in);
 
@@ -114,6 +116,8 @@ public class OceaniaRunner implements ApplicationRunner {
     public void findPath(PathBL pathBL){
         FuncInfoForm start= null;
         FuncInfoForm end= null;
+        System.out.println();
+        System.out.println("--------路径查找--------");
         System.out.println("请输入起点类/函数/参数名：");
         Scanner sc=new Scanner(System.in);
         String nodeStr=sc.nextLine();
