@@ -8,9 +8,25 @@
     <script type="text/javascript" src="/webjars/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
     <!--    <script type="text/javascript" src="../js/g6.min.js"></script>-->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.14.0/cytoscape.min.js"></script>
     <script type="text/javascript" src="../js/graphpage.js"></script>
     <link rel="stylesheet" href="webjars/bootstrap/4.4.1-1/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/dashboard.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/dashboard.css"/>
+    <style>
+        body {
+            font-family: helvetica neue, helvetica, liberation sans, arial, sans-serif;
+            font-size: 14px
+        }
+        /*#cy_container {*/
+        /*    position: absolute;*/
+        /*    left: 0;*/
+        /*    top: 0;*/
+        /*    bottom: 0;*/
+        /*    right: 0;*/
+        /*    z-index: 1;*/
+        /*}*/
+    </style>
 </head>
 <body>
 
@@ -35,11 +51,7 @@
 
         </nav>
     </div>
-    <main role="main" class="col-md-8 mx-sm-auto col-lg-8 px-4">
-        <h1>Bootstrap works</h1>
-        <div id="jQuery_div"></div>
-        <div id="graph_container" style="border: 3px solid black;"></div>
-    </main>
+    <div id="cy_container" class="col-md-8 mx-sm-auto col-lg-8 px-1"></div>
     <div class="row">
         <nav class="col-md-2 d-none d-md-block bg-light sidebar sidebar-right">
 
