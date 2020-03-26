@@ -12,8 +12,13 @@ public class PageController {
         return "/html/index.html";
     }
 
-    @RequestMapping("/test")
+    @RequestMapping("/graphpage")
     public String test() {
-        return "/html/graphtest.html";
+        return "/html/graphpage.html";
+    }
+
+    @RequestMapping("/cy")
+    public String cy() {
+        return "/html/cytotest.html";
     }
 }
