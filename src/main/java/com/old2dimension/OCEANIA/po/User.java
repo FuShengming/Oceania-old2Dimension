@@ -1,19 +1,23 @@
 package com.old2dimension.OCEANIA.po;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "user")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    private String firstName;
-
-    private String lastName;
-
+    @Column(name = "name")
+    private String name;
+    @Column(name = "pwd")
+    private String pwd;
     public User() {
     }
-
-    public User(int id, String firstName, String lastName) {
+    public User(int id, String name, String pwd) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+       this.name=name;
+       this.pwd=pwd;
     }
 
     public int getId() {
@@ -24,21 +28,23 @@ public class User {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getPwd() {
+        return pwd;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
+
+
 
     //Getters, Setters, Constructors.
     //You can generate them using your IDE, or use Lombok to do that job.
