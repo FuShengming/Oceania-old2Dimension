@@ -10,7 +10,7 @@ type Query {
     get_domainset: DomainSet!
     set_domainset(wf: [WF]!): DomainSet!
     #User
-    get_users: [User]!
+#    get_users: [User]!
 }
 
 input WF {
@@ -18,8 +18,7 @@ input WF {
     weightValue: Float!
 }
 
-type Mutation {
-    #User
-    create_user(user_name: String!, pwd: String!): User!
-}
-
+#type Mutation {
+#    #User
+##    create_user(user_name: String!, pwd: String!): User!
+#}

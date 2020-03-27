@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--    <meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+    <!--    <meta name="viewport" content="width=device-width, initial-scale=1">-->
+    <title>graph test</title>
+    <script type="text/javascript" src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
+    <!--    <script type="text/javascript" src="../js/g6.min.js"></script>-->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.14.0/cytoscape.min.js"></script>
+    <script type="text/javascript" src="../js/graphpage.js"></script>
+    <link rel="stylesheet" href="webjars/bootstrap/4.4.1-1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/dashboard.css"/>
+    <style>
+        body {
+            font-family: helvetica neue, helvetica, liberation sans, arial, sans-serif;
+            font-size: 14px
+        }
+        /*#cy_container {*/
+        /*    position: absolute;*/
+        /*    left: 0;*/
+        /*    top: 0;*/
+        /*    bottom: 0;*/
+        /*    right: 0;*/
+        /*    z-index: 1;*/
+        /*}*/
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 col-lg-2 mr-0" href="#">Old2Dimension</a>
+    <input class="form-control form-control-dark col-lg-8" type="text" placeholder="Search" aria-label="Search">
+    <ul class="navbar-nav col-lg-1 px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="#">Login</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav col-lg-1 px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="#">Sign Up</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar sidebar-left">
+
+        </nav>
+    </div>
+    <div id="cy_container" class="col-md-8 mx-sm-auto col-lg-8 px-1"></div>
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar sidebar-right">
+
+        </nav>
+    </div>
+</div>
+
+
+</body>
+</html>

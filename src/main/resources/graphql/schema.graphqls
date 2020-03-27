@@ -34,8 +34,8 @@ type DomainSet {
     domains: [Domain]!
 }
 
-type User {
-    id: Int!
-    firstName: String!
-    lastName: String!
-}
+#type User {
+#    id: Int!
+#    firstName: String!
+#    lastName: String!
+#}

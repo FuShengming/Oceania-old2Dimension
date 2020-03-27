@@ -54,6 +54,7 @@ public class GraphQueryResolver implements GraphQLQueryResolver {
     }
 
     public DomainSet set_domainset(ArrayList<WeightForm> weightForms) {
+        graphCalculate.initializeGraph("call_dependencies_update.txt");
         graphCalculate.getConnectedDomains(weightForms);
         return graphCalculate.domainSet;
     }
