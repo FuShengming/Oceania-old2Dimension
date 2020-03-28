@@ -21,7 +21,7 @@
             z-index: 1;
         }
     </style>
-    <title>graph test</title>
+    <title>Connected Graph</title>
 </head>
 <body>
 <script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
@@ -75,18 +75,74 @@
     </div>
 
 </nav>
-<div class="container-fluid">
-    <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar sidebar-left">
-
-        </nav>
+<div class="container-fluid row px-0 no-gutters" style="
+position: absolute;
+top: 0;
+left: 0;
+padding-top: 40px;
+height: 100%;
+">
+    <nav class="col-2 bg-light sidebar" style="height: inherit"></nav>
+    <div class="col-8 bg-white" style="height: inherit">
+        <div id="cy_container"></div>
     </div>
-    <div id="cy_container" class="col-md-8 mx-sm-auto col-lg-8 px-1"></div>
-    <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar sidebar-right">
+    <nav class="col-2 bg-light sidebar" style="height: inherit">
 
-        </nav>
-    </div>
+        <div class="card m-1">
+            <h5 class="card-header">GraphCalculateImpl.java</h5>
+            <div class="card-body">
+                <pre class="bg-white">
+<code>public ResponseVO getConnectedDomains(ArrayList&lt;WeightForm&gt; weightForms) {
+    try {
+        domainSet = filterByWeights(weightForms);
+        domainSet.sortByVerticesNum();
+        return ResponseVO.buildSuccess(new DomainSetVO(domainSet));
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseVO.buildFailure("连通域生成失败");
+    }
+}</code>
+                </pre>
+            </div>
+        </div>
+
+        <div class="card m-1">
+            <h5 class="card-header">GraphCalculateImpl.java</h5>
+            <div class="card-body">
+                <pre class="bg-white">
+<code>public ResponseVO getConnectedDomains(ArrayList&lt;WeightForm&gt; weightForms) {
+    try {
+        domainSet = filterByWeights(weightForms);
+        domainSet.sortByVerticesNum();
+        return ResponseVO.buildSuccess(new DomainSetVO(domainSet));
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseVO.buildFailure("连通域生成失败");
+    }
+}</code>
+                </pre>
+            </div>
+        </div>
+
+    </nav>
+    <!--    <div class="row col-2">-->
+    <!--        <nav class="col-md-2 d-none d-md-block bg-light sidebar sidebar-left">-->
+
+    <!--        </nav>-->
+    <!--    </div>-->
+    <!--    <div id="main" class="col-8 px-0" style="height: 100%">-->
+    <!--        <div id="cy_container"></div>-->
+    <!--        &lt;!&ndash;        <div id="cy_container" class="col-md-8 mx-sm-auto col-lg-8 px-1"></div>&ndash;&gt;-->
+    <!--        <div id="filter_button" class="rounded-circle">-->
+
+    <!--        </div>-->
+    <!--    </div>-->
+
+    <!--    <div class="row col-2">-->
+    <!--        <nav class="col-md-2 d-none d-md-block bg-light sidebar sidebar-right">-->
+
+    <!--        </nav>-->
+    <!--    </div>-->
 </div>
 
 
