@@ -97,19 +97,21 @@ $(function () {
                 ],
 
                 layout: {
-                    name: 'concentric',
-                    minNodeSpacing: 50,
-                    concentric: function (node) {
-                        return node.degree();
-                    },
-                    levelWidth: function (nodes) { // the letiation of concentric values in each level
-                        return 0.5;
-                    },
+                    // name: 'concentric',
+                    // minNodeSpacing: 50,
+                    // concentric: function (node) {
+                    //     return node.degree();
+                    // },
+                    // levelWidth: function (nodes) { // the letiation of concentric values in each level
+                    //     return 0.5;
+                    // },
 
                     // name: 'cose',
                     // animate: true,
                     // nodeDimensionsIncludeLabels: true,
                     // padding: 100
+
+                    name: 'fcose'
                 }
 
             });
