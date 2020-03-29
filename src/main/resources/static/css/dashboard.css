@@ -19,6 +19,8 @@ body {
 
 .sidebar-left {
     height: inherit;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .sidebar-right {
