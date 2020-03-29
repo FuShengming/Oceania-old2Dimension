@@ -1,4 +1,104 @@
 $(function () {
+    let tree_json = [
+        {
+            "text": "com.old2dimension.OCEANIA",
+            "nodes": [
+                {
+                    "text": "bl",
+                    "nodes": [
+                        {
+                            "text": "GraphCalculate",
+                            "nodes": [
+                                {
+                                    "text": "getConnectedDomains()"
+                                }, {
+                                    "text": "getAmbiguousFuncInfos()"
+                                }
+                            ]
+
+                        }, {
+                            "text": "PathBL",
+                            "nodes": [
+                                {
+                                    "text": "findPath()"
+                                }
+                            ]
+                        }
+                        , {
+                            "text": "UserBL",
+                            "nodes": [
+                                {
+                                    "text": "getAllUser()"
+                                }, {
+                                    "text": "login()"
+                                }, {
+                                    "text": "signUp()"
+                                },
+                            ]
+                        }
+                    ]
+                }, {
+                    "text": "blImpl",
+                    "nodes": [
+                        {
+                            "text": "GraphCalculateImpl",
+                            "nodes": [
+                                {
+                                    "text": "&lt;init&gt;()"
+                                }, {
+                                    "text": "getConnectedDomains()"
+                                }, {
+                                    "text": "getAmbiguousFuncInfos()"
+                                }, {
+                                    "text": "initializeGraph()"
+                                }, {
+                                    "text": "str2Vertex()"
+                                }, {
+                                    "text": "calculateCloseness()"
+                                }, {
+                                    "text": "filterByWeights()"
+                                }, {
+                                    "text": "findEdge()"
+                                }, {
+                                    "text": "generateDomain()"
+                                }
+                            ]
+
+                        }, {
+                            "text": "PathBLImpl",
+                            "nodes": [
+                                {
+                                    "text": "findPath()"
+                                }
+                            ]
+                        }
+                        , {
+                            "text": "UserBL",
+                            "nodes": [
+                                {
+                                    "text": "getAllUser()"
+                                }, {
+                                    "text": "login()"
+                                }, {
+                                    "text": "signUp()"
+                                },
+                            ]
+                        }
+                    ]
+                },
+            ]
+        }];
+    $('#tree').treeview({
+        data: tree_json,
+        backColor: "#f8f9fa",
+        color: "#000000",
+        showBorder: false,
+        expandIcon: "fa fa-caret-right",
+        collapseIcon: "fa fa-caret-down",
+        highlightSelected: true,
+    });
+    $("nav#tree").children().css("padding", 0);
+
     $.ajax({
         type: "post",
         url: "/graphql",

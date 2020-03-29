@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <!--    <meta http-equiv="X-UA-Compatible" content="IE=edge">-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="webjars/bootstrap/4.4.1-1/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/dashboard.css"/>
+
+    <link rel="stylesheet" type="text/css" href="webjars/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.4.1-1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/dashboard.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-treeview.css">
+
     <style>
         body {
             font-family: helvetica neue, helvetica, liberation sans, arial, sans-serif;
@@ -28,6 +32,7 @@
 <script type="text/javascript" src="webjars/popper.js/1.16.0/dist/umd/popper.min.js"></script>
 <script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
 <!--    <script type="text/javascript" src="../js/g6.min.js"></script>-->
+<script type="text/javascript" src="../js/bootstrap-treeview.js"></script>
 <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.14.0/cytoscape.min.js"></script>
 
@@ -75,6 +80,7 @@
     </div>
 
 </nav>
+
 <div class="container-fluid row px-0 no-gutters" style="
 position: absolute;
 top: 0;
@@ -82,16 +88,18 @@ left: 0;
 padding-top: 40px;
 height: 100%;
 ">
-    <nav class="col-2 bg-light sidebar" style="height: inherit"></nav>
+    <nav class="col-2 bg-light sidebar sidebar-left overflow-auto" id="tree">
+
+    </nav>
     <div class="col-8 bg-white" style="height: inherit">
         <div id="cy_container"></div>
     </div>
-    <nav class="col-2 bg-light sidebar" style="height: inherit">
+    <nav class="col-2 bg-light sidebar sidebar-right overflow-auto">
 
-        <div class="card m-1">
+        <div class="card m-2">
             <h5 class="card-header">GraphCalculateImpl.java</h5>
             <div class="card-body">
-                <pre class="bg-white">
+                <pre class="bg-white my-0">
 <code>public ResponseVO getConnectedDomains(ArrayList&lt;WeightForm&gt; weightForms) {
     try {
         domainSet = filterByWeights(weightForms);
@@ -106,43 +114,39 @@ height: 100%;
             </div>
         </div>
 
-        <div class="card m-1">
-            <h5 class="card-header">GraphCalculateImpl.java</h5>
+        <hr style="border-top: 2px dashed #999; width: 80%">
+
+        <div class="card m-2">
+            <h5 class="card-header">Label1</h5>
             <div class="card-body">
-                <pre class="bg-white">
-<code>public ResponseVO getConnectedDomains(ArrayList&lt;WeightForm&gt; weightForms) {
-    try {
-        domainSet = filterByWeights(weightForms);
-        domainSet.sortByVerticesNum();
-        return ResponseVO.buildSuccess(new DomainSetVO(domainSet));
-    } catch (Exception e) {
-        e.printStackTrace();
-        return ResponseVO.buildFailure("连通域生成失败");
-    }
-}</code>
-                </pre>
+                <div class="card-text">
+                    This is an Impl to get connected domains.
+                    This is long long long long long long long long long long long long long long long long long long
+                    long sentence.
+                </div>
+                <div class="mt-3" style="text-align: right">
+                    <button class="btn btn-info">Update</button>
+                    <button class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card m-2">
+            <h5 class="card-header">Label2</h5>
+            <div class="card-body">
+                <div class="card-text">
+                    This is an Impl to get connected domains.
+                    This is long long long long long long long long long long long long long long long long long long
+                    long sentence.
+                </div>
+                <div class="mt-3" style="text-align: right">
+                    <button class="btn btn-info">Update</button>
+                    <button class="btn btn-danger">Delete</button>
+                </div>
             </div>
         </div>
 
     </nav>
-    <!--    <div class="row col-2">-->
-    <!--        <nav class="col-md-2 d-none d-md-block bg-light sidebar sidebar-left">-->
-
-    <!--        </nav>-->
-    <!--    </div>-->
-    <!--    <div id="main" class="col-8 px-0" style="height: 100%">-->
-    <!--        <div id="cy_container"></div>-->
-    <!--        &lt;!&ndash;        <div id="cy_container" class="col-md-8 mx-sm-auto col-lg-8 px-1"></div>&ndash;&gt;-->
-    <!--        <div id="filter_button" class="rounded-circle">-->
-
-    <!--        </div>-->
-    <!--    </div>-->
-
-    <!--    <div class="row col-2">-->
-    <!--        <nav class="col-md-2 d-none d-md-block bg-light sidebar sidebar-right">-->
-
-    <!--        </nav>-->
-    <!--    </div>-->
 </div>
 
 

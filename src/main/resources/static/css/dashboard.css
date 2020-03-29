@@ -13,22 +13,12 @@ body {
  */
 
 .sidebar-left {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 100; /* Behind the navbar */
-  padding: 48px 0 0; /* Height of navbar */
+  height: inherit;
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
 }
 
 .sidebar-right {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 100; /* Behind the navbar */
-  padding: 48px 0 0; /* Height of navbar */
+  height: inherit;
   box-shadow: inset 1px 0 0 rgba(0, 0, 0, .1);
 }
 
