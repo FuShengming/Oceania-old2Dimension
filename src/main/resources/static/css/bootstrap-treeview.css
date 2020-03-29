@@ -21,7 +21,7 @@
     cursor: pointer;
     padding-top: 0;
     padding-bottom: 0;
-    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 .treeview .list-group-item:last-child {
