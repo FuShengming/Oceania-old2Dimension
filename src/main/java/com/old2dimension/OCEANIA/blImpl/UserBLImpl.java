@@ -7,9 +7,10 @@ import com.old2dimension.OCEANIA.vo.ResponseVO;
 import com.old2dimension.OCEANIA.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-@Component
+@Service
 public class UserBLImpl implements UserBL {
     @Autowired
     UserRepository userRepository;
