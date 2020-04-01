@@ -15,8 +15,8 @@
     <style>
 
         body {
-            font-family: tekton-pro, arial, sans-serif;
-            font-weight: 700;
+            font-family: fira-sans, sans-serif;
+            font-weight: 400;
             font-size: 14px;
             font-style: normal;
         }
@@ -27,10 +27,20 @@
             font-style: normal;
         }
 
-        .code-card > .card-header {
-            font-family: anonymous-pro, monospace;
+        .card-header, .card-text {
+            font-family: tekton-pro, arial, sans-serif;
             font-weight: 700;
             font-style: normal;
+        }
+
+        .code-card > .card-header, .card-text {
+            font-family: fira-sans, sans-serif;
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .nav-link {
+            font-size: 1.2rem;
         }
 
         #cy_container {
@@ -52,6 +62,10 @@
             font-size: 1.2rem;
             box-shadow: 0.1rem 0.3rem 0.2rem rgba(0, 0, 0, .2);
         }
+
+        .cxtmenu-disabled {
+            opacity: 0.333;
+        }
     </style>
     <title>Connected Graph</title>
 </head>
@@ -69,25 +83,60 @@
 <script src="https://unpkg.com/cose-base/cose-base.js"></script>
 <script src="../js/cytoscape-fcose.js"></script>
 
+<script src="../js/cytoscape-extmenu.js"></script>
+
 <script type="text/javascript" src="../js/graphpage.js"></script>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
             <div class="modal-body">
-                ...
+                <ul class="nav nav-tabs modal-title" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="search-nodes-tab" data-toggle="tab" href="#search-nodes"
+                           role="tab"
+                           aria-controls="search-nodes" aria-selected="true">Search for Nodes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="search-paths-tab" data-toggle="tab" href="#search-paths" role="tab"
+                           aria-controls="search-paths" aria-selected="false">Search for Paths</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="search-nodes" role="tabpanel"
+                         aria-labelledby="search-nodes-tab">
+                        <div class="input-group my-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Function Name</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="" aria-label="func-name"
+                                   aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="search-paths" role="tabpanel" aria-labelledby="search-paths-tab">
+                        <div class="input-group my-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon2">Start Node</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="" aria-label="start-node"
+                                   aria-describedby="basic-addon2">
+                        </div>
+                        <div class="input-group my-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon3">End Node</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="" aria-label="end-node"
+                                   aria-describedby="basic-addon3">
+                        </div>
+                    </div>
+                </div>
+                <div class="p-0" style="text-align: right">
+                    <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
+                    <button type="button" class="btn btn-primary m-2">SEARCH</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+
         </div>
     </div>
 </div>
@@ -95,38 +144,60 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top p-0">
     <a class="navbar-brand h1 m-0 col-2" href="#">👴 Old2Dimension</a>
 
-    <div class="collapse navbar-collapse col-8 px-0">
-        <input class="form-control form-control-dark col-12" type="text" placeholder="Search" aria-label="Search">
-    </div>
-
-    <div class="collapse navbar-collapse col-2 px-0 ml-5">
-        <ul class="navbar-nav row">
-            <li class="nav-item dropdown col-6 align-self-end">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown"
+    <div class="collapse navbar-collapse col-10 px-0">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
-                    Workspace
+                    Dropdown
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
-                    <a class="dropdown-item" href="#">New Project</a>
-                    <a class="dropdown-item" href="#">Open Recent</a>
-                    <a class="dropdown-item" href="#">Save Workspace</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Setting</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </li>
-            <li class="nav-item dropdown col-6 align-self-end">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                    Username
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown2">
-                    <a class="dropdown-item" href="#">My Profile</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Log Out</a>
-                </div>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#">Disabled</a>
             </li>
         </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
     </div>
+
+    <!--    <div class="collapse navbar-collapse col-2 px-0">-->
+    <!--        <ul class="navbar-nav row" style="text-align: right">-->
+    <!--            <li class="nav-item dropdown">-->
+    <!--                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown"-->
+    <!--                   aria-haspopup="true" aria-expanded="false">Workspace</a>-->
+    <!--                <div class="dropdown-menu" aria-labelledby="navbarDropdown1">-->
+    <!--                    <a class="dropdown-item" href="#">New Project</a>-->
+    <!--                    <a class="dropdown-item" href="#">Open Recent</a>-->
+    <!--                    <a class="dropdown-item" href="#">Save Workspace</a>-->
+    <!--                    <div class="dropdown-divider"></div>-->
+    <!--                    <a class="dropdown-item" href="#">Setting</a>-->
+    <!--                </div>-->
+    <!--            </li>-->
+    <!--            <li class="nav-item dropdown">-->
+    <!--                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown"-->
+    <!--                   aria-haspopup="true" aria-expanded="false">Username</a>-->
+    <!--                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown2">-->
+    <!--                    <a class="dropdown-item" href="#">My Profile</a>-->
+    <!--                    <div class="dropdown-divider"></div>-->
+    <!--                    <a class="dropdown-item" href="#">Log Out</a>-->
+    <!--                </div>-->
+    <!--            </li>-->
+    <!--        </ul>-->
+    <!--    </div>-->
 
 </nav>
 
@@ -141,18 +212,17 @@ height: 100%;
 
     </nav>
     <div class="col-8 bg-white main-graph">
-        <div id="cy_container"></div>
-        <div class="row" style="position: relative;top: 60%;left: 93%;z-index: 99;width: 4rem">
+        <div class="row" style="position: absolute;top: 60%;left: 93%;z-index: 99;width: 4rem">
             <button class="btn btn-danger btn-float">
                 <i class="fa fa-arrows"></i></button>
-            <button class="btn btn-info btn-float">
-                <i class="fa fa-search" data-toggle="modal" data-target="#exampleModal"></i></button>
+            <button class="btn btn-info btn-float" data-toggle="modal" data-target="#searchModal">
+                <i class="fa fa-search"></i></button>
             <button class="btn btn-warning btn-float">
                 <i class="fa fa-filter"></i></button>
             <button class="btn btn-primary btn-float">
                 <i class="fa fa-info"></i></button>
-            </button>
         </div>
+        <div id="cy_container"></div>
     </div>
     <nav class="col-2 bg-light sidebar sidebar-right overflow-auto">
 
@@ -185,7 +255,7 @@ height: 100%;
                         long sentence.</p>
                 </div>
                 <div class="mt-3" style="text-align: right">
-                    <button class="btn btn-info">Update</button>
+                    <button class="btn btn-info">Edit</button>
                     <button class="btn btn-danger">Delete</button>
                 </div>
             </div>
@@ -200,7 +270,7 @@ height: 100%;
                         long sentence.</p>
                 </div>
                 <div class="mt-3" style="text-align: right">
-                    <button class="btn btn-info">Update</button>
+                    <button class="btn btn-info">Edit</button>
                     <button class="btn btn-danger">Delete</button>
                 </div>
             </div>

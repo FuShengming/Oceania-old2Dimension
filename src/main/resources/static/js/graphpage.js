@@ -1,4 +1,5 @@
 $(function () {
+    //treeview on the left sidebar
     let tree_json = [
         {
             "text": "com.old2dimension.OCEANIA",
@@ -99,6 +100,7 @@ $(function () {
     });
     $("nav#tree").children().css("padding", 0);
 
+    //cytoscape container on the middle main div
     $.ajax({
         type: "post",
         url: "/graphql",
@@ -143,24 +145,52 @@ $(function () {
                 nodes: [],
                 edges: [],
             };
-            data.data.set_domainset.domains[0].vertices.forEach(function (vertex) {
+            data.data.set_domainset.domains.forEach(function (domain) {
                 graphData.nodes.push({
                     data: {
-                        id: 'n' + vertex.id.toString(),
-                        label: vertex.funcName,
+                        id: 'd' + domain.id.toString(),
                     }
                 });
-            });
-            data.data.set_domainset.domains[0].edges.forEach(function (edge) {
-                graphData.edges.push({
-                    data: {
-                        id: 'e' + edge.id.toString(),
-                        source: 'n' + edge.start.id.toString(),
-                        target: 'n' + edge.end.id.toString(),
-                        closeness: edge.weights[0].weightValue
-                    }
+                let vertices = domain.vertices;
+                vertices.forEach(function (vertex) {
+                    graphData.nodes.push({
+                        data: {
+                            id: 'n' + vertex.id.toString(),
+                            label: vertex.funcName,
+                            parent: 'd' + domain.id.toString(),
+                        }
+                    });
+                });
+                let edges = domain.edges;
+                edges.forEach(function (edge) {
+                    graphData.edges.push({
+                        data: {
+                            id: 'e' + edge.id.toString(),
+                            source: 'n' + edge.start.id.toString(),
+                            target: 'n' + edge.end.id.toString(),
+                            closeness: edge.weights[0].weightValue
+                        }
+                    });
                 });
             });
+            // data.data.set_domainset.domains[0].vertices.forEach(function (vertex) {
+            //     graphData.nodes.push({
+            //         data: {
+            //             id: 'n' + vertex.id.toString(),
+            //             label: vertex.funcName,
+            //         }
+            //     });
+            // });
+            // data.data.set_domainset.domains[0].edges.forEach(function (edge) {
+            //     graphData.edges.push({
+            //         data: {
+            //             id: 'e' + edge.id.toString(),
+            //             source: 'n' + edge.start.id.toString(),
+            //             target: 'n' + edge.end.id.toString(),
+            //             closeness: edge.weights[0].weightValue
+            //         }
+            //     });
+            // });
             const cy = cytoscape({
 
                 container: document.getElementById('cy_container'), // container to render in
@@ -175,7 +205,6 @@ $(function () {
                         selector: 'node',
                         style: {
                             'background-color': '#9EC9FF',
-                            'label': 'data(label)',
                             'border-width': 1,
                             'border-color': '#5B8FF9'
                         }
@@ -197,7 +226,16 @@ $(function () {
                     {
                         selector: 'node[label]',
                         style: {
+                            'label': 'data(label)',
                             'font-family': 'SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                        }
+                    },
+                    {
+                        selector: ':parent',
+                        style: {
+                            'background-opacity': 0.1,
+                            'background-color': '#9EC9FF',
+                            'border-color': '#9EC9FF'
                         }
                     },
                 ],
@@ -217,13 +255,50 @@ $(function () {
                     // nodeDimensionsIncludeLabels: true,
                     // padding: 100
 
-                    name: 'fcose'
+                    name: 'fcose',
+                    idealEdgeLength: 150,
                 }
-
             });
+
+            cy.cxtmenu({
+                selector: 'node, edge',
+                commands: [
+                    {
+                        content: '<span class="fa fa-flash fa-2x"></span>',
+                        select: function (ele) {
+                            console.log(ele.id());
+                        }
+                    },
+
+                    {
+                        content: '<span class="fa fa-star fa-2x"></span>',
+                        select: function (ele) {
+                            console.log(ele.data('New Label'));
+                        },
+                        // enabled: false
+                    },
+
+                    {
+                        content: 'Text',
+                        select: function (ele) {
+                            console.log(ele.position());
+                        }
+                    }
+                ],
+                menuRadius: 70,
+                indicatorSize: 12,
+                minSpotlightRadius: 12,
+            });
+
+            console.log(JSON.stringify(cy.json()).length);
         },
         error: function (err) {
             console.log(err);
         }
     });
+
+    //buttons on the middle main div
+
+    //code on the right sidebar
+    //labels on the right sidebar
 });
