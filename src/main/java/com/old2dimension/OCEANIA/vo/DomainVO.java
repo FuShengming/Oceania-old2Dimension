@@ -4,8 +4,6 @@ import com.old2dimension.OCEANIA.po.Domain;
 import com.old2dimension.OCEANIA.po.Edge;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 public class DomainVO {
     private int verticesNum;
@@ -49,8 +47,8 @@ public class DomainVO {
         this.id = id;
     }
 
-    public ArrayList<FuncInfoForm> getVertices(){
-        ArrayList<FuncInfoForm> vertices=new ArrayList<FuncInfoForm>();
+    public ArrayList<VertexVO> getVertices(){
+        ArrayList<VertexVO> vertices=new ArrayList<VertexVO>();
         for(int i=0; i<edgeVOS.size(); i++){
             EdgeVO curEdge=edgeVOS.get(i);
             if(!vertices.contains(curEdge.getStart())){

@@ -8,6 +8,7 @@ public class WorkSpaceVO {
     private int codeId;
     private Date date;
     private double closeness;
+
     public WorkSpaceVO(int userId, int codeId, Date date, double closeness) {
         this.userId = userId;
         this.codeId = codeId;

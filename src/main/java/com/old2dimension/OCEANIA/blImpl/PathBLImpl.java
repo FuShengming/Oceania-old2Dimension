@@ -5,7 +5,7 @@ import com.old2dimension.OCEANIA.po.AdjacencyMatrix;
 import com.old2dimension.OCEANIA.po.Edge;
 import com.old2dimension.OCEANIA.po.Vertex;
 import com.old2dimension.OCEANIA.vo.FindPathVO;
-import com.old2dimension.OCEANIA.vo.FuncInfoForm;
+import com.old2dimension.OCEANIA.vo.VertexVO;
 import com.old2dimension.OCEANIA.vo.PathVO;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ public class PathBLImpl implements PathBL {
     }
 
     @Override
-    public ResponseVO findPath(FuncInfoForm startVertex, FuncInfoForm endVertex) {
+    public ResponseVO findPath(VertexVO startVertex, VertexVO endVertex) {
         // --- 初始化数组和栈 ---
         visited = new boolean[adjacencyMatrix.getVerticesNum()];
         stack = new ArrayList<>();

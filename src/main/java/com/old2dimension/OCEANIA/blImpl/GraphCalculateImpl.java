@@ -4,7 +4,7 @@ package com.old2dimension.OCEANIA.blImpl;
 import com.old2dimension.OCEANIA.bl.GraphCalculateBL;
 import com.old2dimension.OCEANIA.po.*;
 import com.old2dimension.OCEANIA.vo.DomainSetVO;
-import com.old2dimension.OCEANIA.vo.FuncInfoForm;
+import com.old2dimension.OCEANIA.vo.VertexVO;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
 import com.old2dimension.OCEANIA.vo.WeightForm;
 import org.springframework.stereotype.Component;
@@ -39,7 +39,7 @@ public class GraphCalculateImpl implements GraphCalculateBL {
     }
 
     public ResponseVO getAmbiguousFuncInfos(String message) {
-        ArrayList<FuncInfoForm> res = new ArrayList<FuncInfoForm>();
+        ArrayList<VertexVO> res = new ArrayList<VertexVO>();
         boolean have1 = false;
         boolean have2 = false;
         boolean noParam = false;
@@ -118,14 +118,14 @@ public class GraphCalculateImpl implements GraphCalculateBL {
                 }
             }
             if (isPossible) {
-                FuncInfoForm funcInfoForm = new FuncInfoForm();
-                funcInfoForm.setBelongPackage(v.getBelongPackage());
-                funcInfoForm.setBelongClass(v.getBelongClass());
-                funcInfoForm.setId(v.getId());
-                funcInfoForm.setFuncName(v.getFuncName());
-                funcInfoForm.setArgs(v.getArgs());
+                VertexVO vertexVO = new VertexVO();
+                vertexVO.setBelongPackage(v.getBelongPackage());
+                vertexVO.setBelongClass(v.getBelongClass());
+                vertexVO.setId(v.getId());
+                vertexVO.setFuncName(v.getFuncName());
+                vertexVO.setArgs(v.getArgs());
 
-                res.add(funcInfoForm);
+                res.add(vertexVO);
             }
         }
 

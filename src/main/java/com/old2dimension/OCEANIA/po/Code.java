@@ -8,11 +8,45 @@ public class Code {
 
     private String name;
 
-    public Code(int userId,int codeId,String name){
-        this.userId=userId;
-        this.codeId=codeId;
-        this.name=name;
+    private int numOfVertices;
+
+    private int numOfEdges;
+
+    private int numOfDomains;
+
+    public Code(int userId, int codeId, String name, int numOfVertices, int numOfEdges, int numOfDomains) {
+        this.userId = userId;
+        this.codeId = codeId;
+        this.name = name;
+        this.numOfVertices = numOfVertices;
+        this.numOfEdges = numOfEdges;
+        this.numOfDomains = numOfDomains;
     }
+
+    public int getNumOfVertices() {
+        return numOfVertices;
+    }
+
+    public void setNumOfVertices(int numOfVertices) {
+        this.numOfVertices = numOfVertices;
+    }
+
+    public int getNumOfEdges() {
+        return numOfEdges;
+    }
+
+    public void setNumOfEdges(int numOfEdges) {
+        this.numOfEdges = numOfEdges;
+    }
+
+    public int getNumOfDomains() {
+        return numOfDomains;
+    }
+
+    public void setNumOfDomains(int numOfDomains) {
+        this.numOfDomains = numOfDomains;
+    }
+
 
     public int getUserId() {
         return userId;

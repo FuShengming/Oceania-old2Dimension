@@ -10,10 +10,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-@Service
+@Component
 public class UserBLImpl implements UserBL {
     @Autowired
     UserRepository userRepository;
+
+
+
    public ResponseVO getAllUser(){
         ArrayList<User> allUsers = (ArrayList<User>) userRepository.findAll();
         ArrayList<UserVO> users=userList2UserVOList(allUsers);
