@@ -41,7 +41,7 @@ public class UserBLImpl implements UserBL {
        try {
             User user =new User(userInfo);
            user=userRepository.save(user);
-           Code code =new Code(user,1,"iTrust",1982,3841,63);
+           Code code =new Code(user.getId(),1,"iTrust",1982,3841,63);
            codeRepository.saveDefaultCode(user.getId());
             return ResponseVO.buildSuccess("sign up success");
        }
