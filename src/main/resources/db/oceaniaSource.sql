@@ -18,6 +18,7 @@ create table if not exists user(
 	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create table if not exists code(
+    id int auto_increment primary key,
 	user_id int NOT NULL,
 	code_id int NOT NULL,
 	name varchar(8192),
@@ -29,6 +30,7 @@ create table if not exists code(
 	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create table if not exists vertex_label(
+id int auto_increment primary key,
 	user_id int NOT NULL,
 	code_id int NOT NULL,
 	vertex_id int NOT NULL,
@@ -41,6 +43,7 @@ create table if not exists vertex_label(
 
 
 create table if not exists edge_label(
+id int auto_increment primary key,
 	user_id int NOT NULL,
 	code_id int NOT NULL,
 	edge_id int NOT NULL,
@@ -52,6 +55,7 @@ create table if not exists edge_label(
 
 
 create table if not exists domain_label(
+    id int auto_increment primary key,
 	user_id int NOT NULL,
 	code_id int NOT NULL,
 	first_edge_id int NOT NULL,
@@ -63,6 +67,7 @@ create table if not exists domain_label(
 	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create table if not exists work_space(
+    id int auto_increment primary key,
 	user_id int NOT NULL,
 	code_id int NOT NULL,
 	work_space_date timestamp default CURRENT_TIMESTAMP,

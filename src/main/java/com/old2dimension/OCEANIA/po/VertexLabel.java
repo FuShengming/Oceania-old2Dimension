@@ -1,7 +1,21 @@
 package com.old2dimension.OCEANIA.po;
 
-public class VertexLabel {
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+public class VertexLabel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     private int userId;
 
     private int codeId;

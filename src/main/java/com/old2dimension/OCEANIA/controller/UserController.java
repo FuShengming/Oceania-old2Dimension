@@ -26,4 +26,7 @@ public class UserController {
         return userBL.login(user.getName(),user.getPwd());
     }
 
+//    @RequestMapping("/getAll")
+//    public ResponseVO getAll
+
 }

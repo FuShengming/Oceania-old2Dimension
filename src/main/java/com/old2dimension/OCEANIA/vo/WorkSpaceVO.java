@@ -3,8 +3,16 @@ package com.old2dimension.OCEANIA.vo;
 import java.util.Date;
 
 public class WorkSpaceVO {
-    private int userId;
+    private int id;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    private int userId;
     private int codeId;
     private Date date;
     private double closeness;

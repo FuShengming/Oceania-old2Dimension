@@ -1,21 +1,46 @@
 package com.old2dimension.OCEANIA.po;
 
-public class Code {
+import javax.persistence.*;
 
+@Entity
+@Table(name = "code")
+public class Code {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    @Column(name="user_id")
     private int userId;
 
+    @Column(name="codeId")
     private int codeId;
-
+    @Column(name="name")
     private String name;
-
+    @Column(name="numOfVertices")
     private int numOfVertices;
-
+    @Column(name="numOfEdges")
     private int numOfEdges;
-
+    @Column(name="numOfDomains")
     private int numOfDomains;
 
     public Code(int userId, int codeId, String name, int numOfVertices, int numOfEdges, int numOfDomains) {
-        this.userId = userId;
+        this.userId=userId;
         this.codeId = codeId;
         this.name = name;
         this.numOfVertices = numOfVertices;
@@ -48,13 +73,7 @@ public class Code {
     }
 
 
-    public int getUserId() {
-        return userId;
-    }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 
     public int getCodeId() {
         return codeId;
