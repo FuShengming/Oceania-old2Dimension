@@ -31,7 +31,8 @@ public class UserBLImpl implements UserBL {
            return ResponseVO.buildFailure("no such userName : "+userName);}
        if(user.getPwd().equals(pwd)){
            System.out.println("登陆成功");
-           return ResponseVO.buildSuccess("login success");}
+           //isLogin=true;
+           return ResponseVO.buildSuccess(user);}
        else{
            System.out.println("登陆失败");
            return ResponseVO.buildFailure("name or pwd is not correct");}
@@ -39,9 +40,15 @@ public class UserBLImpl implements UserBL {
 
     public  ResponseVO signUp(UserVO userInfo){
        try {
+
             User user =new User(userInfo);
+
+            User hasUser=userRepository.findUserByName(user.getName());
+           if(hasUser != null){
+               return ResponseVO.buildFailure("用户名已存在");
+           }
            user=userRepository.save(user);
-           Code code =new Code(user,1,"iTrust",1982,3841,63);
+           Code code =new Code(user.getId(),1,"iTrust",1982,3841,63);
            codeRepository.saveDefaultCode(user.getId());
             return ResponseVO.buildSuccess("sign up success");
        }

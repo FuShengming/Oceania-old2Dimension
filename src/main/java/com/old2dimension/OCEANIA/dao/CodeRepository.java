@@ -13,6 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface CodeRepository extends JpaRepository<Code,Integer> {
     @Transactional
     @Modifying
-    @Query(value = "insert into code values(?1,1,\'iTrust\',1982,3841,63)",nativeQuery = true)
+    @Query(value = "insert into code values(null,?1,1,\'iTrust\',1982,3841,63)",nativeQuery = true)
     void saveDefaultCode(int userId);
 }

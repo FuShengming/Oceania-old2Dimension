@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 public class DomainVO {
     private int verticesNum;
+    private ArrayList<VertexVO> vertices;
     private ArrayList<EdgeVO> edgeVOS;
     private int id;
-
     public DomainVO() {
 
     }
@@ -21,6 +21,7 @@ public class DomainVO {
             edgeVOS.add(new EdgeVO(edge));
         }
         this.id = domain.getId();
+        this.vertices=getVertices();
     }
 
     public int getVerticesNum() {
@@ -29,6 +30,10 @@ public class DomainVO {
 
     public void setVerticesNum(int verticesNum) {
         this.verticesNum = verticesNum;
+    }
+
+    public void setVertices(ArrayList<VertexVO> vertices) {
+        this.vertices = vertices;
     }
 
     public ArrayList<EdgeVO> getEdgeVOS() {
