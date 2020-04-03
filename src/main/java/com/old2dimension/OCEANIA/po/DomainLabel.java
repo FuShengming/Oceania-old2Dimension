@@ -1,9 +1,9 @@
 package com.old2dimension.OCEANIA.po;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "domain_label")
 public class DomainLabel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,14 +16,20 @@ public class DomainLabel {
     public void setId(int id) {
         this.id = id;
     }
+
+    @Column(name = "user_id")
     private int userId;
 
+    @Column(name = "code_id")
     private int codeId;
 
+    @Column(name = "first_edge_id")
     private int firstEdgeId;
 
+    @Column(name = "num_of_vertex")
     private int numOfVertex;
 
+    @Column(name = "content")
     private String content;
 
     public DomainLabel(int userId, int codeId, int firstEdgeId, int numOfVertex, String content) {

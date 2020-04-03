@@ -12,6 +12,10 @@ public class StatisticsController {
     @Autowired
     StatisticsBL statisticsBL;
 
+    @RequestMapping("countUser")
+    public int getNumOfUser() {
+        return statisticsBL.getNumOfUser();
+    }
 
-
+    
 }
