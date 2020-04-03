@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register to Oceania!</title>
+
+    <!-- JavaScript -->
+    <script type="text/javascript" src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
+
+    <!-- Style sheet-->
+    <link rel="stylesheet" href="webjars/bootstrap/4.4.1-1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/login.css"/>
+</head>
+<body>
+<div class="login-container">
+    <div class="login-line-container">
+        <div class="login-form-container">
+            <form class="login-form" style="padding: 0 24px 48px; overflow: hidden;">
+                <div class="login-title"> 注 册 </div>
+                <div class="login-input-outer">
+                    <div class="login-input" id="login-name-input">
+                        <label class="input-wrapper">
+                            <input name="username" class="Input" placeholder="用户名" value>
+                        </label>
+                    </div>
+                </div>
+                <div class="login-input-outer input-content-holder">
+                    <div class="login-input" id="login-pwd-input">
+                        <label class="input-wrapper">
+                            <input name="password" class="Input" placeholder="密码" value>
+                        </label>
+                    </div>
+                </div>
+                <div class="login-input-outer input-content-holder">
+                    <div class="login-input" id="login-pwd-input-repeat">
+                        <label class="input-wrapper">
+                            <input name="password" class="Input" placeholder="重复密码" value>
+                        </label>
+                    </div>
+                </div>
+                <div class="login-input-outer">
+                    <div class="login-input" id="login-captcha-input">
+                        <label class="input-wrapper">
+                            <input name="captcha" class="Input" placeholder="验证码" value>
+                        </label>
+                    </div>
+                    <span class="captcha-image-outer">
+                        <div class="captcha-image-container">
+                            <img class="captcha-image" src="">
+                        </div>
+                    </span>
+                </div>
+                <div class="login-options">
+                    <button type="button" class="login-register">已有帐号？点击登录</button>
+                </div>
+                <button type="submit" class="btn btn-primary login-btn">注册</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
