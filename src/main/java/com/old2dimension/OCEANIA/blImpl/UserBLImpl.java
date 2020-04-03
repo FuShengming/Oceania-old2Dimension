@@ -48,8 +48,8 @@ public class UserBLImpl implements UserBL {
                return ResponseVO.buildFailure("用户名已存在");
            }
            user=userRepository.save(user);
-           Code code =new Code(user.getId(),1,"iTrust",1982,3841,63);
-           codeRepository.saveDefaultCode(user.getId());
+           Code code =new Code(0,user.getId(),"iTrust",1982,3841,63);
+           codeRepository.save(code);
             return ResponseVO.buildSuccess("sign up success");
        }
        catch (Exception e){

@@ -20,13 +20,11 @@ create table if not exists user(
 create table if not exists code(
     id int auto_increment primary key,
 	user_id int NOT NULL,
-	code_id int NOT NULL,
 	name varchar(8192),
-	numOfVertices int,
-	numOfEdges int,
-	numOfDomains int,
-	CONSTRAINT code_fk_user_id FOREIGN KEY(user_id) REFERENCES user(id)  ON DELETE Cascade,
-	KEY code_identity(code_id)
+	num_of_vertices int,
+	num_of_edges int,
+	num_of_domains int,
+	CONSTRAINT code_fk_user_id FOREIGN KEY(user_id) REFERENCES user(id)  ON DELETE Cascade
 	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create table if not exists vertex_label(
@@ -37,7 +35,7 @@ id int auto_increment primary key,
 	content varchar(8192),
 	KEY vertex_identity(vertex_id),
  	CONSTRAINT vertex_fk_user_identity FOREIGN KEY(user_id) REFERENCES user(id) ON DELETE Cascade,
- 	CONSTRAINT vertex_fk_code_id FOREIGN KEY(code_id) REFERENCES code(code_id)  ON DELETE Cascade
+ 	CONSTRAINT vertex_fk_code_id FOREIGN KEY(code_id) REFERENCES code(id)  ON DELETE Cascade
 	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -50,7 +48,7 @@ id int auto_increment primary key,
 	content varchar(8192),
 	KEY edge_identity(edge_id),
  	CONSTRAINT edge_fk_user_identity FOREIGN KEY(user_id) REFERENCES user(id)  ON DELETE Cascade,
- 	CONSTRAINT edge_fk_code_id FOREIGN KEY(code_id) REFERENCES code(code_id)  ON DELETE Cascade
+ 	CONSTRAINT edge_fk_code_id FOREIGN KEY(code_id) REFERENCES code(id)  ON DELETE Cascade
 	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -63,7 +61,7 @@ create table if not exists domain_label(
 	content varchar(8192),
 	KEY domain_identity(first_edge_id,num_of_vertices),
  	CONSTRAINT domain_fk_user_identity FOREIGN KEY(user_id) REFERENCES user(id)  ON DELETE Cascade,
- 	CONSTRAINT domain_fk_code_id FOREIGN KEY(code_id) REFERENCES code(code_id)  ON DELETE Cascade
+ 	CONSTRAINT domain_fk_code_id FOREIGN KEY(code_id) REFERENCES code(id)  ON DELETE Cascade
 	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create table if not exists work_space(
@@ -73,6 +71,6 @@ create table if not exists work_space(
 	work_space_date timestamp default CURRENT_TIMESTAMP,
 	closeness double default 0 NOT NULL,
 	CONSTRAINT work_fk_user_identity FOREIGN KEY(user_id) REFERENCES user(id)  ON DELETE Cascade,
- 	CONSTRAINT work_fk_code_id FOREIGN KEY(code_id) REFERENCES code(code_id)  ON DELETE Cascade
+ 	CONSTRAINT work_fk_code_id FOREIGN KEY(code_id) REFERENCES code(id)  ON DELETE Cascade
 	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

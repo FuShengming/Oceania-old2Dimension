@@ -28,20 +28,28 @@ public class Code {
     @Column(name="user_id")
     private int userId;
 
-    @Column(name="codeId")
-    private int codeId;
     @Column(name="name")
     private String name;
-    @Column(name="numOfVertices")
+    @Column(name="num_of_vertices")
     private int numOfVertices;
-    @Column(name="numOfEdges")
+    @Column(name="num_of_edges")
     private int numOfEdges;
-    @Column(name="numOfDomains")
+    @Column(name="num_of_domains")
     private int numOfDomains;
 
-    public Code(int userId, int codeId, String name, int numOfVertices, int numOfEdges, int numOfDomains) {
+    public Code(){}
+    public Code(int userId, String name, int numOfVertices, int numOfEdges, int numOfDomains) {
         this.userId=userId;
-        this.codeId = codeId;
+
+        this.name = name;
+        this.numOfVertices = numOfVertices;
+        this.numOfEdges = numOfEdges;
+        this.numOfDomains = numOfDomains;
+    }
+
+    public Code(int id,int userId, String name, int numOfVertices, int numOfEdges, int numOfDomains) {
+        this.userId=userId;
+        this.id = id;
         this.name = name;
         this.numOfVertices = numOfVertices;
         this.numOfEdges = numOfEdges;
@@ -72,16 +80,6 @@ public class Code {
         this.numOfDomains = numOfDomains;
     }
 
-
-
-
-    public int getCodeId() {
-        return codeId;
-    }
-
-    public void setCodeId(int codeId) {
-        this.codeId = codeId;
-    }
 
     public String getName() {
         return name;
