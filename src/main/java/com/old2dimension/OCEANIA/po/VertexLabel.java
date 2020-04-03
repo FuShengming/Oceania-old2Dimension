@@ -16,10 +16,10 @@ public class VertexLabel {
     public void setId(int id) {
         this.id = id;
     }
-    @Column(name = "user_Id")
+    @Column(name = "user_id")
     private int userId;
 
-    @Column(name = "code_Id")
+    @Column(name = "code_id")
     private int codeId;
 
     @Column(name = "vertex_id")
@@ -28,6 +28,9 @@ public class VertexLabel {
     @Column(name = "content")
     private String content;
 
+    public VertexLabel(){
+
+    }
     public VertexLabel(int userId, int codeId, int vertexId, String content) {
         this.userId = userId;
         this.codeId = codeId;

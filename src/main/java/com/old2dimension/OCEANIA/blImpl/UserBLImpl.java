@@ -20,35 +20,42 @@ public class UserBLImpl implements UserBL {
     CodeRepository codeRepository;
 
 
-   public ResponseVO getAllUser(){
+    public ResponseVO getAllUser(){
         ArrayList<User> allUsers = (ArrayList<User>) userRepository.findAll();
         ArrayList<UserVO> users=userList2UserVOList(allUsers);
         return ResponseVO.buildSuccess(users);
     }
     public ResponseVO login(String userName, String pwd){
-       User user = userRepository.findUserByName(userName);
-       if(user == null){
-           return ResponseVO.buildFailure("no such userName : "+userName);}
-       if(user.getPwd().equals(pwd)){
-           System.out.println("登陆成功");
-           return ResponseVO.buildSuccess("login success");}
-       else{
-           System.out.println("登陆失败");
-           return ResponseVO.buildFailure("name or pwd is not correct");}
+        User user = userRepository.findUserByName(userName);
+        if(user == null){
+            return ResponseVO.buildFailure("no such userName : "+userName);}
+        if(user.getPwd().equals(pwd)){
+            System.out.println("登陆成功");
+            //isLogin=true;
+            return ResponseVO.buildSuccess(user);}
+        else{
+            System.out.println("登陆失败");
+            return ResponseVO.buildFailure("name or pwd is not correct");}
     }
 
     public  ResponseVO signUp(UserVO userInfo){
-       try {
+        try {
+
             User user =new User(userInfo);
-           user=userRepository.save(user);
-           Code code =new Code(user.getId(),1,"iTrust",1982,3841,63);
-           codeRepository.saveDefaultCode(user.getId());
+
+            User hasUser=userRepository.findUserByName(user.getName());
+            if(hasUser != null){
+                return ResponseVO.buildFailure("用户名已存在");
+            }
+            user=userRepository.save(user);
+            Code code =new Code(0,user.getId(),"iTrust",1982,3841,63);
+            codeRepository.save(code);
             return ResponseVO.buildSuccess("sign up success");
-       }
-       catch (Exception e){
-           e.printStackTrace();
-           return ResponseVO.buildFailure("sign up fail");
-       }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseVO.buildFailure("sign up fail");
+        }
     }
 
     private ArrayList<UserVO> userList2UserVOList(ArrayList<User> userList){

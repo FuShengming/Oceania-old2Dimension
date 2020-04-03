@@ -12,8 +12,6 @@ public class CodeVO {
     }
     private int userId;
 
-    private int codeId;
-
     private String name;
 
     private int numOfVertices;
@@ -48,7 +46,6 @@ public class CodeVO {
 
     public CodeVO(int userId, int codeId, String name, int numOfVertices, int numOfEdges, int numOfDomains) {
         this.userId = userId;
-        this.codeId = codeId;
         this.name = name;
         this.numOfVertices = numOfVertices;
         this.numOfEdges = numOfEdges;
@@ -64,13 +61,6 @@ public class CodeVO {
         this.userId = userId;
     }
 
-    public int getCodeId() {
-        return codeId;
-    }
-
-    public void setCodeId(int codeId) {
-        this.codeId = codeId;
-    }
 
     public String getName() {
         return name;

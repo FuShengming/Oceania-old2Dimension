@@ -11,8 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface CodeRepository extends JpaRepository<Code,Integer> {
-    @Transactional
-    @Modifying
-    @Query(value = "insert into code values(?1,1,\'iTrust\',1982,3841,63)",nativeQuery = true)
-    void saveDefaultCode(int userId);
+//    @Transactional
+//    @Modifying
+//    @Query(value = "insert into code values(?1,1,\'iTrust\',1982,3841,63)",nativeQuery = true)
+//    public void saveDefaultCode(int userId);
+
+    public Code findCodeById(int id);
+
+
 }

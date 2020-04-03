@@ -8,7 +8,9 @@ import java.util.List;
 
 @Repository
 public interface VertexLabelRepository extends JpaRepository<VertexLabel, Integer> {
-    VertexLabel findVertexLabelByUserIdAndCodeIdAndVertexId(int userId, int codeId, int vertexId);
+    VertexLabel findVertexLabelByCodeIdAndVertexId(int codeId, int vertexId);
 
-    List<VertexLabel> findVertexLabelsByUserIdAndCodeId(int userId, int codeId);
+    void deleteVertexLabelByCodeIdAndVertexId(int codeId, int vertexId);
+
+    List<VertexLabel> findVertexLabelsByCodeId(int codeId);
 }

@@ -18,4 +18,6 @@ public class StatisticsBLImpl implements StatisticsBL {
         ArrayList<User> users = (ArrayList<User>) userRepository.findAll();
         return users.size();
     }
+
+
 }

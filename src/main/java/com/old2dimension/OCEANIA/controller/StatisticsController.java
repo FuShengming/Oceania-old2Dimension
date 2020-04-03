@@ -17,5 +17,5 @@ public class StatisticsController {
         return statisticsBL.getNumOfUser();
     }
 
-    
+
 }

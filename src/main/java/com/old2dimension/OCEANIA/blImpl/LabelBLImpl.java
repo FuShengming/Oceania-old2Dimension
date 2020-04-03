@@ -24,128 +24,179 @@ public class LabelBLImpl implements LabelBL {
 
 
     public ResponseVO noteVertex(VertexLabelVO vertexLabelVO) {
-        VertexLabel vertexLabel = vertexLabelRepository.findVertexLabelByUserIdAndCodeIdAndVertexId(
-                vertexLabelVO.getUserId(), vertexLabelVO.getCodeId(), vertexLabelVO.getVertexId());
-        vertexLabel.setContent(vertexLabelVO.getContent());
-        vertexLabelRepository.save(vertexLabel);
+        try{
+            VertexLabel vertexLabel = vertexLabelRepository.findVertexLabelByCodeIdAndVertexId(
+                    vertexLabelVO.getCodeId(), vertexLabelVO.getVertexId());
+            if (vertexLabel == null) {
+                VertexLabel v = new VertexLabel(
+                        vertexLabelVO.getUserId(), vertexLabelVO.getCodeId(), vertexLabelVO.getVertexId(), vertexLabelVO.getContent());
+                vertexLabelRepository.save(v);
+                return ResponseVO.buildSuccess(v);
+            } else {
+                vertexLabel.setContent(vertexLabelVO.getContent());
+                vertexLabelRepository.save(vertexLabel);
+                return ResponseVO.buildSuccess(vertexLabel);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            return ResponseVO.buildFailure("note failed");
+        }
 
-        System.out.println("成功注释点");
-        return ResponseVO.buildSuccess("create/update VertexLabel successfully");
     }
 
     public ResponseVO noteEdge(EdgeLabelVO edgeLabelVO) {
-        EdgeLabel edgeLabel = edgeLabelRepository.findEdgeLabelByUserIdAndCodeIdAndEdgeId(
-                edgeLabelVO.getUserId(), edgeLabelVO.getCodeId(), edgeLabelVO.getEdgeId());
-        edgeLabel.setContent(edgeLabelVO.getContent());
-        edgeLabelRepository.save(edgeLabel);
+        try {
+            EdgeLabel edgeLabel = edgeLabelRepository.findEdgeLabelByCodeIdAndEdgeId(
+                    edgeLabelVO.getCodeId(), edgeLabelVO.getEdgeId());
+            if (edgeLabel == null) {
+                EdgeLabel e = new EdgeLabel(
+                        edgeLabelVO.getUserId(), edgeLabelVO.getCodeId(), edgeLabelVO.getEdgeId(), edgeLabelVO.getContent());
+                edgeLabelRepository.save(e);
+                return ResponseVO.buildSuccess(e);
+            } else {
+                edgeLabel.setContent(edgeLabelVO.getContent());
+                edgeLabelRepository.save(edgeLabel);
+                return ResponseVO.buildSuccess(edgeLabel);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            return ResponseVO.buildFailure("note failed");
+        }
 
-        System.out.println("成功注释边");
-        return ResponseVO.buildSuccess("create/update EdgeLabel successfully");
     }
 
     public ResponseVO noteDomain(DomainLabelVO domainLabelVO) {
-        DomainLabel domainLabel = domainLabelRepository.findDomainLabelByUserIdAndCodeIdAndFirstEdgeIdAndNumOfVertex(
-                domainLabelVO.getUserId(), domainLabelVO.getCodeId(), domainLabelVO.getFirstEdgeId(), domainLabelVO.getNumOfVertex());
-        domainLabel.setContent(domainLabelVO.getContent());
-        domainLabelRepository.save(domainLabel);
+        try {
+            DomainLabel domainLabel = domainLabelRepository.findDomainLabelByCodeIdAndFirstEdgeIdAndNumOfVertex(
+                    domainLabelVO.getCodeId(), domainLabelVO.getFirstEdgeId(), domainLabelVO.getNumOfVertex());
+            if (domainLabel == null) {
+                DomainLabel d = new DomainLabel(
+                        domainLabelVO.getUserId(), domainLabelVO.getCodeId(), domainLabelVO.getFirstEdgeId(), domainLabelVO.getNumOfVertex(), domainLabelVO.getContent());
+                domainLabelRepository.save(d);
+                return ResponseVO.buildSuccess(d);
+            } else {
+                domainLabel.setContent(domainLabelVO.getContent());
+                domainLabelRepository.save(domainLabel);
+                return ResponseVO.buildSuccess(domainLabel);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            return ResponseVO.buildFailure("note failed");
+        }
 
-        System.out.println("成功注释域");
-        return ResponseVO.buildSuccess("create/update DomainLabel successfully");
     }
 
 
     public ResponseVO deleteVertexLabel(VertexLabelVO vertexLabelVO) {
-        if (vertexLabelVO.getContent() == null) {
-            return ResponseVO.buildFailure("The vertex has no label");
-        } else {
-            VertexLabel vertexLabel = vertexLabelRepository.findVertexLabelByUserIdAndCodeIdAndVertexId(
-                    vertexLabelVO.getUserId(), vertexLabelVO.getCodeId(), vertexLabelVO.getVertexId());
-            vertexLabel.setContent(null);
-            vertexLabelRepository.save(vertexLabel);
-
-            System.out.println("成功删除点注释");
-            return ResponseVO.buildSuccess("delete VertexLabel successfully");
+        try {
+            VertexLabel vertexLabel = vertexLabelRepository.findVertexLabelByCodeIdAndVertexId(
+                    vertexLabelVO.getCodeId(), vertexLabelVO.getVertexId());
+            if (vertexLabel == null) {
+                return ResponseVO.buildFailure("no such label");
+            } else {
+                vertexLabelRepository.deleteVertexLabelByCodeIdAndVertexId(
+                        vertexLabelVO.getCodeId(), vertexLabelVO.getVertexId());
+                return ResponseVO.buildSuccess("delete label successfully");
+            }
+        } catch (Exception e) {
+            return ResponseVO.buildFailure("delete failed");
         }
+
     }
 
     public ResponseVO deleteEdgeLabel(EdgeLabelVO edgeLabelVO) {
-        if (edgeLabelVO.getContent() == null) {
-            return ResponseVO.buildFailure("The edge has no label");
-        } else {
-            EdgeLabel edgeLabel = edgeLabelRepository.findEdgeLabelByUserIdAndCodeIdAndEdgeId(
-                    edgeLabelVO.getUserId(), edgeLabelVO.getCodeId(), edgeLabelVO.getEdgeId());
-            edgeLabel.setContent(null);
-            edgeLabelRepository.save(edgeLabel);
-
-            System.out.println("成功删除边注释");
-            return ResponseVO.buildSuccess("delete EdgeLabel successfully");
+        try {
+            EdgeLabel edgeLabel = edgeLabelRepository.findEdgeLabelByCodeIdAndEdgeId(
+                    edgeLabelVO.getCodeId(), edgeLabelVO.getEdgeId());
+            if (edgeLabel == null) {
+                return ResponseVO.buildFailure("no such label");
+            } else {
+                edgeLabelRepository.deleteEdgeLabelByCodeIdAndEdgeId(
+                        edgeLabelVO.getCodeId(), edgeLabelVO.getEdgeId());
+                return ResponseVO.buildSuccess("delete label successfully");
+            }
+        } catch (Exception e) {
+            return ResponseVO.buildFailure("delete failed");
         }
+
     }
 
     public ResponseVO deleteDomainLabel(DomainLabelVO domainLabelVO) {
-        if (domainLabelVO.getContent() == null) {
-            return ResponseVO.buildFailure("The domain has no label");
-        } else {
-            DomainLabel domainLabel = domainLabelRepository.findDomainLabelByUserIdAndCodeIdAndFirstEdgeIdAndNumOfVertex(
-                    domainLabelVO.getUserId(), domainLabelVO.getCodeId(), domainLabelVO.getFirstEdgeId(), domainLabelVO.getNumOfVertex());
-            domainLabel.setContent(null);
-            domainLabelRepository.save(domainLabel);
-
-            System.out.println("成功删除域注释");
-            return ResponseVO.buildSuccess("delete DomainLabel successfully");
+        try {
+            DomainLabel domainLabel = domainLabelRepository.findDomainLabelByCodeIdAndFirstEdgeIdAndNumOfVertex(
+                    domainLabelVO.getCodeId(), domainLabelVO.getFirstEdgeId(), domainLabelVO.getNumOfVertex());
+            if (domainLabel == null) {
+                return ResponseVO.buildFailure("no such label");
+            } else {
+                domainLabelRepository.deleteDomainLabelByCodeIdAndFirstEdgeIdAndNumOfVertex(
+                        domainLabelVO.getCodeId(), domainLabelVO.getFirstEdgeId(), domainLabelVO.getNumOfVertex());
+                return ResponseVO.buildSuccess("delete label successfully");
+            }
+        } catch (Exception e) {
+            return ResponseVO.buildFailure("delete failed");
         }
+
     }
 
 
     public ResponseVO getOneVertexLabel(VertexLabelVO vertexLabelVO) {
-        VertexLabel vertexLabel = vertexLabelRepository.findVertexLabelByUserIdAndCodeIdAndVertexId(
-                vertexLabelVO.getUserId(), vertexLabelVO.getCodeId(), vertexLabelVO.getVertexId());
-        if (vertexLabel == null) {
-            return ResponseVO.buildFailure("No such vertexLabel");
-        } else {
-            return ResponseVO.buildSuccess(vertexLabel);
+        try {
+            VertexLabel vertexLabel = vertexLabelRepository.findVertexLabelByCodeIdAndVertexId(
+                    vertexLabelVO.getCodeId(), vertexLabelVO.getVertexId());
+            if (vertexLabel == null) {
+                return ResponseVO.buildFailure("No such vertexLabel");
+            } else {
+                return ResponseVO.buildSuccess(vertexLabel);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseVO.buildFailure("get failed");
         }
     }
 
     public ResponseVO getOneEdgeLabel(EdgeLabelVO edgeLabelVO) {
-        EdgeLabel edgeLabel = edgeLabelRepository.findEdgeLabelByUserIdAndCodeIdAndEdgeId(
-                edgeLabelVO.getUserId(), edgeLabelVO.getCodeId(), edgeLabelVO.getEdgeId());
-        if (edgeLabel == null) {
-            return ResponseVO.buildFailure("No such edgeLabel");
-        } else {
-            return ResponseVO.buildSuccess(edgeLabel);
+        try {
+            EdgeLabel edgeLabel = edgeLabelRepository.findEdgeLabelByCodeIdAndEdgeId(
+                    edgeLabelVO.getCodeId(), edgeLabelVO.getEdgeId());
+            if (edgeLabel == null) {
+                return ResponseVO.buildFailure("No such vertexLabel");
+            } else {
+                return ResponseVO.buildSuccess(edgeLabel);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseVO.buildFailure("get failed");
         }
     }
 
     public ResponseVO getOneDomainLabel(DomainLabelVO domainLabelVO) {
-        DomainLabel domainLabel = domainLabelRepository.findDomainLabelByUserIdAndCodeIdAndFirstEdgeIdAndNumOfVertex(
-                domainLabelVO.getUserId(), domainLabelVO.getCodeId(), domainLabelVO.getFirstEdgeId(), domainLabelVO.getNumOfVertex());
-        if (domainLabel == null) {
-            return ResponseVO.buildFailure("No such domainLabel");
-        } else {
-            return ResponseVO.buildSuccess(domainLabel);
+        try {
+            DomainLabel domainLabel = domainLabelRepository.findDomainLabelByCodeIdAndFirstEdgeIdAndNumOfVertex(
+                    domainLabelVO.getCodeId(), domainLabelVO.getFirstEdgeId(), domainLabelVO.getNumOfVertex());
+            if (domainLabel == null) {
+                return ResponseVO.buildFailure("No such vertexLabel");
+            } else {
+                return ResponseVO.buildSuccess(domainLabel);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseVO.buildFailure("get failed");
         }
     }
 
 
     public ResponseVO getAllVertexLabel(UserAndCodeForm userAndCodeForm) {
-        ArrayList<VertexLabel> res = (ArrayList<VertexLabel>) vertexLabelRepository.findVertexLabelsByUserIdAndCodeId(
-                userAndCodeForm.getUserId(), userAndCodeForm.getCodeId());
-        System.out.println("所有点注释");
+        ArrayList<VertexLabel> res = (ArrayList<VertexLabel>) vertexLabelRepository.findVertexLabelsByCodeId(userAndCodeForm.getCodeId());
         return ResponseVO.buildSuccess(res);
     }
 
     public ResponseVO getAllEdgeLabel(UserAndCodeForm userAndCodeForm) {
-        ArrayList<EdgeLabel> res = (ArrayList<EdgeLabel>) edgeLabelRepository.findEdgeLabelsByUserIdAndCodeId(
-                userAndCodeForm.getUserId(), userAndCodeForm.getCodeId());
-        System.out.println("所有边注释");
+        ArrayList<EdgeLabel> res = (ArrayList<EdgeLabel>) edgeLabelRepository.findEdgeLabelsByCodeId(userAndCodeForm.getCodeId());
         return ResponseVO.buildSuccess(res);
     }
 
     public ResponseVO getAllDomainLabel(UserAndCodeForm userAndCodeForm) {
-        ArrayList<DomainLabel> res = (ArrayList<DomainLabel>) domainLabelRepository.findDomainLabelsByUserIdAndCodeId(
-                userAndCodeForm.getUserId(), userAndCodeForm.getCodeId());
-        System.out.println("所有域注释");
+        ArrayList<DomainLabel> res = (ArrayList<DomainLabel>) domainLabelRepository.findDomainLabelsByCodeId(userAndCodeForm.getCodeId());
         return ResponseVO.buildSuccess(res);
     }
 

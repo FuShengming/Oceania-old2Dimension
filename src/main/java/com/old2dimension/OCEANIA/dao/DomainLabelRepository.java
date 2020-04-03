@@ -8,7 +8,9 @@ import java.util.List;
 
 @Repository
 public interface DomainLabelRepository extends JpaRepository<DomainLabel, Integer> {
-    DomainLabel findDomainLabelByUserIdAndCodeIdAndFirstEdgeIdAndNumOfVertex(int userId, int codeId, int firstEdgeId, int numOfVertex);
+    DomainLabel findDomainLabelByCodeIdAndFirstEdgeIdAndNumOfVertex(int codeId, int firstEdgeId, int numOfVertex);
 
-    List<DomainLabel> findDomainLabelsByUserIdAndCodeId(int userId, int codeId);
+    void deleteDomainLabelByCodeIdAndFirstEdgeIdAndNumOfVertex(int codeId, int firstEdgeId, int numOfVertex);
+
+    List<DomainLabel> findDomainLabelsByCodeId(int codeId);
 }

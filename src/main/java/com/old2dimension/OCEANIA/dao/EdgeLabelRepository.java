@@ -8,7 +8,9 @@ import java.util.List;
 
 @Repository
 public interface EdgeLabelRepository extends JpaRepository<EdgeLabel, Integer>  {
-    EdgeLabel findEdgeLabelByUserIdAndCodeIdAndEdgeId(int userId, int codeId, int edgeId);
+    EdgeLabel findEdgeLabelByCodeIdAndEdgeId(int codeId, int edgeId);
 
-    List<EdgeLabel> findEdgeLabelsByUserIdAndCodeId(int userId, int codeId);
+    void deleteEdgeLabelByCodeIdAndEdgeId(int codeId, int edgeId);
+
+    List<EdgeLabel> findEdgeLabelsByCodeId(int codeId);
 }

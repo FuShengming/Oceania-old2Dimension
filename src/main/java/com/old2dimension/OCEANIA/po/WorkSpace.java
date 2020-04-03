@@ -1,14 +1,15 @@
 package com.old2dimension.OCEANIA.po;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.Date;
+import com.old2dimension.OCEANIA.vo.WorkSpaceVO;
 
+import javax.persistence.*;
+import java.util.Date;
+@Entity
+@Table(name = "work_space")
 public class WorkSpace {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    private int id;
 
     public int getId() {
         return id;
@@ -17,16 +18,38 @@ public class WorkSpace {
     public void setId(int id) {
         this.id = id;
     }
+    @Column(name = "user_id")
     private int userId;
-
+    @Column(name = "code_id")
     private int codeId;
+    @Column(name = "work_space_date")
     private Date date;
+    @Column(name = "closeness")
     private double closeness;
+
     public WorkSpace(int userId, int codeId, Date date, double closeness) {
         this.userId = userId;
         this.codeId = codeId;
         this.date = date;
         this.closeness = closeness;
+    }
+
+    public WorkSpace(int id,int userId, int codeId, Date date, double closeness) {
+        this.id=id;
+        this.userId = userId;
+        this.codeId = codeId;
+        this.date = date;
+        this.closeness = closeness;
+    }
+
+
+    public WorkSpace(){}
+    public WorkSpace(WorkSpaceVO workSpaceVO){
+        this.userId=workSpaceVO.getUserId();
+        this.id = workSpaceVO.getId();
+        this.codeId = workSpaceVO.getCodeId();
+        this.date = workSpaceVO.getDate();
+        this.closeness = workSpaceVO.getCloseness();
     }
 
     public int getUserId() {
