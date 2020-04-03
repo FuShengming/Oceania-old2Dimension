@@ -1,4 +1,7 @@
 $(function () {
+    //initialize cytoscape
+    let cy = cytoscape();
+
     //treeview on the left sidebar
     let tree_json = [
         {
@@ -149,7 +152,8 @@ $(function () {
                 graphData.nodes.push({
                     data: {
                         id: 'd' + domain.id.toString(),
-                    }
+                    },
+                    classes: ['domain'],
                 });
                 let vertices = domain.vertices;
                 vertices.forEach(function (vertex) {
@@ -158,7 +162,8 @@ $(function () {
                             id: 'n' + vertex.id.toString(),
                             label: vertex.funcName,
                             parent: 'd' + domain.id.toString(),
-                        }
+                        },
+                        classes: ['vertex'],
                     });
                 });
                 let edges = domain.edges;
@@ -191,7 +196,7 @@ $(function () {
             //         }
             //     });
             // });
-            const cy = cytoscape({
+            cy = cytoscape({
 
                 container: document.getElementById('cy_container'), // container to render in
 
@@ -202,7 +207,7 @@ $(function () {
 
                 style: [ // the stylesheet for the graph
                     {
-                        selector: 'node',
+                        selector: 'node.vertex',
                         style: {
                             'background-color': '#9EC9FF',
                             'border-width': 1,
@@ -231,11 +236,39 @@ $(function () {
                         }
                     },
                     {
-                        selector: ':parent',
+                        selector: 'node.domain',
                         style: {
                             'background-opacity': 0.1,
                             'background-color': '#9EC9FF',
                             'border-color': '#9EC9FF'
+                        }
+                    },
+                    {
+                        selector: 'node.favor',
+                        style: {
+                            'background-color': '#f2c0ff',
+                            'border-color': '#e295ec',
+                        }
+                    },
+                    {
+                        selector: 'edge.favor',
+                        style: {
+                            'line-color': '#e295ec',
+                            'target-arrow-color': '#e295ec',
+                        }
+                    },
+                    {
+                        selector: 'node:selected',
+                        style: {
+                            'background-color': '#b8ffcb',
+                            'border-color': '#33e17e',
+                        }
+                    },
+                    {
+                        selector: 'edge:selected',
+                        style: {
+                            'line-color': '#33e17e',
+                            'target-arrow-color': '#33e17e',
                         }
                     },
                 ],
@@ -257,29 +290,145 @@ $(function () {
 
                     name: 'fcose',
                     idealEdgeLength: 150,
+
+                    stop: function () {
+                        $('#loading').hide();
+                    },
                 }
             });
 
             cy.cxtmenu({
-                selector: 'node, edge',
+                selector: 'node.vertex.favor, edge.favor',
                 commands: [
                     {
-                        content: '<span class="fa fa-flash fa-2x"></span>',
+                        content: '<span class="fa fa-arrows-alt fa-2x"></span>',
                         select: function (ele) {
-                            console.log(ele.id());
+                            cy.$('node,edge').unselect();
+                            console.log('this id', ele.id());
+                            ele.select();
+                            let neighborhoods = ele.neighborhood();
+                            neighborhoods.forEach(function (nb) {
+                                console.log('neighbor id', nb.id());
+                                nb.select();
+                            });
+                            cy.fit(cy.$('node:selected'), $('#cy_container').height() * 0.25);
                         }
                     },
 
                     {
-                        content: '<span class="fa fa-star fa-2x"></span>',
+                        content: '<span style="color:#faff62;" class="fa fa-lightbulb-o fa-2x"></span>',
                         select: function (ele) {
-                            console.log(ele.data('New Label'));
+                            ele.removeClass('favor');
+                            ele.removeData('favor');
                         },
                         // enabled: false
                     },
 
                     {
-                        content: 'Text',
+                        content: '<span class="fa fa-bookmark fa-2x"></span>',
+                        select: function (ele) {
+                            console.log(ele.position());
+                        }
+                    }
+                ],
+                menuRadius: 70,
+                indicatorSize: 12,
+                minSpotlightRadius: 12,
+            });
+
+            cy.cxtmenu({
+                selector: 'node.vertex[^favor]',
+                commands: [
+                    {
+                        content: '<span class="fa fa-arrows-alt fa-2x"></span>',
+                        select: function (ele) {
+                            cy.$('node,edge').unselect();
+                            console.log('this id', ele.id());
+                            ele.select();
+                            let neighborhoods = ele.neighborhood();
+                            neighborhoods.forEach(function (nb) {
+                                console.log('neighbor id', nb.id());
+                                nb.select();
+                            });
+                            cy.fit(cy.$('node:selected'), $('#cy_container').height() * 0.25);
+                        }
+                    },
+
+                    {
+                        content: '<span class="fa fa-lightbulb-o fa-2x"></span>',
+                        select: function (ele) {
+                            ele.addClass('favor');
+                            ele.data('favor', true);
+                        },
+                    },
+
+                    {
+                        content: '<span class="fa fa-bookmark fa-2x"></span>',
+                        select: function (ele) {
+                            console.log(ele.position());
+                        }
+                    }
+                ],
+                menuRadius: 70,
+                indicatorSize: 12,
+                minSpotlightRadius: 12,
+            });
+
+            cy.cxtmenu({
+                selector: 'edge[^favor]',
+                commands: [
+                    {
+                        content: '<span class="fa fa-arrows-alt fa-2x"></span>',
+                        select: function (ele) {
+                            cy.$('node,edge').unselect();
+                            console.log('this id', ele.id());
+                            ele.select();
+                            let neighborhoods = ele.neighborhood();
+                            neighborhoods.forEach(function (nb) {
+                                console.log('neighbor id', nb.id());
+                                nb.select();
+                            });
+                            cy.fit(cy.$('node:selected'), $('#cy_container').height() * 0.25);
+                        }
+                    },
+
+                    {
+                        content: '<span class="fa fa-lightbulb-o fa-2x"></span>',
+                        select: function (ele) {
+                            ele.addClass('favor');
+                            ele.data('favor', true);
+                            ele.source().addClass('favor');
+                            ele.source().data('favor', true);
+                            ele.target().addClass('favor');
+                            ele.target().data('favor', true);
+                        },
+                        // enabled: false
+                    },
+
+                    {
+                        content: '<span class="fa fa-bookmark fa-2x"></span>',
+                        select: function (ele) {
+                            console.log(ele.position());
+                        }
+                    }
+                ],
+                menuRadius: 70,
+                indicatorSize: 12,
+                minSpotlightRadius: 12,
+            });
+
+            cy.cxtmenu({
+                selector: 'node.domain',
+                commands: [
+                    {
+                        content: '<span class="fa fa-arrows-alt fa-2x"></span>',
+                        select: function (ele) {
+                            cy.fit(ele);
+                        }
+                    },
+
+                    {
+                        content: '<span class="fa fa-bookmark fa-2x"></span>',
                         select: function (ele) {
                             console.log(ele.position());
                         }
@@ -298,7 +447,9 @@ $(function () {
     });
 
     //buttons on the middle main div
-
+    $("#layout-btn").on("click", function () {
+        cy.fit();
+    });
     //code on the right sidebar
     //labels on the right sidebar
 });
