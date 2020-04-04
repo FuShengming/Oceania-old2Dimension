@@ -7,11 +7,11 @@ public class DependencyGraphVO {
         this.domainSetVO=domainSetVO;
     }
 
-    public DomainSetVO getDomainVOs() {
+    public DomainSetVO getDomainSetVO() {
         return domainSetVO;
     }
 
-    public void setDomainVOs(DomainSetVO domainSetVO) {
+    public void setDomainSetVO(DomainSetVO domainSetVO) {
         this.domainSetVO = domainSetVO;
     }
 
