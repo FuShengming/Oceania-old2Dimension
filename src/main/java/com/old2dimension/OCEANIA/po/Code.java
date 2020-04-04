@@ -30,11 +30,11 @@ public class Code {
 
     @Column(name="name")
     private String name;
-    @Column(name="numOfVertices")
+    @Column(name="num_of_vertices")
     private int numOfVertices;
-    @Column(name="numOfEdges")
+    @Column(name="num_of_edges")
     private int numOfEdges;
-    @Column(name="numOfDomains")
+    @Column(name="num_of_domains")
     private int numOfDomains;
 
     public Code(){}
@@ -48,8 +48,9 @@ public class Code {
         this.numOfDomains = numOfDomains;
     }
 
-    public Code(int id, int userId, String name, int numOfVertices, int numOfEdges, int numOfDomains) {
-        this.userId = userId;
+
+    public Code(int id,int userId, String name, int numOfVertices, int numOfEdges, int numOfDomains) {
+        this.userId=userId;
         this.id = id;
         this.name = name;
         this.numOfVertices = numOfVertices;

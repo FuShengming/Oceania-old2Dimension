@@ -2,11 +2,11 @@ package com.old2dimension.OCEANIA.blImpl;
 
 
 import com.old2dimension.OCEANIA.bl.GraphCalculateBL;
+import com.old2dimension.OCEANIA.dao.CodeRepository;
+import com.old2dimension.OCEANIA.dao.UserRepository;
 import com.old2dimension.OCEANIA.po.*;
-import com.old2dimension.OCEANIA.vo.DomainSetVO;
-import com.old2dimension.OCEANIA.vo.VertexVO;
-import com.old2dimension.OCEANIA.vo.ResponseVO;
-import com.old2dimension.OCEANIA.vo.WeightForm;
+import com.old2dimension.OCEANIA.vo.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -22,6 +22,48 @@ public class GraphCalculateImpl implements GraphCalculateBL {
     public DomainSet domainSet;
     public ArrayList<Vertex> allVertexes;
     private boolean[][] visited;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private CodeRepository codeRepository;
+
+    public ResponseVO getGraph(UserAndCodeForm userAndCodeForm){
+
+        User currentUser = userRepository.findUserById(userAndCodeForm.getUserId());
+        if(currentUser == null ){
+            return ResponseVO.buildFailure("no such user");
+        }
+        Code curCode = codeRepository.findCodeById(userAndCodeForm.getCodeId());
+        if(curCode == null){
+            return ResponseVO.buildFailure("no such code");
+        }
+        if(curCode.getName().equals("iTrust")){
+            System.out.println("iTrust");
+            initializeGraph("call_dependencies_update.txt");
+            WeightForm weightForm = new WeightForm();
+            weightForm.setWeightName("closeness");
+            weightForm.setWeightValue(0.15);
+            ArrayList<WeightForm> weightForms = new ArrayList<WeightForm>();
+            weightForms.add(weightForm);
+            getConnectedDomains(weightForms);
+            DependencyGraphVO dependencyGraphVO=new DependencyGraphVO(new DomainSetVO(domainSet));
+            return ResponseVO.buildSuccess(dependencyGraphVO);
+        }
+        return ResponseVO.buildFailure("目前只支持iTrust分析");
+    }
+
+    public ResponseVO filterByWeightForm(ArrayList<WeightForm> weightForms){
+        try{
+            for(WeightForm w : weightForms){
+                if(w.getWeightValue()<0||w.getWeightValue()>1){
+                    return ResponseVO.buildFailure("closeness should be between 0 and 1(including 0 and 1)");
+                }
+            }
+            return ResponseVO.buildSuccess(new DependencyGraphVO(new DomainSetVO(filterByWeights(weightForms))));}
+        catch (Exception e){
+            return ResponseVO.buildFailure("Failure");
+        }
+    }
 
     public GraphCalculateImpl() {
     }
@@ -39,6 +81,7 @@ public class GraphCalculateImpl implements GraphCalculateBL {
     }
 
     public ResponseVO getAmbiguousFuncInfos(String message) {
+        System.out.println(message);
         ArrayList<VertexVO> res = new ArrayList<VertexVO>();
         boolean have1 = false;
         boolean have2 = false;
@@ -162,31 +205,42 @@ public class GraphCalculateImpl implements GraphCalculateBL {
         int indexOfEdge = 0;
 
         for (String curLine : lines) {
-
+            boolean isInvalid  = false;
             String v1String = curLine.substring(0, curLine.indexOf(" "));
             String v2String = curLine.substring(curLine.indexOf(" ") + 4);
             if (!vertexMap.containsKey(v1String)) {
                 Vertex curVertex = str2Vertex(v1String);
+                if(curVertex != null) {
                 curVertex.setId(indexOfVertex);
                 indexOfVertex++;
                 vertexMap.put(v1String, curVertex);
                 vertexList.add(curVertex);
+                }
+                else{
+                    isInvalid=true;
+                }
             }
 
             if (!vertexMap.containsKey(v2String)) {
+
                 Vertex curVertex = str2Vertex(v2String);
+                if(curVertex != null) {
                 curVertex.setId(indexOfVertex);
                 indexOfVertex++;
                 vertexMap.put(v2String, curVertex);
                 vertexList.add(curVertex);
+                }
+                else {
+                    isInvalid = true;
+                }
             }
-
+            if(!isInvalid){
             Edge curEdge = new Edge();
             curEdge.setStart(vertexMap.get(v1String));
             curEdge.setEnd(vertexMap.get(v2String));
             curEdge.setId(indexOfEdge);
             edgeList.add(curEdge);
-            indexOfEdge++;
+            indexOfEdge++;}
         }
 
         adMatrix = new AdjacencyMatrix(vertexList.size());
@@ -231,6 +285,10 @@ public class GraphCalculateImpl implements GraphCalculateBL {
         String packageName = withoutArg.substring(0, withoutArg.lastIndexOf("."));
         String className = withoutArg.substring(withoutArg.lastIndexOf(".") + 1, withoutArg.indexOf(":"));
         String funcName = withoutArg.substring(withoutArg.indexOf(":") + 1);
+        if(funcName.contains("$")){
+            return null;
+        }
+
         String[] args = curString.substring(curString.indexOf("(") + 1, curString.indexOf(")")).split(",");
         curVertex.setBelongPackage(packageName);
         curVertex.setBelongClass(className);
