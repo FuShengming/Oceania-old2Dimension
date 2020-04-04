@@ -38,6 +38,7 @@ public class Code {
     private int numOfDomains;
 
     public Code(){}
+
     public Code(int userId, String name, int numOfVertices, int numOfEdges, int numOfDomains) {
         this.userId=userId;
 
@@ -46,6 +47,7 @@ public class Code {
         this.numOfEdges = numOfEdges;
         this.numOfDomains = numOfDomains;
     }
+
 
     public Code(int id,int userId, String name, int numOfVertices, int numOfEdges, int numOfDomains) {
         this.userId=userId;
