@@ -1,11 +1,10 @@
 package com.old2dimension.OCEANIA.dao;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 
-@Service
-public class GraphRepository {
-    public GraphRepository(){
 
-    }
+@Repository
+public interface GraphRepository {
+
 }

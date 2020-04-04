@@ -2,7 +2,7 @@ package com.old2dimension.OCEANIA.blImpl.GraphCalculateImplTest;
 
 import com.old2dimension.OCEANIA.OceaniaApplication;
 import com.old2dimension.OCEANIA.blImpl.GraphCalculateImpl;
-import com.old2dimension.OCEANIA.vo.FuncInfoForm;
+import com.old2dimension.OCEANIA.vo.VertexVO;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,9 +20,9 @@ public class GetFuncInfosTest {
     @Test
     public void getFuncInfosTest(){
         graphCalculate.initializeGraph("src/test/resources/test_dependency_data.txt");
-        Assert.assertEquals(3, ((ArrayList<FuncInfoForm>) graphCalculate.getAmbiguousFuncInfos("Age").getContent()).size());
-        Assert.assertEquals("AgeFactorTest:testRegularAge()", ((ArrayList<FuncInfoForm>) graphCalculate.getAmbiguousFuncInfos("Age").getContent()).get(0).getClassNameAndFunc());
-        Assert.assertEquals(9, ((ArrayList<FuncInfoForm>) graphCalculate.getAmbiguousFuncInfos("").getContent()).size());
-        Assert.assertEquals(0, ((ArrayList<FuncInfoForm>) graphCalculate.getAmbiguousFuncInfos("rua").getContent()).size());
+        Assert.assertEquals(3, ((ArrayList<VertexVO>) graphCalculate.getAmbiguousFuncInfos("Age").getContent()).size());
+        Assert.assertEquals("AgeFactorTest:testRegularAge()", ((ArrayList<VertexVO>) graphCalculate.getAmbiguousFuncInfos("Age").getContent()).get(0).getClassNameAndFunc());
+        Assert.assertEquals(9, ((ArrayList<VertexVO>) graphCalculate.getAmbiguousFuncInfos("").getContent()).size());
+        Assert.assertEquals(0, ((ArrayList<VertexVO>) graphCalculate.getAmbiguousFuncInfos("rua").getContent()).size());
     }
 }

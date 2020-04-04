@@ -140,7 +140,7 @@ input.Input {
     cursor: pointer;
 }
 
-.error-info {
+.input-error-msg {
     position: absolute;
     right: 0;
     height: 90%;
@@ -154,4 +154,12 @@ input.Input {
     opacity: 1;
     box-sizing: border-box;
     transition: opacity .25s ease;
+}
+
+.hidden-error {
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
 }

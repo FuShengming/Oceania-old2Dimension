@@ -25,6 +25,7 @@
                         <label class="input-wrapper">
                             <input name="username" class="Input" placeholder="用户名" value>
                         </label>
+                        <div class="input-error-msg hidden-error username-error"></div>
                     </div>
                 </div>
                 <div class="login-input-outer input-content-holder">
@@ -32,6 +33,7 @@
                         <label class="input-wrapper">
                             <input name="password" class="Input" placeholder="密码" value>
                         </label>
+                        <div class="input-error-msg hidden-error password-error"></div>
                     </div>
                     <button type="button" class="show-pwd">
                         <span class="svg-container">
@@ -44,8 +46,9 @@
                 <div class="login-input-outer">
                     <div class="login-input" id="login-captcha-input">
                         <label class="input-wrapper">
-                            <input name="captcha" class="Input" placeholder="验证码" value>
+                            <input name="captcha" class="Input captcha-input" placeholder="验证码" value>
                         </label>
+                        <div class="input-error-msg hidden-error captcha-error"></div>
                     </div>
                     <span class="captcha-image-outer">
                         <div class="captcha-image-container">

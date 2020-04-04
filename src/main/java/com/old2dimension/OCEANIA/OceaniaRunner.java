@@ -1,14 +1,14 @@
-package com.old2dimension.OCEANIA;
-
-import com.old2dimension.OCEANIA.bl.PathBL;
-import com.old2dimension.OCEANIA.blImpl.GraphCalculateImpl;
-import com.old2dimension.OCEANIA.blImpl.PathBLImpl;
-import com.old2dimension.OCEANIA.po.Edge;
-import com.old2dimension.OCEANIA.po.Vertex;
-import com.old2dimension.OCEANIA.vo.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
+//package com.old2dimension.OCEANIA;
+//
+//import com.old2dimension.OCEANIA.bl.PathBL;
+//import com.old2dimension.OCEANIA.blImpl.GraphCalculateImpl;
+//import com.old2dimension.OCEANIA.blImpl.PathBLImpl;
+//import com.old2dimension.OCEANIA.po.Edge;
+//import com.old2dimension.OCEANIA.po.Vertex;
+//import com.old2dimension.OCEANIA.vo.*;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.boot.ApplicationArguments;
+//import org.springframework.boot.ApplicationRunner;
 //import org.springframework.stereotype.Component;
 //
 //import java.util.ArrayList;
@@ -91,9 +91,9 @@ import org.springframework.boot.ApplicationRunner;
 //                int verticesNum=curDomain.getVerticesNum();
 //                System.out.println("-------连通域"+(i+1+"")+"-------");
 //                System.out.println("连通域顶点数："+(verticesNum+""));
-//                ArrayList<FuncInfoForm> vertices = curDomain.getVertices();
+//                ArrayList<VertexVO> vertices = curDomain.getVertices();
 //                int index = 1;
-//                for(FuncInfoForm curNode : vertices){
+//                for(VertexVO curNode : vertices){
 //                    System.out.println("Node"+(index + "")+": "+curNode.getClassNameAndFunc());
 //                    index++;
 //                }
@@ -114,8 +114,8 @@ import org.springframework.boot.ApplicationRunner;
 //    }
 //
 //    public void findPath(PathBL pathBL){
-//        FuncInfoForm start= null;
-//        FuncInfoForm end= null;
+//        VertexVO start= null;
+//        VertexVO end= null;
 //        System.out.println();
 //        System.out.println("--------路径查找--------");
 //        System.out.println("请输入起点类/函数/参数名：");
@@ -174,11 +174,11 @@ import org.springframework.boot.ApplicationRunner;
 //        return res;
 //    }
 //
-//    private FuncInfoForm getAmbiguousFunc(String nodeStr,Scanner sc){
+//    private VertexVO getAmbiguousFunc(String nodeStr,Scanner sc){
 //
 //        ResponseVO resVO =graphCalculate.getAmbiguousFuncInfos(nodeStr);
 //        if(!resVO.isSuccess()){System.out.println("获取函数信息失败"); return null;}
-//        ArrayList<FuncInfoForm> vertices= (ArrayList<FuncInfoForm>)resVO.getContent();
+//        ArrayList<VertexVO> vertices= (ArrayList<VertexVO>)resVO.getContent();
 //
 //        if(vertices.size()==0){System.out.println("没有找到与此类/函数名匹配的函数顶点"); return null;}
 //        else{

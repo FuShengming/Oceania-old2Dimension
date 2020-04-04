@@ -8,6 +8,14 @@ $(document).ready(function () {
         login()
     });
 
+    // 按下回车登录
+    $("captcha-input").onkeydown(function (e) {
+        let eCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+        if (eCode === 13){
+            login();
+        }
+    });
+
     function login() {
         let formData = getLoginForm();
         if (!validateLoginForm(formData)) {
@@ -15,7 +23,7 @@ $(document).ready(function () {
         }
 
         postRequest(
-            '/login',
+            '/user/login',
             formData,
             function (res) {
                 if (res.success) {
