@@ -1,0 +1,24 @@
+type Query {
+    # Hello World
+    hello(who: String): String!
+    #Graph
+    get_v(id: Int!): Vertex
+    get_all_vertices: [Vertex]!
+    get_e(id: Int!): Edge
+    get_all_edges: [Edge]!
+    get_d(id: Int!): Domain
+    get_domainset: DomainSet!
+    set_domainset(wf: [WF]!): DomainSet!
+    #User
+#    get_users: [User]!
+}
+
+input WF {
+    weightName: String!
+    weightValue: Float!
+}
+
+#type Mutation {
+#    #User
+##    create_user(user_name: String!, pwd: String!): User!
+#}
