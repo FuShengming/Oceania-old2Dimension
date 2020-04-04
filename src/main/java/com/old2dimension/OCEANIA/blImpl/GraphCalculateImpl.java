@@ -73,6 +73,7 @@ public class GraphCalculateImpl implements GraphCalculateBL {
         try {
             domainSet = filterByWeights(weightForms);
             domainSet.sortByVerticesNum();
+
             return ResponseVO.buildSuccess(new DomainSetVO(domainSet));
         } catch (Exception e) {
             e.printStackTrace();
@@ -329,6 +330,7 @@ public class GraphCalculateImpl implements GraphCalculateBL {
                 if (domain.getEdges().size() == 0) continue;
                 domain.setId(index);
                 index++;
+
                 domains.add(domain);
             }
         }
