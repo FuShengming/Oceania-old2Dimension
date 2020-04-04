@@ -1,13 +1,12 @@
 package com.old2dimension.OCEANIA.blImpl.PathBLImplTest;
 
-import com.old2dimension.OCEANIA.OceaniaApplication;
 import com.old2dimension.OCEANIA.blImpl.GraphCalculateImpl;
 import com.old2dimension.OCEANIA.blImpl.PathBLImpl;
 import com.old2dimension.OCEANIA.po.AdjacencyMatrix;
 import com.old2dimension.OCEANIA.po.Edge;
 import com.old2dimension.OCEANIA.po.Vertex;
 import com.old2dimension.OCEANIA.vo.FindPathVO;
-import com.old2dimension.OCEANIA.vo.FuncInfoForm;
+import com.old2dimension.OCEANIA.vo.VertexVO;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
@@ -84,8 +83,8 @@ public class PathBLImplTest {
         v1.setId(1);
         Vertex v3 = new Vertex();
         v3.setId(3);
-        FuncInfoForm f1 = new FuncInfoForm(v1);
-        FuncInfoForm f3 = new FuncInfoForm(v3);
+        VertexVO f1 = new VertexVO(v1);
+        VertexVO f3 = new VertexVO(v3);
         FindPathVO paths = (FindPathVO)pathBL.findPath(f1, f3).getContent();
         Assert.assertEquals(3, paths.getPathNum());
     }
@@ -96,8 +95,8 @@ public class PathBLImplTest {
         v1.setId(1);
         Vertex v3 = new Vertex();
         v3.setId(0);
-        FuncInfoForm f1 = new FuncInfoForm(v1);
-        FuncInfoForm f3 = new FuncInfoForm(v3);
+        VertexVO f1 = new VertexVO(v1);
+        VertexVO f3 = new VertexVO(v3);
         FindPathVO paths = (FindPathVO)pathBL.findPath(f1, f3).getContent();
         Assert.assertEquals(2, paths.getPathNum());
     }
@@ -108,8 +107,8 @@ public class PathBLImplTest {
         v1.setId(2);
         Vertex v3 = new Vertex();
         v3.setId(4);
-        FuncInfoForm f1 = new FuncInfoForm(v1);
-        FuncInfoForm f3 = new FuncInfoForm(v3);
+        VertexVO f1 = new VertexVO(v1);
+        VertexVO f3 = new VertexVO(v3);
         FindPathVO paths = (FindPathVO)pathBL.findPath(f1, f3).getContent();
         Assert.assertEquals(0, paths.getPathNum());
     }

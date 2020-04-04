@@ -7,8 +7,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class EdgeVO {
-    private FuncInfoForm start;
-    private FuncInfoForm end;
+    private VertexVO start;
+    private VertexVO end;
 
     private ArrayList<WeightForm> weights;
 
@@ -18,27 +18,27 @@ public class EdgeVO {
     }
 
     public EdgeVO(Edge edge) {
-        this.start=new FuncInfoForm(edge.getStart());
-        this.end=new FuncInfoForm(edge.getEnd());
+        this.start=new VertexVO(edge.getStart());
+        this.end=new VertexVO(edge.getEnd());
         this.weights = new ArrayList<>();
         for(Weight w:edge.getWeights()){
             this.weights.add(new WeightForm(w));
         }
     }
 
-    public FuncInfoForm getStart() {
+    public VertexVO getStart() {
         return start;
     }
 
-    public void setStart(FuncInfoForm start) {
+    public void setStart(VertexVO start) {
         this.start = start;
     }
 
-    public FuncInfoForm getEnd() {
+    public VertexVO getEnd() {
         return end;
     }
 
-    public void setEnd(FuncInfoForm end) {
+    public void setEnd(VertexVO end) {
         this.end = end;
     }
 
