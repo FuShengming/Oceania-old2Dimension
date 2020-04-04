@@ -59,7 +59,7 @@ public class GraphCalculateImpl implements GraphCalculateBL {
                     return ResponseVO.buildFailure("closeness should be between 0 and 1(including 0 and 1)");
                 }
             }
-            return ResponseVO.buildSuccess(filterByWeights(weightForms));}
+            return ResponseVO.buildSuccess(new DependencyGraphVO(new DomainSetVO(filterByWeights(weightForms))));}
         catch (Exception e){
             return ResponseVO.buildFailure("Failure");
         }
