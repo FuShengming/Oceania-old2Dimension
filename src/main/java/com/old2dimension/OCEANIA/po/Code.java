@@ -37,6 +37,8 @@ public class Code {
     @Column(name="numOfDomains")
     private int numOfDomains;
 
+    public Code(){}
+
     public Code(int userId, String name, int numOfVertices, int numOfEdges, int numOfDomains) {
         this.userId=userId;
 

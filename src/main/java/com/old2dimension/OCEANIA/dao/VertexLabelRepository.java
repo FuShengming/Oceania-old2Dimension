@@ -13,4 +13,6 @@ public interface VertexLabelRepository extends JpaRepository<VertexLabel, Intege
     void deleteVertexLabelByCodeIdAndVertexId(int codeId, int vertexId);
 
     List<VertexLabel> findVertexLabelsByCodeId(int codeId);
+
+
 }

@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface CodeRepository extends JpaRepository<Code,Integer> {
 //    @Transactional
@@ -18,5 +20,6 @@ public interface CodeRepository extends JpaRepository<Code,Integer> {
 
     public Code findCodeById(int id);
 
+    List<Code> findCodesByUserId(int userId);
 
 }

@@ -26,7 +26,7 @@ public class DomainLabel {
     @Column(name = "first_edge_id")
     private int firstEdgeId;
 
-    @Column(name = "num_of_vertex")
+    @Column(name = "num_of_vertices")
     private int numOfVertex;
 
     @Column(name = "content")
@@ -39,6 +39,8 @@ public class DomainLabel {
         this.numOfVertex = numOfVertex;
         this.content = content;
     }
+
+    public DomainLabel(){}
 
     public int getUserId() {
         return userId;
