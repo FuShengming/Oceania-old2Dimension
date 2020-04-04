@@ -59,7 +59,7 @@ public class GraphCalculateImpl implements GraphCalculateBL {
                     return ResponseVO.buildFailure("closeness should be between 0 and 1(including 0 and 1)");
                 }
             }
-            return ResponseVO.buildSuccess(filterByWeights(weightForms));}
+            return ResponseVO.buildSuccess(new DependencyGraphVO(new DomainSetVO(filterByWeights(weightForms))));}
         catch (Exception e){
             return ResponseVO.buildFailure("Failure");
         }
@@ -205,31 +205,42 @@ public class GraphCalculateImpl implements GraphCalculateBL {
         int indexOfEdge = 0;
 
         for (String curLine : lines) {
-
+            boolean isInvalid  = false;
             String v1String = curLine.substring(0, curLine.indexOf(" "));
             String v2String = curLine.substring(curLine.indexOf(" ") + 4);
             if (!vertexMap.containsKey(v1String)) {
                 Vertex curVertex = str2Vertex(v1String);
+                if(curVertex != null) {
                 curVertex.setId(indexOfVertex);
                 indexOfVertex++;
                 vertexMap.put(v1String, curVertex);
                 vertexList.add(curVertex);
+                }
+                else{
+                    isInvalid=true;
+                }
             }
 
             if (!vertexMap.containsKey(v2String)) {
+
                 Vertex curVertex = str2Vertex(v2String);
+                if(curVertex != null) {
                 curVertex.setId(indexOfVertex);
                 indexOfVertex++;
                 vertexMap.put(v2String, curVertex);
                 vertexList.add(curVertex);
+                }
+                else {
+                    isInvalid = true;
+                }
             }
-
+            if(!isInvalid){
             Edge curEdge = new Edge();
             curEdge.setStart(vertexMap.get(v1String));
             curEdge.setEnd(vertexMap.get(v2String));
             curEdge.setId(indexOfEdge);
             edgeList.add(curEdge);
-            indexOfEdge++;
+            indexOfEdge++;}
         }
 
         adMatrix = new AdjacencyMatrix(vertexList.size());
@@ -274,6 +285,10 @@ public class GraphCalculateImpl implements GraphCalculateBL {
         String packageName = withoutArg.substring(0, withoutArg.lastIndexOf("."));
         String className = withoutArg.substring(withoutArg.lastIndexOf(".") + 1, withoutArg.indexOf(":"));
         String funcName = withoutArg.substring(withoutArg.indexOf(":") + 1);
+        if(funcName.contains("$")){
+            return null;
+        }
+
         String[] args = curString.substring(curString.indexOf("(") + 1, curString.indexOf(")")).split(",");
         curVertex.setBelongPackage(packageName);
         curVertex.setBelongClass(className);
