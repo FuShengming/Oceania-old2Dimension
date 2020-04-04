@@ -1,9 +1,9 @@
 package com.old2dimension.OCEANIA.po;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "edge_label")
 public class EdgeLabel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,12 +16,17 @@ public class EdgeLabel {
     public void setId(int id) {
         this.id = id;
     }
+
+    @Column(name = "user_id")
     private int userId;
 
-    private int edgeId;
-
+    @Column(name = "code_id")
     private int codeId;
 
+    @Column(name = "edge_id")
+    private int edgeId;
+
+    @Column(name = "content")
     private String content;
 
     public EdgeLabel(int userId, int edgeId, int codeId, String content) {

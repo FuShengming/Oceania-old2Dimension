@@ -23,7 +23,9 @@ public class UserBLImpl implements UserBL {
     @Autowired
     CodeRepository codeRepository;
 
+
     public ResponseVO getAllUser() {
+
         ArrayList<User> allUsers = (ArrayList<User>) userRepository.findAll();
         ArrayList<UserVO> users = userList2UserVOList(allUsers);
         return ResponseVO.buildSuccess(users);
@@ -58,6 +60,7 @@ public class UserBLImpl implements UserBL {
             codeRepository.save(code);
             return ResponseVO.buildSuccess("sign up success");
         } catch (Exception e) {
+
             e.printStackTrace();
             return ResponseVO.buildFailure("sign up fail");
         }

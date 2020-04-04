@@ -1,9 +1,9 @@
 package com.old2dimension.OCEANIA.po;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "vertex_label")
 public class VertexLabel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,14 +16,21 @@ public class VertexLabel {
     public void setId(int id) {
         this.id = id;
     }
+    @Column(name = "user_id")
     private int userId;
 
+    @Column(name = "code_id")
     private int codeId;
 
+    @Column(name = "vertex_id")
     private int vertexId;
 
+    @Column(name = "content")
     private String content;
 
+    public VertexLabel(){
+
+    }
     public VertexLabel(int userId, int codeId, int vertexId, String content) {
         this.userId = userId;
         this.codeId = codeId;

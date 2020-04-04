@@ -16,62 +16,62 @@ public class LabelController {
 
     @RequestMapping(value = "/noteVertex",method = RequestMethod.POST)
     public ResponseVO noteVertex(@RequestBody VertexLabelVO vertexLabelVO){
-        return null;
+        return labelBL.noteVertex(vertexLabelVO);
     }
 
     @RequestMapping(value = "/noteEdge",method = RequestMethod.POST)
-    public ResponseVO noteEdge(@RequestBody EdgeLabelVO vertexLabelVO){
-        return null;
+    public ResponseVO noteEdge(@RequestBody EdgeLabelVO edgeLabelVO){
+        return labelBL.noteEdge(edgeLabelVO);
     }
 
     @RequestMapping(value = "/noteDomain",method = RequestMethod.POST)
-    public ResponseVO noteDomain(@RequestBody DomainLabelVO vertexLabelVO){
-        return null;
+    public ResponseVO noteDomain(@RequestBody DomainLabelVO domainLabelVO){
+        return labelBL.noteDomain(domainLabelVO);
     }
 
     @RequestMapping(value = "/deleteVertexLabel",method = RequestMethod.POST)
     public ResponseVO deleteVertexLabel(@RequestBody VertexLabelVO vertexLabelVO){
-        return null;
+        return labelBL.deleteVertexLabel(vertexLabelVO);
     }
 
     @RequestMapping(value = "/deleteEdgeLabel",method = RequestMethod.POST)
     public ResponseVO deleteEdgeLabel(@RequestBody EdgeLabelVO edgeLabelVO){
-        return null;
+        return labelBL.deleteEdgeLabel(edgeLabelVO);
     }
 
     @RequestMapping(value = "/deleteDomainLabel",method = RequestMethod.POST)
     public ResponseVO deleteDomainLabel(@RequestBody DomainLabelVO domainLabelVO){
-        return null;
+        return labelBL.deleteDomainLabel(domainLabelVO);
     }
 
     @RequestMapping(value = "/getOneVertexLabel",method = RequestMethod.POST)
     public ResponseVO getOneVertexLabel(@RequestBody VertexLabelVO vertexLabelVO){
-        return null;
+        return labelBL.getOneVertexLabel(vertexLabelVO);
     }
 
     @RequestMapping(value = "/getOneEdgeLabel",method = RequestMethod.POST)
     public ResponseVO getOneEdgeLabel(@RequestBody EdgeLabelVO edgeLabelVO){
-        return null;
+        return labelBL.getOneEdgeLabel(edgeLabelVO);
     }
 
     @RequestMapping(value = "/getOneDomainLabel",method = RequestMethod.POST)
     public ResponseVO getOneDomainLabel(@RequestBody DomainLabelVO domainLabelVO){
-        return null;
+        return labelBL.getOneDomainLabel(domainLabelVO);
     }
 
     @RequestMapping(value = "/getAllVertexLabels",method = RequestMethod.POST)
     public ResponseVO getAllVertexLabels(@RequestBody UserAndCodeForm userAndCodeForm){
-        return null;
+        return labelBL.getAllVertexLabel(userAndCodeForm);
     }
 
     @RequestMapping(value = "/getAllEdgeLabels",method = RequestMethod.POST)
     public ResponseVO getAllEdgeLabels(@RequestBody UserAndCodeForm userAndCodeForm){
-        return null;
+        return labelBL.getAllEdgeLabel(userAndCodeForm);
     }
 
     @RequestMapping(value = "/getAllDomainLabels",method = RequestMethod.POST)
     public ResponseVO getAllDomainLabels(@RequestBody UserAndCodeForm userAndCodeForm){
-        return null;
+        return labelBL.getAllDomainLabel(userAndCodeForm);
     }
 
 
