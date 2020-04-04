@@ -137,12 +137,6 @@ public class CodeBLImpl implements CodeBL {
             return ResponseVO.buildSuccess(funcBody);
         }
 
-
-
-
-
-
-
         return ResponseVO.buildFailure("test");
     }
 
@@ -151,8 +145,9 @@ public class CodeBLImpl implements CodeBL {
         int backCurvesIndex = getBackCurves(content,frontCurvesIndex);
         int frontBraceIndex = content.indexOf("{",backCurvesIndex+1);
         int backBraceIndex = getBackBrace(content,frontBraceIndex);
-
-        return content.substring(funcIndex,backBraceIndex+1);
+        String lineSeparator = System.lineSeparator();
+        int start = content.lastIndexOf(lineSeparator,funcIndex);
+        return content.substring(start+1,backBraceIndex+1);
     }
 
     private int getBackCurves(String content,int frontCurvesIndex){
