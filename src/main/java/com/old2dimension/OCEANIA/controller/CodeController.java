@@ -23,7 +23,7 @@ public class CodeController {
 
     @RequestMapping(value = "/getFuncCode",method = RequestMethod.POST)
     public ResponseVO getFuncCode(@RequestBody VertexVO vertexVO){
-        return null;
+        return codeBL.getFuncCode(vertexVO);
     }
 
     /*

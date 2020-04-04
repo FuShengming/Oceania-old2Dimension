@@ -1,1 +1,0 @@
-INSERT INTO Users(MID, password, role) VALUES(9999999999, 'pw', 'tester');
