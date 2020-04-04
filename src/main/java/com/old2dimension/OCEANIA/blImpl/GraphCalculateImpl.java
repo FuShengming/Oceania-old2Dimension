@@ -33,7 +33,7 @@ public class GraphCalculateImpl implements GraphCalculateBL {
         if(currentUser == null ){
             return ResponseVO.buildFailure("no such user");
         }
-        Code curCode = codeRepository.findCodeById(userAndCodeForm.getCodeId());
+        Code curCode = codeRepository.findCodeByIdAndUserId(userAndCodeForm.getCodeId(),userAndCodeForm.getUserId());
         if(curCode == null){
             return ResponseVO.buildFailure("no such code");
         }
