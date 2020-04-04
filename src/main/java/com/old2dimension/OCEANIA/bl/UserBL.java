@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface UserBL {
     ResponseVO getAllUser();
+
     ResponseVO login(String userName, String pwd);
+
     ResponseVO signUp(UserVO userInfo);
 }

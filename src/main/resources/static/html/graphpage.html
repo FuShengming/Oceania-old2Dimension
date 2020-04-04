@@ -1,0 +1,393 @@
+<!DOCTYPEhtml>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <!--    <meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://use.typekit.net/cpy1erx.css">
+
+    <link rel="stylesheet" type="text/css" href="webjars/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.4.1-1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/dashboard.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-treeview.css">
+
+    <style>
+
+        /* fonts */
+        body {
+            font-family: fira-sans, sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            font-style: normal;
+        }
+
+        .navbar-brand {
+            font-family: flood-std, sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .card-header, .card-text {
+            font-family: tekton-pro, arial, sans-serif;
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        .code-card > .card-header, .card-text {
+            font-family: fira-sans, sans-serif;
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .nav-link {
+            font-size: 1.2rem;
+        }
+
+        /* cytoscape */
+        #cy_container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            z-index: 1;
+        }
+
+        /* float buttons */
+        #float_container {
+            position: absolute;
+            top: calc(100% - 21rem); /* 100% - n*height - 1rem */
+            left: calc(100% - 5rem); /* 100% - weight - 1rem */
+            z-index: 99;
+            width: 4rem;
+        }
+
+        .btn-float {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 2rem;
+            text-align: center;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            box-shadow: 0.1rem 0.3rem 0.2rem rgba(0, 0, 0, .2);
+        }
+
+        /* cxtmenu */
+        .cxtmenu-disabled {
+            opacity: 0.333;
+        }
+
+        /* loader */
+        .loader {
+            position: absolute;
+            top: calc(40% - 64px);
+            left: calc(50% - 64px);
+            width: 128px;
+            height: 128px;
+            border-radius: 50%;
+            perspective: 1600px;
+        }
+
+        .inner {
+            position: absolute;
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .inner.one {
+            left: 0%;
+            top: 0%;
+            animation: rotate-one 1s linear infinite;
+            border-bottom: 3px solid #9EC9FF;
+        }
+
+        .inner.two {
+            right: 0%;
+            top: 0%;
+            animation: rotate-two 1s linear infinite;
+            border-right: 3px solid #9EC9FF;
+        }
+
+        .inner.three {
+            right: 0%;
+            bottom: 0%;
+            animation: rotate-three 1s linear infinite;
+            border-top: 3px solid #9EC9FF;
+        }
+
+        @keyframes rotate-one {
+            0% {
+                transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
+            }
+            100% {
+                transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
+            }
+        }
+
+        @keyframes rotate-two {
+            0% {
+                transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
+            }
+            100% {
+                transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
+            }
+        }
+
+        @keyframes rotate-three {
+            0% {
+                transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
+            }
+            100% {
+                transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
+            }
+        }
+    </style>
+    <title>Connected Graph</title>
+</head>
+<body>
+<script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript" src="webjars/popper.js/1.16.0/dist/umd/popper.min.js"></script>
+<script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
+<!--    <script type="text/javascript" src="../js/g6.min.js"></script>-->
+<script type="text/javascript" src="../js/bootstrap-treeview.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.14.0/cytoscape.min.js"></script>
+
+<script src="https://unpkg.com/numeric/numeric-1.2.6.js"></script>
+<script src="https://unpkg.com/layout-base/layout-base.js"></script>
+<script src="https://unpkg.com/cose-base/cose-base.js"></script>
+<script src="../js/cytoscape-fcose.js"></script>
+
+<script src="../js/cytoscape-extmenu.js"></script>
+
+<script type="text/javascript" src="../js/graphpage.js"></script>
+
+<!--SEARCH-->
+<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <ul class="nav nav-tabs modal-title" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="search-nodes-tab" data-toggle="tab" href="#search-nodes"
+                           role="tab"
+                           aria-controls="search-nodes" aria-selected="true">Search for Nodes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="search-paths-tab" data-toggle="tab" href="#search-paths" role="tab"
+                           aria-controls="search-paths" aria-selected="false">Search for Paths</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="search-nodes" role="tabpanel"
+                         aria-labelledby="search-nodes-tab">
+                        <div class="input-group my-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Function Name</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="" aria-label="func-name"
+                                   aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="search-paths" role="tabpanel" aria-labelledby="search-paths-tab">
+                        <div class="input-group my-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon2">Start Node</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="" aria-label="start-node"
+                                   aria-describedby="basic-addon2">
+                        </div>
+                        <div class="input-group my-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon3">End Node</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="" aria-label="end-node"
+                                   aria-describedby="basic-addon3">
+                        </div>
+                    </div>
+                </div>
+                <div class="p-0" style="text-align: right">
+                    <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
+                    <button type="button" class="btn btn-primary m-2">SEARCH</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--FILTER-->
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Filter</h3>
+            </div>
+            <div class="modal-body">
+                <h4>Edge Attributes</h4>
+                <div class="d-flex justify-content-between">
+                    <label for="ctm-range" class="h5 my-auto">Closeness</label>
+                    <div class="d-flex">
+                        <output class="h5 d-block m-auto text-center" id="range_value">0.15</output>
+                        <button class=" btn fa fa-pencil h5 ml-2 my-auto py-0" data-toggle="collapse"
+                                href="#collapseExample"
+                                role="button" aria-expanded="false" aria-controls="collapseExample"></button>
+                    </div>
+                </div>
+                <div class="collapse card p-2 my-1" id="collapseExample">
+                    <div class="d-flex justify-content-center">
+                        <span class="font-weight-bold h4 mr-3 mb-0">0</span>
+                        <input type="range" class="custom-range align-self-center" min="0" max="1" step="0.01"
+                               value="0.15" id="ctm-range" oninput="range_value.value=value"
+                               onchange="range_value.value=value">
+                        <span class="font-weight-bold h4 ml-3 mb-0">1</span>
+                    </div>
+                </div>
+                <hr style="border-top: 1px dashed #999; width: 100%">
+                <h4>Vertex Attributes</h4>
+                <div class="d-flex justify-content-between">
+                    <label for="ctm-range" class="h5 my-auto">In-degree</label>
+                    <div class="h5 my-auto">To be finished in the next iteration.</div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <label for="ctm-range" class="h5 my-auto">Out-degree</label>
+                    <div class="h5 my-auto">To be finished in the next iteration.</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
+                <button type="button" class="btn btn-primary m-2">SEARCH</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top p-0">
+    <a class="navbar-brand h1 m-0 col-2" href="#">👴 Old2Dimension</a>
+
+    <div class="collapse navbar-collapse col-10 px-0">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Dropdown
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#">Disabled</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+
+<div class="container-fluid row px-0 no-gutters" style="
+position: absolute;
+top: 0;
+left: 0;
+padding-top: 40px;
+height: 100%;
+">
+    <nav class="col-2 bg-light sidebar sidebar-left overflow-auto" id="tree">
+
+    </nav>
+    <div class="col-8 bg-white main-graph">
+        <div class="card" id="loading"
+             style="z-index: 2;height: 100%;display: flex;align-items: center;justify-content: center;">
+            <div class="loader">
+                <div class="inner one"></div>
+                <div class="inner two"></div>
+                <div class="inner three"></div>
+            </div>
+            <p class="h4" style="position: absolute;top: calc(40% + 84px);">Loading...</p>
+        </div>
+        <div class="row" id="float_container">
+            <button class="btn btn-danger btn-float" id="layout-btn">
+                <i class="fa fa-arrows"></i></button>
+            <button class="btn btn-info btn-float" data-toggle="modal" data-target="#searchModal">
+                <i class="fa fa-search"></i></button>
+            <button class="btn btn-warning btn-float" data-toggle="modal" data-target="#filterModal">
+                <i class="fa fa-filter"></i></button>
+            <button class="btn btn-primary btn-float">
+                <i class="fa fa-info"></i></button>
+        </div>
+        <div id="cy_container"></div>
+    </div>
+    <nav class="col-2 bg-light sidebar sidebar-right overflow-auto">
+
+        <div class="card m-2 code-card">
+            <h5 class="card-header">GraphCalculateImpl.java</h5>
+            <div class="card-body">
+                <pre class="bg-white my-0">
+<code>public ResponseVO getConnectedDomains(ArrayList&lt;WeightForm&gt; weightForms) {
+    try {
+        domainSet = filterByWeights(weightForms);
+        domainSet.sortByVerticesNum();
+        return ResponseVO.buildSuccess(new DomainSetVO(domainSet));
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseVO.buildFailure("连通域生成失败");
+    }
+}</code>
+                </pre>
+            </div>
+        </div>
+
+        <hr style="border-top: 2px dashed #999; width: 80%">
+
+        <div class="card m-2">
+            <h5 class="card-header">Label1</h5>
+            <div class="card-body">
+                <div class="card-text">
+                    <p>This is an Impl to get connected domains.</p>
+                    <p>This is long long long long long long long long long long long long long long long long long long
+                        long sentence.</p>
+                </div>
+                <div class="mt-3" style="text-align: right">
+                    <button class="btn btn-info">Edit</button>
+                    <button class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card m-2">
+            <h5 class="card-header">Label2</h5>
+            <div class="card-body">
+                <div class="card-text">
+                    <p>This is an Impl to get connected domains.</p>
+                    <p>This is long long long long long long long long long long long long long long long long long long
+                        long sentence.</p>
+                </div>
+                <div class="mt-3" style="text-align: right">
+                    <button class="btn btn-info">Edit</button>
+                    <button class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+
+    </nav>
+</div>
+
+
+</body>
+</html>
