@@ -12,13 +12,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.*;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = OceaniaApplication.class)
+//@ExtendWith(SpringExtension.class)
+//@SpringBootTest(classes = OceaniaApplication.class)
 public class GetFuncInfosTest {
-    @Autowired
-    GraphCalculateImpl graphCalculate;
+
     @Test
     public void getFuncInfosTest(){
+        GraphCalculateImpl graphCalculate = new GraphCalculateImpl();
         graphCalculate.initializeGraph("src/test/resources/test_dependency_data.txt");
         Assert.assertEquals(3, ((ArrayList<VertexVO>) graphCalculate.getAmbiguousFuncInfos("Age").getContent()).size());
         Assert.assertEquals("AgeFactorTest:testRegularAge()", ((ArrayList<VertexVO>) graphCalculate.getAmbiguousFuncInfos("Age").getContent()).get(0).getClassNameAndFunc());
