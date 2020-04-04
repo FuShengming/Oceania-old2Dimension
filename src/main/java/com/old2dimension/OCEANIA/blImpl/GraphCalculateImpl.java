@@ -37,7 +37,7 @@ public class GraphCalculateImpl implements GraphCalculateBL {
         if(curCode == null){
             return ResponseVO.buildFailure("no such code");
         }
-        if(curCode.getName().equals("iTrust")){
+        if(curCode.getIs_default()==1){
             System.out.println("iTrust");
             initializeGraph("call_dependencies_update.txt");
             WeightForm weightForm = new WeightForm();

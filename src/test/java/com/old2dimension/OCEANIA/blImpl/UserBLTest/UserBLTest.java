@@ -86,7 +86,7 @@ public class UserBLTest {
         when(userRepository.findUserByName("test")).thenReturn(null);
         when(userRepository.save(any())).thenReturn(expected);
         when(userRepository.findUserById(1)).thenReturn(expected);
-        Code code = new Code(0, expected.getId(), "iTrust", 1979, 3834, 64);
+        Code code = new Code(0, expected.getId(), "iTrust", 1979, 3834, 64,1);
         CodeRepository codeRepository = mock(CodeRepository.class);
         when(codeRepository.save(any())).thenReturn(code);
         userBL.setUserRepository(userRepository);
@@ -109,7 +109,7 @@ public class UserBLTest {
         when(userRepository.findUserByName("test")).thenReturn(null);
         when(userRepository.save(user)).thenReturn(expected);
         when(userRepository.findUserById(1)).thenReturn(expected);
-        Code code = new Code(0, expected.getId(), "iTrust", 1979, 3834, 64);
+        Code code = new Code(0, expected.getId(), "iTrust", 1979, 3834, 64,1);
         CodeRepository codeRepository = mock(CodeRepository.class);
         when(codeRepository.save(code)).thenReturn(code);
         userBL.setUserRepository(userRepository);

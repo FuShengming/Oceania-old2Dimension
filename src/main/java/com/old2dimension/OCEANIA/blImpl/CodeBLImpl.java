@@ -1,9 +1,13 @@
 package com.old2dimension.OCEANIA.blImpl;
 
 import com.old2dimension.OCEANIA.bl.CodeBL;
+import com.old2dimension.OCEANIA.dao.CodeRepository;
+import com.old2dimension.OCEANIA.po.Code;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
 import com.old2dimension.OCEANIA.vo.VertexVO;
 
+import com.old2dimension.OCEANIA.vo.VertexVOAndUserIdAndCodeId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -16,7 +20,25 @@ import java.io.IOException;
 
 @Component
 public class CodeBLImpl implements CodeBL {
-    public ResponseVO getFuncCode(VertexVO vertexVO){
+
+    @Autowired
+    CodeRepository codeRepository;
+
+    @Override
+    public ResponseVO getFuncCode(VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId) {
+        Code code = codeRepository.findCodeByIdAndUserId(vertexVOAndUserIdAndCodeId.getCodeId(),vertexVOAndUserIdAndCodeId.getUserId());
+        if(code == null){
+            return ResponseVO.buildFailure("no such user or code");
+        }
+        if(code.getIs_default()==1){
+        return getFuncCodeWithVertexVO(vertexVOAndUserIdAndCodeId.getVertexVO());
+        }
+        else{
+            return ResponseVO.buildFailure("目前不支持itrust以外的代码分析");
+        }
+    }
+
+    private ResponseVO getFuncCodeWithVertexVO(VertexVO vertexVO){
         String basicPath = "analyzeCode/src/";
         String packageStr = vertexVO.getBelongPackage();
         String classStr = vertexVO.getBelongClass();
