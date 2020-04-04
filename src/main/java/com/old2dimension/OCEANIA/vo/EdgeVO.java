@@ -18,6 +18,7 @@ public class EdgeVO {
     }
 
     public EdgeVO(Edge edge) {
+        this.id = edge.getId();
         this.start=new VertexVO(edge.getStart());
         this.end=new VertexVO(edge.getEnd());
         this.weights = new ArrayList<>();

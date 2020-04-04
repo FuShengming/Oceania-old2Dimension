@@ -4,6 +4,7 @@ import com.old2dimension.OCEANIA.bl.CodeBL;
 import com.old2dimension.OCEANIA.vo.VertexVO;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
 import com.old2dimension.OCEANIA.vo.UserAndCodeForm;
+import com.old2dimension.OCEANIA.vo.VertexVOAndUserIdAndCodeId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +23,8 @@ public class CodeController {
     }
 
     @RequestMapping(value = "/getFuncCode",method = RequestMethod.POST)
-    public ResponseVO getFuncCode(@RequestBody VertexVO vertexVO){
-        return null;
+    public ResponseVO getFuncCode(@RequestBody VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId){
+        return codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
     }
 
     /*

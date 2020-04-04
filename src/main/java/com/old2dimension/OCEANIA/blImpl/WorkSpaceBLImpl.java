@@ -16,9 +16,20 @@ public class WorkSpaceBLImpl implements WorkSpaceBL {
     WorkPlaceRepository workPlaceRepository;
     @Autowired
     CodeRepository codeRepository;
+
+    public void setCodeRepository(CodeRepository codeRepository) {
+        this.codeRepository = codeRepository;
+    }
+
+    public void setWorkPlaceRepository(WorkPlaceRepository workPlaceRepository) {
+        this.workPlaceRepository = workPlaceRepository;
+    }
+
     public ResponseVO save(WorkSpaceVO workSpaceVO){
         try{
-            if(codeRepository.findCodeById(workSpaceVO.getCodeId()) == null){return ResponseVO.buildFailure("do not have that user or code");}
+            if(codeRepository.findCodeByIdAndUserId(workSpaceVO.getCodeId(),workSpaceVO.getUserId()) == null){
+                return ResponseVO.buildFailure("do not have that user or code");
+            }
             workPlaceRepository.save(new WorkSpace(workSpaceVO));
             return ResponseVO.buildSuccess("save a workSpace.");}
         catch (Exception e){
