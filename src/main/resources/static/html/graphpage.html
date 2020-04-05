@@ -146,7 +146,7 @@
             }
         }
     </style>
-    <title>Connected Graph</title>
+    <title>Call Graph</title>
 </head>
 <body>
 <script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
@@ -193,6 +193,10 @@
                             <input type="text" class="form-control" placeholder="" aria-label="func-name"
                                    aria-describedby="basic-addon1">
                         </div>
+                        <div class="p-0" style="text-align: right">
+                            <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
+                            <button type="button" class="btn btn-primary m-2">SEARCH</button>
+                        </div>
                     </div>
                     <div class="tab-pane fade" id="search-paths" role="tabpanel" aria-labelledby="search-paths-tab">
                         <div class="input-group my-4">
@@ -209,12 +213,13 @@
                             <input type="text" class="form-control" placeholder="" aria-label="end-node"
                                    aria-describedby="basic-addon3">
                         </div>
+                        <div class="p-0" style="text-align: right">
+                            <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
+                            <button type="button" class="btn btn-primary m-2">SEARCH</button>
+                        </div>
                     </div>
                 </div>
-                <div class="p-0" style="text-align: right">
-                    <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
-                    <button type="button" class="btn btn-primary m-2">SEARCH</button>
-                </div>
+
             </div>
 
         </div>
@@ -336,9 +341,9 @@ height: 100%;
     <nav class="col-2 bg-light sidebar sidebar-right overflow-auto">
 
         <div class="card m-2 code-card">
-            <h5 class="card-header">GraphCalculateImpl.java</h5>
+            <div class="h5 card-header" id="code-header">GraphCalculateImpl.java</div>
             <div class="card-body">
-                <pre class="bg-white my-0">
+                <pre class="bg-white my-0" id="code-pre">
 <code>public ResponseVO getConnectedDomains(ArrayList&lt;WeightForm&gt; weightForms) {
     try {
         domainSet = filterByWeights(weightForms);

@@ -153,6 +153,12 @@ $(function () {
                             id: 'n' + vertex.id.toString(),
                             label: vertex.funcName,
                             parent: 'd' + domain.id.toString(),
+                            full_info: {
+                                belongPackage: vertex.belongPackage,
+                                belongClass: vertex.belongClass,
+                                funcName: vertex.funcName,
+                                args: vertex.args,
+                            }
                         },
                         classes: ['vertex'],
                     });
@@ -267,8 +273,93 @@ $(function () {
                 }
             });
 
+            cy.on('tap', 'node.vertex', function (event) {
+                console.log('selected');
+                console.log(event.target.data());
+                let info = event.target.data("full_info");
+                $.ajax({
+                    type: "post",
+                    url: "/code/getFuncCode",
+                    dataType: "json",
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        userId: 1,
+                        codeId: 1,
+                        vertexVO: info,
+                    }),
+                    success: function (data) {
+                        console.log(data);
+                        $("#code-header").text(info["belongClass"] + ": " + info["funcName"] + " (" + info["args"].join(", ") + ")");
+                        $("#code-pre").html("<code>" + data.content + "</code>");
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            });
+
             cy.cxtmenu({
-                selector: 'node.vertex.favor, edge.favor',
+                selector: 'node.vertex.favor',
+                commands: [
+                    {
+                        content: '<span class="fa fa-arrows-alt fa-2x"></span>',
+                        select: function (ele) {
+                            let info = ele.data("full_info");
+                            $.ajax({
+                                type: "post",
+                                url: "/code/getFuncCode",
+                                dataType: "json",
+                                contentType: 'application/json',
+                                data: JSON.stringify({
+                                    userId: 1,
+                                    codeId: 1,
+                                    vertexVO: info,
+                                }),
+                                success: function (data) {
+                                    console.log(data);
+                                    $("#code-header").text(info["belongClass"] + ": " + info["funcName"] + " (" + info["args"].join(", ") + ")");
+                                    $("#code-pre").html("<code>" + data.content + "</code>");
+                                },
+                                error: function (err) {
+                                    console.log(err);
+                                }
+                            });
+
+                            cy.$('node,edge').unselect();
+                            console.log('this id', ele.id());
+                            ele.select();
+                            let neighborhoods = ele.neighborhood();
+                            neighborhoods.forEach(function (nb) {
+                                console.log('neighbor id', nb.id());
+                                nb.select();
+                            });
+                            cy.fit(cy.$('node:selected'), $('#cy_container').height() * 0.25);
+                        }
+                    },
+
+                    {
+                        content: '<span style="color:#faff62;" class="fa fa-lightbulb-o fa-2x"></span>',
+                        select: function (ele) {
+                            ele.removeClass('favor');
+                            ele.removeData('favor');
+                        },
+                        // enabled: false
+                    },
+
+                    {
+                        content: '<span class="fa fa-bookmark fa-2x"></span>',
+                        select: function (ele) {
+                            console.log(ele.position());
+                        }
+                    }
+                ],
+                menuRadius: 70,
+                indicatorSize: 12,
+                minSpotlightRadius: 12,
+            });
+
+            cy.cxtmenu({
+                selector: 'edge.favor',
                 commands: [
                     {
                         content: '<span class="fa fa-arrows-alt fa-2x"></span>',
@@ -312,6 +403,27 @@ $(function () {
                     {
                         content: '<span class="fa fa-arrows-alt fa-2x"></span>',
                         select: function (ele) {
+                            let info = ele.data("full_info");
+                            $.ajax({
+                                type: "post",
+                                url: "/code/getFuncCode",
+                                dataType: "json",
+                                contentType: 'application/json',
+                                data: JSON.stringify({
+                                    userId: 1,
+                                    codeId: 1,
+                                    vertexVO: info,
+                                }),
+                                success: function (data) {
+                                    console.log(data);
+                                    $("#code-header").text(info["belongClass"] + ": " + info["funcName"] + " (" + info["args"].join(", ") + ")");
+                                    $("#code-pre").html("<code>" + data.content + "</code>");
+                                },
+                                error: function (err) {
+                                    console.log(err);
+                                }
+                            });
+
                             cy.$('node,edge').unselect();
                             console.log('this id', ele.id());
                             ele.select();
