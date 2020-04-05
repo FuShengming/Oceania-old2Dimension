@@ -3,6 +3,7 @@ package com.old2dimension.OCEANIA.blImpl;
 import com.old2dimension.OCEANIA.bl.CodeBL;
 import com.old2dimension.OCEANIA.dao.CodeRepository;
 import com.old2dimension.OCEANIA.po.Code;
+import com.old2dimension.OCEANIA.vo.CodeVO;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
 import com.old2dimension.OCEANIA.vo.VertexVO;
 
@@ -17,12 +18,26 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class CodeBLImpl implements CodeBL {
 
     @Autowired
     CodeRepository codeRepository;
+
+    public ResponseVO getCodesByUserId(int userId){
+        List<Code> dbRes = codeRepository.findCodesByUserId(userId);
+        if(dbRes == null){
+            return ResponseVO.buildFailure("that user doesn't have any codes");
+        }
+        List<CodeVO> res = new ArrayList<CodeVO>();
+        for(Code cur : dbRes){
+            res.add(new CodeVO(cur));
+        }
+        return ResponseVO.buildSuccess(res);
+    }
 
     @Override
     public ResponseVO getFuncCode(VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId) {
@@ -71,9 +86,6 @@ public class CodeBLImpl implements CodeBL {
             classStr = classStr.substring(0,classStr.indexOf("$"));
         }
         tempStrLength = classStr.length();
-
-
-
        File[] files = packageDir.listFiles();
        File classFile = null;
         if(files == null){
@@ -92,8 +104,13 @@ public class CodeBLImpl implements CodeBL {
             return ResponseVO.buildFailure("class file do not exist");
         }
         StringBuffer fileContentBuffer = new StringBuffer("");
-        if(!internalClass.equals("")){System.out.println("internal class");}
+        if(!internalClass.equals("")){
+            //----------------------------todo--------------------------
+            System.out.println("internal class");
+
+        }
         else{
+
             BufferedReader br = null;
             try{
                 br = new BufferedReader(new FileReader(classFile));
@@ -109,16 +126,51 @@ public class CodeBLImpl implements CodeBL {
             }
             String content = fileContentBuffer.toString();
             String funcName = vertexVO.getFuncName();
+            //------------构造函数---------------
+            if(funcName.equals("<init>")){
+                funcName = classStr;
+                System.out.println("init:"+funcName);
+            }
+            //------------clinit----------------
+            if(funcName.equals("<clinit>")){
+                return ResponseVO.buildSuccess("this function is class initialize function, it doesn't have a function body.");
+            }
+
+            //------------纯接口-------------
+
+
+
             int funcIndex = content.indexOf(funcName);
+            int lineIndex = content.lastIndexOf(lineSeparator,funcIndex);
+            String funcLine= content.substring(lineIndex+1,funcIndex);
+            if(funcLine.contains("class")){
+                funcIndex = content.indexOf(funcName,funcIndex+1);
+            }
+
             if(funcIndex==-1){return ResponseVO.buildFailure("do not find funName in file");}
 
             while(funcIndex != -1){
                 int frontCurvesIndex = content.indexOf("(",funcIndex);
+
+                char indexChar = '\0';
+                if(funcIndex>0){
+                   indexChar = content.charAt(funcIndex-1);
+                }
+                if((!(indexChar == ' '|| indexChar == '\t' || indexChar == '\n' || indexChar == '\r'))&&indexChar!='\0'){
+                    funcIndex = content.indexOf(funcName,funcIndex+1);
+                    continue;
+                }
+
+                if(content.lastIndexOf(funcName,frontCurvesIndex) != funcIndex){
+                    funcIndex=content.lastIndexOf(funcName,frontCurvesIndex);
+                    continue;
+                }
+
                 int backCurvesIndex = getBackCurves(content,frontCurvesIndex);
                 if(frontCurvesIndex == -1 || backCurvesIndex == -1){return ResponseVO.buildFailure("do not have curves");}
 
                 String paramsStr = content.substring(frontCurvesIndex+1,backCurvesIndex);
-                System.out.println(packageStr);
+                System.out.println("param:"+paramsStr);
 
                 String[] args = paramsStr.split(",");
                 String[] vertexArgs = vertexVO.getArgs();
@@ -126,10 +178,17 @@ public class CodeBLImpl implements CodeBL {
                 boolean equal = true;
                 for(int i = 0; i<args.length;i++){
                     String arg = args[i].trim();
-                    System.out.println(arg);
+                    System.out.println("arg:"+arg);
                     String vertexArg = vertexArgs[i];
 
-                    if(arg.split("[ \t]")[0].equals("T")){
+                    String argKind = arg.split("[ \t\n]")[0];
+                    String vertexArgKind = vertexArg.substring(vertexArg.lastIndexOf(".")+1);
+                    if(argKind.contains(".")){
+                        vertexArgKind = vertexArg;
+                    }
+
+
+                    if(arg.split("[ \t\n]")[0].equals("T")){
 
                         if(!vertexArg.substring(vertexArg.lastIndexOf(".")+1).equals("Object")){
                             funcIndex = content.indexOf(funcName,funcIndex+1);
@@ -137,8 +196,9 @@ public class CodeBLImpl implements CodeBL {
                             break;
                         }
                     }
-
-                   else if(!arg.split("[ \t]")[0].equals(vertexArg.substring(vertexArg.lastIndexOf(".")+1))){
+                   else if(!argKind.equals(vertexArgKind)){
+                       System.out.println("withoutSpace:"+arg.split("[ \t\n]")[0]);
+                       System.out.println("vertexArg:"+vertexArg.substring(vertexArg.lastIndexOf(".")+1));
                         funcIndex = content.indexOf(funcName,funcIndex+1);
                         equal = false;
                         break;
@@ -153,7 +213,9 @@ public class CodeBLImpl implements CodeBL {
 
             }
 
-            if(funcIndex == -1){return ResponseVO.buildFailure("match args do not exist ");}
+            if(funcIndex == -1){
+                if(funcName.equals(classStr)){return ResponseVO.buildSuccess("do not have an explicit initialize function.");}
+                return ResponseVO.buildFailure("match args do not exist ");}
             String funcBody = getFuncBody(content,funcIndex);
             System.out.println(funcBody);
             return ResponseVO.buildSuccess(funcBody);

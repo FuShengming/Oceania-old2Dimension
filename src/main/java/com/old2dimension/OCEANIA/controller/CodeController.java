@@ -6,16 +6,18 @@ import com.old2dimension.OCEANIA.vo.ResponseVO;
 import com.old2dimension.OCEANIA.vo.UserAndCodeForm;
 import com.old2dimension.OCEANIA.vo.VertexVOAndUserIdAndCodeId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/code")
 public class CodeController {
     @Autowired
     CodeBL codeBL;
+
+    @RequestMapping(value = "/getCodesByUserId/{userId}",method = RequestMethod.GET)
+    public ResponseVO getCodesByUserId(@PathVariable("userId") int userId){
+        return  codeBL.getCodesByUserId(userId);
+    }
 
     @RequestMapping(value = "/getCodeStructure",method = RequestMethod.POST)
     public ResponseVO getCodeStructure(@RequestBody UserAndCodeForm userAndCodeForm){

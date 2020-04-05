@@ -1,5 +1,7 @@
 package com.old2dimension.OCEANIA.vo;
 
+import com.old2dimension.OCEANIA.po.Code;
+
 public class CodeVO {
     private int id;
 
@@ -63,6 +65,15 @@ public class CodeVO {
         this.is_default=is_default;
     }
 
+    public CodeVO(Code c){
+        this.id=c.getId();
+        this.is_default=c.getIs_default();
+        this.name=c.getName();
+        this.numOfDomains=c.getNumOfDomains();
+        this.numOfEdges=c.getNumOfEdges();
+        this.numOfDomains=c.getNumOfDomains();
+        this.userId=c.getUserId();
+    }
 
     public int getUserId() {
         return userId;
