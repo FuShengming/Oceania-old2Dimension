@@ -24,7 +24,10 @@ create table if not exists code(
 	num_of_vertices int,
 	num_of_edges int,
 	num_of_domains int,
+<<<<<<< HEAD
 	is_default int,
+=======
+>>>>>>> origin/gr-2
 	CONSTRAINT code_fk_user_id FOREIGN KEY(user_id) REFERENCES user(id)  ON DELETE Cascade
 	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

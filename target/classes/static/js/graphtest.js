@@ -1,5 +1,9 @@
 $(function () {
+<<<<<<< HEAD
     $("#jQuery_div").text("jQuery works");
+=======
+    $("#my_div").text("jQuery works");
+>>>>>>> origin/gr-2
     $.ajax({
         type: "post",
         url: "/graphql",
@@ -18,6 +22,7 @@ $(function () {
                             id
                             funcName
                         }
+<<<<<<< HEAD
                         edges
                         {
                             start
@@ -33,12 +38,15 @@ $(function () {
                                 weightValue
                             }
                         }
+=======
+>>>>>>> origin/gr-2
                     }
                 }
             }`
         }),
         success: function (data) {
             console.log(data);
+<<<<<<< HEAD
             // console.log(data.data.get_domainset.domains[1]);
             let graphData = {
                 nodes: [],
@@ -61,11 +69,14 @@ $(function () {
             console.log(graphData);
             graph.data(graphData); // 加载数据
             graph.render(); // 渲染
+=======
+>>>>>>> origin/gr-2
         },
         error: function (err) {
             console.log(err);
         }
     });
+<<<<<<< HEAD
     console.log(G6.Global.version);
     const data = {
         nodes: [
@@ -138,4 +149,6 @@ $(function () {
 
     graph.data(data);
     graph.render();
+=======
+>>>>>>> origin/gr-2
 });
