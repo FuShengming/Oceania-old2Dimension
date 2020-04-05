@@ -3,6 +3,7 @@ package com.old2dimension.OCEANIA.blImpl;
 import com.old2dimension.OCEANIA.bl.CodeBL;
 import com.old2dimension.OCEANIA.dao.CodeRepository;
 import com.old2dimension.OCEANIA.po.Code;
+import com.old2dimension.OCEANIA.vo.CodeVO;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
 import com.old2dimension.OCEANIA.vo.VertexVO;
 
@@ -17,12 +18,26 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class CodeBLImpl implements CodeBL {
 
     @Autowired
     CodeRepository codeRepository;
+
+    public ResponseVO getCodesByUserId(int userId){
+        List<Code> dbRes = codeRepository.findCodesByUserId(userId);
+        if(dbRes == null){
+            return ResponseVO.buildFailure("that user doesn't have any codes");
+        }
+        List<CodeVO> res = new ArrayList<CodeVO>();
+        for(Code cur : dbRes){
+            res.add(new CodeVO(cur));
+        }
+        return ResponseVO.buildSuccess(res);
+    }
 
     @Override
     public ResponseVO getFuncCode(VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId) {

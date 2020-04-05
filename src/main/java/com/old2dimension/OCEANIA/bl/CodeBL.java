@@ -7,4 +7,5 @@ import com.old2dimension.OCEANIA.vo.VertexVOAndUserIdAndCodeId;
 
 public interface CodeBL {
     public ResponseVO getFuncCode(VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId);
+    public ResponseVO getCodesByUserId(int userId);
 }
