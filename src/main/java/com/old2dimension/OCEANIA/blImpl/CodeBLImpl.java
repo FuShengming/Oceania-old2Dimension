@@ -71,9 +71,6 @@ public class CodeBLImpl implements CodeBL {
             classStr = classStr.substring(0,classStr.indexOf("$"));
         }
         tempStrLength = classStr.length();
-
-
-
        File[] files = packageDir.listFiles();
        File classFile = null;
         if(files == null){
@@ -95,6 +92,7 @@ public class CodeBLImpl implements CodeBL {
         if(!internalClass.equals("")){
             //----------------------------todo--------------------------
             System.out.println("internal class");
+
         }
         else{
 
@@ -200,7 +198,9 @@ public class CodeBLImpl implements CodeBL {
 
             }
 
-            if(funcIndex == -1){return ResponseVO.buildFailure("match args do not exist ");}
+            if(funcIndex == -1){
+                if(funcName.equals(classStr)){return ResponseVO.buildSuccess("do not have an explicit initialize function.");}
+                return ResponseVO.buildFailure("match args do not exist ");}
             String funcBody = getFuncBody(content,funcIndex);
             System.out.println(funcBody);
             return ResponseVO.buildSuccess(funcBody);
