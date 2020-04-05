@@ -23,6 +23,26 @@ public class StatisticsBLImpl implements StatisticsBL {
     @Autowired
     DomainLabelRepository domainLabelRepository;
 
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void setCodeRepository(CodeRepository codeRepository) {
+        this.codeRepository = codeRepository;
+    }
+
+    public void setVertexLabelRepository(VertexLabelRepository vertexLabelRepository) {
+        this.vertexLabelRepository = vertexLabelRepository;
+    }
+
+    public void setEdgeLabelRepository(EdgeLabelRepository edgeLabelRepository) {
+        this.edgeLabelRepository = edgeLabelRepository;
+    }
+
+    public void setDomainLabelRepository(DomainLabelRepository domainLabelRepository) {
+        this.domainLabelRepository = domainLabelRepository;
+    }
+
     public int getNumOfUser() {
         ArrayList<User> users = (ArrayList<User>) userRepository.findAll();
         return users.size();

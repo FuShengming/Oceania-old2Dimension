@@ -18,6 +18,6 @@ public interface CodeRepository extends JpaRepository<Code,Integer> {
     public Code findCodeById(int id);
 
 
-
+    List<Code> findCodesByUserId(int userId);
 
 }

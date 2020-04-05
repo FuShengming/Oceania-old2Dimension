@@ -22,6 +22,17 @@ public class LabelBLImpl implements LabelBL {
     @Autowired
     DomainLabelRepository domainLabelRepository;
 
+    public void setVertexLabelRepository(VertexLabelRepository vertexLabelRepository) {
+        this.vertexLabelRepository = vertexLabelRepository;
+    }
+
+    public void setEdgeLabelRepository(EdgeLabelRepository edgeLabelRepository) {
+        this.edgeLabelRepository = edgeLabelRepository;
+    }
+
+    public void setDomainLabelRepository(DomainLabelRepository domainLabelRepository) {
+        this.domainLabelRepository = domainLabelRepository;
+    }
 
     public ResponseVO noteVertex(VertexLabelVO vertexLabelVO) {
         try{
