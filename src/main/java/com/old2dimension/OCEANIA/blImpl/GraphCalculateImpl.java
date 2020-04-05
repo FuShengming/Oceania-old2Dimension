@@ -33,11 +33,11 @@ public class GraphCalculateImpl implements GraphCalculateBL {
         if(currentUser == null ){
             return ResponseVO.buildFailure("no such user");
         }
-        Code curCode = codeRepository.findCodeById(userAndCodeForm.getCodeId());
+        Code curCode = codeRepository.findCodeByIdAndUserId(userAndCodeForm.getCodeId(),userAndCodeForm.getUserId());
         if(curCode == null){
             return ResponseVO.buildFailure("no such code");
         }
-        if(curCode.getName().equals("iTrust")){
+        if(curCode.getIs_default()==1){
             System.out.println("iTrust");
             initializeGraph("call_dependencies_update.txt");
             WeightForm weightForm = new WeightForm();
@@ -73,6 +73,7 @@ public class GraphCalculateImpl implements GraphCalculateBL {
         try {
             domainSet = filterByWeights(weightForms);
             domainSet.sortByVerticesNum();
+
             return ResponseVO.buildSuccess(new DomainSetVO(domainSet));
         } catch (Exception e) {
             e.printStackTrace();
@@ -329,6 +330,7 @@ public class GraphCalculateImpl implements GraphCalculateBL {
                 if (domain.getEdges().size() == 0) continue;
                 domain.setId(index);
                 index++;
+
                 domains.add(domain);
             }
         }

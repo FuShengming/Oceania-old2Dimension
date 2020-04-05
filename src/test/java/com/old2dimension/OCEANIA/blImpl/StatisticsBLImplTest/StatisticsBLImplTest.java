@@ -42,8 +42,8 @@ public class StatisticsBLImplTest {
         User a = new User(1, "a", "123");
         users.add(a);
         ArrayList<Code> codes = new ArrayList<Code>();
-        Code p = new Code(1, 1, "p", 100, 10, 5);
-        Code q = new Code(2, 1, "q", 500, 200, 10);
+        Code p = new Code(1, 1, "p", 100, 10, 5, 1);
+        Code q = new Code(2, 1, "q", 500, 200, 10, 1);
         codes.add(p);
         codes.add(q);
 
@@ -66,7 +66,7 @@ public class StatisticsBLImplTest {
         statisticsBL.setEdgeLabelRepository(edgeLabelRepository);
         statisticsBL.setDomainLabelRepository(domainLabelRepository);
 
-        Code code = new Code(1, 1, "code", 100, 50, 20);
+        Code code = new Code(1, 1, "code", 100, 50, 20, 1);
         when(codeRepository.findCodeById(1)).thenReturn(code);
         ArrayList<VertexLabel> vertexLabels = new ArrayList<>();
         ArrayList<EdgeLabel> edgeLabels = new ArrayList<>();

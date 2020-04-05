@@ -15,9 +15,10 @@ import java.util.List;
 public interface CodeRepository extends JpaRepository<Code,Integer> {
 
 
-    public Code findCodeById(int id);
-
+    public Code findCodeByIdAndUserId(int id,int userId);
 
     List<Code> findCodesByUserId(int userId);
+
+    public Code findCodeById(int id);
 
 }

@@ -23,6 +23,13 @@ public class UserBLImpl implements UserBL {
     @Autowired
     CodeRepository codeRepository;
 
+    public void setCodeRepository(CodeRepository codeRepository) {
+        this.codeRepository = codeRepository;
+    }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public ResponseVO getAllUser() {
 
@@ -56,7 +63,7 @@ public class UserBLImpl implements UserBL {
                 return ResponseVO.buildFailure("用户名已存在");
             }
             user = userRepository.save(user);
-            Code code = new Code(0, user.getId(), "iTrust", 1979, 3834, 64);
+            Code code = new Code(0, user.getId(), "iTrust", 1979, 3834, 64, 1);
             codeRepository.save(code);
             return ResponseVO.buildSuccess("sign up success");
         } catch (Exception e) {

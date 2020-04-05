@@ -36,26 +36,40 @@ public class Code {
     private int numOfEdges;
     @Column(name="num_of_domains")
     private int numOfDomains;
+    @Column(name = "is_default")
+    private int is_default;
+
 
     public Code(){}
 
-    public Code(int userId, String name, int numOfVertices, int numOfEdges, int numOfDomains) {
+    public Code(int userId, String name, int numOfVertices, int numOfEdges, int numOfDomains, int is_default) {
         this.userId=userId;
 
         this.name = name;
         this.numOfVertices = numOfVertices;
         this.numOfEdges = numOfEdges;
         this.numOfDomains = numOfDomains;
+        this.is_default= is_default;
     }
 
 
-    public Code(int id,int userId, String name, int numOfVertices, int numOfEdges, int numOfDomains) {
+
+    public Code(int id,int userId, String name, int numOfVertices, int numOfEdges, int numOfDomains, int is_default) {
         this.userId=userId;
         this.id = id;
         this.name = name;
         this.numOfVertices = numOfVertices;
         this.numOfEdges = numOfEdges;
         this.numOfDomains = numOfDomains;
+        this.is_default=is_default;
+    }
+
+    public int getIs_default() {
+        return is_default;
+    }
+
+    public void setIs_default(int is_default) {
+        this.is_default = is_default;
     }
 
     public int getNumOfVertices() {
