@@ -1,7 +1,26 @@
 $(function () {
     //initialize cytoscape
     let cy = cytoscape();
-
+    let fcose_layout = {
+        name: 'fcose',
+        idealEdgeLength: 150,
+        stop: function () {
+            $('#loading').hide();
+        }
+    };
+    let concentric_layout = {
+        name: 'concentric',
+        minNodeSpacing: 50,
+        concentric: function (node) {
+            return node.degree();
+        },
+        levelWidth: function (nodes) { // the letiation of concentric values in each level
+            return 0.5;
+        },
+        stop: function () {
+            $('#loading').hide();
+        }
+    };
     //treeview on the left sidebar
     let tree_json = [
         {
@@ -239,11 +258,6 @@ $(function () {
                     //     return 0.5;
                     // },
 
-                    // name: 'cose',
-                    // animate: true,
-                    // nodeDimensionsIncludeLabels: true,
-                    // padding: 100
-
                     name: 'fcose',
                     idealEdgeLength: 150,
 
@@ -339,11 +353,8 @@ $(function () {
                             cy.$('node,edge').unselect();
                             console.log('this id', ele.id());
                             ele.select();
-                            let neighborhoods = ele.neighborhood();
-                            neighborhoods.forEach(function (nb) {
-                                console.log('neighbor id', nb.id());
-                                nb.select();
-                            });
+                            ele.source().select();
+                            ele.target().select();
                             cy.fit(cy.$('node:selected'), $('#cy_container').height() * 0.25);
                         }
                     },
@@ -757,7 +768,7 @@ $(function () {
             contentType: "application/json",
             data: JSON.stringify([{
                 "weightName": "closeness",
-                "weightValue": 0.3
+                "weightValue": $("#range_value").val()
             }]),
             success: function (data) {
                 console.log(data);
@@ -795,13 +806,15 @@ $(function () {
                         });
                     });
                 });
-                cy.data({
+                cy.elements().remove();
+                cy.json({
                     elements: {
                         nodes: graphData.nodes,
                         edges: graphData.edges,
                     }
                 });
-                cy.layout();
+                $("#filterModal").modal('hide');
+                cy.layout(fcose_layout).run();
             },
             error: function (err) {
                 console.log(err);
