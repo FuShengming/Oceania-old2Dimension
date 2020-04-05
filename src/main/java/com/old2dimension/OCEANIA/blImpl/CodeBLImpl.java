@@ -169,10 +169,10 @@ public class CodeBLImpl implements CodeBL {
                 return ResponseVO.buildSuccess("this function is class initialize function, it doesn't have a function body.");
             }
 
-            //------------纯接口-------------
 
 
 
+            boolean funcStringExist = false;
             int funcIndex = content.indexOf(funcName);
             int lineIndex = content.lastIndexOf(lineSeparator,funcIndex);
             String funcLine= content.substring(lineIndex+1,funcIndex);
@@ -185,6 +185,9 @@ public class CodeBLImpl implements CodeBL {
                 return ResponseVO.buildFailure("do not find function name in file");
             }
 
+            char[] validBeforeFuncNameChar={' ','\t','\n','\r','.'};
+
+
             while(funcIndex != -1){
                 int frontCurvesIndex = content.indexOf("(",funcIndex);
 
@@ -192,17 +195,27 @@ public class CodeBLImpl implements CodeBL {
                 if(funcIndex>0){
                    indexChar = content.charAt(funcIndex-1);
                 }
-                if((!(indexChar == ' '|| indexChar == '\t' || indexChar == '\n' || indexChar == '\r'))&&indexChar!='\0'){
-                    System.out.println("ass1");
+                boolean indexCharValid = false;
+                for(char c : validBeforeFuncNameChar){
+                    if(indexChar == c){
+                        indexCharValid = true;
+                        break;
+                    }
+                }
+                if((!indexCharValid)&&indexChar!='\0'){
+
                     funcIndex = content.indexOf(funcName,funcIndex+1);
                     continue;
                 }
 
                 if(content.lastIndexOf(funcName,frontCurvesIndex) != funcIndex){
-                    System.out.println("ass2");
                     funcIndex=content.lastIndexOf(funcName,frontCurvesIndex);
                     continue;
                 }
+
+
+                funcStringExist = true;
+
 
                 int backCurvesIndex = getBackCurves(content,frontCurvesIndex);
                 if(frontCurvesIndex == -1 || backCurvesIndex == -1){return ResponseVO.buildFailure("do not have curves");}
@@ -211,6 +224,7 @@ public class CodeBLImpl implements CodeBL {
                 //-----------判断是对目标函数的声明还是调用----------
                 int tempSemiIndex = content.indexOf(";",backCurvesIndex);
                 int tempBraceIndex = content.indexOf("{",backCurvesIndex);
+
                 if(tempBraceIndex>tempSemiIndex){
                     System.out.println("调用");
                     funcIndex = content.indexOf(funcName,funcIndex+1);
@@ -328,7 +342,7 @@ public class CodeBLImpl implements CodeBL {
             }
 
             if(funcIndex == -1){
-
+                if(funcStringExist){return ResponseVO.buildFailure("doesn't have explicit declaration. It maybe a parent class function or library function.");}
                 return ResponseVO.buildFailure("match args do not exist ");}
             String funcBody = getFuncBody(content,funcIndex);
             System.out.println(funcBody);
