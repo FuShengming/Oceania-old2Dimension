@@ -7,19 +7,24 @@ public class CodeNode {
 
     private ArrayList<CodeNode> nodes;
 
+    private int vertexId;
+
     public CodeNode(){
         this.text="";
         this.nodes=new ArrayList<CodeNode>();
+        this.vertexId = -1;
     }
 
     public CodeNode(String text){
         this.text=text;
         this.nodes=new ArrayList<CodeNode>();
+        this.vertexId = -1;
     }
 
     public CodeNode(String text, ArrayList<CodeNode> nodes) {
         this.text = text;
         this.nodes = nodes;
+        this.vertexId = -1;
     }
 
     public String getText() {
@@ -40,5 +45,13 @@ public class CodeNode {
 
     public void addChild(CodeNode child){
         this.nodes.add(child);
+    }
+
+    public int getVertexId() {
+        return vertexId;
+    }
+
+    public void setVertexId(int vertexId) {
+        this.vertexId = vertexId;
     }
 }

@@ -6,7 +6,7 @@ public class VertexVOAndUserIdAndCodeId {
 
     private int codeId;
     private int userId;
-public VertexVOAndUserIdAndCodeId(){}
+    public VertexVOAndUserIdAndCodeId(){}
     public VertexVOAndUserIdAndCodeId(VertexVO vertexVO, int codeId, int userId) {
         this.vertexVO = vertexVO;
         this.codeId = codeId;

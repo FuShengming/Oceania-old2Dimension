@@ -21,7 +21,7 @@ public class CodeController {
 
     @RequestMapping(value = "/getCodeStructure",method = RequestMethod.POST)
     public ResponseVO getCodeStructure(@RequestBody UserAndCodeForm userAndCodeForm){
-        return null;
+        return codeBL.getCodeStructure(userAndCodeForm);
     }
 
     @RequestMapping(value = "/getFuncCode",method = RequestMethod.POST)
