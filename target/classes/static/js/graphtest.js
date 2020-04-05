@@ -1,9 +1,13 @@
 $(function () {
 <<<<<<< HEAD
+<<<<<<< HEAD
     $("#jQuery_div").text("jQuery works");
 =======
     $("#my_div").text("jQuery works");
 >>>>>>> origin/gr-2
+=======
+    $("#jQuery_div").text("jQuery works");
+>>>>>>> gr-2
     $.ajax({
         type: "post",
         url: "/graphql",
@@ -23,6 +27,9 @@ $(function () {
                             funcName
                         }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> gr-2
                         edges
                         {
                             start
@@ -38,8 +45,11 @@ $(function () {
                                 weightValue
                             }
                         }
+<<<<<<< HEAD
 =======
 >>>>>>> origin/gr-2
+=======
+>>>>>>> gr-2
                     }
                 }
             }`
@@ -47,6 +57,9 @@ $(function () {
         success: function (data) {
             console.log(data);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> gr-2
             // console.log(data.data.get_domainset.domains[1]);
             let graphData = {
                 nodes: [],
@@ -69,14 +82,20 @@ $(function () {
             console.log(graphData);
             graph.data(graphData); // 加载数据
             graph.render(); // 渲染
+<<<<<<< HEAD
 =======
 >>>>>>> origin/gr-2
+=======
+>>>>>>> gr-2
         },
         error: function (err) {
             console.log(err);
         }
     });
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> gr-2
     console.log(G6.Global.version);
     const data = {
         nodes: [
@@ -149,6 +168,9 @@ $(function () {
 
     graph.data(data);
     graph.render();
+<<<<<<< HEAD
 =======
 >>>>>>> origin/gr-2
+=======
+>>>>>>> gr-2
 });
