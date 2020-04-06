@@ -3,11 +3,10 @@ package com.old2dimension.OCEANIA.blImpl;
 import com.old2dimension.OCEANIA.bl.CodeBL;
 import com.old2dimension.OCEANIA.dao.CodeRepository;
 import com.old2dimension.OCEANIA.po.Code;
-import com.old2dimension.OCEANIA.vo.CodeVO;
-import com.old2dimension.OCEANIA.vo.ResponseVO;
-import com.old2dimension.OCEANIA.vo.VertexVO;
+import com.old2dimension.OCEANIA.po.CodeNode;
+import com.old2dimension.OCEANIA.po.Vertex;
+import com.old2dimension.OCEANIA.vo.*;
 
-import com.old2dimension.OCEANIA.vo.VertexVOAndUserIdAndCodeId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.core.io.ClassPathResource;
@@ -26,6 +25,8 @@ public class CodeBLImpl implements CodeBL {
 
     @Autowired
     CodeRepository codeRepository;
+    @Autowired
+    GraphCalculateImpl graphCalculate;
 
     public ResponseVO getCodesByUserId(int userId) {
         List<Code> dbRes = codeRepository.findCodesByUserId(userId);
@@ -414,5 +415,127 @@ public class CodeBLImpl implements CodeBL {
             }
         }
         return -1;
+    }
+
+    public ResponseVO getCodeStructure(UserAndCodeForm userAndCodeForm) {
+        //GraphCalculateImpl graphCalculate = new GraphCalculateImpl();
+        graphCalculate.getGraph(userAndCodeForm);
+        ArrayList<Vertex> vertices = graphCalculate.allVertexes;
+
+        String basicPath = "analyzeCode/src";
+        String rootPath = "edu";
+        basicPath = basicPath + "/" + rootPath;
+        CodeNode codeNode = new CodeNode(rootPath);
+        Resource resource = new ClassPathResource(basicPath);
+        File f = null;
+        try {
+            f = resource.getFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseVO.buildFailure("nop");
+        }
+        File[] files = f.listFiles();
+        if (files == null) {
+            return ResponseVO.buildFailure("empty dir");
+        }
+
+        for (File file : files) {
+            CodeNode child = createChildNode(rootPath, file, vertices);
+            if (child != null)
+                codeNode.addChild(child);
+        }
+        if (codeNode.getNodes().size() == 0) {
+            codeNode.setNodes(null);
+        }
+
+        return ResponseVO.buildSuccess(codeNode);
+    }
+
+    private CodeNode createChildNode(String fatherPath, File file, ArrayList<Vertex> vertices) {
+        String basicPath = "analyzeCode/src";
+        String name = file.getName();
+        CodeNode codeNode = new CodeNode(name);
+        String path = fatherPath + "/" + name;
+        if (name.length() > 5 && name.substring(name.length() - 5).equals(".java")) {
+            codeNode.setText(name.substring(0, name.length() - 5));
+            ArrayList<CodeNode> res = createJavaChild(path.substring(0, path.length() - 5), vertices);
+            codeNode.setNodes(res);
+            //System.out.println(res.size());
+            return codeNode;
+        } else {
+            Resource resource = new ClassPathResource(basicPath + "/" + path);
+            File f = null;
+            try {
+                f = resource.getFile();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+            File[] files = f.listFiles();
+            if (files == null) {
+                return null;
+            }
+
+            for (File file1 : files) {
+                CodeNode child = createChildNode(path, file1, vertices);
+                if (child != null)
+                    codeNode.addChild(child);
+
+            }
+            return codeNode;
+        }
+    }
+
+    private ArrayList<CodeNode> createJavaChild(String path, ArrayList<Vertex> vertices) {
+        //System.out.println(path);
+        ArrayList<CodeNode> codeNodes = new ArrayList<CodeNode>();
+        String pkgName = path.substring(0, path.lastIndexOf("/"));
+        String className = path.substring(path.lastIndexOf("/") + 1);
+
+        for (Vertex vertex : vertices) {
+            String vertexPkgName = vertex.getBelongPackage();
+            vertexPkgName = vertexPkgName.replace('.', '/');
+            //System.out.println(vertexPkgName);
+
+            String vertexClassName = vertex.getBelongClass();
+
+            if (vertexPkgName.equals(pkgName)) {
+                if (vertexClassName.equals(className)) {
+                    CodeNode funcNode = new CodeNode(vertex.getFuncName() + "(" + vertex.getArgsString(vertex.getArgs()) + ")");
+                    funcNode.setVertexId(vertex.getId());
+                    codeNodes.add(funcNode);
+                } else if ((vertexClassName.length() > className.length()) && ((vertexClassName.substring(0, className.length() + 1)).equals(className + "$"))) {
+                    //System.out.println(vertexClassName);
+
+                    CodeNode innerClassNode = new CodeNode(vertexClassName.substring(vertexClassName.indexOf("$") + 1));
+                    ArrayList<CodeNode> res = createInnerChild(path + "/" + vertexClassName.substring(vertexClassName.indexOf("$") + 1), vertices);
+                    innerClassNode.setNodes(res);
+                    if (innerClassNode.getText().equals("1"))
+                        innerClassNode.setText("InnerHiddenClass");
+                    codeNodes.add(innerClassNode);
+                }
+            }
+        }
+        return codeNodes;
+    }
+
+    private ArrayList<CodeNode> createInnerChild(String path, ArrayList<Vertex> vertices) {
+        ArrayList<CodeNode> codeNodes = new ArrayList<CodeNode>();
+        String innerClassName = path.substring(path.lastIndexOf("/") + 1);
+        path = path.substring(0, path.lastIndexOf("/"));
+        String className = path.substring(path.lastIndexOf("/") + 1);
+        String pkgName = path.substring(0, path.lastIndexOf("/"));
+
+        for (Vertex vertex : vertices) {
+            String vertexPkgName = vertex.getBelongPackage();
+            vertexPkgName = vertexPkgName.replace('.', '/');
+            String vertexClassName = vertex.getBelongClass();
+            if (vertexPkgName.equals(pkgName) && vertexClassName.equals(className + "$" + innerClassName)) {
+                CodeNode funcNode = new CodeNode(vertex.getFuncName() + "(" + vertex.getArgsString(vertex.getArgs()) + ")");
+                funcNode.setVertexId(vertex.getId());
+                codeNodes.add(funcNode);
+            }
+        }
+        return codeNodes;
     }
 }

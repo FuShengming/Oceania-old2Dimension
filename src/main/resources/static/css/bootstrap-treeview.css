@@ -17,7 +17,17 @@
  * limitations under the License.
  * ========================================================= */
 
+.treeview {
+    display: flex;
+}
+
+.treeview .list-group {
+    padding: 0;
+    flex: 1;
+}
+
 .treeview .list-group-item {
+    display: inherit;
     cursor: pointer;
     padding-top: 0;
     padding-bottom: 0;

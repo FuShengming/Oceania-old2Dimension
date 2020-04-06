@@ -22,105 +22,147 @@ $(function () {
         }
     };
     //treeview on the left sidebar
-    let tree_json = [
-        {
-            "text": "com.old2dimension.OCEANIA",
-            "nodes": [
-                {
-                    "text": "bl",
-                    "nodes": [
-                        {
-                            "text": "GraphCalculate",
-                            "nodes": [
-                                {
-                                    "text": "getConnectedDomains()"
-                                }, {
-                                    "text": "getAmbiguousFuncInfos()"
-                                }
-                            ]
-
-                        }, {
-                            "text": "PathBL",
-                            "nodes": [
-                                {
-                                    "text": "findPath()"
-                                }
-                            ]
-                        }
-                        , {
-                            "text": "UserBL",
-                            "nodes": [
-                                {
-                                    "text": "getAllUser()"
-                                }, {
-                                    "text": "login()"
-                                }, {
-                                    "text": "signUp()"
-                                },
-                            ]
-                        }
-                    ]
-                }, {
-                    "text": "blImpl",
-                    "nodes": [
-                        {
-                            "text": "GraphCalculateImpl",
-                            "nodes": [
-                                {
-                                    "text": "&lt;init&gt;()"
-                                }, {
-                                    "text": "getConnectedDomains()"
-                                }, {
-                                    "text": "getAmbiguousFuncInfos()"
-                                }, {
-                                    "text": "initializeGraph()"
-                                }, {
-                                    "text": "str2Vertex()"
-                                }, {
-                                    "text": "calculateCloseness()"
-                                }, {
-                                    "text": "filterByWeights()"
-                                }, {
-                                    "text": "findEdge()"
-                                }, {
-                                    "text": "generateDomain()"
-                                }
-                            ]
-
-                        }, {
-                            "text": "PathBLImpl",
-                            "nodes": [
-                                {
-                                    "text": "findPath()"
-                                }
-                            ]
-                        }
-                        , {
-                            "text": "UserBL",
-                            "nodes": [
-                                {
-                                    "text": "getAllUser()"
-                                }, {
-                                    "text": "login()"
-                                }, {
-                                    "text": "signUp()"
-                                },
-                            ]
-                        }
-                    ]
-                },
-            ]
-        }];
-    $('#tree').treeview({
-        data: tree_json,
-        backColor: "#f8f9fa",
-        color: "#000000",
-        showBorder: false,
-        expandIcon: "fa fa-caret-right",
-        collapseIcon: "fa fa-caret-down",
-        highlightSelected: true,
+    let remove_empty_node = function (tree) {
+        console.log(tree);
+        tree.nodes.forEach(function (sub_tree) {
+            console.log(sub_tree);
+            console.log(sub_tree.nodes.length);
+            if (sub_tree.nodes.length === 0) {
+                delete sub_tree.nodes;
+                console.log("delete one");
+            } else {
+                remove_empty_node(sub_tree);
+            }
+        });
+    };
+    $.ajax({
+        type: "post",
+        url: "/code/getCodeStructure",
+        dataType: "json",
+        contentType: 'application/json',
+        data: JSON.stringify({
+            userId: 1,
+            codeId: 1
+        }),
+        success: function (data) {
+            let tree_json = [data.content];
+            tree_json.forEach(function (tree) {
+                remove_empty_node(tree);
+            });
+            console.log(tree_json);
+            $('#tree').treeview({
+                data: tree_json,
+                backColor: "#f8f9fa",
+                color: "#000000",
+                showBorder: false,
+                expandIcon: "fa fa-caret-right",
+                collapseIcon: "fa fa-caret-down",
+                highlightSelected: true,
+            });
+        },
+        error: function (err) {
+            console.log(err);
+        }
     });
-    $("nav#tree").children().css("padding", 0);
+    // let tree_json = [
+    //     {
+    //         "text": "com.old2dimension.OCEANIA",
+    //         "nodes": [
+    //             {
+    //                 "text": "bl",
+    //                 "nodes": [
+    //                     {
+    //                         "text": "GraphCalculate",
+    //                         "nodes": [
+    //                             {
+    //                                 "text": "getConnectedDomains()"
+    //                             }, {
+    //                                 "text": "getAmbiguousFuncInfos()"
+    //                             }
+    //                         ]
+    //
+    //                     }, {
+    //                         "text": "PathBL",
+    //                         "nodes": [
+    //                             {
+    //                                 "text": "findPath()"
+    //                             }
+    //                         ]
+    //                     }
+    //                     , {
+    //                         "text": "UserBL",
+    //                         "nodes": [
+    //                             {
+    //                                 "text": "getAllUser()"
+    //                             }, {
+    //                                 "text": "login()"
+    //                             }, {
+    //                                 "text": "signUp()"
+    //                             },
+    //                         ]
+    //                     }
+    //                 ]
+    //             }, {
+    //                 "text": "blImpl",
+    //                 "nodes": [
+    //                     {
+    //                         "text": "GraphCalculateImpl",
+    //                         "nodes": [
+    //                             {
+    //                                 "text": "&lt;init&gt;()"
+    //                             }, {
+    //                                 "text": "getConnectedDomains()"
+    //                             }, {
+    //                                 "text": "getAmbiguousFuncInfos()"
+    //                             }, {
+    //                                 "text": "initializeGraph()"
+    //                             }, {
+    //                                 "text": "str2Vertex()"
+    //                             }, {
+    //                                 "text": "calculateCloseness()"
+    //                             }, {
+    //                                 "text": "filterByWeights()"
+    //                             }, {
+    //                                 "text": "findEdge()"
+    //                             }, {
+    //                                 "text": "generateDomain()"
+    //                             }
+    //                         ]
+    //
+    //                     }, {
+    //                         "text": "PathBLImpl",
+    //                         "nodes": [
+    //                             {
+    //                                 "text": "findPath()"
+    //                             }
+    //                         ]
+    //                     }
+    //                     , {
+    //                         "text": "UserBL",
+    //                         "nodes": [
+    //                             {
+    //                                 "text": "getAllUser()"
+    //                             }, {
+    //                                 "text": "login()"
+    //                             }, {
+    //                                 "text": "signUp()"
+    //                             },
+    //                         ]
+    //                     }
+    //                 ]
+    //             },
+    //         ]
+    //     }];
+    // $('#tree').treeview({
+    //     data: tree_json,
+    //     backColor: "#f8f9fa",
+    //     color: "#000000",
+    //     showBorder: false,
+    //     expandIcon: "fa fa-caret-right",
+    //     collapseIcon: "fa fa-caret-down",
+    //     highlightSelected: true,
+    // });
+    // $("nav#tree").children().css("padding", 0);
 
     //cytoscape container on the middle main div
 
