@@ -72,6 +72,7 @@ public class CodeBLImpl implements CodeBL {
         StringBuilder sb = new StringBuilder(basicPath);
         String lineSeparator = System.lineSeparator();
         String classNameBf = "";
+        boolean isAbstract = false;
         int tempStrLength = packageStr.length();
         for(int i = 0; i < tempStrLength; i++){
             char curChar = packageStr.charAt(i);
@@ -223,8 +224,10 @@ public class CodeBLImpl implements CodeBL {
                     continue;
                 }
 
-
-
+                int tempFuncStart = content.lastIndexOf("\n",funcIndex);
+                if(content.substring(tempFuncStart,funcIndex).contains("abstract")){
+                    isAbstract = true;
+                }
 
 
                 int backCurvesIndex = getBackCurves(content,frontCurvesIndex);
@@ -235,7 +238,7 @@ public class CodeBLImpl implements CodeBL {
                 int tempSemiIndex = content.indexOf(";",backCurvesIndex);
                 int tempBraceIndex = content.indexOf("{",backCurvesIndex);
 
-                if(tempBraceIndex>tempSemiIndex){
+                if(tempBraceIndex>tempSemiIndex&&!isAbstract){
                     System.out.println("调用");
                     funcIndex = content.indexOf(funcName,funcIndex+1);
                     continue;
@@ -248,6 +251,13 @@ public class CodeBLImpl implements CodeBL {
 
                 String[] args = paramsStr.split(",");
                 String[] vertexArgs = vertexVO.getArgs();
+                for(int  k = 0;k<vertexArgs.length;k++){
+                    int temp = vertexArgs[k].indexOf("$");
+                    if(temp != -1){
+                        vertexArgs[k]=vertexArgs[k].substring(temp+1);
+                    }
+
+                }
 
 
                 if(isInit&&isInternal){
@@ -256,10 +266,8 @@ public class CodeBLImpl implements CodeBL {
                         temp[k-1]=vertexArgs[k];
                     }
                     vertexArgs =temp;
-
-
-
                 }
+
                 if(args.length != vertexArgs.length){funcIndex = content.indexOf(funcName,funcIndex+1); continue;}
                 boolean equal = true;
                 funcStringExist = true;
@@ -279,9 +287,12 @@ public class CodeBLImpl implements CodeBL {
                 else {
                     int classIndex = content.indexOf(classStr);
                     int lineStart = content.lastIndexOf("\n",classIndex);
+                    int tempEnd= content.indexOf("\n",classIndex);
+
                     if(lineStart!=-1){
+
                         if((content.substring(lineStart+1,classIndex).contains("class")||
-                                content.substring(lineStart+1,classIndex).contains("enum"))&&content.indexOf("<",classIndex)!=-1){
+                                content.substring(lineStart+1,classIndex).contains("enum"))&&content.substring(lineStart+1,tempEnd).contains("<")){
 
                             int start = content.indexOf("<",classIndex);
 
@@ -354,7 +365,7 @@ public class CodeBLImpl implements CodeBL {
             if(funcIndex == -1){
                 if(funcStringExist){return ResponseVO.buildFailure("doesn't have explicit declaration. It maybe a parent class function or library function.");}
                 return ResponseVO.buildFailure("match args do not exist ");}
-            String funcBody = getFuncBody(content,funcIndex);
+            String funcBody = getFuncBody(content,funcIndex,isAbstract);
 
             return ResponseVO.buildSuccess(funcBody);
 
@@ -362,14 +373,22 @@ public class CodeBLImpl implements CodeBL {
         //return ResponseVO.buildFailure("test");
     }
 
-    private String getFuncBody(String content, int funcIndex){
+    private String getFuncBody(String content, int funcIndex,boolean isAbstract){
+        String lineSeparator = System.lineSeparator();
+        if(isAbstract){
+            int end = content.indexOf(";",funcIndex);
+            int start = content.lastIndexOf(lineSeparator,funcIndex);
+            return content.substring(start+1,end+1);
+        }
+        else{
         int frontCurvesIndex = content.indexOf("(",funcIndex);
         int backCurvesIndex = getBackCurves(content,frontCurvesIndex);
         int frontBraceIndex = content.indexOf("{",backCurvesIndex+1);
         int backBraceIndex = getBackBrace(content,frontBraceIndex);
-        String lineSeparator = System.lineSeparator();
+
         int start = content.lastIndexOf(lineSeparator,funcIndex);
         return content.substring(start+1,backBraceIndex+1);
+        }
     }
 
     private int getBackCurves(String content,int frontCurvesIndex){
