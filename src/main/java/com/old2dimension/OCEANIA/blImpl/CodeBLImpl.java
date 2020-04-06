@@ -25,6 +25,44 @@ public class CodeBLImpl implements CodeBL {
     @Autowired
     CodeRepository codeRepository;
 
+    public ResponseVO modifyName(CodeIdAndUserIdAndNameForm codeIdAndUserIdAndNameForm){
+
+        Code code = codeRepository.findCodeByIdAndUserId(codeIdAndUserIdAndNameForm.getCodeId(),codeIdAndUserIdAndNameForm.getUserId());
+        if(code == null){
+            return ResponseVO.buildFailure("no such user or code");
+        }
+        try{
+            code.setName(codeIdAndUserIdAndNameForm.getName());
+            Code res = codeRepository.save(code);
+            return ResponseVO.buildSuccess(res);
+        }
+        catch (Exception e){
+            return ResponseVO.buildFailure("modify name error");
+        }
+    }
+
+    public ResponseVO addCode (UserAndCodeForm userAndCodeForm){
+        Code code = codeRepository.findCodeByIdAndUserId(userAndCodeForm.getCodeId(),userAndCodeForm.getUserId());
+        if(code == null){
+            return ResponseVO.buildFailure("no such user or code");
+        }
+        if(code.getIs_default()==1){
+            Code res = new Code();
+            res.setName(code.getName()+"副本");
+            res.setId(0);
+            res.setUserId(code.getUserId());
+            res.setIs_default(code.getIs_default());
+            res.setNumOfDomains(code.getNumOfDomains());
+            res.setNumOfEdges(code.getNumOfEdges());
+            res.setNumOfVertices(code.getNumOfVertices());
+
+
+             res = codeRepository.save(res);
+            return ResponseVO.buildSuccess(res);
+        }
+        return ResponseVO.buildFailure("目前只支持iTrust分析");
+    }
+
     public void setGraphCalculate(GraphCalculateImpl graphCalculate) {
         this.graphCalculate = graphCalculate;
     }
