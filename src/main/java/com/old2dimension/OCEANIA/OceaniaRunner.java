@@ -91,6 +91,7 @@
 //                int verticesNum=curDomain.getVerticesNum();
 //                System.out.println("-------连通域"+(i+1+"")+"-------");
 //                System.out.println("连通域顶点数："+(verticesNum+""));
+
 //                ArrayList<VertexVO> vertices = curDomain.getVertices();
 //                int index = 1;
 //                for(VertexVO curNode : vertices){

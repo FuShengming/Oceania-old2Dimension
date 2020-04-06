@@ -9,10 +9,13 @@
     <script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
     <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
     <script src="../js/login.js"></script>
+    <script src="../js/captcha.js"></script>
+    <script src="../js/md5.min.js"></script>
 
     <!-- Style sheet-->
     <link rel="stylesheet" href="webjars/bootstrap/4.4.1-1/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="../css/login.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/common.css"/>
 </head>
 <body>
 <div class="login-container">
@@ -23,19 +26,19 @@
                 <div class="login-input-outer">
                     <div class="login-input" id="login-name-input">
                         <label class="input-wrapper">
-                            <input name="username" class="Input" placeholder="用户名" value>
+                            <input name="username" class="Input username-input" placeholder="用户名" value>
                         </label>
-                        <div class="input-error-msg hidden-error username-error"></div>
+                        <div class="input-error-msg input-required-error hidden-error" id="username-warn"></div>
                     </div>
                 </div>
                 <div class="login-input-outer input-content-holder">
                     <div class="login-input" id="login-pwd-input">
-                        <label class="input-wrapper">
-                            <input name="password" class="Input" placeholder="密码" value>
+                        <label class="input-wrapper password-wrapper">
+                            <input name="password" type="password" class="Input password-input" placeholder="密码" value>
                         </label>
-                        <div class="input-error-msg hidden-error password-error"></div>
+                        <div class="input-error-msg input-required-error hidden-error" id="password-warn"></div>
                     </div>
-                    <button type="button" class="show-pwd">
+                    <button type="button" class="pwd-visual-switcher" id="show-password">
                         <span class="svg-container">
                             <svg fill="currentColor" viewBox="0 0 24 24" width="1.2em" height="1.2em">
                                 <path d="M1 11.5C1 15 7 19 12 19s11-4 11-7.5S17 4 12 4 1 8 1 11.5zm11 5c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm-3-5c0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3-3 1.34-3 3z" fill-rule="evenodd"></path>
@@ -48,18 +51,18 @@
                         <label class="input-wrapper">
                             <input name="captcha" class="Input captcha-input" placeholder="验证码" value>
                         </label>
-                        <div class="input-error-msg hidden-error captcha-error"></div>
+                        <div class="input-error-msg input-required-error hidden-error" id="captcha-warn"></div>
                     </div>
                     <span class="captcha-image-outer">
                         <div class="captcha-image-container">
-                            <img class="captcha-image" src="">
+                            <canvas class="captcha-image" id="canvas" onclick="draw()"></canvas>
                         </div>
                     </span>
                 </div>
                 <div class="login-options">
                     <button type="button" class="login-register" >没有帐号？点击注册</button>
                 </div>
-                <button type="submit" class="btn btn-primary login-btn">登录</button>
+                <button type="button" class="btn btn-primary login-btn">登录</button>
             </form>
         </div>
     </div>
