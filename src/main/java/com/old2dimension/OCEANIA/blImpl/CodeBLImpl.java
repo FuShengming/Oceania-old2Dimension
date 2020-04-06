@@ -61,6 +61,7 @@ public class CodeBLImpl implements CodeBL {
         String internalClass="";
         StringBuilder sb = new StringBuilder(basicPath);
         String lineSeparator = System.lineSeparator();
+        String classNameBf = "";
         int tempStrLength = packageStr.length();
         for(int i = 0; i < tempStrLength; i++){
             char curChar = packageStr.charAt(i);
@@ -104,32 +105,64 @@ public class CodeBLImpl implements CodeBL {
         if(classFile == null){
             return ResponseVO.buildFailure("class file do not exist");
         }
+
+
         StringBuffer fileContentBuffer = new StringBuffer("");
+
+
+        BufferedReader br = null;
+        try{
+            br = new BufferedReader(new FileReader(classFile));
+            String tempStr;
+            while ((tempStr = br.readLine()) != null) {
+                fileContentBuffer.append(tempStr);
+                fileContentBuffer.append(lineSeparator);
+            }
+        }
+        catch (IOException e){
+            e.printStackTrace();
+            return ResponseVO.buildFailure("io exception 2");
+        }
+        String content = fileContentBuffer.toString();
+
+        boolean isInternal = false;
+
         if(!internalClass.equals("")){
             //----------------------------todo--------------------------
             System.out.println("internal class");
+            isInternal = true;
+            int classIndex = content.indexOf(internalClass);
+            while (classIndex != -1){
 
+            int lineStart = content.lastIndexOf("\n",classIndex);
+            if(content.substring(lineStart+1,classIndex).contains("class")||
+                    content.substring(lineStart+1,classIndex).contains("enum")){
+                int startBrace = content.indexOf("{",classIndex);
+                int endBrace = getBackBrace(content,startBrace);
+                int classStartLineIndex = content.lastIndexOf("\n",classIndex);
+                content = content.substring(classStartLineIndex,endBrace+1);
+                classNameBf = classStr;
+                classStr = internalClass;
+                System.out.println("internal class:\n"+content);
+                break;
+            }
+            else{
+                classIndex = content.indexOf(internalClass,classIndex+1);
+
+            }
+            }
+            if(classIndex == -1){
+                return ResponseVO.buildFailure("internal class not found");
+            }
         }
-        else{
 
-            BufferedReader br = null;
-            try{
-                br = new BufferedReader(new FileReader(classFile));
-                String tempStr;
-                while ((tempStr = br.readLine()) != null) {
-                    fileContentBuffer.append(tempStr);
-                    fileContentBuffer.append(lineSeparator);
-                }
-            }
-            catch (IOException e){
-                e.printStackTrace();
-                return ResponseVO.buildFailure("io exception 2");
-            }
-            String content = fileContentBuffer.toString();
+
+            boolean isInit = false;
             String funcName = vertexVO.getFuncName();
             //------------构造函数---------------
             if(funcName.equals("<init>")){
                 funcName = classStr;
+                isInit = true;
                 System.out.println("init:"+funcName);
             }
             //------------clinit----------------
@@ -137,18 +170,24 @@ public class CodeBLImpl implements CodeBL {
                 return ResponseVO.buildSuccess("this function is class initialize function, it doesn't have a function body.");
             }
 
-            //------------纯接口-------------
 
 
 
+            boolean funcStringExist = false;
             int funcIndex = content.indexOf(funcName);
             int lineIndex = content.lastIndexOf(lineSeparator,funcIndex);
             String funcLine= content.substring(lineIndex+1,funcIndex);
-            if(funcLine.contains("class")){
+            if(funcLine.contains("class")||funcLine.contains("enum")){
                 funcIndex = content.indexOf(funcName,funcIndex+1);
             }
 
-            if(funcIndex==-1){return ResponseVO.buildFailure("do not find funName in file");}
+            if(funcIndex==-1){
+                if(funcName.equals(classStr)){return ResponseVO.buildSuccess("do not have an explicit initialize function.");}
+                return ResponseVO.buildFailure("do not find function name in file");
+            }
+
+            char[] validBeforeFuncNameChar={' ','\t','\n','\r','.'};
+
 
             while(funcIndex != -1){
                 int frontCurvesIndex = content.indexOf("(",funcIndex);
@@ -157,7 +196,15 @@ public class CodeBLImpl implements CodeBL {
                 if(funcIndex>0){
                    indexChar = content.charAt(funcIndex-1);
                 }
-                if((!(indexChar == ' '|| indexChar == '\t' || indexChar == '\n' || indexChar == '\r'))&&indexChar!='\0'){
+                boolean indexCharValid = false;
+                for(char c : validBeforeFuncNameChar){
+                    if(indexChar == c){
+                        indexCharValid = true;
+                        break;
+                    }
+                }
+                if((!indexCharValid)&&indexChar!='\0'){
+
                     funcIndex = content.indexOf(funcName,funcIndex+1);
                     continue;
                 }
@@ -167,16 +214,97 @@ public class CodeBLImpl implements CodeBL {
                     continue;
                 }
 
+
+                funcStringExist = true;
+
+
                 int backCurvesIndex = getBackCurves(content,frontCurvesIndex);
                 if(frontCurvesIndex == -1 || backCurvesIndex == -1){return ResponseVO.buildFailure("do not have curves");}
+
+
+                //-----------判断是对目标函数的声明还是调用----------
+                int tempSemiIndex = content.indexOf(";",backCurvesIndex);
+                int tempBraceIndex = content.indexOf("{",backCurvesIndex);
+
+                if(tempBraceIndex>tempSemiIndex){
+                    System.out.println("调用");
+                    funcIndex = content.indexOf(funcName,funcIndex+1);
+                    continue;
+                }
+                //------------------------------------------------
+
 
                 String paramsStr = content.substring(frontCurvesIndex+1,backCurvesIndex);
                 System.out.println("param:"+paramsStr);
 
                 String[] args = paramsStr.split(",");
                 String[] vertexArgs = vertexVO.getArgs();
+
+
+                if(isInit&&isInternal){
+                    String [] temp = new String[vertexArgs.length-1];
+                    for(int  k = 1;k<vertexArgs.length;k++){
+                        temp[k-1]=vertexArgs[k];
+                    }
+                    vertexArgs =temp;
+
+
+
+                }
                 if(args.length != vertexArgs.length){funcIndex = content.indexOf(funcName,funcIndex+1); continue;}
                 boolean equal = true;
+
+                //--------------模板函数与模板类处理，不完全，classIndex应该迭代而不是预设class标志出现在文件最前---------
+                int lineEndIndex = content.indexOf("\n",funcIndex);
+                if(content.substring(funcIndex,lineEndIndex).contains("<")){
+                    int start = content.substring(funcIndex,lineEndIndex).indexOf("<");
+                    int end  = getBackAngle(content,start);
+                    String templateClass = content.substring(start+1,end);
+                    System.out.println("templateClass:"+templateClass);
+                    for(int j =0; j<vertexArgs.length;j++){
+                       if(vertexArgs[j].equals("java.lang.Object")){
+                           vertexArgs[j]=templateClass;
+                       }
+                    }
+                }
+                else {
+                    int classIndex = content.indexOf(classStr);
+                    int lineStart = content.lastIndexOf("\n",classIndex);
+                    if(lineStart!=-1){
+                        if((content.substring(lineStart+1,classIndex).contains("class")||
+                                content.substring(lineStart+1,classIndex).contains("enum"))&&content.indexOf("<",classIndex)!=-1){
+
+                            int start = content.indexOf("<",classIndex);
+
+                            int end = getBackAngle(content,start);
+                            String templateClass = content.substring(start+1,end);
+                            System.out.println("templateClass1:"+templateClass);
+                            for(int j =0; j<vertexArgs.length;j++){
+                                if(vertexArgs[j].equals("java.lang.Object")){
+                                    vertexArgs[j]=templateClass;
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        if((content.substring(0,classIndex).contains("class")||
+                                content.substring(lineStart+1,classIndex).contains("enum"))&&content.indexOf("<",classIndex)!=-1){
+
+                            int start = content.indexOf("<",classIndex);
+                            int end = getBackAngle(content,start);
+                            String templateClass = content.substring(start+1,end);
+                            System.out.println("templateClass2:"+templateClass);
+                            for(int j =0; j<vertexArgs.length;j++){
+                                if(vertexArgs[j].equals("java.lang.Object")){
+                                    vertexArgs[j]=templateClass;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                //-------------------------------------------------------------------
+
                 for(int i = 0; i<args.length;i++){
                     String arg = args[i].trim();
                     System.out.println("arg:"+arg);
@@ -189,15 +317,15 @@ public class CodeBLImpl implements CodeBL {
                     }
 
 
-                    if(arg.split("[ \t\n]")[0].equals("T")){
-
-                        if(!vertexArg.substring(vertexArg.lastIndexOf(".")+1).equals("Object")){
-                            funcIndex = content.indexOf(funcName,funcIndex+1);
-                            equal = false;
-                            break;
-                        }
-                    }
-                   else if(!argKind.equals(vertexArgKind)){
+//                    if(arg.split("[ \t\n]")[0].equals("T")){
+//
+//                        if(!vertexArg.substring(vertexArg.lastIndexOf(".")+1).equals("Object")){
+//                            funcIndex = content.indexOf(funcName,funcIndex+1);
+//                            equal = false;
+//                            break;
+//                        }
+//                    }else
+                   if(!argKind.equals(vertexArgKind)){
                        System.out.println("withoutSpace:"+arg.split("[ \t\n]")[0]);
                        System.out.println("vertexArg:"+vertexArg.substring(vertexArg.lastIndexOf(".")+1));
                         funcIndex = content.indexOf(funcName,funcIndex+1);
@@ -215,14 +343,14 @@ public class CodeBLImpl implements CodeBL {
             }
 
             if(funcIndex == -1){
-                if(funcName.equals(classStr)){return ResponseVO.buildSuccess("do not have an explicit initialize function.");}
+                if(funcStringExist){return ResponseVO.buildFailure("doesn't have explicit declaration. It maybe a parent class function or library function.");}
                 return ResponseVO.buildFailure("match args do not exist ");}
             String funcBody = getFuncBody(content,funcIndex);
             System.out.println(funcBody);
             return ResponseVO.buildSuccess(funcBody);
-        }
 
-        return ResponseVO.buildFailure("test");
+
+        //return ResponseVO.buildFailure("test");
     }
 
     private String getFuncBody(String content, int funcIndex){
@@ -246,6 +374,18 @@ public class CodeBLImpl implements CodeBL {
         }
         return -1;
     }
+    private int getBackAngle(String content,int frontAngleIndex){
+        int frontNum = 1;
+        int backNum = 0;
+        int contentLen = content.length();
+        for(int i = frontAngleIndex+1;i<contentLen;i++){
+            if(content.charAt(i)=='<'){frontNum++;}
+            if(content.charAt(i)=='>'){backNum++;}
+            if(frontNum == backNum){return i;}
+        }
+        return -1;
+    }
+
     private int getBackBrace(String content,int frontBraceIndex){
         int frontNum = 1;
         int backNum = 0;
