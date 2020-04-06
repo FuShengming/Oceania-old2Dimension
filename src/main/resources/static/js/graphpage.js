@@ -115,6 +115,26 @@ $(function () {
         }
     });
 
+    let expand_tree = function (id) {
+        let treeViewObject = $('#tree').data('treeview');
+        let allCollapsedNodes = treeViewObject.getCollapsed(),
+            allExpandedNodes = treeViewObject.getExpanded(),
+            allNodes = allCollapsedNodes.concat(allExpandedNodes);
+        let nodeId = -1;
+        allNodes.forEach(function (node) {
+            if (id === 'n' + node.vertexId.toString()) {
+                nodeId = node.nodeId;
+            }
+        });
+        console.log(nodeId);
+        $('#tree').treeview('collapseAll', {silent: true});
+        $('#tree').treeview('revealNode', [nodeId, {silent: true}]);
+        $('#tree').treeview('selectNode', [nodeId, {silent: true}]);
+        $(".node-selected")[0].scrollIntoView({
+            behavior: "smooth", // or "auto" or "instant"
+            block: "start" // or "end"
+        });
+    };
 
     //cytoscape container on the middle main div
 
@@ -251,6 +271,8 @@ $(function () {
             cy.layout(cose_bilkent_layout).run();
 
             cy.on('tap', 'node.vertex', function (event) {
+                expand_tree(event.target.data("id"));
+
                 console.log('selected');
                 console.log(event.target.data());
                 let info = event.target.data("full_info");
@@ -263,6 +285,8 @@ $(function () {
                     {
                         content: '<span class="fa fa-arrows-alt fa-2x"></span>',
                         select: function (ele) {
+                            expand_tree(ele.data("id"));
+
                             let info = ele.data("full_info");
                             get_code(info);
 
@@ -344,6 +368,8 @@ $(function () {
                     {
                         content: '<span class="fa fa-arrows-alt fa-2x"></span>',
                         select: function (ele) {
+                            expand_tree(ele.data("id"));
+
                             let info = ele.data("full_info");
                             get_code(info);
 
