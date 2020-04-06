@@ -32,6 +32,14 @@ public class GraphCalculateImpl implements GraphCalculateBL {
     @Autowired
     private CodeRepository codeRepository;
 
+    public void setCodeRepository(CodeRepository codeRepository) {
+        this.codeRepository = codeRepository;
+    }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     public ResponseVO getGraph(UserAndCodeForm userAndCodeForm){
 
         User currentUser = userRepository.findUserById(userAndCodeForm.getUserId());
