@@ -161,6 +161,7 @@
 <script src="https://unpkg.com/layout-base/layout-base.js"></script>
 <script src="https://unpkg.com/cose-base/cose-base.js"></script>
 <script src="../js/cytoscape-fcose.js"></script>
+<script src="../js/cytoscape-cose-bilkent.js"></script>
 
 <script src="../js/cytoscape-extmenu.js"></script>
 
@@ -341,20 +342,9 @@ height: 100%;
     <nav class="col-2 bg-light sidebar sidebar-right overflow-auto">
 
         <div class="card m-2 code-card">
-            <div class="h5 card-header" id="code-header">GraphCalculateImpl.java</div>
+            <div class="h5 card-header" id="code-header">Code Block</div>
             <div class="card-body">
-                <pre class="bg-white my-0" id="code-pre">
-<code>public ResponseVO getConnectedDomains(ArrayList&lt;WeightForm&gt; weightForms) {
-    try {
-        domainSet = filterByWeights(weightForms);
-        domainSet.sortByVerticesNum();
-        return ResponseVO.buildSuccess(new DomainSetVO(domainSet));
-    } catch (Exception e) {
-        e.printStackTrace();
-        return ResponseVO.buildFailure("连通域生成失败");
-    }
-}</code>
-                </pre>
+                <pre class="bg-white my-0" id="code-pre"><code>Click a node to get its code block.</code></pre>
             </div>
         </div>
 

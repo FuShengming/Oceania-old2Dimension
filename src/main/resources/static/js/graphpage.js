@@ -21,20 +21,52 @@ $(function () {
             $('#loading').hide();
         }
     };
+    let cose_bilkent_layout = {
+        name: 'cose-bilkent',
+        randomize: true,
+        stop: function () {
+            $('#loading').hide();
+        }
+    };
+
+    //code on the right
+    let get_code = function (info) {
+        $.ajax({
+            type: "post",
+            url: "/code/getFuncCode",
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                userId: 1,
+                codeId: 1,
+                vertexVO: info,
+            }),
+            success: function (data) {
+                console.log(data);
+                $("#code-header").text(info["belongClass"] + ":\xa0" + info["funcName"] + "\xa0(" + info["args"].join(",\xa0") + ")");
+                if (data.success) {
+                    $("#code-pre").html("<code>" + data.content + "</code>");
+                } else {
+                    $("#code-pre").html("<code>" + data.message + "</code>");
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    };
+
     //treeview on the left sidebar
     let remove_empty_node = function (tree) {
-        console.log(tree);
         tree.nodes.forEach(function (sub_tree) {
-            console.log(sub_tree);
-            console.log(sub_tree.nodes.length);
             if (sub_tree.nodes.length === 0) {
                 delete sub_tree.nodes;
-                console.log("delete one");
             } else {
                 remove_empty_node(sub_tree);
             }
         });
     };
+
     $.ajax({
         type: "post",
         url: "/code/getCodeStructure",
@@ -58,111 +90,31 @@ $(function () {
                 expandIcon: "fa fa-caret-right",
                 collapseIcon: "fa fa-caret-down",
                 highlightSelected: true,
+                onNodeSelected: function (event, data) {
+                    console.log(event);
+                    console.log(data);
+                    if (data.vertexId !== -1) {
+                        cy.$('node,edge').unselect();
+                        let n = cy.$id('n' + data.vertexId.toString());
+                        console.log(n);
+                        if (n.length === 0) {
+                            alert("This function has been filtered out. Please adjust filter weight.")
+                        } else {
+                            n.select();
+                            cy.fit(n, $('#cy_container').height() * 0.45);
+                            let info = n.data("full_info");
+                            get_code(info);
+                        }
+
+                    }
+                }
             });
         },
         error: function (err) {
             console.log(err);
         }
     });
-    // let tree_json = [
-    //     {
-    //         "text": "com.old2dimension.OCEANIA",
-    //         "nodes": [
-    //             {
-    //                 "text": "bl",
-    //                 "nodes": [
-    //                     {
-    //                         "text": "GraphCalculate",
-    //                         "nodes": [
-    //                             {
-    //                                 "text": "getConnectedDomains()"
-    //                             }, {
-    //                                 "text": "getAmbiguousFuncInfos()"
-    //                             }
-    //                         ]
-    //
-    //                     }, {
-    //                         "text": "PathBL",
-    //                         "nodes": [
-    //                             {
-    //                                 "text": "findPath()"
-    //                             }
-    //                         ]
-    //                     }
-    //                     , {
-    //                         "text": "UserBL",
-    //                         "nodes": [
-    //                             {
-    //                                 "text": "getAllUser()"
-    //                             }, {
-    //                                 "text": "login()"
-    //                             }, {
-    //                                 "text": "signUp()"
-    //                             },
-    //                         ]
-    //                     }
-    //                 ]
-    //             }, {
-    //                 "text": "blImpl",
-    //                 "nodes": [
-    //                     {
-    //                         "text": "GraphCalculateImpl",
-    //                         "nodes": [
-    //                             {
-    //                                 "text": "&lt;init&gt;()"
-    //                             }, {
-    //                                 "text": "getConnectedDomains()"
-    //                             }, {
-    //                                 "text": "getAmbiguousFuncInfos()"
-    //                             }, {
-    //                                 "text": "initializeGraph()"
-    //                             }, {
-    //                                 "text": "str2Vertex()"
-    //                             }, {
-    //                                 "text": "calculateCloseness()"
-    //                             }, {
-    //                                 "text": "filterByWeights()"
-    //                             }, {
-    //                                 "text": "findEdge()"
-    //                             }, {
-    //                                 "text": "generateDomain()"
-    //                             }
-    //                         ]
-    //
-    //                     }, {
-    //                         "text": "PathBLImpl",
-    //                         "nodes": [
-    //                             {
-    //                                 "text": "findPath()"
-    //                             }
-    //                         ]
-    //                     }
-    //                     , {
-    //                         "text": "UserBL",
-    //                         "nodes": [
-    //                             {
-    //                                 "text": "getAllUser()"
-    //                             }, {
-    //                                 "text": "login()"
-    //                             }, {
-    //                                 "text": "signUp()"
-    //                             },
-    //                         ]
-    //                     }
-    //                 ]
-    //             },
-    //         ]
-    //     }];
-    // $('#tree').treeview({
-    //     data: tree_json,
-    //     backColor: "#f8f9fa",
-    //     color: "#000000",
-    //     showBorder: false,
-    //     expandIcon: "fa fa-caret-right",
-    //     collapseIcon: "fa fa-caret-down",
-    //     highlightSelected: true,
-    // });
-    // $("nav#tree").children().css("padding", 0);
+
 
     //cytoscape container on the middle main div
 
@@ -295,49 +247,14 @@ $(function () {
                         }
                     },
                 ],
-
-                layout: {
-                    // name: 'concentric',
-                    // minNodeSpacing: 50,
-                    // concentric: function (node) {
-                    //     return node.degree();
-                    // },
-                    // levelWidth: function (nodes) { // the letiation of concentric values in each level
-                    //     return 0.5;
-                    // },
-
-                    name: 'fcose',
-                    idealEdgeLength: 150,
-
-                    stop: function () {
-                        $('#loading').hide();
-                    },
-                }
             });
+            cy.layout(cose_bilkent_layout).run();
 
             cy.on('tap', 'node.vertex', function (event) {
                 console.log('selected');
                 console.log(event.target.data());
                 let info = event.target.data("full_info");
-                $.ajax({
-                    type: "post",
-                    url: "/code/getFuncCode",
-                    dataType: "json",
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        userId: 1,
-                        codeId: 1,
-                        vertexVO: info,
-                    }),
-                    success: function (data) {
-                        console.log(data);
-                        $("#code-header").text(info["belongClass"] + ": " + info["funcName"] + " (" + info["args"].join(", ") + ")");
-                        $("#code-pre").html("<code>" + data.content + "</code>");
-                    },
-                    error: function (err) {
-                        console.log(err);
-                    }
-                });
+                get_code(info);
             });
 
             cy.cxtmenu({
@@ -347,25 +264,7 @@ $(function () {
                         content: '<span class="fa fa-arrows-alt fa-2x"></span>',
                         select: function (ele) {
                             let info = ele.data("full_info");
-                            $.ajax({
-                                type: "post",
-                                url: "/code/getFuncCode",
-                                dataType: "json",
-                                contentType: 'application/json',
-                                data: JSON.stringify({
-                                    userId: 1,
-                                    codeId: 1,
-                                    vertexVO: info,
-                                }),
-                                success: function (data) {
-                                    console.log(data);
-                                    $("#code-header").text(info["belongClass"] + ": " + info["funcName"] + " (" + info["args"].join(", ") + ")");
-                                    $("#code-pre").html("<code>" + data.content + "</code>");
-                                },
-                                error: function (err) {
-                                    console.log(err);
-                                }
-                            });
+                            get_code(info);
 
                             cy.$('node,edge').unselect();
                             console.log('this id', ele.id());
@@ -446,25 +345,7 @@ $(function () {
                         content: '<span class="fa fa-arrows-alt fa-2x"></span>',
                         select: function (ele) {
                             let info = ele.data("full_info");
-                            $.ajax({
-                                type: "post",
-                                url: "/code/getFuncCode",
-                                dataType: "json",
-                                contentType: 'application/json',
-                                data: JSON.stringify({
-                                    userId: 1,
-                                    codeId: 1,
-                                    vertexVO: info,
-                                }),
-                                success: function (data) {
-                                    console.log(data);
-                                    $("#code-header").text(info["belongClass"] + ": " + info["funcName"] + " (" + info["args"].join(", ") + ")");
-                                    $("#code-pre").html("<code>" + data.content + "</code>");
-                                },
-                                error: function (err) {
-                                    console.log(err);
-                                }
-                            });
+                            get_code(info);
 
                             cy.$('node,edge').unselect();
                             console.log('this id', ele.id());

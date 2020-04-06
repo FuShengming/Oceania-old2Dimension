@@ -27,6 +27,7 @@
 }
 
 .treeview .list-group-item {
+    white-space: nowrap;
     display: inherit;
     cursor: pointer;
     padding-top: 0;
