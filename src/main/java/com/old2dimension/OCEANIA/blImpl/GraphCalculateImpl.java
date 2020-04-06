@@ -20,6 +20,11 @@ public class GraphCalculateImpl implements GraphCalculateBL {
     public AdjacencyMatrix adMatrix;
     public ArrayList<Edge> allEdges;
     public DomainSet domainSet;
+
+    public ArrayList<Vertex> getAllVertexes() {
+        return allVertexes;
+    }
+
     public ArrayList<Vertex> allVertexes;
     private boolean[][] visited;
     @Autowired
@@ -363,4 +368,6 @@ public class GraphCalculateImpl implements GraphCalculateBL {
             generateDomain(domain, i, endId, thresholds);
         }
     }
+
+
 }

@@ -25,6 +25,11 @@ public class CodeBLImpl implements CodeBL {
 
     @Autowired
     CodeRepository codeRepository;
+
+    public void setGraphCalculate(GraphCalculateImpl graphCalculate) {
+        this.graphCalculate = graphCalculate;
+    }
+
     @Autowired
     GraphCalculateImpl graphCalculate;
 
@@ -400,8 +405,10 @@ public class CodeBLImpl implements CodeBL {
 
     public ResponseVO getCodeStructure(UserAndCodeForm userAndCodeForm) {
         //GraphCalculateImpl graphCalculate = new GraphCalculateImpl();
-        graphCalculate.getGraph(userAndCodeForm);
-        ArrayList<Vertex> vertices = graphCalculate.allVertexes;
+        ResponseVO responseVO = graphCalculate.getGraph(userAndCodeForm);
+        if (!responseVO.isSuccess())
+            return responseVO;
+        ArrayList<Vertex> vertices = graphCalculate.getAllVertexes();
 
         String basicPath = "analyzeCode/src";
         String rootPath = "edu";
