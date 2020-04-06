@@ -25,15 +25,18 @@ public class CodeBLImpl implements CodeBL {
 
     @Autowired
     CodeRepository codeRepository;
+
+    public void setGraphCalculate(GraphCalculateImpl graphCalculate) {
+        this.graphCalculate = graphCalculate;
+    }
+
     @Autowired
     GraphCalculateImpl graphCalculate;
 
     public void setCodeRepository(CodeRepository codeRepository) {
         this.codeRepository = codeRepository;
     }
-    public void setGraphCalculate(GraphCalculateImpl graphCalculate) {
-        this.graphCalculate = graphCalculate;
-    }
+
 
     public ResponseVO getCodesByUserId(int userId){
         List<Code> dbRes = codeRepository.findCodesByUserId(userId);
@@ -406,8 +409,10 @@ public class CodeBLImpl implements CodeBL {
 
     public ResponseVO getCodeStructure(UserAndCodeForm userAndCodeForm) {
         //GraphCalculateImpl graphCalculate = new GraphCalculateImpl();
-        graphCalculate.getGraph(userAndCodeForm);
-        ArrayList<Vertex> vertices = graphCalculate.allVertexes;
+        ResponseVO responseVO = graphCalculate.getGraph(userAndCodeForm);
+        if (!responseVO.isSuccess())
+            return responseVO;
+        ArrayList<Vertex> vertices = graphCalculate.getAllVertexes();
 
         String basicPath = "analyzeCode/src";
         String rootPath = "edu";
@@ -488,7 +493,12 @@ public class CodeBLImpl implements CodeBL {
 
             if (vertexPkgName.equals(pkgName)) {
                 if (vertexClassName.equals(className)) {
-                    CodeNode funcNode = new CodeNode(vertex.getFuncName() + "(" + vertex.getArgsString(vertex.getArgs()) + ")");
+                    String funcName = vertex.getFuncName();
+                    if (funcName.equals("<init>"))
+                        funcName = "&lt;init&gt;";
+                    if (funcName.equals("<clinit>"))
+                        funcName = "&lt;clinit&gt;";
+                    CodeNode funcNode = new CodeNode(funcName + "(" + vertex.getArgsString(vertex.getArgs()) + ")");
                     funcNode.setVertexId(vertex.getId());
                     codeNodes.add(funcNode);
                 } else if ((vertexClassName.length() > className.length()) && ((vertexClassName.substring(0, className.length() + 1)).equals(className + "$"))) {
@@ -518,7 +528,12 @@ public class CodeBLImpl implements CodeBL {
             vertexPkgName = vertexPkgName.replace('.', '/');
             String vertexClassName = vertex.getBelongClass();
             if (vertexPkgName.equals(pkgName) && vertexClassName.equals(className + "$" + innerClassName)) {
-                CodeNode funcNode = new CodeNode(vertex.getFuncName() + "(" + vertex.getArgsString(vertex.getArgs()) + ")");
+                String funcName = vertex.getFuncName();
+                if (funcName.equals("<init>"))
+                    funcName = "&lt;init&gt;";
+                if (funcName.equals("<clinit"))
+                    funcName = "&lt;clinit&gt;";
+                CodeNode funcNode = new CodeNode(funcName + "(" + vertex.getArgsString(vertex.getArgs()) + ")");
                 funcNode.setVertexId(vertex.getId());
                 codeNodes.add(funcNode);
             }

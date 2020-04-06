@@ -2,23 +2,30 @@ package com.old2dimension.OCEANIA.blImpl.CodeBLImplTest;
 import com.old2dimension.OCEANIA.blImpl.CodeBLImpl;
 import com.old2dimension.OCEANIA.blImpl.GraphCalculateImpl;
 import com.old2dimension.OCEANIA.dao.CodeRepository;
+import com.old2dimension.OCEANIA.dao.UserRepository;
 import com.old2dimension.OCEANIA.po.Code;
+import com.old2dimension.OCEANIA.po.CodeNode;
+import com.old2dimension.OCEANIA.po.User;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
+import com.old2dimension.OCEANIA.vo.UserAndCodeForm;
 import com.old2dimension.OCEANIA.vo.VertexVO;
 import com.old2dimension.OCEANIA.vo.VertexVOAndUserIdAndCodeId;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.ArrayList;
+
 import static org.mockito.Mockito.*;
 
 public class CodeBLImplTest {
     @Test
-    public void getFuncCodeTest1(){
+    public void getFuncCodeTest1() {
 
         VertexVO vertexVO = new VertexVO();
         vertexVO.setBelongPackage("edu.ncsu.csc.itrust.dao.mysql");
         vertexVO.setBelongClass("ReferralDAO$ReferralListQuery");
         vertexVO.setFuncName("<init>");
-        String[] args = { "edu.ncsu.csc.itrust.dao.mysql.ReferralDAO",
+        String[] args = {"edu.ncsu.csc.itrust.dao.mysql.ReferralDAO",
                 "edu.ncsu.csc.itrust.dao.DAOFactory",
                 "long"};
         vertexVO.setArgs(args);
@@ -32,16 +39,15 @@ public class CodeBLImplTest {
         expected.setIs_default(1);
         CodeBLImpl codeBL = new CodeBLImpl();
         CodeRepository codeRepository = mock(CodeRepository.class);
-        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(expected);
+        when(codeRepository.findCodeByIdAndUserId(1, 1)).thenReturn(expected);
         codeBL.setCodeRepository(codeRepository);
         ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
-        Assert.assertEquals(responseVO.getContent(),funcCode);
+        Assert.assertEquals(responseVO.getContent(), funcCode);
     }
 
 
-
     @Test
-    public void getFuncCodeTest2(){
+    public void getFuncCodeTest2() {
 
         VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId = new VertexVOAndUserIdAndCodeId();
         vertexVOAndUserIdAndCodeId.setCodeId(1);
@@ -53,14 +59,14 @@ public class CodeBLImplTest {
         CodeBLImpl codeBL = new CodeBLImpl();
         CodeRepository codeRepository = mock(CodeRepository.class);
         GraphCalculateImpl graphCalculate = mock(GraphCalculateImpl.class);
-        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(expected);
+        when(codeRepository.findCodeByIdAndUserId(1, 1)).thenReturn(expected);
         codeBL.setCodeRepository(codeRepository);
         ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
-        Assert.assertEquals(responseVO.getMessage(),"目前不支持itrust以外的代码分析");
+        Assert.assertEquals(responseVO.getMessage(), "目前不支持itrust以外的代码分析");
     }
 
     @Test
-    public void getFuncCodeTest3(){
+    public void getFuncCodeTest3() {
 
         VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId = new VertexVOAndUserIdAndCodeId();
         vertexVOAndUserIdAndCodeId.setCodeId(1);
@@ -72,20 +78,21 @@ public class CodeBLImplTest {
         CodeBLImpl codeBL = new CodeBLImpl();
         CodeRepository codeRepository = mock(CodeRepository.class);
         GraphCalculateImpl graphCalculate = mock(GraphCalculateImpl.class);
-        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(null);
+        when(codeRepository.findCodeByIdAndUserId(1, 1)).thenReturn(null);
         codeBL.setCodeRepository(codeRepository);
         ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
-        Assert.assertEquals(responseVO.getMessage(),"no such user or code");
+        Assert.assertEquals(responseVO.getMessage(), "no such user or code");
     }
+
     @Test
-    public void getFuncCodeTest4(){
+    public void getFuncCodeTest4() {
 
         VertexVO vertexVO = new VertexVO();
         vertexVO.setBelongPackage("edu.ncsu.csc.itrust.enums");
         vertexVO.setBelongClass("Gender");
         vertexVO.setFuncName("equals");
-        String[] args = { "java.lang.Object"
-                };
+        String[] args = {"java.lang.Object"
+        };
 
 
         vertexVO.setArgs(args);
@@ -99,20 +106,20 @@ public class CodeBLImplTest {
         expected.setIs_default(1);
         CodeBLImpl codeBL = new CodeBLImpl();
         CodeRepository codeRepository = mock(CodeRepository.class);
-        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(expected);
+        when(codeRepository.findCodeByIdAndUserId(1, 1)).thenReturn(expected);
         codeBL.setCodeRepository(codeRepository);
         ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
-        Assert.assertEquals(responseVO.getMessage(),"doesn't have explicit declaration. It maybe a parent class function or library function.");
+        Assert.assertEquals(responseVO.getMessage(), "doesn't have explicit declaration. It maybe a parent class function or library function.");
     }
 
     @Test
-    public void getFuncCodeTest5(){
+    public void getFuncCodeTest5() {
 
         VertexVO vertexVO = new VertexVO();
         vertexVO.setBelongPackage("edu.ncsu.csc.itrust.enums");
         vertexVO.setBelongClass("Gender");
         vertexVO.setFuncName("rua");
-        String[] args = { "java.lang.Object"
+        String[] args = {"java.lang.Object"
         };
 
 
@@ -127,20 +134,20 @@ public class CodeBLImplTest {
         expected.setIs_default(1);
         CodeBLImpl codeBL = new CodeBLImpl();
         CodeRepository codeRepository = mock(CodeRepository.class);
-        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(expected);
+        when(codeRepository.findCodeByIdAndUserId(1, 1)).thenReturn(expected);
         codeBL.setCodeRepository(codeRepository);
         ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
-        Assert.assertEquals(responseVO.getMessage(),"do not find function name in file");
+        Assert.assertEquals(responseVO.getMessage(), "do not find function name in file");
     }
 
     @Test
-    public void getFuncCodeTest6(){
+    public void getFuncCodeTest6() {
 
         VertexVO vertexVO = new VertexVO();
         vertexVO.setBelongPackage("edu.ncsu.csc.itrust.action");
         vertexVO.setBelongClass("Localization");
         vertexVO.setFuncName("<clinit>");
-        String[] args = { ""
+        String[] args = {""
         };
 
 
@@ -154,20 +161,20 @@ public class CodeBLImplTest {
         expected.setIs_default(1);
         CodeBLImpl codeBL = new CodeBLImpl();
         CodeRepository codeRepository = mock(CodeRepository.class);
-        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(expected);
+        when(codeRepository.findCodeByIdAndUserId(1, 1)).thenReturn(expected);
         codeBL.setCodeRepository(codeRepository);
         ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
-        Assert.assertEquals(responseVO.getMessage(),"class file do not exist");
+        Assert.assertEquals(responseVO.getMessage(), "class file do not exist");
     }
 
     @Test
-    public void getFuncCodeTest7(){
+    public void getFuncCodeTest7() {
 
         VertexVO vertexVO = new VertexVO();
         vertexVO.setBelongPackage("edu.ncsu.csc.itrust");
         vertexVO.setBelongClass("Messages");
         vertexVO.setFuncName("<clinit>");
-        String[] args = { ""
+        String[] args = {""
         };
 
 
@@ -181,19 +188,20 @@ public class CodeBLImplTest {
         expected.setIs_default(1);
         CodeBLImpl codeBL = new CodeBLImpl();
         CodeRepository codeRepository = mock(CodeRepository.class);
-        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(expected);
+        when(codeRepository.findCodeByIdAndUserId(1, 1)).thenReturn(expected);
         codeBL.setCodeRepository(codeRepository);
         ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
-        Assert.assertEquals(responseVO.getContent(),"this function is class initialize function, it doesn't have a function body.");
+        Assert.assertEquals(responseVO.getContent(), "this function is class initialize function, it doesn't have a function body.");
     }
+
     @Test
-    public void getFuncCodeTest8(){
+    public void getFuncCodeTest8() {
 
         VertexVO vertexVO = new VertexVO();
         vertexVO.setBelongPackage("edu.ncsA.csc.itrust.action");
         vertexVO.setBelongClass("Localization");
         vertexVO.setFuncName("<clinit>");
-        String[] args = { ""
+        String[] args = {""
         };
 
 
@@ -207,20 +215,20 @@ public class CodeBLImplTest {
         expected.setIs_default(1);
         CodeBLImpl codeBL = new CodeBLImpl();
         CodeRepository codeRepository = mock(CodeRepository.class);
-        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(expected);
+        when(codeRepository.findCodeByIdAndUserId(1, 1)).thenReturn(expected);
         codeBL.setCodeRepository(codeRepository);
         ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
-        Assert.assertEquals(responseVO.getMessage(),"package dir errors");
+        Assert.assertEquals(responseVO.getMessage(), "package dir errors");
     }
 
     @Test
-    public void getFuncCodeTest9(){
+    public void getFuncCodeTest9() {
 
         VertexVO vertexVO = new VertexVO();
         vertexVO.setBelongPackage("edu.ncsu.csc.itrust.action");
         vertexVO.setBelongClass("GetVisitRemindersAction$ReminderType");
         vertexVO.setFuncName("getTypeName");
-        String[] args = { ""
+        String[] args = {""
         };
 
 
@@ -234,22 +242,22 @@ public class CodeBLImplTest {
         expected.setIs_default(1);
         CodeBLImpl codeBL = new CodeBLImpl();
         CodeRepository codeRepository = mock(CodeRepository.class);
-        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(expected);
+        when(codeRepository.findCodeByIdAndUserId(1, 1)).thenReturn(expected);
         codeBL.setCodeRepository(codeRepository);
         ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
-        Assert.assertEquals(responseVO.getContent(),"\n\t\tpublic String getTypeName() {\r\n\t\t\treturn typeName;\r\n\t\t}");
+        Assert.assertEquals(responseVO.getContent(), "\n\t\tpublic String getTypeName() {\r\n\t\t\treturn typeName;\r\n\t\t}");
 
     }
 
 
     @Test
-    public void getFuncCodeTest10(){
+    public void getFuncCodeTest10() {
 
         VertexVO vertexVO = new VertexVO();
         vertexVO.setBelongPackage("edu.ncsu.csc.itrust");
         vertexVO.setBelongClass("BeanBuilder");
         vertexVO.setFuncName("build");
-        String[] args = {  "java.util.Map",
+        String[] args = {"java.util.Map",
                 "java.lang.Object"
         };
 
@@ -264,12 +272,43 @@ public class CodeBLImplTest {
         expected.setIs_default(1);
         CodeBLImpl codeBL = new CodeBLImpl();
         CodeRepository codeRepository = mock(CodeRepository.class);
-        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(expected);
+        when(codeRepository.findCodeByIdAndUserId(1, 1)).thenReturn(expected);
         codeBL.setCodeRepository(codeRepository);
         ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
-        Assert.assertEquals(responseVO.getContent(),expectedFuncBody);
+        Assert.assertEquals(responseVO.getContent(), expectedFuncBody);
 
     }
 
+    @Test
+    public void TestGetCodeStructure() {
+        CodeBLImpl codeBL = new CodeBLImpl();
+        GraphCalculateImpl graphCalculate = mock(GraphCalculateImpl.class);
+        UserAndCodeForm userAndCodeForm = new UserAndCodeForm(1, 1);
+        UserRepository userRepository = mock(UserRepository.class);
+        CodeRepository codeRepository = mock(CodeRepository.class);
+        codeBL.setGraphCalculate(graphCalculate);
+        User user = new User(1, "gr", "123456");
+        when(userRepository.findUserById(1)).thenReturn(user);
+
+        Code code = new Code(1, 1, "iTrust", 1979, 3834, 64, 1);
+        when(codeRepository.findCodeByIdAndUserId(1, 1)).thenReturn(code);
+
+        ResponseVO responseVO = codeBL.getCodeStructure(userAndCodeForm);
+        CodeNode codeNode = (CodeNode) responseVO.getContent();
+        Assert.assertEquals(codeNode.getText(), "edu");
+        ArrayList<CodeNode> codeNodes1 = codeNode.getNodes();
+        CodeNode codeNode1 = codeNodes1.get(0);
+        //Assert.assertEquals(codeNode1.getText(), "ncsu");
+        ArrayList<CodeNode> codeNodes2 = codeNode1.getNodes();
+        CodeNode codeNode2 = codeNodes2.get(0);
+        //Assert.assertEquals(codeNode2.getText(), "csc");
+        ArrayList<CodeNode> codeNodes3 = codeNode2.getNodes();
+        CodeNode codeNode3 = codeNodes3.get(0);
+        //Assert.assertEquals(codeNode3.getText(), "itrust");
+        ArrayList<CodeNode> rua = codeNode3.getNodes();
+        Assert.assertEquals(rua.size(), 19);
+    }
 
 }
+
+
