@@ -28,6 +28,13 @@ public class CodeBLImpl implements CodeBL {
     @Autowired
     GraphCalculateImpl graphCalculate;
 
+    public void setCodeRepository(CodeRepository codeRepository) {
+        this.codeRepository = codeRepository;
+    }
+    public void setGraphCalculate(GraphCalculateImpl graphCalculate) {
+        this.graphCalculate = graphCalculate;
+    }
+
     public ResponseVO getCodesByUserId(int userId){
         List<Code> dbRes = codeRepository.findCodesByUserId(userId);
         if(dbRes == null){
@@ -79,8 +86,7 @@ public class CodeBLImpl implements CodeBL {
             packageDir = resource.getFile();
         }
         catch (IOException e){
-            e.printStackTrace();
-            return ResponseVO.buildFailure("finding file fail");
+            return ResponseVO.buildFailure("package dir errors");
         }
 
         if(classStr.contains("$")){
@@ -143,7 +149,6 @@ public class CodeBLImpl implements CodeBL {
                 content = content.substring(classStartLineIndex,endBrace+1);
                 classNameBf = classStr;
                 classStr = internalClass;
-                System.out.println("internal class:\n"+content);
                 break;
             }
             else{
@@ -176,15 +181,16 @@ public class CodeBLImpl implements CodeBL {
             boolean funcStringExist = false;
             int funcIndex = content.indexOf(funcName);
             int lineIndex = content.lastIndexOf(lineSeparator,funcIndex);
+        if(funcIndex==-1){
+            if(funcName.equals(classStr)){return ResponseVO.buildSuccess("do not have an explicit initialize function.");}
+            return ResponseVO.buildFailure("do not find function name in file");
+        }
             String funcLine= content.substring(lineIndex+1,funcIndex);
             if(funcLine.contains("class")||funcLine.contains("enum")){
                 funcIndex = content.indexOf(funcName,funcIndex+1);
             }
 
-            if(funcIndex==-1){
-                if(funcName.equals(classStr)){return ResponseVO.buildSuccess("do not have an explicit initialize function.");}
-                return ResponseVO.buildFailure("do not find function name in file");
-            }
+
 
             char[] validBeforeFuncNameChar={' ','\t','\n','\r','.'};
 
@@ -215,7 +221,7 @@ public class CodeBLImpl implements CodeBL {
                 }
 
 
-                funcStringExist = true;
+
 
 
                 int backCurvesIndex = getBackCurves(content,frontCurvesIndex);
@@ -253,7 +259,7 @@ public class CodeBLImpl implements CodeBL {
                 }
                 if(args.length != vertexArgs.length){funcIndex = content.indexOf(funcName,funcIndex+1); continue;}
                 boolean equal = true;
-
+                funcStringExist = true;
                 //--------------模板函数与模板类处理，不完全，classIndex应该迭代而不是预设class标志出现在文件最前---------
                 int lineEndIndex = content.indexOf("\n",funcIndex);
                 if(content.substring(funcIndex,lineEndIndex).contains("<")){
@@ -346,7 +352,7 @@ public class CodeBLImpl implements CodeBL {
                 if(funcStringExist){return ResponseVO.buildFailure("doesn't have explicit declaration. It maybe a parent class function or library function.");}
                 return ResponseVO.buildFailure("match args do not exist ");}
             String funcBody = getFuncBody(content,funcIndex);
-            System.out.println(funcBody);
+
             return ResponseVO.buildSuccess(funcBody);
 
 

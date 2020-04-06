@@ -1,0 +1,275 @@
+package com.old2dimension.OCEANIA.blImpl.CodeBLImplTest;
+import com.old2dimension.OCEANIA.blImpl.CodeBLImpl;
+import com.old2dimension.OCEANIA.blImpl.GraphCalculateImpl;
+import com.old2dimension.OCEANIA.dao.CodeRepository;
+import com.old2dimension.OCEANIA.po.Code;
+import com.old2dimension.OCEANIA.vo.ResponseVO;
+import com.old2dimension.OCEANIA.vo.VertexVO;
+import com.old2dimension.OCEANIA.vo.VertexVOAndUserIdAndCodeId;
+import org.junit.Assert;
+import org.junit.Test;
+import static org.mockito.Mockito.*;
+
+public class CodeBLImplTest {
+    @Test
+    public void getFuncCodeTest1(){
+
+        VertexVO vertexVO = new VertexVO();
+        vertexVO.setBelongPackage("edu.ncsu.csc.itrust.dao.mysql");
+        vertexVO.setBelongClass("ReferralDAO$ReferralListQuery");
+        vertexVO.setFuncName("<init>");
+        String[] args = { "edu.ncsu.csc.itrust.dao.mysql.ReferralDAO",
+                "edu.ncsu.csc.itrust.dao.DAOFactory",
+                "long"};
+        vertexVO.setArgs(args);
+        VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId = new VertexVOAndUserIdAndCodeId();
+        vertexVOAndUserIdAndCodeId.setCodeId(1);
+        vertexVOAndUserIdAndCodeId.setUserId(1);
+        vertexVOAndUserIdAndCodeId.setVertexVO(vertexVO);
+        String funcCode = "\n\t\tpublic ReferralListQuery(DAOFactory factory, long userid) {\r\n\t\t\tthis.factory = factory;\r\n\t\t\tthis.userid = userid;\r\n\t\t\t// initialize lookup map\r\n\t\t\tsortColumns = new HashMap<String,String>();\r\n\t\t\tsortColumns.put(\"patientName\", \"CONCAT(patients.lastName, ' ', patients.firstName)\");\r\n\t\t\tsortColumns.put(\"receiverName\", \"CONCAT(preceiver.lastName, preceiver.firstName)\");\r\n\t\t\tsortColumns.put(\"senderName\", \"CONCAT(psender.lastName, psender.firstName)\");\r\n\t\t\tsortColumns.put(\"timestamp\", \"referrals.timestamp\");\r\n\t\t\tsortColumns.put(\"priority\", \"referrals.PriorityCode\");\r\n\t\t}";
+        Code expected = new Code();
+        expected.setId(1);
+        expected.setIs_default(1);
+        CodeBLImpl codeBL = new CodeBLImpl();
+        CodeRepository codeRepository = mock(CodeRepository.class);
+        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(expected);
+        codeBL.setCodeRepository(codeRepository);
+        ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
+        Assert.assertEquals(responseVO.getContent(),funcCode);
+    }
+
+
+
+    @Test
+    public void getFuncCodeTest2(){
+
+        VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId = new VertexVOAndUserIdAndCodeId();
+        vertexVOAndUserIdAndCodeId.setCodeId(1);
+        vertexVOAndUserIdAndCodeId.setUserId(1);
+
+        Code expected = new Code();
+        expected.setId(1);
+        expected.setIs_default(2);
+        CodeBLImpl codeBL = new CodeBLImpl();
+        CodeRepository codeRepository = mock(CodeRepository.class);
+        GraphCalculateImpl graphCalculate = mock(GraphCalculateImpl.class);
+        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(expected);
+        codeBL.setCodeRepository(codeRepository);
+        ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
+        Assert.assertEquals(responseVO.getMessage(),"目前不支持itrust以外的代码分析");
+    }
+
+    @Test
+    public void getFuncCodeTest3(){
+
+        VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId = new VertexVOAndUserIdAndCodeId();
+        vertexVOAndUserIdAndCodeId.setCodeId(1);
+        vertexVOAndUserIdAndCodeId.setUserId(1);
+
+        Code expected = new Code();
+        expected.setId(1);
+        expected.setIs_default(2);
+        CodeBLImpl codeBL = new CodeBLImpl();
+        CodeRepository codeRepository = mock(CodeRepository.class);
+        GraphCalculateImpl graphCalculate = mock(GraphCalculateImpl.class);
+        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(null);
+        codeBL.setCodeRepository(codeRepository);
+        ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
+        Assert.assertEquals(responseVO.getMessage(),"no such user or code");
+    }
+    @Test
+    public void getFuncCodeTest4(){
+
+        VertexVO vertexVO = new VertexVO();
+        vertexVO.setBelongPackage("edu.ncsu.csc.itrust.enums");
+        vertexVO.setBelongClass("Gender");
+        vertexVO.setFuncName("equals");
+        String[] args = { "java.lang.Object"
+                };
+
+
+        vertexVO.setArgs(args);
+        VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId = new VertexVOAndUserIdAndCodeId();
+        vertexVOAndUserIdAndCodeId.setCodeId(1);
+        vertexVOAndUserIdAndCodeId.setUserId(1);
+        vertexVOAndUserIdAndCodeId.setVertexVO(vertexVO);
+        //String funcCode = "\n\t\tpublic ReferralListQuery(DAOFactory factory, long userid) {\r\n\t\t\tthis.factory = factory;\r\n\t\t\tthis.userid = userid;\r\n\t\t\t// initialize lookup map\r\n\t\t\tsortColumns = new HashMap<String,String>();\r\n\t\t\tsortColumns.put(\"patientName\", \"CONCAT(patients.lastName, ' ', patients.firstName)\");\r\n\t\t\tsortColumns.put(\"receiverName\", \"CONCAT(preceiver.lastName, preceiver.firstName)\");\r\n\t\t\tsortColumns.put(\"senderName\", \"CONCAT(psender.lastName, psender.firstName)\");\r\n\t\t\tsortColumns.put(\"timestamp\", \"referrals.timestamp\");\r\n\t\t\tsortColumns.put(\"priority\", \"referrals.PriorityCode\");\r\n\t\t}";
+        Code expected = new Code();
+        expected.setId(1);
+        expected.setIs_default(1);
+        CodeBLImpl codeBL = new CodeBLImpl();
+        CodeRepository codeRepository = mock(CodeRepository.class);
+        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(expected);
+        codeBL.setCodeRepository(codeRepository);
+        ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
+        Assert.assertEquals(responseVO.getMessage(),"doesn't have explicit declaration. It maybe a parent class function or library function.");
+    }
+
+    @Test
+    public void getFuncCodeTest5(){
+
+        VertexVO vertexVO = new VertexVO();
+        vertexVO.setBelongPackage("edu.ncsu.csc.itrust.enums");
+        vertexVO.setBelongClass("Gender");
+        vertexVO.setFuncName("rua");
+        String[] args = { "java.lang.Object"
+        };
+
+
+        vertexVO.setArgs(args);
+        VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId = new VertexVOAndUserIdAndCodeId();
+        vertexVOAndUserIdAndCodeId.setCodeId(1);
+        vertexVOAndUserIdAndCodeId.setUserId(1);
+        vertexVOAndUserIdAndCodeId.setVertexVO(vertexVO);
+        //String funcCode = "\n\t\tpublic ReferralListQuery(DAOFactory factory, long userid) {\r\n\t\t\tthis.factory = factory;\r\n\t\t\tthis.userid = userid;\r\n\t\t\t// initialize lookup map\r\n\t\t\tsortColumns = new HashMap<String,String>();\r\n\t\t\tsortColumns.put(\"patientName\", \"CONCAT(patients.lastName, ' ', patients.firstName)\");\r\n\t\t\tsortColumns.put(\"receiverName\", \"CONCAT(preceiver.lastName, preceiver.firstName)\");\r\n\t\t\tsortColumns.put(\"senderName\", \"CONCAT(psender.lastName, psender.firstName)\");\r\n\t\t\tsortColumns.put(\"timestamp\", \"referrals.timestamp\");\r\n\t\t\tsortColumns.put(\"priority\", \"referrals.PriorityCode\");\r\n\t\t}";
+        Code expected = new Code();
+        expected.setId(1);
+        expected.setIs_default(1);
+        CodeBLImpl codeBL = new CodeBLImpl();
+        CodeRepository codeRepository = mock(CodeRepository.class);
+        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(expected);
+        codeBL.setCodeRepository(codeRepository);
+        ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
+        Assert.assertEquals(responseVO.getMessage(),"do not find function name in file");
+    }
+
+    @Test
+    public void getFuncCodeTest6(){
+
+        VertexVO vertexVO = new VertexVO();
+        vertexVO.setBelongPackage("edu.ncsu.csc.itrust.action");
+        vertexVO.setBelongClass("Localization");
+        vertexVO.setFuncName("<clinit>");
+        String[] args = { ""
+        };
+
+
+        vertexVO.setArgs(args);
+        VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId = new VertexVOAndUserIdAndCodeId();
+        vertexVOAndUserIdAndCodeId.setCodeId(1);
+        vertexVOAndUserIdAndCodeId.setUserId(1);
+        vertexVOAndUserIdAndCodeId.setVertexVO(vertexVO);
+        Code expected = new Code();
+        expected.setId(1);
+        expected.setIs_default(1);
+        CodeBLImpl codeBL = new CodeBLImpl();
+        CodeRepository codeRepository = mock(CodeRepository.class);
+        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(expected);
+        codeBL.setCodeRepository(codeRepository);
+        ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
+        Assert.assertEquals(responseVO.getMessage(),"class file do not exist");
+    }
+
+    @Test
+    public void getFuncCodeTest7(){
+
+        VertexVO vertexVO = new VertexVO();
+        vertexVO.setBelongPackage("edu.ncsu.csc.itrust");
+        vertexVO.setBelongClass("Messages");
+        vertexVO.setFuncName("<clinit>");
+        String[] args = { ""
+        };
+
+
+        vertexVO.setArgs(args);
+        VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId = new VertexVOAndUserIdAndCodeId();
+        vertexVOAndUserIdAndCodeId.setCodeId(1);
+        vertexVOAndUserIdAndCodeId.setUserId(1);
+        vertexVOAndUserIdAndCodeId.setVertexVO(vertexVO);
+        Code expected = new Code();
+        expected.setId(1);
+        expected.setIs_default(1);
+        CodeBLImpl codeBL = new CodeBLImpl();
+        CodeRepository codeRepository = mock(CodeRepository.class);
+        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(expected);
+        codeBL.setCodeRepository(codeRepository);
+        ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
+        Assert.assertEquals(responseVO.getContent(),"this function is class initialize function, it doesn't have a function body.");
+    }
+    @Test
+    public void getFuncCodeTest8(){
+
+        VertexVO vertexVO = new VertexVO();
+        vertexVO.setBelongPackage("edu.ncsA.csc.itrust.action");
+        vertexVO.setBelongClass("Localization");
+        vertexVO.setFuncName("<clinit>");
+        String[] args = { ""
+        };
+
+
+        vertexVO.setArgs(args);
+        VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId = new VertexVOAndUserIdAndCodeId();
+        vertexVOAndUserIdAndCodeId.setCodeId(1);
+        vertexVOAndUserIdAndCodeId.setUserId(1);
+        vertexVOAndUserIdAndCodeId.setVertexVO(vertexVO);
+        Code expected = new Code();
+        expected.setId(1);
+        expected.setIs_default(1);
+        CodeBLImpl codeBL = new CodeBLImpl();
+        CodeRepository codeRepository = mock(CodeRepository.class);
+        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(expected);
+        codeBL.setCodeRepository(codeRepository);
+        ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
+        Assert.assertEquals(responseVO.getMessage(),"package dir errors");
+    }
+
+    @Test
+    public void getFuncCodeTest9(){
+
+        VertexVO vertexVO = new VertexVO();
+        vertexVO.setBelongPackage("edu.ncsu.csc.itrust.action");
+        vertexVO.setBelongClass("GetVisitRemindersAction$ReminderType");
+        vertexVO.setFuncName("getTypeName");
+        String[] args = { ""
+        };
+
+
+        vertexVO.setArgs(args);
+        VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId = new VertexVOAndUserIdAndCodeId();
+        vertexVOAndUserIdAndCodeId.setCodeId(1);
+        vertexVOAndUserIdAndCodeId.setUserId(1);
+        vertexVOAndUserIdAndCodeId.setVertexVO(vertexVO);
+        Code expected = new Code();
+        expected.setId(1);
+        expected.setIs_default(1);
+        CodeBLImpl codeBL = new CodeBLImpl();
+        CodeRepository codeRepository = mock(CodeRepository.class);
+        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(expected);
+        codeBL.setCodeRepository(codeRepository);
+        ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
+        Assert.assertEquals(responseVO.getContent(),"\n\t\tpublic String getTypeName() {\r\n\t\t\treturn typeName;\r\n\t\t}");
+
+    }
+
+
+    @Test
+    public void getFuncCodeTest10(){
+
+        VertexVO vertexVO = new VertexVO();
+        vertexVO.setBelongPackage("edu.ncsu.csc.itrust");
+        vertexVO.setBelongClass("BeanBuilder");
+        vertexVO.setFuncName("build");
+        String[] args = {  "java.util.Map",
+                "java.lang.Object"
+        };
+
+        String expectedFuncBody = "\n\tpublic T build(Map map, T bean) throws Exception {\r\n\t\t// JavaBeans should not have overloaded methods, according to their API\r\n\t\t// (a stupid limitation!)\r\n\t\t// Nevertheless, we should check for it\r\n\t\tcheckOverloadedMethods(bean);\r\n\r\n\t\t// Use an introspector to find all of the getXXX or setXXX, we only want\r\n\t\t// the setXXX\r\n\t\tPropertyDescriptor[] propertyDescriptors = Introspector.getBeanInfo(bean.getClass())\r\n\t\t\t\t.getPropertyDescriptors();\r\n\t\tfor (PropertyDescriptor descriptor : propertyDescriptors) {\r\n\t\t\t// if object is null, either it was ignored or empty - just go with\r\n\t\t\t// bean's default\r\n\t\t\tString[] value = (String[]) map.get(descriptor.getName());\r\n\t\t\tMethod writeMethod = descriptor.getWriteMethod();\r\n\t\t\tif (!\"class\".equals(descriptor.getName()) && value != null && writeMethod != null) {\r\n\t\t\t\t// descriptor's name is the name of your property; like\r\n\t\t\t\t// firstName\r\n\t\t\t\t// only take the first string\r\n\t\t\t\ttry {\r\n\t\t\t\t\t// Skip the setters for enumerations\r\n\t\t\t\t\tif (writeMethod.getParameterTypes()[0].getEnumConstants() == null)\r\n\t\t\t\t\t\twriteMethod.invoke(bean, new Object[] { value[0] });\r\n\t\t\t\t} catch (IllegalArgumentException e) {\r\n\t\t\t\t\t// Throw a more informative exception\r\n\t\t\t\t\tthrow new IllegalArgumentException(e.getMessage() + \" with \" + writeMethod.getName()\r\n\t\t\t\t\t\t\t+ \" and \" + value[0]);\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn bean;\r\n\t}";
+        vertexVO.setArgs(args);
+        VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId = new VertexVOAndUserIdAndCodeId();
+        vertexVOAndUserIdAndCodeId.setCodeId(1);
+        vertexVOAndUserIdAndCodeId.setUserId(1);
+        vertexVOAndUserIdAndCodeId.setVertexVO(vertexVO);
+        Code expected = new Code();
+        expected.setId(1);
+        expected.setIs_default(1);
+        CodeBLImpl codeBL = new CodeBLImpl();
+        CodeRepository codeRepository = mock(CodeRepository.class);
+        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(expected);
+        codeBL.setCodeRepository(codeRepository);
+        ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
+        Assert.assertEquals(responseVO.getContent(),expectedFuncBody);
+
+    }
+
+
+}
