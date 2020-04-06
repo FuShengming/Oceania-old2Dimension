@@ -282,12 +282,14 @@ public class CodeBLImplTest {
     @Test
     public void TestGetCodeStructure() {
         CodeBLImpl codeBL = new CodeBLImpl();
-        GraphCalculateImpl graphCalculate = mock(GraphCalculateImpl.class);
+        GraphCalculateImpl graphCalculate = new GraphCalculateImpl();
         UserAndCodeForm userAndCodeForm = new UserAndCodeForm(1, 1);
         UserRepository userRepository = mock(UserRepository.class);
         CodeRepository codeRepository = mock(CodeRepository.class);
         codeBL.setGraphCalculate(graphCalculate);
         User user = new User(1, "gr", "123456");
+        graphCalculate.setCodeRepository(codeRepository);
+        graphCalculate.setUserRepository(userRepository);
         when(userRepository.findUserById(1)).thenReturn(user);
 
         Code code = new Code(1, 1, "iTrust", 1979, 3834, 64, 1);
