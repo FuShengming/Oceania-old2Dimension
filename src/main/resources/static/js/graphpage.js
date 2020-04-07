@@ -8,7 +8,7 @@ $(function () {
     };
 
     // constructs the suggestion engine
-    states = new Bloodhound({
+    let states = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.whitespace,
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         // `states` is an array of state names defined in "The Basics"
@@ -39,6 +39,7 @@ $(function () {
     $("#node-search-btn").on("click", function () {
         if ($("#func-name-input").val() === "") {
             alert("Input can't be empty.");
+            return;
         }
         $.ajax({
             type: "get",
@@ -50,7 +51,7 @@ $(function () {
                     return;
                 }
                 if (data.content.length > 1) {
-                    alert("Input is ambiguous. You can choose it in the autocomplete menu.");
+                    alert("Input is ambiguous. You can choose one in the autocomplete menu.");
                     return;
                 }
                 $("#searchModal").modal('hide');
@@ -72,9 +73,68 @@ $(function () {
             error: function (err) {
                 console.log(err);
             }
-        })
+        });
     });
 
+    $("#path-search-btn").on("click", function () {
+        if ($("#start-node-input").val() === "" || $("#end-node-input").val() === 0) {
+            alert("Input can't be empty.");
+            return;
+        }
+        let start_id = -1;
+        let end_id = -1;
+        $.ajax({
+            type: "get",
+            url: "/graph/findVertex/" + $("#start-node-input").val(),
+            success: function (data) {
+                console.log(data);
+                if (data.content.length === 0) {
+                    alert("Can't find such start node.");
+                    return;
+                }
+                if (data.content.length > 1) {
+                    alert("Start node input is ambiguous. You can choose one in the autocomplete menu.");
+                    return;
+                }
+                start_id = data.content[0].id;
+                $.ajax({
+                    type: "get",
+                    url: "/graph/findVertex/" + $("#end-node-input").val(),
+                    success: function (data) {
+                        console.log(data);
+                        if (data.content.length === 0) {
+                            alert("Can't find such end node.");
+                            return;
+                        }
+                        if (data.content.length > 1) {
+                            alert("End node input is ambiguous. You can choose one in the autocomplete menu.");
+                            return;
+                        }
+                        end_id = data.content[0].id;
+                        $.ajax({
+                            type: "post",
+                            url: "/graph/findPath",
+                            dataType: "json",
+                            contentType: 'application/json',
+                            data: JSON.stringify([{id: start_id}, {id: end_id}]),
+                            success: function (data) {
+                                console.log(data);
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    });
     //initialize cytoscape
     let cy = cytoscape();
     let fcose_layout = {
@@ -935,6 +995,12 @@ $(function () {
                                 id: 'n' + vertex.id.toString(),
                                 label: vertex.funcName,
                                 parent: 'd' + domain.id.toString(),
+                                full_info: {
+                                    belongPackage: vertex.belongPackage,
+                                    belongClass: vertex.belongClass,
+                                    funcName: vertex.funcName,
+                                    args: vertex.args,
+                                }
                             },
                             classes: ['vertex'],
                         });
