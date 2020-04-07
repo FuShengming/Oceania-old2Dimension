@@ -247,7 +247,7 @@ public class LabelBLImpl implements LabelBL {
 
     public ResponseVO getAllVertexLabel(UserAndCodeForm userAndCodeForm) {
         ArrayList<VertexLabel> res = (ArrayList<VertexLabel>) vertexLabelRepository.
-                findVertexLabelsByCodeIdAndUserId(userAndCodeForm.getCodeId(),userAndCodeForm.getUserId());
+                findVertexLabelsByCodeId(userAndCodeForm.getCodeId());
         return ResponseVO.buildSuccess(res);
     }
 
