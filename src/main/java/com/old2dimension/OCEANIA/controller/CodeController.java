@@ -1,10 +1,7 @@
 package com.old2dimension.OCEANIA.controller;
 
 import com.old2dimension.OCEANIA.bl.CodeBL;
-import com.old2dimension.OCEANIA.vo.VertexVO;
-import com.old2dimension.OCEANIA.vo.ResponseVO;
-import com.old2dimension.OCEANIA.vo.UserAndCodeForm;
-import com.old2dimension.OCEANIA.vo.VertexVOAndUserIdAndCodeId;
+import com.old2dimension.OCEANIA.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +43,11 @@ public class CodeController {
      * */
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public ResponseVO add(@RequestBody UserAndCodeForm userAndCodeForm){
-        return null;
+        return codeBL.addCode(userAndCodeForm);
+    }
+
+    @RequestMapping(value = "/modifyName")
+    public ResponseVO modifyName(@RequestBody CodeIdAndUserIdAndNameForm codeIdAndUserIdAndNameForm){
+        return codeBL.modifyName(codeIdAndUserIdAndNameForm);
     }
 }

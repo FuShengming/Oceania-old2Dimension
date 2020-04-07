@@ -34,6 +34,7 @@ id int auto_increment primary key,
 	code_id int NOT NULL,
 	vertex_id int NOT NULL,
 	content varchar(8192),
+	title varchar(255),
 	KEY vertex_identity(vertex_id),
  	CONSTRAINT vertex_fk_user_identity FOREIGN KEY(user_id) REFERENCES user(id) ON DELETE Cascade,
  	CONSTRAINT vertex_fk_code_id FOREIGN KEY(code_id) REFERENCES code(id)  ON DELETE Cascade
@@ -47,6 +48,7 @@ id int auto_increment primary key,
 	code_id int NOT NULL,
 	edge_id int NOT NULL,
 	content varchar(8192),
+	title varchar(255),
 	KEY edge_identity(edge_id),
  	CONSTRAINT edge_fk_user_identity FOREIGN KEY(user_id) REFERENCES user(id)  ON DELETE Cascade,
  	CONSTRAINT edge_fk_code_id FOREIGN KEY(code_id) REFERENCES code(id)  ON DELETE Cascade
@@ -60,6 +62,7 @@ create table if not exists domain_label(
 	first_edge_id int NOT NULL,
 	num_of_vertices int NOT NULL,
 	content varchar(8192),
+	title varchar(255),
 	KEY domain_identity(first_edge_id,num_of_vertices),
  	CONSTRAINT domain_fk_user_identity FOREIGN KEY(user_id) REFERENCES user(id)  ON DELETE Cascade,
  	CONSTRAINT domain_fk_code_id FOREIGN KEY(code_id) REFERENCES code(id)  ON DELETE Cascade
