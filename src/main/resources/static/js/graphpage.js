@@ -1,5 +1,229 @@
 $(function () {
 
+    let get_v_labels = function (vertexId) {
+        $.ajax({
+            type: "post",
+            url: "/label/getOneVertexLabel",
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                userId: 1,
+                codeId: 1,
+                vertexId: vertexId
+            }),
+            success: function (data) {
+                if (data.success) {
+                    console.log(data);
+                    let labels = data.content;
+                    let h = "";
+                    labels.forEach(function (label) {
+                        h += "<div class=\"card m-2\">\n" +
+                            "<h5 class=\"card-header\">" + label.title + "</h5>\n" +
+                            "<div class=\"card-body\">\n" +
+                            "<div class=\"card-text\">\n" +
+                            "<p>" + label.content.replace(/\n/g, "<br>") + "</p>\n" +
+                            "</div>\n" +
+                            "<div class=\"mt-3\" style=\"text-align: right\">\n" +
+                            "<button class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#labelModal\">Edit</button>\n" +
+                            "<button class=\"btn btn-danger\">Delete</button>\n" +
+                            "</div>\n" +
+                            "</div>\n" +
+                            "</div>";
+                    });
+                    $("#labels-container").html(h);
+                } else {
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    };
+    let get_e_labels = function (edgeId) {
+        $.ajax({
+            type: "post",
+            url: "/label/getOneEdgeLabel",
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                userId: 1,
+                codeId: 1,
+                edgeId: edgeId
+            }),
+            success: function (data) {
+                if (data.success) {
+                    console.log(data);
+                    let labels = data.content;
+                    let h = "";
+                    labels.forEach(function (label) {
+                        h += "<div class=\"card m-2\">\n" +
+                            "<h5 class=\"card-header\">" + label.title + "</h5>\n" +
+                            "<div class=\"card-body\">\n" +
+                            "<div class=\"card-text\">\n" +
+                            "<p>" + label.content.replace(/\n/g, "<br>") + "</p>\n" +
+                            "</div>\n" +
+                            "<div class=\"mt-3\" style=\"text-align: right\">\n" +
+                            "<button class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#labelModal\">Edit</button>\n" +
+                            "<button class=\"btn btn-danger\">Delete</button>\n" +
+                            "</div>\n" +
+                            "</div>\n" +
+                            "</div>";
+                    });
+                    $("#labels-container").html(h);
+                } else {
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    };
+    let get_d_labels = function (firstEdgeId, numOfVertex) {
+        $.ajax({
+            type: "post",
+            url: "/label/getOneDomainLabel",
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                userId: 1,
+                codeId: 1,
+                firstEdgeId: firstEdgeId,
+                numOfVertex: numOfVertex
+            }),
+            success: function (data) {
+                if (data.success) {
+                    console.log(data);
+                    let labels = data.content;
+                    let h = "";
+                    labels.forEach(function (label) {
+                        h += "<div class=\"card m-2\">\n" +
+                            "<h5 class=\"card-header\">" + label.title + "</h5>\n" +
+                            "<div class=\"card-body\">\n" +
+                            "<div class=\"card-text\">\n" +
+                            "<p>" + label.content.replace(/\n/g, "<br>") + "</p>\n" +
+                            "</div>\n" +
+                            "<div class=\"mt-3\" style=\"text-align: right\">\n" +
+                            "<button class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#labelModal\">Edit</button>\n" +
+                            "<button class=\"btn btn-danger\">Delete</button>\n" +
+                            "</div>\n" +
+                            "</div>\n" +
+                            "</div>";
+                    });
+                    $("#labels-container").html(h);
+                } else {
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    };
+
+    $("#label_submit").on('click', function () {
+        let type = $("#labelModal").attr("x-id")[0];
+        let x_id = Number($("#labelModal").attr("x-id").substring(1));
+        if (!$("#labelModal").attr("label-id") === undefined) {
+            console.log($("#labelModal").attr("label-id"))
+        }
+
+        console.log(type, x_id);
+        if (type === 'n') {
+            $.ajax({
+                type: "post",
+                url: "/label/noteVertex",
+                dataType: "json",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    id: $("#labelModal").attr("label-id"),
+                    userId: 1,
+                    codeId: 1,
+                    vertexId: x_id,
+                    title: $("#title-input").val(),
+                    content: $("#content-input").val()
+                }),
+                success: function (data) {
+                    if (data.success) {
+                        console.log("success");
+                        $("#labelModal").modal('hide');
+                        $("#title-input").val("");
+                        $("#content-input").val("");
+                        get_v_labels(x_id);
+                    } else {
+                        console.log(data.message);
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        } else if (type === 'e') {
+            $.ajax({
+                type: "post",
+                url: "/label/noteEdge",
+                dataType: "json",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    id: $("#labelModal").attr("label-id"),
+                    userId: 1,
+                    codeId: 1,
+                    edgeId: x_id,
+                    title: $("#title-input").val(),
+                    content: $("#content-input").val()
+                }),
+                success: function (data) {
+                    if (data.success) {
+                        console.log("success");
+                        $("#labelModal").modal('hide');
+                        $("#title-input").val("");
+                        $("#content-input").val("");
+                        get_e_labels(x_id);
+                    } else {
+                        console.log(data.message);
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        } else if (type === 'd') {
+            let firstEdgeId = $('#labelModal').attr("firstEdgeId");
+            let numOfVertex = $('#labelModal').attr("numOfVertex");
+            $.ajax({
+                type: "post",
+                url: "/label/noteDomain",
+                dataType: "json",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    firstEdgeId: firstEdgeId,
+                    numOfVertex: numOfVertex,
+                    id: $("#labelModal").attr("label-id"),
+                    userId: 1,
+                    codeId: 1,
+                    title: $("#title-input").val(),
+                    content: $("#content-input").val()
+                }),
+                success: function (data) {
+                    if (data.success) {
+                        console.log("success");
+                        $("#labelModal").modal('hide');
+                        $("#title-input").val("");
+                        $("#content-input").val("");
+
+                    } else {
+                        console.log(data.message);
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        }
+
+    });
+
     let update_info = function (v_num, e_num, d_num) {
         let t = "<tr><th scope=\"row\">Vertices</th><td>" + v_num.toString() + "</td></tr>" +
             "<tr><th scope=\"row\">Edges</th><td>" + e_num.toString() + "</td></tr>" +
@@ -214,7 +438,7 @@ $(function () {
             }),
             success: function (data) {
                 console.log(data);
-                $("#code-header").text(info["belongClass"] + ":\xa0" + info["funcName"] + "\xa0(" + info["args"].join(",\xa0") + ")");
+                $("#code-header").text(info["belongClass"] + ":" + info["funcName"] + "(" + info["args"].join(",") + ")");
                 if (data.success) {
                     $("#code-pre").html("<code>" + data.content + "</code>");
                 } else {
@@ -328,6 +552,8 @@ $(function () {
                 graphData.nodes.push({
                     data: {
                         id: 'd' + domain.id.toString(),
+                        numOfVertex: domain.vertices.length,
+                        firstEdgeId: domain.edgeVOS[0].id,
                     },
                     classes: ['domain'],
                 });
@@ -446,11 +672,18 @@ $(function () {
 
             cy.on('tap', 'node.vertex', function (event) {
                 expand_tree(event.target.data("id"));
+                get_v_labels(Number(event.target.data("id").substring(1)));
 
                 console.log('selected');
                 console.log(event.target.data());
                 let info = event.target.data("full_info");
                 get_code(info);
+            });
+            cy.on('tap', 'edge', function (event) {
+                get_e_labels(Number(event.target.data("id").substring(1)));
+            });
+            cy.on('tap', 'node.domain', function (event) {
+                get_d_labels(event.target.data("firstEdgeId"), event.target.data("numOfVertex"));
             });
 
             cy.cxtmenu({
@@ -488,7 +721,11 @@ $(function () {
                     {
                         content: '<span class="fa fa-bookmark fa-2x"></span>',
                         select: function (ele) {
-                            console.log(ele.position());
+                            cy.$('node,edge').unselect();
+                            ele.select();
+                            $("#labelModal").removeAttr('label-id');
+                            $("#labelModal").attr('x-id', ele.data("id"));
+                            $("#labelModal").modal('show');
                         }
                     }
                 ],
@@ -527,7 +764,11 @@ $(function () {
                     {
                         content: '<span class="fa fa-bookmark fa-2x"></span>',
                         select: function (ele) {
-                            console.log(ele.position());
+                            cy.$('node,edge').unselect();
+                            ele.select();
+                            $("#labelModal").removeAttr('label-id');
+                            $("#labelModal").attr('x-id', ele.data("id"));
+                            $("#labelModal").modal('show');
                         }
                     }
                 ],
@@ -570,7 +811,11 @@ $(function () {
                     {
                         content: '<span class="fa fa-bookmark fa-2x"></span>',
                         select: function (ele) {
-                            console.log(ele.position());
+                            cy.$('node,edge').unselect();
+                            ele.select();
+                            $("#labelModal").removeAttr('label-id');
+                            $("#labelModal").attr('x-id', ele.data("id"));
+                            $("#labelModal").modal('show');
                         }
                     }
                 ],
@@ -610,7 +855,11 @@ $(function () {
                     {
                         content: '<span class="fa fa-bookmark fa-2x"></span>',
                         select: function (ele) {
-                            console.log(ele.position());
+                            cy.$('node,edge').unselect();
+                            ele.select();
+                            $("#labelModal").removeAttr('label-id');
+                            $("#labelModal").attr('x-id', ele.data("id"));
+                            $("#labelModal").modal('show');
                         }
                     }
                 ],
@@ -632,7 +881,13 @@ $(function () {
                     {
                         content: '<span class="fa fa-bookmark fa-2x"></span>',
                         select: function (ele) {
-                            console.log(ele.position());
+                            cy.$('node,edge').unselect();
+                            ele.select();
+                            $("#labelModal").removeAttr('label-id');
+                            $("#labelModal").attr('x-id', ele.data("id"));
+                            $("#labelModal").attr('firstEdgeId', ele.data("firstEdgeId"));
+                            $("#labelModal").attr('numOfVertex', ele.data("numOfVertex"));
+                            $("#labelModal").modal('show');
                         }
                     }
                 ],
@@ -1015,6 +1270,8 @@ $(function () {
                     graphData.nodes.push({
                         data: {
                             id: 'd' + domain.id.toString(),
+                            numOfVertex: domain.vertices.length,
+                            firstEdgeId: domain.edgeVOS[0].id,
                         },
                         classes: ['domain'],
                     });
