@@ -29,18 +29,30 @@ public class DomainLabel {
     @Column(name = "num_of_vertices")
     private int numOfVertex;
 
+    @Column(name = "title")
+    private String title;
+
     @Column(name = "content")
     private String content;
 
-    public DomainLabel(int userId, int codeId, int firstEdgeId, int numOfVertex, String content) {
+    public DomainLabel(int userId, int codeId, int firstEdgeId, int numOfVertex, String title,String content) {
         this.userId = userId;
         this.codeId = codeId;
         this.firstEdgeId = firstEdgeId;
         this.numOfVertex = numOfVertex;
+        this.title=title;
         this.content = content;
     }
 
     public DomainLabel(){}
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public int getUserId() {
         return userId;

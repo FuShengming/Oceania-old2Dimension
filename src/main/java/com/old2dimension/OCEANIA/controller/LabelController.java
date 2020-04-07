@@ -46,17 +46,17 @@ public class LabelController {
 
     @RequestMapping(value = "/getOneVertexLabel",method = RequestMethod.POST)
     public ResponseVO getOneVertexLabel(@RequestBody VertexLabelVO vertexLabelVO){
-        return labelBL.getOneVertexLabel(vertexLabelVO);
+        return labelBL.getOneVertexLabels(vertexLabelVO);
     }
 
     @RequestMapping(value = "/getOneEdgeLabel",method = RequestMethod.POST)
     public ResponseVO getOneEdgeLabel(@RequestBody EdgeLabelVO edgeLabelVO){
-        return labelBL.getOneEdgeLabel(edgeLabelVO);
+        return labelBL.getOneEdgeLabels(edgeLabelVO);
     }
 
     @RequestMapping(value = "/getOneDomainLabel",method = RequestMethod.POST)
     public ResponseVO getOneDomainLabel(@RequestBody DomainLabelVO domainLabelVO){
-        return labelBL.getOneDomainLabel(domainLabelVO);
+        return labelBL.getOneDomainLabels(domainLabelVO);
     }
 
     @RequestMapping(value = "/getAllVertexLabels",method = RequestMethod.POST)
