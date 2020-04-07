@@ -24,13 +24,37 @@ $(function () {
                             "<p>" + label.content.replace(/\n/g, "<br>") + "</p>\n" +
                             "</div>\n" +
                             "<div class=\"mt-3\" style=\"text-align: right\">\n" +
-                            "<button class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#labelModal\">Edit</button>\n" +
-                            "<button class=\"btn btn-danger\">Delete</button>\n" +
+                            "<button class=\"btn btn-info label-edit\">Edit</button>\n" +
+                            "<button class=\"btn btn-danger label-del\" " + " labelId=" + label.id + ">Delete</button>\n" +
                             "</div>\n" +
                             "</div>\n" +
                             "</div>";
                     });
                     $("#labels-container").html(h);
+                    $(".label-del").on('click', function (event) {
+                        let id = Number($(event.target).attr('labelId'));
+                        $.ajax({
+                            type: "post",
+                            url: "/label/deleteVertexLabel",
+                            dataType: "json",
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                userId: 1,
+                                codeId: 1,
+                                id: id
+                            }),
+                            success: function (data) {
+                                if (data.success) {
+                                    get_v_labels(vertexId);
+                                } else {
+                                    console.log(data.message);
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    });
                 } else {
                     console.log(data.message);
                 }
@@ -65,12 +89,36 @@ $(function () {
                             "</div>\n" +
                             "<div class=\"mt-3\" style=\"text-align: right\">\n" +
                             "<button class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#labelModal\">Edit</button>\n" +
-                            "<button class=\"btn btn-danger\">Delete</button>\n" +
+                            "<button class=\"btn btn-danger label-del\" " + " labelId=" + label.id + ">Delete</button>\n" +
                             "</div>\n" +
                             "</div>\n" +
                             "</div>";
                     });
                     $("#labels-container").html(h);
+                    $(".label-del").on('click', function (event) {
+                        let id = Number($(event.target).attr('labelId'));
+                        $.ajax({
+                            type: "post",
+                            url: "/label/deleteEdgeLabel",
+                            dataType: "json",
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                userId: 1,
+                                codeId: 1,
+                                id: id
+                            }),
+                            success: function (data) {
+                                if (data.success) {
+                                    get_e_labels(edgeId);
+                                } else {
+                                    console.log(data.message);
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    });
                 } else {
                     console.log(data.message);
                 }
@@ -106,12 +154,36 @@ $(function () {
                             "</div>\n" +
                             "<div class=\"mt-3\" style=\"text-align: right\">\n" +
                             "<button class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#labelModal\">Edit</button>\n" +
-                            "<button class=\"btn btn-danger\">Delete</button>\n" +
+                            "<button class=\"btn btn-danger label-del\" " + " labelId=" + label.id + ">Delete</button>\n" +
                             "</div>\n" +
                             "</div>\n" +
                             "</div>";
                     });
                     $("#labels-container").html(h);
+                    $(".label-del").on('click', function (event) {
+                        let id = Number($(event.target).attr('labelId'));
+                        $.ajax({
+                            type: "post",
+                            url: "/label/deleteDomainLabel",
+                            dataType: "json",
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                userId: 1,
+                                codeId: 1,
+                                id: id
+                            }),
+                            success: function (data) {
+                                if (data.success) {
+                                    get_d_labels(firstEdgeId, numOfVertex);
+                                } else {
+                                    console.log(data.message);
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    });
                 } else {
                     console.log(data.message);
                 }
@@ -121,6 +193,7 @@ $(function () {
             }
         });
     };
+
 
     $("#label_submit").on('click', function () {
         let type = $("#labelModal").attr("x-id")[0];
@@ -211,7 +284,7 @@ $(function () {
                         $("#labelModal").modal('hide');
                         $("#title-input").val("");
                         $("#content-input").val("");
-
+                        get_d_labels(firstEdgeId, numOfVertex);
                     } else {
                         console.log(data.message);
                     }

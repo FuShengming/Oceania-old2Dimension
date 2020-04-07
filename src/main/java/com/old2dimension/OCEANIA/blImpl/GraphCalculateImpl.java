@@ -85,7 +85,7 @@ public class GraphCalculateImpl implements GraphCalculateBL {
     public ResponseVO getConnectedDomains(ArrayList<WeightForm> weightForms) {
         try {
             domainSet = filterByWeights(weightForms);
-            domainSet.sortByVerticesNum();
+//            domainSet.sortByVerticesNum();
 
             return ResponseVO.buildSuccess(new DomainSetVO(domainSet));
         } catch (Exception e) {
