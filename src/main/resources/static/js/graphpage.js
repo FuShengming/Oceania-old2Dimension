@@ -119,6 +119,36 @@ $(function () {
                             data: JSON.stringify([{id: start_id}, {id: end_id}]),
                             success: function (data) {
                                 console.log(data);
+                                let n = data.content.pathNum;
+                                let paths = data.content.pathVOS;
+                                if (n === 0) {
+                                    alert("No path found");
+                                    return;
+                                }
+                                let all_edges = [];
+                                let all_nodes = [];
+                                paths.forEach(function (path) {
+                                    path.edges.forEach(function (edge) {
+                                        let id = edge.id;
+                                        let e = cy.$id('e' + id.toString());
+                                        if (e.length === 0) {
+
+                                        } else {
+                                            all_edges.push(e[0]);
+                                            all_nodes.push(e[0].source());
+                                            all_nodes.push(e[0].target());
+                                        }
+                                    })
+                                });
+                                $("#searchModal").modal('hide');
+                                cy.$('node,edge').unselect();
+                                all_edges.forEach(function (edge) {
+                                    edge.select();
+                                });
+                                all_nodes.forEach(function (node) {
+                                    node.select();
+                                });
+                                cy.fit(cy.$('node:selected'), $('#cy_container').height() * 0.25);
                             },
                             error: function (err) {
                                 console.log(err);
@@ -1023,13 +1053,13 @@ $(function () {
                     data.content.domainSetVO.domainVOs.length);
 
                 cy.elements().remove();
+                $("#filterModal").modal('hide');
                 cy.json({
                     elements: {
                         nodes: graphData.nodes,
                         edges: graphData.edges,
                     }
                 });
-                $("#filterModal").modal('hide');
                 cy.layout(fcose_layout).run();
             },
             error: function (err) {
