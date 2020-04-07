@@ -1,8 +1,89 @@
 $(function () {
+
+    let update_info = function (v_num, e_num, d_num) {
+        let t = "<tr><th scope=\"row\">Vertices</th><td>" + v_num.toString() + "</td></tr>" +
+            "<tr><th scope=\"row\">Edges</th><td>" + e_num.toString() + "</td></tr>" +
+            "<tr><th scope=\"row\">Domains</th><td>" + d_num.toString() + "</td></tr>";
+        $("#info-table-body").html(t);
+    };
+
+    // constructs the suggestion engine
+    states = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.whitespace,
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        // `states` is an array of state names defined in "The Basics"
+        remote: {
+            url: '/graph/findVertex/%QUERY',
+            wildcard: '%QUERY',
+            transform: function (data) {
+                console.log(data);
+                let names = [];
+                data.content.forEach(function (func) {
+                    names.push(func.fullName);
+                });
+                // Map the remote source JSON array to a JavaScript object array
+                return names;
+            }
+        }
+    });
+
+    $('.typeahead').typeahead({
+        hint: true,
+        highlight: true,
+        minLength: 1
+    }, {
+        name: 'states',
+        source: states
+    });
+
+    $("#node-search-btn").on("click", function () {
+        if ($("#func-name-input").val() === "") {
+            alert("Input can't be empty.");
+        }
+        $.ajax({
+            type: "get",
+            url: "/graph/findVertex/" + $("#func-name-input").val(),
+            success: function (data) {
+                console.log(data);
+                if (data.content.length === 0) {
+                    alert("Can't find such node.");
+                    return;
+                }
+                if (data.content.length > 1) {
+                    alert("Input is ambiguous. You can choose it in the autocomplete menu.");
+                    return;
+                }
+                $("#searchModal").modal('hide');
+                let id = 'n' + data.content[0].id.toString();
+                console.log(id);
+                expand_tree(id);
+                cy.$('node,edge').unselect();
+                let n = cy.$id(id);
+                console.log(n);
+                if (n.length === 0) {
+                    alert("This node has been filtered out. Please adjust filter weights.")
+                } else {
+                    n.select();
+                    cy.fit(n, $('#cy_container').height() * 0.45);
+                    let info = n.data("full_info");
+                    get_code(info);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    });
+
     //initialize cytoscape
     let cy = cytoscape();
     let fcose_layout = {
         name: 'fcose',
+        // Represents the amount of the vertical space to put between the zero degree members during the tiling operation(can also be a function)
+        tilingPaddingVertical: 100,
+        // Represents the amount of the horizontal space to put between the zero degree members during the tiling operation(can also be a function)
+        tilingPaddingHorizontal: 100,
+        nodeRepulsion: 450000,
         idealEdgeLength: 150,
         stop: function () {
             $('#loading').hide();
@@ -98,7 +179,7 @@ $(function () {
                         let n = cy.$id('n' + data.vertexId.toString());
                         console.log(n);
                         if (n.length === 0) {
-                            alert("This function has been filtered out. Please adjust filter weight.")
+                            alert("This node has been filtered out. Please adjust filter weights.")
                         } else {
                             n.select();
                             cy.fit(n, $('#cy_container').height() * 0.45);
@@ -190,6 +271,9 @@ $(function () {
                 });
             });
             console.log(graphData);
+            update_info(graphData.nodes.length - data.content.domainSetVO.domainVOs.length,
+                graphData.edges.length,
+                data.content.domainSetVO.domainVOs.length);
 
             cy = cytoscape({
 
@@ -867,6 +951,11 @@ $(function () {
                         });
                     });
                 });
+
+                update_info(graphData.nodes.length - data.content.domainSetVO.domainVOs.length,
+                    graphData.edges.length,
+                    data.content.domainSetVO.domainVOs.length);
+
                 cy.elements().remove();
                 cy.json({
                     elements: {

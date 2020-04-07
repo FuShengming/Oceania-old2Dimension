@@ -145,6 +145,104 @@
                 transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
             }
         }
+
+        /*typeahead*/
+        span.twitter-typeahead .tt-menu {
+            cursor: pointer;
+        }
+
+        .input-group > .twitter-typeahead {
+            position: relative;
+            -ms-flex: 1 1 auto;
+            -webkit-box-flex: 1;
+            flex: 1 1 auto;
+            width: 1%;
+            margin-bottom: 0;
+        }
+
+        .input-group > .twitter-typeahead:not(:last-child) {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .input-group > .twitter-typeahead > .tt-input {
+            border-radius: 0 0.25rem 0.25rem 0;
+        }
+
+        .form-control.tt-input:focus {
+            z-index: 3
+        }
+
+        .dropdown-menu, span.twitter-typeahead .tt-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            display: none;
+            float: left;
+            min-width: 160px;
+            padding: 5px 0;
+            margin: 2px 0 0;
+            font-size: 1rem;
+            color: #373a3c;
+            text-align: left;
+            list-style: none;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 0.25rem;
+        }
+
+        span.twitter-typeahead .tt-suggestion {
+            display: block;
+            width: 100%;
+            padding: 3px 20px;
+            clear: both;
+            font-weight: normal;
+            line-height: 1.5;
+            color: #373a3c;
+            text-align: inherit;
+            white-space: nowrap;
+            background: none;
+            border: 0;
+        }
+
+        span.twitter-typeahead .tt-suggestion:focus, .dropdown-item:hover, span.twitter-typeahead .tt-suggestion:hover {
+            color: #2b2d2f;
+            text-decoration: none;
+            background-color: #f5f5f5;
+        }
+
+        span.twitter-typeahead .active.tt-suggestion, span.twitter-typeahead .tt-suggestion.tt-cursor, span.twitter-typeahead .active.tt-suggestion:focus, span.twitter-typeahead .tt-suggestion.tt-cursor:focus, span.twitter-typeahead .active.tt-suggestion:hover, span.twitter-typeahead .tt-suggestion.tt-cursor:hover {
+            color: #fff;
+            text-decoration: none;
+            background-color: #0275d8;
+            outline: 0;
+        }
+
+        span.twitter-typeahead .disabled.tt-suggestion, span.twitter-typeahead .disabled.tt-suggestion:focus, span.twitter-typeahead .disabled.tt-suggestion:hover {
+            color: #818a91;
+        }
+
+        span.twitter-typeahead .disabled.tt-suggestion:focus, span.twitter-typeahead .disabled.tt-suggestion:hover {
+            text-decoration: none;
+            cursor: not-allowed;
+            background-color: transparent;
+            background-image: none;
+            filter: "progid:DXImageTransform.Microsoft.gradient(enabled = false)";
+        }
+
+        span.twitter-typeahead {
+            width: 100%;
+        }
+
+        .input-group span.twitter-typeahead {
+            display: block !important;
+        }
+
+        .input-group span.twitter-typeahead .tt-menu {
+            top: 2.375rem !important;
+        }
     </style>
     <title>Call Graph</title>
 </head>
@@ -164,6 +262,8 @@
 <script src="../js/cytoscape-cose-bilkent.js"></script>
 
 <script src="../js/cytoscape-extmenu.js"></script>
+
+<script src="../js/typeahead.bundle.min.js"></script>
 
 <script type="text/javascript" src="../js/graphpage.js"></script>
 
@@ -191,12 +291,12 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon1">Function Name</span>
                             </div>
-                            <input type="text" class="form-control" placeholder="" aria-label="func-name"
-                                   aria-describedby="basic-addon1">
+                            <input type="text" class="form-control typeahead" data-provide="typeahead" placeholder=""
+                                   aria-label="func-name" aria-describedby="basic-addon1" id="func-name-input">
                         </div>
                         <div class="p-0" style="text-align: right">
                             <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
-                            <button type="button" class="btn btn-primary m-2">SEARCH</button>
+                            <button type="button" class="btn btn-primary m-2" id="node-search-btn">SEARCH</button>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="search-paths" role="tabpanel" aria-labelledby="search-paths-tab">
@@ -205,18 +305,18 @@
                                 <span class="input-group-text" id="basic-addon2">Start Node</span>
                             </div>
                             <input type="text" class="form-control" placeholder="" aria-label="start-node"
-                                   aria-describedby="basic-addon2">
+                                   aria-describedby="basic-addon2" id="start-node-input">
                         </div>
                         <div class="input-group my-4">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon3">End Node</span>
                             </div>
                             <input type="text" class="form-control" placeholder="" aria-label="end-node"
-                                   aria-describedby="basic-addon3">
+                                   aria-describedby="basic-addon3" id="end-node-input">
                         </div>
                         <div class="p-0" style="text-align: right">
                             <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
-                            <button type="button" class="btn btn-primary m-2">SEARCH</button>
+                            <button type="button" class="btn btn-primary m-2" id="path-search-btn">SEARCH</button>
                         </div>
                     </div>
                 </div>
@@ -268,6 +368,39 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
                 <button type="button" class="btn btn-primary m-2" id="filter_search">SEARCH</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Info-->
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Statics</h3>
+            </div>
+            <div class="modal-body">
+                <h4>Count</h4>
+                <table class="table table-bordered">
+                    <tbody id="info-table-body">
+                    <tr>
+                        <th scope="row">Vertices</th>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Edges</th>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Domains</th>
+                        <td>0</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
             </div>
         </div>
     </div>
@@ -334,7 +467,7 @@ height: 100%;
                 <i class="fa fa-search"></i></button>
             <button class="btn btn-warning btn-float" data-toggle="modal" data-target="#filterModal">
                 <i class="fa fa-filter"></i></button>
-            <button class="btn btn-primary btn-float">
+            <button class="btn btn-primary btn-float" data-toggle="modal" data-target="#infoModal">
                 <i class="fa fa-info"></i></button>
         </div>
         <div id="cy_container"></div>
@@ -351,27 +484,10 @@ height: 100%;
         <hr style="border-top: 2px dashed #999; width: 80%">
 
         <div class="card m-2">
-            <h5 class="card-header">Label1</h5>
+            <h5 class="card-header">Label</h5>
             <div class="card-body">
                 <div class="card-text">
-                    <p>This is an Impl to get connected domains.</p>
-                    <p>This is long long long long long long long long long long long long long long long long long long
-                        long sentence.</p>
-                </div>
-                <div class="mt-3" style="text-align: right">
-                    <button class="btn btn-info">Edit</button>
-                    <button class="btn btn-danger">Delete</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="card m-2">
-            <h5 class="card-header">Label2</h5>
-            <div class="card-body">
-                <div class="card-text">
-                    <p>This is an Impl to get connected domains.</p>
-                    <p>This is long long long long long long long long long long long long long long long long long long
-                        long sentence.</p>
+                    <p>Add labels to any nodes, edges or domains in the right-click menu.</p>
                 </div>
                 <div class="mt-3" style="text-align: right">
                     <button class="btn btn-info">Edit</button>
