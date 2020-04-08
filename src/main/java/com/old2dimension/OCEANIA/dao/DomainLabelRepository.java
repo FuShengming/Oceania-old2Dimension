@@ -20,4 +20,5 @@ public interface DomainLabelRepository extends JpaRepository<DomainLabel, Intege
     void deleteDomainLabelById(int id);
 
     DomainLabel findDomainLabelById(int id);
+    List<DomainLabel> findDomainLabelsByCodeIdAndUserId(int codeId,int userId);
 }

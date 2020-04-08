@@ -26,7 +26,7 @@ public class LabelBLImplTest {
         VertexLabel vertexLabel = new VertexLabel(1, 1, 1,"mytile", "rua");
         List<VertexLabel> vertexLabels = new ArrayList<VertexLabel>();
         //vertexLabels.add(vertexLabel);
-        when(vertexLabelRepository.findVertexLabelsByCodeIdAndUserIdAndVertexId(1, 1,1)).thenReturn(vertexLabels);
+        when(vertexLabelRepository.findVertexLabelsByCodeIdAndUserId(1, 1)).thenReturn(vertexLabels);
         when(vertexLabelRepository.save(vertexLabel)).thenReturn(vertexLabel);
 
         ResponseVO responseVO = labelBL.noteVertex(vertexLabelVO);
@@ -42,7 +42,7 @@ public class LabelBLImplTest {
         EdgeLabel edgeLabel = new EdgeLabel(1, 1, 1,"mytile", "rua");
         List<EdgeLabel> edgeLabels = new ArrayList<EdgeLabel>();
         //vertexLabels.add(vertexLabel);
-        when(edgeLabelRepository.findEdgeLabelsByCodeIdAndUserIdAndEdgeId(1, 1,1)).thenReturn(edgeLabels);
+        when(edgeLabelRepository.findEdgeLabelsByCodeIdAndUserId(1,1)).thenReturn(edgeLabels);
         when(edgeLabelRepository.save(edgeLabel)).thenReturn(edgeLabel);
 
         ResponseVO responseVO = labelBL.noteEdge(edgeLabelVO);
@@ -59,7 +59,7 @@ public class LabelBLImplTest {
         DomainLabel domainLabel = new DomainLabel(1, 1, 1, 1, "title","rua");
         List<DomainLabel> domainLabels = new ArrayList<DomainLabel>();
 
-        when(domainLabelRepository.findDomainLabelsByCodeIdAndUserIdAndFirstEdgeIdAndNumOfVertex(1, 1,1, 1)).thenReturn(domainLabels);
+        when(domainLabelRepository.findDomainLabelsByCodeIdAndUserId(1, 1)).thenReturn(domainLabels);
         when(domainLabelRepository.save(domainLabel)).thenReturn(domainLabel);
 
         ResponseVO responseVO = labelBL.noteDomain(domainLabelVO);
@@ -170,7 +170,7 @@ public class LabelBLImplTest {
         ArrayList<VertexLabel> vertexLabelArrayList = new ArrayList<>();
         VertexLabel vertexLabel = new VertexLabel(1, 1, 1,"title", "rua");
         vertexLabelArrayList.add(vertexLabel);
-        when(vertexLabelRepository.findVertexLabelsByCodeId(1)).thenReturn(vertexLabelArrayList);
+        when(vertexLabelRepository.findVertexLabelsByCodeIdAndUserId(1,1)).thenReturn(vertexLabelArrayList);
 
         ResponseVO responseVO = labelBL.getAllVertexLabel(userAndCodeForm);
         Assert.assertEquals(((ArrayList<VertexLabel>) responseVO.getContent()).size(), 1);
@@ -186,7 +186,7 @@ public class LabelBLImplTest {
         ArrayList<EdgeLabel> edgeLabelArrayList = new ArrayList<>();
         EdgeLabel edgeLabel = new EdgeLabel(1, 1, 1,"title", "rua");
         edgeLabelArrayList.add(edgeLabel);
-        when(edgeLabelRepository.findEdgeLabelsByCodeId(1)).thenReturn(edgeLabelArrayList);
+        when(edgeLabelRepository.findEdgeLabelsByCodeIdAndUserId(1,1)).thenReturn(edgeLabelArrayList);
 
         ResponseVO responseVO = labelBL.getAllEdgeLabel(userAndCodeForm);
         Assert.assertEquals(((ArrayList<EdgeLabel>) responseVO.getContent()).size(), 1);
@@ -202,7 +202,7 @@ public class LabelBLImplTest {
         ArrayList<DomainLabel> domainLabelArrayList = new ArrayList<>();
         DomainLabel domainLabel = new DomainLabel(1, 1, 1, 1,"title", "rua");
         domainLabelArrayList.add(domainLabel);
-        when(domainLabelRepository.findDomainLabelsByCodeId(1)).thenReturn(domainLabelArrayList);
+        when(domainLabelRepository.findDomainLabelsByCodeIdAndUserId(1,1)).thenReturn(domainLabelArrayList);
 
         ResponseVO responseVO = labelBL.getAllDomainLabel(userAndCodeForm);
         Assert.assertEquals(((ArrayList<DomainLabel>) responseVO.getContent()).size(), 1);
