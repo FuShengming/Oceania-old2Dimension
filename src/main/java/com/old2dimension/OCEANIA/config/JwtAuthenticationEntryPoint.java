@@ -28,7 +28,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text");
         PrintWriter printWriter = response.getWriter();
-        String body = "没有访问权限！";
+        String body = "No permission!";
         printWriter.write(body);
         printWriter.flush();
     }

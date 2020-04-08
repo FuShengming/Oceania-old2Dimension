@@ -22,7 +22,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text");
         PrintWriter printWriter = response.getWriter();
-        String body = "没有访问权限！";
+        String body = "No Permission!";
         printWriter.write(body);
         printWriter.flush();
     }

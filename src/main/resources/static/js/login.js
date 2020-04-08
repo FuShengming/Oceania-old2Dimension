@@ -107,8 +107,8 @@ function login() {
         success: function (res, textStatus, request) {
             if (res === "login success") {
                 let token = request.getResponseHeader("token");
-                localStorage.setItem("token", token)
-                //$(window).attr("location", "/graphpage") //todo
+                localStorage.setItem("token", token);
+                $(window).attr("location", "/graphpage")
             }
             else if (res === "authentication failed, reason: Bad credentials") {
                 $("#password-warn").addClass("password-error-msg")
@@ -118,7 +118,7 @@ function login() {
             }
         },
         error: function (res) {
-            console.log(res)
+            console.log(res);
             alert("error occurred")
         }
     })

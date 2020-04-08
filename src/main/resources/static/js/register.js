@@ -147,8 +147,8 @@ function register() {
         data: JSON.stringify(formData),
         success: function (res) {
             if (res.success) {
-                localStorage.setItem("token", res.content.token)
-                //$(window).attr("location", "/graphpage") //todo
+                localStorage.setItem("token", res.content.token);
+                $(window).attr("location", "/graphpage")
             }
             else if (res.message === "用户名已存在") {
                 $("#username-warn").addClass("password-error-msg")
