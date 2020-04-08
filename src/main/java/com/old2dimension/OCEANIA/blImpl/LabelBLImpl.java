@@ -114,7 +114,7 @@ public class LabelBLImpl implements LabelBL {
             DomainLabel d = new DomainLabel(
                     domainLabelVO.getUserId(), domainLabelVO.getCodeId(), domainLabelVO.getFirstEdgeId(), domainLabelVO.getNumOfVertex(),domainLabelVO.getTitle(), domainLabelVO.getContent());
 
-            if (domainLabels.size() == 0) {
+            if (domainLabels.size() == 0&&domainLabelVO.getId()==0) {
                                domainLabelRepository.save(d);
                 return ResponseVO.buildSuccess(d);
             } else {
@@ -133,6 +133,7 @@ public class LabelBLImpl implements LabelBL {
                     return ResponseVO.buildSuccess(existedLabel);
                 }
                 else{
+
                     domainLabelRepository.save(d);
                     return ResponseVO.buildSuccess(d);
                 }
@@ -152,8 +153,9 @@ public class LabelBLImpl implements LabelBL {
             if (vertexLabel == null) {
                 return ResponseVO.buildFailure("no such label");
             } else {
-                if(vertexLabel.getUserId() != vertexLabelVO.getUserId()){
-                    return ResponseVO.buildFailure("label does not match user");
+                if(vertexLabel.getUserId() != vertexLabelVO.getUserId()||vertexLabel.getCodeId() != vertexLabelVO.getCodeId() ||
+                        vertexLabel.getVertexId()!=vertexLabelVO.getVertexId()){
+                    return ResponseVO.buildFailure("label match error");
                 }
                 System.out.println(vertexLabelVO.getId());
                 vertexLabelRepository.deleteVertexLabelById(vertexLabelVO.getId());
@@ -173,8 +175,9 @@ public class LabelBLImpl implements LabelBL {
             if (edgeLabel == null) {
                 return ResponseVO.buildFailure("no such label");
             } else {
-                if(edgeLabel.getUserId() != edgeLabelVO.getUserId()){
-                    return ResponseVO.buildFailure("label does not match user");
+                if(edgeLabel.getUserId() != edgeLabelVO.getUserId() || edgeLabel.getCodeId() != edgeLabelVO.getCodeId() ||
+                edgeLabel.getEdgeId() != edgeLabelVO.getEdgeId()){
+                    return ResponseVO.buildFailure("label match error");
                 }
                 System.out.println(edgeLabelVO.getId());
                edgeLabelRepository.deleteEdgeLabelById(edgeLabelVO.getId());
@@ -194,8 +197,9 @@ public class LabelBLImpl implements LabelBL {
             if (domainLabel == null) {
                 return ResponseVO.buildFailure("no such label");
             } else {
-                if(domainLabel.getUserId() != domainLabelVO.getUserId()){
-                    return ResponseVO.buildFailure("label does not match user");
+                if(domainLabel.getUserId() != domainLabelVO.getUserId()||domainLabel.getCodeId() != domainLabelVO.getCodeId()
+                ||domainLabel.getFirstEdgeId()!= domainLabelVO.getFirstEdgeId() || domainLabel.getNumOfVertex() != domainLabelVO.getNumOfVertex()){
+                    return ResponseVO.buildFailure("label match error");
                 }
                 domainLabelRepository.deleteDomainLabelById(domainLabelVO.getId());
                 return ResponseVO.buildSuccess("delete label successfully");
