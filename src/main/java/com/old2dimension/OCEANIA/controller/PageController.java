@@ -21,4 +21,14 @@ public class PageController {
     public String cy() {
         return "/html/cytotest.html";
     }
+
+    @RequestMapping("/login")
+    public String login() {
+        return "/html/login.html";
+    }
+
+    @RequestMapping("/register")
+    public String register() {
+        return "/html/register.html";
+    }
 }

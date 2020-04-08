@@ -30,6 +30,16 @@ $(document).ready(function () {
         $(".password-input").get(0).focus();
     });
 
+    $(".password-input").bind("focus", function () {
+        $("#password-warn").removeClass("password-error-msg")
+            .addClass("hidden-error").addClass("input-required-error").text("");
+    });
+
+    $(".username-input").bind("focus", function () {
+        $("#password-warn").removeClass("password-error-msg")
+            .addClass("hidden-error").addClass("input-required-error").text("");
+    });
+
     $(".username-input").bind("blur", function (event) {
         let username = event.target.value;
         if (username.length === 0) {
@@ -53,7 +63,7 @@ $(document).ready(function () {
     });
 
     $(".captcha-input").bind("focus", function (event) {
-            $("#captcha-warn").addClass("hidden-error")
+            $("#captcha-warn").addClass("hidden-error").addClass("input-required-error")
                 .removeClass("captcha-error").text("")
     });
 
@@ -94,42 +104,24 @@ function login() {
         type: "POST",
         contentType:'application/json;charset=utf-8',
         data: JSON.stringify(formData),
-        success: function (res) {
-            if (res.success) {
-                localStorage.setItem("token", res.content.token)
+        success: function (res, textStatus, request) {
+            if (res === "login success") {
+                let token = request.getResponseHeader("token");
+                localStorage.setItem("token", token)
                 //$(window).attr("location", "/graphpage") //todo
             }
-            else if (res.message === "name or pwd is not correct") {
+            else if (res === "authentication failed, reason: Bad credentials") {
                 $("#password-warn").addClass("password-error-msg")
-                    .removeClass("hidden-error").removeClass("input-required-error").text("用户名已存在")
+                    .removeClass("hidden-error").removeClass("input-required-error").text("用户名或密码错误");
+                $(".captcha-input").val("");
+                draw()
             }
         },
         error: function (res) {
             console.log(res)
+            alert("error occurred")
         }
     })
-
-    // postRequest(
-    //     '/user/login',
-    //     formData,
-    //     function (res) {
-    //         if (res.success) {
-    //             sessionStorage.setItem('username', formData.username);
-    //             sessionStorage.setItem('id', res.content.id);
-    //             if (formData.name == "root") {
-    //                 sessionStorage.setItem('role', 'admin');
-    //                 window.location.href = "/admin/movie/manage"
-    //             } else {
-    //                 sessionStorage.setItem('role', 'user');
-    //                 window.location.href = "/user/home"
-    //             }
-    //         } else {
-    //             alert(res.message);
-    //         }
-    //     },
-    //     function (error) {
-    //         alert(error)
-    //     });
 }
 
 function getLoginForm() {
