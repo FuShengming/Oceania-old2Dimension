@@ -27,6 +27,8 @@ public class GraphCalculateImpl implements GraphCalculateBL {
 
     public ArrayList<Vertex> allVertexes;
     private boolean[][] visited;
+    int curUserId;
+    int curCodeId;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -51,6 +53,8 @@ public class GraphCalculateImpl implements GraphCalculateBL {
             return ResponseVO.buildFailure("no such code");
         }
         if(curCode.getIs_default()==1){
+            curUserId=userAndCodeForm.getUserId();
+            curCodeId=userAndCodeForm.getCodeId();
             System.out.println("iTrust");
             initializeGraph("call_dependencies_update.txt");
             WeightForm weightForm = new WeightForm();

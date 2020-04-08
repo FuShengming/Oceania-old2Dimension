@@ -465,10 +465,20 @@ public class CodeBLImpl implements CodeBL {
 
     public ResponseVO getCodeStructure(UserAndCodeForm userAndCodeForm) {
         //GraphCalculateImpl graphCalculate = new GraphCalculateImpl();
-        ResponseVO responseVO = graphCalculate.getGraph(userAndCodeForm);
-        if (!responseVO.isSuccess())
-            return responseVO;
-        ArrayList<Vertex> vertices = graphCalculate.getAllVertexes();
+//        ResponseVO responseVO = graphCalculate.getGraph(userAndCodeForm);
+//        if (!responseVO.isSuccess())
+//            return responseVO;
+        System.out.println("user:"+graphCalculate.curUserId);
+        System.out.println("code:"+graphCalculate.curCodeId);
+        ArrayList<Vertex> vertices =  graphCalculate.getAllVertexes();
+        if(userAndCodeForm.getCodeId()!=graphCalculate.curCodeId||userAndCodeForm.getUserId()!=graphCalculate.curUserId){
+            ResponseVO responseVO = graphCalculate.getGraph(userAndCodeForm);
+            if (!responseVO.isSuccess()){
+                return responseVO;
+            }
+            vertices = graphCalculate.allVertexes;
+        }
+
 
         String basicPath = "analyzeCode/src";
         String rootPath = "edu";
