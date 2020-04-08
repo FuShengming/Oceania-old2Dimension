@@ -18,19 +18,26 @@ $(function () {
                     let h = "";
                     labels.forEach(function (label) {
                         h += "<div class=\"card m-2\">\n" +
-                            "<h5 class=\"card-header\">" + label.title + "</h5>\n" +
+                            "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
                             "<div class=\"card-body\">\n" +
-                            "<div class=\"card-text\">\n" +
-                            "<p>" + label.content.replace(/\n/g, "<br>") + "</p>\n" +
+                            "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
+                            label.content.replace(/\n/g, "<br>") +
                             "</div>\n" +
                             "<div class=\"mt-3\" style=\"text-align: right\">\n" +
-                            "<button class=\"btn btn-info label-edit\">Edit</button>\n" +
+                            "<button class=\"btn btn-info label-edit\" " + " labelId=" + label.id + ">Edit</button>\n" +
                             "<button class=\"btn btn-danger label-del\" " + " labelId=" + label.id + ">Delete</button>\n" +
                             "</div>\n" +
                             "</div>\n" +
                             "</div>";
                     });
                     $("#labels-container").html(h);
+                    $(".label-edit").on('click', function (event) {
+                        let id = $(event.target).attr('labelId');
+                        $("#labelModal").attr("x-id", 'n' + id);
+                        $("#title-input").val($("#lt-" + id).text());
+                        $("#content-input").val($("#lc-" + id).html().replace(/<br>/g, "\n"));
+                        $("#labelModal").modal('show');
+                    });
                     $(".label-del").on('click', function (event) {
                         let id = Number($(event.target).attr('labelId'));
                         $.ajax({
@@ -82,19 +89,26 @@ $(function () {
                     let h = "";
                     labels.forEach(function (label) {
                         h += "<div class=\"card m-2\">\n" +
-                            "<h5 class=\"card-header\">" + label.title + "</h5>\n" +
+                            "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
                             "<div class=\"card-body\">\n" +
-                            "<div class=\"card-text\">\n" +
-                            "<p>" + label.content.replace(/\n/g, "<br>") + "</p>\n" +
+                            "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
+                            label.content.replace(/\n/g, "<br>") +
                             "</div>\n" +
                             "<div class=\"mt-3\" style=\"text-align: right\">\n" +
-                            "<button class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#labelModal\">Edit</button>\n" +
+                            "<button class=\"btn btn-info label-edit\" " + " labelId=" + label.id + ">Edit</button>\n" +
                             "<button class=\"btn btn-danger label-del\" " + " labelId=" + label.id + ">Delete</button>\n" +
                             "</div>\n" +
                             "</div>\n" +
                             "</div>";
                     });
                     $("#labels-container").html(h);
+                    $(".label-edit").on('click', function (event) {
+                        let id = $(event.target).attr('labelId');
+                        $("#labelModal").attr("x-id", 'n' + id);
+                        $("#title-input").val($("#lt-" + id).text());
+                        $("#content-input").val($("#lc-" + id).html().replace(/<br>/g, "\n"));
+                        $("#labelModal").modal('show');
+                    });
                     $(".label-del").on('click', function (event) {
                         let id = Number($(event.target).attr('labelId'));
                         $.ajax({
@@ -147,19 +161,26 @@ $(function () {
                     let h = "";
                     labels.forEach(function (label) {
                         h += "<div class=\"card m-2\">\n" +
-                            "<h5 class=\"card-header\">" + label.title + "</h5>\n" +
+                            "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
                             "<div class=\"card-body\">\n" +
-                            "<div class=\"card-text\">\n" +
-                            "<p>" + label.content.replace(/\n/g, "<br>") + "</p>\n" +
+                            "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
+                            label.content.replace(/\n/g, "<br>") +
                             "</div>\n" +
                             "<div class=\"mt-3\" style=\"text-align: right\">\n" +
-                            "<button class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#labelModal\">Edit</button>\n" +
+                            "<button class=\"btn btn-info label-edit\" " + " labelId=" + label.id + ">Edit</button>\n" +
                             "<button class=\"btn btn-danger label-del\" " + " labelId=" + label.id + ">Delete</button>\n" +
                             "</div>\n" +
                             "</div>\n" +
                             "</div>";
                     });
                     $("#labels-container").html(h);
+                    $(".label-edit").on('click', function (event) {
+                        let id = $(event.target).attr('labelId');
+                        $("#labelModal").attr("x-id", 'n' + id);
+                        $("#title-input").val($("#lt-" + id).text());
+                        $("#content-input").val($("#lc-" + id).html().replace(/<br>/g, "\n"));
+                        $("#labelModal").modal('show');
+                    });
                     $(".label-del").on('click', function (event) {
                         let id = Number($(event.target).attr('labelId'));
                         $.ajax({
@@ -221,8 +242,6 @@ $(function () {
                     if (data.success) {
                         console.log("success");
                         $("#labelModal").modal('hide');
-                        $("#title-input").val("");
-                        $("#content-input").val("");
                         get_v_labels(x_id);
                     } else {
                         console.log(data.message);
@@ -250,8 +269,6 @@ $(function () {
                     if (data.success) {
                         console.log("success");
                         $("#labelModal").modal('hide');
-                        $("#title-input").val("");
-                        $("#content-input").val("");
                         get_e_labels(x_id);
                     } else {
                         console.log(data.message);
@@ -282,8 +299,6 @@ $(function () {
                     if (data.success) {
                         console.log("success");
                         $("#labelModal").modal('hide');
-                        $("#title-input").val("");
-                        $("#content-input").val("");
                         get_d_labels(firstEdgeId, numOfVertex);
                     } else {
                         console.log(data.message);
@@ -768,6 +783,7 @@ $(function () {
                         content: '<span class="fa fa-arrows-alt fa-2x"></span>',
                         select: function (ele) {
                             expand_tree(ele.data("id"));
+                            get_v_labels(Number(ele.data("id").substring(1)));
 
                             let info = ele.data("full_info");
                             get_code(info);
@@ -800,6 +816,8 @@ $(function () {
                             ele.select();
                             $("#labelModal").removeAttr('label-id');
                             $("#labelModal").attr('x-id', ele.data("id"));
+                            $("#title-input").val("");
+                            $("#content-input").val("");
                             $("#labelModal").modal('show');
                         }
                     }
@@ -815,6 +833,8 @@ $(function () {
                     {
                         content: '<span class="fa fa-arrows-alt fa-2x"></span>',
                         select: function (ele) {
+                            get_e_labels(Number(ele.data("id").substring(1)));
+
                             cy.$('node,edge').unselect();
                             console.log('this id', ele.id());
                             ele.select();
@@ -843,6 +863,8 @@ $(function () {
                             ele.select();
                             $("#labelModal").removeAttr('label-id');
                             $("#labelModal").attr('x-id', ele.data("id"));
+                            $("#title-input").val("");
+                            $("#content-input").val("");
                             $("#labelModal").modal('show');
                         }
                     }
@@ -859,6 +881,7 @@ $(function () {
                         content: '<span class="fa fa-arrows-alt fa-2x"></span>',
                         select: function (ele) {
                             expand_tree(ele.data("id"));
+                            get_v_labels(Number(ele.data("id").substring(1)));
 
                             let info = ele.data("full_info");
                             get_code(info);
@@ -890,6 +913,8 @@ $(function () {
                             ele.select();
                             $("#labelModal").removeAttr('label-id');
                             $("#labelModal").attr('x-id', ele.data("id"));
+                            $("#title-input").val("");
+                            $("#content-input").val("");
                             $("#labelModal").modal('show');
                         }
                     }
@@ -905,6 +930,8 @@ $(function () {
                     {
                         content: '<span class="fa fa-arrows-alt fa-2x"></span>',
                         select: function (ele) {
+                            get_e_labels(Number(ele.data("id").substring(1)));
+
                             cy.$('node,edge').unselect();
                             console.log('this id', ele.id());
                             ele.select();
@@ -934,6 +961,8 @@ $(function () {
                             ele.select();
                             $("#labelModal").removeAttr('label-id');
                             $("#labelModal").attr('x-id', ele.data("id"));
+                            $("#title-input").val("");
+                            $("#content-input").val("");
                             $("#labelModal").modal('show');
                         }
                     }
@@ -956,12 +985,16 @@ $(function () {
                     {
                         content: '<span class="fa fa-bookmark fa-2x"></span>',
                         select: function (ele) {
+                            get_d_labels(ele.data("firstEdgeId"), ele.data("numOfVertex"));
+
                             cy.$('node,edge').unselect();
                             ele.select();
                             $("#labelModal").removeAttr('label-id');
                             $("#labelModal").attr('x-id', ele.data("id"));
                             $("#labelModal").attr('firstEdgeId', ele.data("firstEdgeId"));
                             $("#labelModal").attr('numOfVertex', ele.data("numOfVertex"));
+                            $("#title-input").val("");
+                            $("#content-input").val("");
                             $("#labelModal").modal('show');
                         }
                     }
