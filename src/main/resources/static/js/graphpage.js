@@ -513,7 +513,7 @@ $(function () {
                 console.log(data);
                 $("#code-header").text(info["belongClass"] + ":" + info["funcName"] + "(" + info["args"].join(",") + ")");
                 if (data.success) {
-                    $("#code-pre").html("<code>" + data.content + "</code>");
+                    $("#code-pre").html("<code>" + data.content.replace(/\n\t/g, "\n").substring(1) + "</code>");
                 } else {
                     $("#code-pre").html("<code>" + data.message + "</code>");
                 }
@@ -615,8 +615,10 @@ $(function () {
             userId: 1,
             codeId: 1
         }),
+        timeout: 10000,
         success: function (data) {
             console.log(data);
+            console.log(JSON.stringify(data).length);
             let graphData = {
                 nodes: [],
                 edges: [],
@@ -1335,6 +1337,7 @@ $(function () {
             }]),
             success: function (data) {
                 console.log(data);
+                console.log(JSON.stringify(data).length);
                 let graphData = {
                     nodes: [],
                     edges: [],
