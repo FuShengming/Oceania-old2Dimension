@@ -20,9 +20,9 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         System.out.println("认证失败：" + e.getMessage());
         response.setStatus(200);
         response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json; charset=utf-8");
+        response.setContentType("text");
         PrintWriter printWriter = response.getWriter();
-        String body = ResponseVO.buildFailure("没有访问权限！").toString();
+        String body = "没有访问权限！";
         printWriter.write(body);
         printWriter.flush();
     }
