@@ -21,6 +21,18 @@ $(function () {
             }
         });
     });
+    $("#export-btn").on('click', function () {
+        let img = cy.jpg({scala: 10, full: true});
+        // let link = $("<a>");
+        // link.attr("href", img);
+        // link.attr("download", "graph.png");
+        // link.trigger('click');
+        let link = document.createElement('a');
+        link.href = img;
+        link.download = "download.jpg";
+        link.click();
+        delete link;
+    });
     let get_v_labels = function (vertexId) {
         $.ajax({
             type: "post",
