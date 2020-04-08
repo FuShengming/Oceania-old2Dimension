@@ -37,8 +37,8 @@ public class LabelBLImpl implements LabelBL {
 
     public ResponseVO noteVertex(VertexLabelVO vertexLabelVO) {
         try{
-            List<VertexLabel> vertexLabels = vertexLabelRepository.findVertexLabelsByCodeIdAndUserIdAndVertexId(
-                    vertexLabelVO.getCodeId(), vertexLabelVO.getUserId(),vertexLabelVO.getVertexId());
+            List<VertexLabel> vertexLabels = vertexLabelRepository.findVertexLabelsByCodeIdAndUserId(
+                    vertexLabelVO.getCodeId(), vertexLabelVO.getUserId());
             VertexLabel v = new VertexLabel(
                     vertexLabelVO.getUserId(), vertexLabelVO.getCodeId(), vertexLabelVO.getVertexId(),vertexLabelVO.getTitle(), vertexLabelVO.getContent());
             if (vertexLabels.size() == 0) {
@@ -60,8 +60,13 @@ public class LabelBLImpl implements LabelBL {
                     return ResponseVO.buildSuccess(existedLabel);
                 }
                 else{
+                    if(vertexLabelVO.getId()==0){
                     vertexLabelRepository.save(v);
                     return ResponseVO.buildSuccess(v);
+                    }
+                    else{
+                        return ResponseVO.buildFailure("the vertex label to update does not exist");
+                    }
                 }
             }
         } catch(Exception e) {
@@ -73,8 +78,8 @@ public class LabelBLImpl implements LabelBL {
 
     public ResponseVO noteEdge(EdgeLabelVO edgeLabelVO) {
         try{
-            List<EdgeLabel> edgeLabels = edgeLabelRepository.findEdgeLabelsByCodeIdAndUserIdAndEdgeId(
-                    edgeLabelVO.getCodeId(), edgeLabelVO.getUserId(),edgeLabelVO.getEdgeId());
+            List<EdgeLabel> edgeLabels = edgeLabelRepository.findEdgeLabelsByCodeIdAndUserId(
+                    edgeLabelVO.getCodeId(), edgeLabelVO.getUserId());
            EdgeLabel e = new EdgeLabel(edgeLabelVO.getUserId(),edgeLabelVO.getEdgeId(),edgeLabelVO.getCodeId(),edgeLabelVO.getTitle(),edgeLabelVO.getContent());
             if (edgeLabels.size() == 0) {
                 edgeLabelRepository.save(e);
@@ -96,8 +101,13 @@ public class LabelBLImpl implements LabelBL {
                     return ResponseVO.buildSuccess(existedLabel);
                 }
                 else{
+                    if(edgeLabelVO.getId()==0){
                     edgeLabelRepository.save(e);
                     return ResponseVO.buildSuccess(e);
+                    }
+                    else{
+                        return ResponseVO.buildFailure("the edge label to update does not exist");
+                    }
                 }
             }
         } catch(Exception e) {
@@ -109,8 +119,8 @@ public class LabelBLImpl implements LabelBL {
 
     public ResponseVO noteDomain(DomainLabelVO domainLabelVO) {
         try {
-            List<DomainLabel> domainLabels = domainLabelRepository.findDomainLabelsByCodeIdAndUserIdAndFirstEdgeIdAndNumOfVertex(
-                    domainLabelVO.getCodeId(), domainLabelVO.getUserId(),domainLabelVO.getFirstEdgeId(), domainLabelVO.getNumOfVertex());
+            List<DomainLabel> domainLabels = domainLabelRepository.findDomainLabelsByCodeIdAndUserId(
+                    domainLabelVO.getCodeId(), domainLabelVO.getUserId());
             DomainLabel d = new DomainLabel(
                     domainLabelVO.getUserId(), domainLabelVO.getCodeId(), domainLabelVO.getFirstEdgeId(), domainLabelVO.getNumOfVertex(),domainLabelVO.getTitle(), domainLabelVO.getContent());
 
@@ -133,9 +143,13 @@ public class LabelBLImpl implements LabelBL {
                     return ResponseVO.buildSuccess(existedLabel);
                 }
                 else{
-
+                    if(domainLabelVO.getId()==0){
                     domainLabelRepository.save(d);
                     return ResponseVO.buildSuccess(d);
+                    }
+                    else{
+                        return ResponseVO.buildFailure("the domain label to update does not exist");
+                    }
                 }
             }
         } catch(Exception e) {
@@ -153,8 +167,7 @@ public class LabelBLImpl implements LabelBL {
             if (vertexLabel == null) {
                 return ResponseVO.buildFailure("no such label");
             } else {
-                if(vertexLabel.getUserId() != vertexLabelVO.getUserId()||vertexLabel.getCodeId() != vertexLabelVO.getCodeId() ||
-                        vertexLabel.getVertexId()!=vertexLabelVO.getVertexId()){
+                if(vertexLabel.getUserId() != vertexLabelVO.getUserId()||vertexLabel.getCodeId() != vertexLabelVO.getCodeId()){
                     return ResponseVO.buildFailure("label match error");
                 }
                 System.out.println(vertexLabelVO.getId());
@@ -175,8 +188,7 @@ public class LabelBLImpl implements LabelBL {
             if (edgeLabel == null) {
                 return ResponseVO.buildFailure("no such label");
             } else {
-                if(edgeLabel.getUserId() != edgeLabelVO.getUserId() || edgeLabel.getCodeId() != edgeLabelVO.getCodeId() ||
-                edgeLabel.getEdgeId() != edgeLabelVO.getEdgeId()){
+                if(edgeLabel.getUserId() != edgeLabelVO.getUserId() || edgeLabel.getCodeId() != edgeLabelVO.getCodeId()){
                     return ResponseVO.buildFailure("label match error");
                 }
                 System.out.println(edgeLabelVO.getId());
@@ -197,8 +209,7 @@ public class LabelBLImpl implements LabelBL {
             if (domainLabel == null) {
                 return ResponseVO.buildFailure("no such label");
             } else {
-                if(domainLabel.getUserId() != domainLabelVO.getUserId()||domainLabel.getCodeId() != domainLabelVO.getCodeId()
-                ||domainLabel.getFirstEdgeId()!= domainLabelVO.getFirstEdgeId() || domainLabel.getNumOfVertex() != domainLabelVO.getNumOfVertex()){
+                if(domainLabel.getUserId() != domainLabelVO.getUserId()||domainLabel.getCodeId() != domainLabelVO.getCodeId()){
                     return ResponseVO.buildFailure("label match error");
                 }
                 domainLabelRepository.deleteDomainLabelById(domainLabelVO.getId());
@@ -251,17 +262,17 @@ public class LabelBLImpl implements LabelBL {
 
     public ResponseVO getAllVertexLabel(UserAndCodeForm userAndCodeForm) {
         ArrayList<VertexLabel> res = (ArrayList<VertexLabel>) vertexLabelRepository.
-                findVertexLabelsByCodeId(userAndCodeForm.getCodeId());
+                findVertexLabelsByCodeIdAndUserId(userAndCodeForm.getCodeId(),userAndCodeForm.getUserId());
         return ResponseVO.buildSuccess(res);
     }
 
     public ResponseVO getAllEdgeLabel(UserAndCodeForm userAndCodeForm) {
-        ArrayList<EdgeLabel> res = (ArrayList<EdgeLabel>) edgeLabelRepository.findEdgeLabelsByCodeId(userAndCodeForm.getCodeId());
+        ArrayList<EdgeLabel> res = (ArrayList<EdgeLabel>) edgeLabelRepository.findEdgeLabelsByCodeIdAndUserId(userAndCodeForm.getCodeId(),userAndCodeForm.getUserId());
         return ResponseVO.buildSuccess(res);
     }
 
     public ResponseVO getAllDomainLabel(UserAndCodeForm userAndCodeForm) {
-        ArrayList<DomainLabel> res = (ArrayList<DomainLabel>) domainLabelRepository.findDomainLabelsByCodeId(userAndCodeForm.getCodeId());
+        ArrayList<DomainLabel> res = (ArrayList<DomainLabel>) domainLabelRepository.findDomainLabelsByCodeIdAndUserId(userAndCodeForm.getCodeId(),userAndCodeForm.getUserId());
         return ResponseVO.buildSuccess(res);
     }
 
