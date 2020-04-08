@@ -1,5 +1,26 @@
 $(function () {
-
+    $("#save-btn").on('click', function () {
+        $.ajax({
+            type: "post",
+            url: "/workSpace/save",
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                userId: 1,
+                codeId: 1,
+                date: new Date(),
+                closeness: 0.5,
+                cyInfo: JSON.stringify(cy.json())
+            }),
+            success: function (data) {
+                if (data.success) alert("Success");
+                else alert(data.message);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    });
     let get_v_labels = function (vertexId) {
         $.ajax({
             type: "post",
@@ -511,6 +532,12 @@ $(function () {
             $('#loading').hide();
         }
     };
+    let preset_layout = {
+        name: 'preset',
+        stop: function () {
+            $('#loading').hide();
+        }
+    };
 
     //code on the right
     let get_code = function (info) {
@@ -623,393 +650,425 @@ $(function () {
 
     $.ajax({
         type: "post",
-        url: "/graph/getGraph",
+        url: "/workSpace/recover",
         dataType: "json",
         contentType: 'application/json',
         data: JSON.stringify({
             userId: 1,
             codeId: 1
         }),
-        timeout: 10000,
         success: function (data) {
-            console.log(data);
-            console.log(JSON.stringify(data).length);
-            let graphData = {
-                nodes: [],
-                edges: [],
-            };
-            data.content.domainSetVO.domainVOs.forEach(function (domain) {
-                graphData.nodes.push({
-                    data: {
-                        id: 'd' + domain.id.toString(),
-                        numOfVertex: domain.vertices.length,
-                        firstEdgeId: domain.edgeVOS[0].id,
-                    },
-                    classes: ['domain'],
-                });
-                let vertices = domain.vertices;
-                vertices.forEach(function (vertex) {
-                    graphData.nodes.push({
-                        data: {
-                            id: 'n' + vertex.id.toString(),
-                            label: vertex.funcName,
-                            parent: 'd' + domain.id.toString(),
-                            full_info: {
-                                belongPackage: vertex.belongPackage,
-                                belongClass: vertex.belongClass,
-                                funcName: vertex.funcName,
-                                args: vertex.args,
-                            }
-                        },
-                        classes: ['vertex'],
-                    });
-                });
-                let edges = domain.edgeVOS;
-                edges.forEach(function (edge) {
-                    graphData.edges.push({
-                        data: {
-                            id: 'e' + edge.id.toString(),
-                            source: 'n' + edge.start.id.toString(),
-                            target: 'n' + edge.end.id.toString(),
-                            closeness: edge.weights[0].weightValue
-                        }
-                    });
-                });
-            });
-            console.log(graphData);
-            update_info(graphData.nodes.length - data.content.domainSetVO.domainVOs.length,
-                graphData.edges.length,
-                data.content.domainSetVO.domainVOs.length);
-
-            cy = cytoscape({
-
-                container: document.getElementById('cy_container'), // container to render in
-
-                elements: {
-                    nodes: graphData.nodes,
-                    edges: graphData.edges,
-                },
-
-                style: [ // the stylesheet for the graph
-                    {
-                        selector: 'node.vertex',
-                        style: {
-                            'background-color': '#9EC9FF',
-                            'border-width': 1,
-                            'border-color': '#5B8FF9'
-                        }
-                    },
-                    {
-                        selector: 'edge',
-                        style: {
-                            'width': 3,
-                            'opacity': 'data(closeness)',
-                            'line-color': '#5B8FF9',
-                            'curve-style': 'straight',
-                            'target-endpoint': 'outside-to-node',
-                            'target-arrow-shape': 'vee',
-                            'target-arrow-color': '#5B8FF9',
-                            'target-arrow-fill': 'filled',
-                            'arrow-scale': 2
-                        }
-                    },
-                    {
-                        selector: 'node[label]',
-                        style: {
-                            'label': 'data(label)',
-                            'font-family': 'SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                        }
-                    },
-                    {
-                        selector: 'node.domain',
-                        style: {
-                            'background-opacity': 0.1,
-                            'background-color': '#9EC9FF',
-                            'border-color': '#9EC9FF'
-                        }
-                    },
-                    {
-                        selector: 'node.favor',
-                        style: {
-                            'background-color': '#f2c0ff',
-                            'border-color': '#e295ec',
-                        }
-                    },
-                    {
-                        selector: 'edge.favor',
-                        style: {
-                            'line-color': '#e295ec',
-                            'target-arrow-color': '#e295ec',
-                        }
-                    },
-                    {
-                        selector: 'node:selected',
-                        style: {
-                            'background-color': '#b8ffcb',
-                            'border-color': '#33e17e',
-                        }
-                    },
-                    {
-                        selector: 'edge:selected',
-                        style: {
-                            'line-color': '#33e17e',
-                            'target-arrow-color': '#33e17e',
-                        }
-                    },
-                ],
-            });
-            cy.layout(cose_bilkent_layout).run();
-
-            cy.on('tap', 'node.vertex', function (event) {
-                expand_tree(event.target.data("id"));
-                get_v_labels(Number(event.target.data("id").substring(1)));
-
-                console.log('selected');
-                console.log(event.target.data());
-                let info = event.target.data("full_info");
-                get_code(info);
-            });
-            cy.on('tap', 'edge', function (event) {
-                get_e_labels(Number(event.target.data("id").substring(1)));
-            });
-            cy.on('tap', 'node.domain', function (event) {
-                get_d_labels(event.target.data("firstEdgeId"), event.target.data("numOfVertex"));
-            });
-
-            cy.cxtmenu({
-                selector: 'node.vertex.favor',
-                commands: [
-                    {
-                        content: '<span class="fa fa-arrows-alt fa-2x"></span>',
-                        select: function (ele) {
-                            expand_tree(ele.data("id"));
-                            get_v_labels(Number(ele.data("id").substring(1)));
-
-                            let info = ele.data("full_info");
-                            get_code(info);
-
-                            cy.$('node,edge').unselect();
-                            console.log('this id', ele.id());
-                            ele.select();
-                            let neighborhoods = ele.neighborhood();
-                            neighborhoods.forEach(function (nb) {
-                                console.log('neighbor id', nb.id());
-                                nb.select();
-                            });
-                            cy.fit(cy.$('node:selected'), $('#cy_container').height() * 0.25);
-                        }
-                    },
-
-                    {
-                        content: '<span style="color:#faff62;" class="fa fa-lightbulb-o fa-2x"></span>',
-                        select: function (ele) {
-                            ele.removeClass('favor');
-                            ele.removeData('favor');
-                        },
-                        // enabled: false
-                    },
-
-                    {
-                        content: '<span class="fa fa-bookmark fa-2x"></span>',
-                        select: function (ele) {
-                            cy.$('node,edge').unselect();
-                            ele.select();
-                            $("#labelModal").removeAttr('label-id');
-                            $("#labelModal").attr('x-id', ele.data("id"));
-                            $("#title-input").val("");
-                            $("#content-input").val("");
-                            $("#labelModal").modal('show');
-                        }
-                    }
-                ],
-                menuRadius: 70,
-                indicatorSize: 12,
-                minSpotlightRadius: 12,
-            });
-
-            cy.cxtmenu({
-                selector: 'edge.favor',
-                commands: [
-                    {
-                        content: '<span class="fa fa-arrows-alt fa-2x"></span>',
-                        select: function (ele) {
-                            get_e_labels(Number(ele.data("id").substring(1)));
-
-                            cy.$('node,edge').unselect();
-                            console.log('this id', ele.id());
-                            ele.select();
-                            let neighborhoods = ele.neighborhood();
-                            neighborhoods.forEach(function (nb) {
-                                console.log('neighbor id', nb.id());
-                                nb.select();
-                            });
-                            cy.fit(cy.$('node:selected'), $('#cy_container').height() * 0.25);
-                        }
-                    },
-
-                    {
-                        content: '<span style="color:#faff62;" class="fa fa-lightbulb-o fa-2x"></span>',
-                        select: function (ele) {
-                            ele.removeClass('favor');
-                            ele.removeData('favor');
-                        },
-                        // enabled: false
-                    },
-
-                    {
-                        content: '<span class="fa fa-bookmark fa-2x"></span>',
-                        select: function (ele) {
-                            cy.$('node,edge').unselect();
-                            ele.select();
-                            $("#labelModal").removeAttr('label-id');
-                            $("#labelModal").attr('x-id', ele.data("id"));
-                            $("#title-input").val("");
-                            $("#content-input").val("");
-                            $("#labelModal").modal('show');
-                        }
-                    }
-                ],
-                menuRadius: 70,
-                indicatorSize: 12,
-                minSpotlightRadius: 12,
-            });
-
-            cy.cxtmenu({
-                selector: 'node.vertex[^favor]',
-                commands: [
-                    {
-                        content: '<span class="fa fa-arrows-alt fa-2x"></span>',
-                        select: function (ele) {
-                            expand_tree(ele.data("id"));
-                            get_v_labels(Number(ele.data("id").substring(1)));
-
-                            let info = ele.data("full_info");
-                            get_code(info);
-
-                            cy.$('node,edge').unselect();
-                            console.log('this id', ele.id());
-                            ele.select();
-                            let neighborhoods = ele.neighborhood();
-                            neighborhoods.forEach(function (nb) {
-                                console.log('neighbor id', nb.id());
-                                nb.select();
-                            });
-                            cy.fit(cy.$('node:selected'), $('#cy_container').height() * 0.25);
-                        }
-                    },
-
-                    {
-                        content: '<span class="fa fa-lightbulb-o fa-2x"></span>',
-                        select: function (ele) {
-                            ele.addClass('favor');
-                            ele.data('favor', true);
-                        },
-                    },
-
-                    {
-                        content: '<span class="fa fa-bookmark fa-2x"></span>',
-                        select: function (ele) {
-                            cy.$('node,edge').unselect();
-                            ele.select();
-                            $("#labelModal").removeAttr('label-id');
-                            $("#labelModal").attr('x-id', ele.data("id"));
-                            $("#title-input").val("");
-                            $("#content-input").val("");
-                            $("#labelModal").modal('show');
-                        }
-                    }
-                ],
-                menuRadius: 70,
-                indicatorSize: 12,
-                minSpotlightRadius: 12,
-            });
-
-            cy.cxtmenu({
-                selector: 'edge[^favor]',
-                commands: [
-                    {
-                        content: '<span class="fa fa-arrows-alt fa-2x"></span>',
-                        select: function (ele) {
-                            get_e_labels(Number(ele.data("id").substring(1)));
-
-                            cy.$('node,edge').unselect();
-                            console.log('this id', ele.id());
-                            ele.select();
-                            ele.source().select();
-                            ele.target().select();
-                            cy.fit(cy.$('node:selected'), $('#cy_container').height() * 0.25);
-                        }
-                    },
-
-                    {
-                        content: '<span class="fa fa-lightbulb-o fa-2x"></span>',
-                        select: function (ele) {
-                            ele.addClass('favor');
-                            ele.data('favor', true);
-                            ele.source().addClass('favor');
-                            ele.source().data('favor', true);
-                            ele.target().addClass('favor');
-                            ele.target().data('favor', true);
-                        },
-                        // enabled: false
-                    },
-
-                    {
-                        content: '<span class="fa fa-bookmark fa-2x"></span>',
-                        select: function (ele) {
-                            cy.$('node,edge').unselect();
-                            ele.select();
-                            $("#labelModal").removeAttr('label-id');
-                            $("#labelModal").attr('x-id', ele.data("id"));
-                            $("#title-input").val("");
-                            $("#content-input").val("");
-                            $("#labelModal").modal('show');
-                        }
-                    }
-                ],
-                menuRadius: 70,
-                indicatorSize: 12,
-                minSpotlightRadius: 12,
-            });
-
-            cy.cxtmenu({
-                selector: 'node.domain',
-                commands: [
-                    {
-                        content: '<span class="fa fa-arrows-alt fa-2x"></span>',
-                        select: function (ele) {
-                            cy.fit(ele);
-                        }
-                    },
-
-                    {
-                        content: '<span class="fa fa-bookmark fa-2x"></span>',
-                        select: function (ele) {
-                            get_d_labels(ele.data("firstEdgeId"), ele.data("numOfVertex"));
-
-                            cy.$('node,edge').unselect();
-                            ele.select();
-                            $("#labelModal").removeAttr('label-id');
-                            $("#labelModal").attr('x-id', ele.data("id"));
-                            $("#labelModal").attr('firstEdgeId', ele.data("firstEdgeId"));
-                            $("#labelModal").attr('numOfVertex', ele.data("numOfVertex"));
-                            $("#title-input").val("");
-                            $("#content-input").val("");
-                            $("#labelModal").modal('show');
-                        }
-                    }
-                ],
-                menuRadius: 70,
-                indicatorSize: 12,
-                minSpotlightRadius: 12,
-            });
-
-            console.log(JSON.stringify(cy.json()).length);
+            if (data.success) {
+                console.log(JSON.parse(data.content.cyInfo));
+                cy = cytoscape({container: document.getElementById('cy_container')});
+                cy.json(JSON.parse(data.content.cyInfo));
+                cy.layout(preset_layout).run();
+                setCyEvents();
+            } else {
+                getGraph();
+            }
         },
         error: function (err) {
             console.log(err);
         }
     });
+
+    let setCyEvents = function () {
+        cy.on('tap', 'node.vertex', function (event) {
+            expand_tree(event.target.data("id"));
+            get_v_labels(Number(event.target.data("id").substring(1)));
+
+            console.log('selected');
+            console.log(event.target.data());
+            let info = event.target.data("full_info");
+            get_code(info);
+        });
+        cy.on('tap', 'edge', function (event) {
+            get_e_labels(Number(event.target.data("id").substring(1)));
+        });
+        cy.on('tap', 'node.domain', function (event) {
+            get_d_labels(event.target.data("firstEdgeId"), event.target.data("numOfVertex"));
+        });
+
+        cy.cxtmenu({
+            selector: 'node.vertex.favor',
+            commands: [
+                {
+                    content: '<span class="fa fa-arrows-alt fa-2x"></span>',
+                    select: function (ele) {
+                        expand_tree(ele.data("id"));
+                        get_v_labels(Number(ele.data("id").substring(1)));
+
+                        let info = ele.data("full_info");
+                        get_code(info);
+
+                        cy.$('node,edge').unselect();
+                        console.log('this id', ele.id());
+                        ele.select();
+                        let neighborhoods = ele.neighborhood();
+                        neighborhoods.forEach(function (nb) {
+                            console.log('neighbor id', nb.id());
+                            nb.select();
+                        });
+                        cy.fit(cy.$('node:selected'), $('#cy_container').height() * 0.25);
+                    }
+                },
+
+                {
+                    content: '<span style="color:#faff62;" class="fa fa-lightbulb-o fa-2x"></span>',
+                    select: function (ele) {
+                        ele.removeClass('favor');
+                        ele.removeData('favor');
+                    },
+                    // enabled: false
+                },
+
+                {
+                    content: '<span class="fa fa-bookmark fa-2x"></span>',
+                    select: function (ele) {
+                        cy.$('node,edge').unselect();
+                        ele.select();
+                        $("#labelModal").removeAttr('label-id');
+                        $("#labelModal").attr('x-id', ele.data("id"));
+                        $("#title-input").val("");
+                        $("#content-input").val("");
+                        $("#labelModal").modal('show');
+                    }
+                }
+            ],
+            menuRadius: 70,
+            indicatorSize: 12,
+            minSpotlightRadius: 12,
+        });
+
+        cy.cxtmenu({
+            selector: 'edge.favor',
+            commands: [
+                {
+                    content: '<span class="fa fa-arrows-alt fa-2x"></span>',
+                    select: function (ele) {
+                        get_e_labels(Number(ele.data("id").substring(1)));
+
+                        cy.$('node,edge').unselect();
+                        console.log('this id', ele.id());
+                        ele.select();
+                        let neighborhoods = ele.neighborhood();
+                        neighborhoods.forEach(function (nb) {
+                            console.log('neighbor id', nb.id());
+                            nb.select();
+                        });
+                        cy.fit(cy.$('node:selected'), $('#cy_container').height() * 0.25);
+                    }
+                },
+
+                {
+                    content: '<span style="color:#faff62;" class="fa fa-lightbulb-o fa-2x"></span>',
+                    select: function (ele) {
+                        ele.removeClass('favor');
+                        ele.removeData('favor');
+                    },
+                    // enabled: false
+                },
+
+                {
+                    content: '<span class="fa fa-bookmark fa-2x"></span>',
+                    select: function (ele) {
+                        cy.$('node,edge').unselect();
+                        ele.select();
+                        $("#labelModal").removeAttr('label-id');
+                        $("#labelModal").attr('x-id', ele.data("id"));
+                        $("#title-input").val("");
+                        $("#content-input").val("");
+                        $("#labelModal").modal('show');
+                    }
+                }
+            ],
+            menuRadius: 70,
+            indicatorSize: 12,
+            minSpotlightRadius: 12,
+        });
+
+        cy.cxtmenu({
+            selector: 'node.vertex[^favor]',
+            commands: [
+                {
+                    content: '<span class="fa fa-arrows-alt fa-2x"></span>',
+                    select: function (ele) {
+                        expand_tree(ele.data("id"));
+                        get_v_labels(Number(ele.data("id").substring(1)));
+
+                        let info = ele.data("full_info");
+                        get_code(info);
+
+                        cy.$('node,edge').unselect();
+                        console.log('this id', ele.id());
+                        ele.select();
+                        let neighborhoods = ele.neighborhood();
+                        neighborhoods.forEach(function (nb) {
+                            console.log('neighbor id', nb.id());
+                            nb.select();
+                        });
+                        cy.fit(cy.$('node:selected'), $('#cy_container').height() * 0.25);
+                    }
+                },
+
+                {
+                    content: '<span class="fa fa-lightbulb-o fa-2x"></span>',
+                    select: function (ele) {
+                        ele.addClass('favor');
+                        ele.data('favor', true);
+                    },
+                },
+
+                {
+                    content: '<span class="fa fa-bookmark fa-2x"></span>',
+                    select: function (ele) {
+                        cy.$('node,edge').unselect();
+                        ele.select();
+                        $("#labelModal").removeAttr('label-id');
+                        $("#labelModal").attr('x-id', ele.data("id"));
+                        $("#title-input").val("");
+                        $("#content-input").val("");
+                        $("#labelModal").modal('show');
+                    }
+                }
+            ],
+            menuRadius: 70,
+            indicatorSize: 12,
+            minSpotlightRadius: 12,
+        });
+
+        cy.cxtmenu({
+            selector: 'edge[^favor]',
+            commands: [
+                {
+                    content: '<span class="fa fa-arrows-alt fa-2x"></span>',
+                    select: function (ele) {
+                        get_e_labels(Number(ele.data("id").substring(1)));
+
+                        cy.$('node,edge').unselect();
+                        console.log('this id', ele.id());
+                        ele.select();
+                        ele.source().select();
+                        ele.target().select();
+                        cy.fit(cy.$('node:selected'), $('#cy_container').height() * 0.25);
+                    }
+                },
+
+                {
+                    content: '<span class="fa fa-lightbulb-o fa-2x"></span>',
+                    select: function (ele) {
+                        ele.addClass('favor');
+                        ele.data('favor', true);
+                        ele.source().addClass('favor');
+                        ele.source().data('favor', true);
+                        ele.target().addClass('favor');
+                        ele.target().data('favor', true);
+                    },
+                    // enabled: false
+                },
+
+                {
+                    content: '<span class="fa fa-bookmark fa-2x"></span>',
+                    select: function (ele) {
+                        cy.$('node,edge').unselect();
+                        ele.select();
+                        $("#labelModal").removeAttr('label-id');
+                        $("#labelModal").attr('x-id', ele.data("id"));
+                        $("#title-input").val("");
+                        $("#content-input").val("");
+                        $("#labelModal").modal('show');
+                    }
+                }
+            ],
+            menuRadius: 70,
+            indicatorSize: 12,
+            minSpotlightRadius: 12,
+        });
+
+        cy.cxtmenu({
+            selector: 'node.domain',
+            commands: [
+                {
+                    content: '<span class="fa fa-arrows-alt fa-2x"></span>',
+                    select: function (ele) {
+                        cy.fit(ele);
+                    }
+                },
+
+                {
+                    content: '<span class="fa fa-bookmark fa-2x"></span>',
+                    select: function (ele) {
+                        get_d_labels(ele.data("firstEdgeId"), ele.data("numOfVertex"));
+
+                        cy.$('node,edge').unselect();
+                        ele.select();
+                        $("#labelModal").removeAttr('label-id');
+                        $("#labelModal").attr('x-id', ele.data("id"));
+                        $("#labelModal").attr('firstEdgeId', ele.data("firstEdgeId"));
+                        $("#labelModal").attr('numOfVertex', ele.data("numOfVertex"));
+                        $("#title-input").val("");
+                        $("#content-input").val("");
+                        $("#labelModal").modal('show');
+                    }
+                }
+            ],
+            menuRadius: 70,
+            indicatorSize: 12,
+            minSpotlightRadius: 12,
+        });
+    };
+
+    let getGraph = function () {
+        $.ajax({
+            type: "post",
+            url: "/graph/getGraph",
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                userId: 1,
+                codeId: 1
+            }),
+            timeout: 10000,
+            success: function (data) {
+                console.log(data);
+                console.log(JSON.stringify(data).length);
+                let graphData = {
+                    nodes: [],
+                    edges: [],
+                };
+                data.content.domainSetVO.domainVOs.forEach(function (domain) {
+                    graphData.nodes.push({
+                        data: {
+                            id: 'd' + domain.id.toString(),
+                            numOfVertex: domain.vertices.length,
+                            firstEdgeId: domain.edgeVOS[0].id,
+                        },
+                        classes: ['domain'],
+                    });
+                    let vertices = domain.vertices;
+                    vertices.forEach(function (vertex) {
+                        graphData.nodes.push({
+                            data: {
+                                id: 'n' + vertex.id.toString(),
+                                label: vertex.funcName,
+                                parent: 'd' + domain.id.toString(),
+                                full_info: {
+                                    belongPackage: vertex.belongPackage,
+                                    belongClass: vertex.belongClass,
+                                    funcName: vertex.funcName,
+                                    args: vertex.args,
+                                }
+                            },
+                            classes: ['vertex'],
+                        });
+                    });
+                    let edges = domain.edgeVOS;
+                    edges.forEach(function (edge) {
+                        graphData.edges.push({
+                            data: {
+                                id: 'e' + edge.id.toString(),
+                                source: 'n' + edge.start.id.toString(),
+                                target: 'n' + edge.end.id.toString(),
+                                closeness: edge.weights[0].weightValue
+                            }
+                        });
+                    });
+                });
+                console.log(graphData);
+                update_info(graphData.nodes.length - data.content.domainSetVO.domainVOs.length,
+                    graphData.edges.length,
+                    data.content.domainSetVO.domainVOs.length);
+
+                cy = cytoscape({
+
+                    container: document.getElementById('cy_container'), // container to render in
+
+                    elements: {
+                        nodes: graphData.nodes,
+                        edges: graphData.edges,
+                    },
+
+                    style: [ // the stylesheet for the graph
+                        {
+                            selector: 'node.vertex',
+                            style: {
+                                'background-color': '#9EC9FF',
+                                'border-width': 1,
+                                'border-color': '#5B8FF9'
+                            }
+                        },
+                        {
+                            selector: 'edge',
+                            style: {
+                                'width': 3,
+                                'opacity': 'data(closeness)',
+                                'line-color': '#5B8FF9',
+                                'curve-style': 'straight',
+                                'target-endpoint': 'outside-to-node',
+                                'target-arrow-shape': 'vee',
+                                'target-arrow-color': '#5B8FF9',
+                                'target-arrow-fill': 'filled',
+                                'arrow-scale': 2
+                            }
+                        },
+                        {
+                            selector: 'node[label]',
+                            style: {
+                                'label': 'data(label)',
+                                'font-family': 'SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                            }
+                        },
+                        {
+                            selector: 'node.domain',
+                            style: {
+                                'background-opacity': 0.1,
+                                'background-color': '#9EC9FF',
+                                'border-color': '#9EC9FF'
+                            }
+                        },
+                        {
+                            selector: 'node.favor',
+                            style: {
+                                'background-color': '#f2c0ff',
+                                'border-color': '#e295ec',
+                            }
+                        },
+                        {
+                            selector: 'edge.favor',
+                            style: {
+                                'line-color': '#e295ec',
+                                'target-arrow-color': '#e295ec',
+                            }
+                        },
+                        {
+                            selector: 'node:selected',
+                            style: {
+                                'background-color': '#b8ffcb',
+                                'border-color': '#33e17e',
+                            }
+                        },
+                        {
+                            selector: 'edge:selected',
+                            style: {
+                                'line-color': '#33e17e',
+                                'target-arrow-color': '#33e17e',
+                            }
+                        },
+                    ],
+                });
+                cy.layout(cose_bilkent_layout).run();
+
+                setCyEvents();
+
+                console.log(JSON.stringify(cy.json()).length);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    };
+
     // $.ajax({
     //     type: "post",
     //     url: "/graphql",

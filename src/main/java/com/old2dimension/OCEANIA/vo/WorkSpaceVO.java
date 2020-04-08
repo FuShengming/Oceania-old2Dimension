@@ -12,16 +12,19 @@ public class WorkSpaceVO {
     public void setId(int id) {
         this.id = id;
     }
+
     private int userId;
     private int codeId;
     private Date date;
     private double closeness;
+    private String cyInfo;
 
-    public WorkSpaceVO(int userId, int codeId, Date date, double closeness) {
+    public WorkSpaceVO(int userId, int codeId, Date date, double closeness, String cyInfo) {
         this.userId = userId;
         this.codeId = codeId;
         this.date = date;
         this.closeness = closeness;
+        this.cyInfo = cyInfo;
     }
 
     public int getUserId() {
@@ -54,5 +57,13 @@ public class WorkSpaceVO {
 
     public void setCloseness(double closeness) {
         this.closeness = closeness;
+    }
+
+    public String getCyInfo() {
+        return cyInfo;
+    }
+
+    public void setCyInfo(String cyInfo) {
+        this.cyInfo = cyInfo;
     }
 }
