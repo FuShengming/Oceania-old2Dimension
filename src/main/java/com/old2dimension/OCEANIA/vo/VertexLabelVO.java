@@ -17,13 +17,24 @@ public class VertexLabelVO {
 
     private int vertexId;
 
+    private String title;
+
     private String content;
 
-    public VertexLabelVO(int userId, int codeId, int vertexId, String content) {
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public VertexLabelVO(int userId, int codeId, int vertexId, String title, String content) {
         this.userId = userId;
         this.codeId = codeId;
         this.vertexId = vertexId;
         this.content = content;
+        this.title = title;
     }
 
     public int getUserId() {
