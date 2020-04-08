@@ -9,7 +9,7 @@ $(function () {
                 userId: 1,
                 codeId: 1,
                 date: new Date(),
-                closeness: 0.5,
+                closeness: $("#range_value").val(),
                 cyInfo: JSON.stringify(cy.json())
             }),
             success: function (data) {
@@ -23,10 +23,6 @@ $(function () {
     });
     $("#export-btn").on('click', function () {
         let img = cy.jpg({scala: 10, full: true});
-        // let link = $("<a>");
-        // link.attr("href", img);
-        // link.attr("download", "graph.png");
-        // link.trigger('click');
         let link = document.createElement('a');
         link.href = img;
         link.download = "download.jpg";
@@ -381,6 +377,23 @@ $(function () {
         source: states
     });
 
+    let search_by_id = function (id) {
+        console.log(id);
+        expand_tree(id);
+        cy.$('node,edge').unselect();
+        let n = cy.$id(id);
+        console.log(n);
+        if (n.length === 0) {
+            alert("This node has been filtered out. Please adjust filter weights.")
+        } else {
+            n.select();
+            cy.fit(n, $('#cy_container').height() * 0.45);
+            let info = n.data("full_info");
+            get_code(info);
+            get_v_labels(Number(id.substring(1)));
+        }
+    };
+
     $("#node-search-btn").on("click", function () {
         if ($("#func-name-input").val() === "") {
             alert("Input can't be empty.");
@@ -396,24 +409,22 @@ $(function () {
                     return;
                 }
                 if (data.content.length > 1) {
-                    alert("Input is ambiguous. You can choose one in the autocomplete menu.");
+                    $("#ambiguousFuncSelect").html("");
+                    data.content.forEach(function (func) {
+                        $("#ambiguousFuncSelect").append("<option value='" + func.id + "'>" + func.fullName + "</option>");
+                    });
+                    $("#ambiguousModal").modal('show');
+                    $("#ambiguous_submit").on('click', function () {
+                        let id = 'n' + $("#ambiguousFuncSelect").find("option:selected").val();
+                        search_by_id(id);
+                        $("#ambiguousModal").modal('hide');
+                        $("#searchModal").modal('hide');
+                    });
                     return;
                 }
-                $("#searchModal").modal('hide');
                 let id = 'n' + data.content[0].id.toString();
-                console.log(id);
-                expand_tree(id);
-                cy.$('node,edge').unselect();
-                let n = cy.$id(id);
-                console.log(n);
-                if (n.length === 0) {
-                    alert("This node has been filtered out. Please adjust filter weights.")
-                } else {
-                    n.select();
-                    cy.fit(n, $('#cy_container').height() * 0.45);
-                    let info = n.data("full_info");
-                    get_code(info);
-                }
+                search_by_id(id);
+                $("#searchModal").modal('hide');
             },
             error: function (err) {
                 console.log(err);
@@ -676,6 +687,11 @@ $(function () {
                 cy.json(JSON.parse(data.content.cyInfo));
                 cy.layout(preset_layout).run();
                 setCyEvents();
+                update_info(cy.$("node.vertex").length,
+                    cy.$("edge").length,
+                    cy.$("node.domain").length);
+                $("#ctm-range").val(data.content.closeness);
+                $("#range_value").val(data.content.closeness);
             } else {
                 getGraph();
             }
@@ -988,9 +1004,9 @@ $(function () {
                     });
                 });
                 console.log(graphData);
-                update_info(graphData.nodes.length - data.content.domainSetVO.domainVOs.length,
-                    graphData.edges.length,
-                    data.content.domainSetVO.domainVOs.length);
+                update_info(cy.$("node.vertex").length,
+                    cy.$("edge").length,
+                    cy.$("node.domain").length);
 
                 cy = cytoscape({
 
