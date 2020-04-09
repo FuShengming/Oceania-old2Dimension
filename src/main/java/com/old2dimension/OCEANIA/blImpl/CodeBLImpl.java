@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Component
@@ -545,11 +546,12 @@ public class CodeBLImpl implements CodeBL {
     }
 
     private ArrayList<CodeNode> createJavaChild(String path, ArrayList<Vertex> vertices) {
+        HashSet<String> innerClass = new HashSet<String>();
         //System.out.println(path);
         ArrayList<CodeNode> codeNodes = new ArrayList<CodeNode>();
         String pkgName = path.substring(0, path.lastIndexOf("/"));
         String className = path.substring(path.lastIndexOf("/") + 1);
-
+        CodeNode innerClassNode = null;
         for (Vertex vertex : vertices) {
             String vertexPkgName = vertex.getBelongPackage();
             vertexPkgName = vertexPkgName.replace('.', '/');
@@ -569,13 +571,15 @@ public class CodeBLImpl implements CodeBL {
                     codeNodes.add(funcNode);
                 } else if ((vertexClassName.length() > className.length()) && ((vertexClassName.substring(0, className.length() + 1)).equals(className + "$"))) {
                     //System.out.println(vertexClassName);
-
-                    CodeNode innerClassNode = new CodeNode(vertexClassName.substring(vertexClassName.indexOf("$") + 1));
-                    ArrayList<CodeNode> res = createInnerChild(path + "/" + vertexClassName.substring(vertexClassName.indexOf("$") + 1), vertices);
-                    innerClassNode.setNodes(res);
-                    if (innerClassNode.getText().equals("1"))
-                        innerClassNode.setText("InnerHiddenClass");
-                    codeNodes.add(innerClassNode);
+                    if (!innerClass.contains(vertexClassName)) {
+                        innerClassNode = new CodeNode(vertexClassName.substring(vertexClassName.indexOf("$") + 1));
+                        ArrayList<CodeNode> res = createInnerChild(path + "/" + vertexClassName.substring(vertexClassName.indexOf("$") + 1), vertices);
+                        innerClassNode.setNodes(res);
+                        if (innerClassNode.getText().equals("1"))
+                            innerClassNode.setText("InnerHiddenClass");
+                        codeNodes.add(innerClassNode);
+                        innerClass.add(vertexClassName);
+                    }
                 }
             }
         }
@@ -597,7 +601,7 @@ public class CodeBLImpl implements CodeBL {
                 String funcName = vertex.getFuncName();
                 if (funcName.equals("<init>"))
                     funcName = "&lt;init&gt;";
-                if (funcName.equals("<clinit"))
+                if (funcName.equals("<clinit>"))
                     funcName = "&lt;clinit&gt;";
                 CodeNode funcNode = new CodeNode(funcName + "(" + vertex.getArgsString(vertex.getArgs()) + ")");
                 funcNode.setVertexId(vertex.getId());

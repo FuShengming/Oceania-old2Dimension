@@ -12,6 +12,11 @@ public class PageController {
         return "/html/index.html";
     }
 
+    @RequestMapping("/workspace")
+    public String workspace() {
+        return "/html/workspace.html";
+    }
+
     @RequestMapping("/graph")
     public String graph() {
         return "/html/graph.html";
