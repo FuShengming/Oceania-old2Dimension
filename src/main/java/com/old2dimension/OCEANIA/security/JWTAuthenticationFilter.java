@@ -1,10 +1,10 @@
 package com.old2dimension.OCEANIA.security;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.old2dimension.OCEANIA.po.JwtUser;
 import com.old2dimension.OCEANIA.utils.JWTUtils;
-import com.old2dimension.OCEANIA.vo.ResponseVO;
 import com.old2dimension.OCEANIA.vo.UserVO;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,12 +15,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -65,15 +67,19 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
 
         String token = JWTUtils.createToken(jwtUser.getUsername(), role.get(0));
-        //String token = JwtTokenUtils.createToken(jwtUser.getUsername(), false);
-        // 返回创建成功的token
-        // 但是这里创建的token只是单纯的token
-        // 按照jwt的规定，最后请求的时候应该是 `Bearer token`
-        String body = "login success";
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("status", "success");
+        map.put("id", Integer.toString(jwtUser.getId()));
+
+        Cookie cookie = new Cookie("token", token);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
         response.setCharacterEncoding("UTF-8");
-        response.setContentType("text");
+        response.setContentType("application/json");
         response.setHeader("token", token);
-        response.getWriter().write(body);
+        response.getWriter().write(JSONObject.toJSONString(map));
     }
 
     @Override

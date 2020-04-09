@@ -104,10 +104,9 @@ function login() {
         type: "POST",
         contentType:'application/json;charset=utf-8',
         data: JSON.stringify(formData),
-        success: function (res, textStatus, request) {
-            if (res === "login success") {
-                let token = request.getResponseHeader("token");
-                localStorage.setItem("token", token);
+        success: function (res) {
+            if (res.status === "success") {
+                localStorage.setItem("id", res.id);
                 $(window).attr("location", "/graph")
             }
             else if (res === "authentication failed, reason: Bad credentials") {

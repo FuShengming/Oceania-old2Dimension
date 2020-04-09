@@ -50,6 +50,10 @@ public class JwtUser implements UserDetails {
         return simpleAuthorities;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getPassword() {
         return pwd;
     }

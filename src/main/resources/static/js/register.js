@@ -147,7 +147,7 @@ function register() {
         data: JSON.stringify(formData),
         success: function (res) {
             if (res.success) {
-                localStorage.setItem("token", res.content.token);
+                localStorage.setItem("id", res.content.id);
                 $(window).attr("location", "/graph")
             }
             else if (res.message === "用户名已存在") {
@@ -192,6 +192,7 @@ function validateRegisterForm(data) {
         }
     }
     else if ($(".password-repeat-input").val() !== data.pwd) {
+        isValidate = false;
         $("#password-repeat-warn").addClass("password-error").addClass("password-error-msg")
             .removeClass("hidden-error").removeClass("input-required-error").text("两次输入密码不一致")
     }

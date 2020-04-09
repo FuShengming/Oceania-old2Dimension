@@ -4,7 +4,6 @@ import com.old2dimension.OCEANIA.bl.UserBL;
 import com.old2dimension.OCEANIA.po.User;
 import com.old2dimension.OCEANIA.utils.JWTUtils;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
-import com.old2dimension.OCEANIA.vo.TokenVO;
 import com.old2dimension.OCEANIA.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,8 +28,8 @@ public class UserController {
         if (r.isSuccess()) {
             User user1 = (User) r.getContent();
             String token = JWTUtils.createToken(user1.getName(), "ROLE_USER");
-            TokenVO tokenVO = new TokenVO(token);
-            r.setContent(tokenVO);
+            user1.setPwd(null);
+            r.setContent(user1);
 
             Cookie cookie = new Cookie("token", token);
             cookie.setPath("/");
@@ -38,23 +37,6 @@ public class UserController {
         }
         return r;
     }
-
-//    @PostMapping(value = "/login")
-//    public ResponseVO login(@RequestBody UserVO user, HttpServletResponse response) {
-//        ResponseVO r = userBL.login(user.getName(), user.getPwd());
-//        if (r.isSuccess()) {
-//            User user1 = (User) r.getContent();
-//            String token = tokenBL.getToken(user1);
-//            TokenVO tokenVO = new TokenVO(token);
-//            r.setContent(tokenVO);
-//
-//            Cookie cookie = new Cookie("token", token);
-//            cookie.setPath("/");
-//            response.addCookie(cookie);
-//        }
-//        return r;
-//    }
-
 
 //    @RequestMapping("/getAll")
 //    public ResponseVO getAll

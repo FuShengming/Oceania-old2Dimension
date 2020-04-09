@@ -56,21 +56,6 @@ public class UserBLImpl implements UserBL, UserDetailsService {
         return ResponseVO.buildSuccess(users);
     }
 
-//    public ResponseVO login(String userName, String pwd) {
-//        User user = userRepository.findUserByName(userName);
-//        if (user == null) {
-//            return ResponseVO.buildFailure("name or pwd is not correct");
-//        }
-//        if (user.getPwd().equals(pwd)) {
-//            System.out.println("登陆成功");
-//            return ResponseVO.buildSuccess(user);
-//        } else {
-//            System.out.println("登陆失败");
-//            return ResponseVO.buildFailure("name or pwd is not correct");
-//        }
-//    }
-
-
     @Transactional
     public ResponseVO signUp(UserVO userInfo) {
         try {
