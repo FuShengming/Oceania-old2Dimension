@@ -39,10 +39,15 @@
             params: {
                 'codeId': 1
             },
+            renameFile: function (file) {
+                // console.log(file, file.webkitRelativePath);
+                let newFilename = file.webkitRelativePath;
+                return newFilename;
+            },
             init: function () {
                 this.hiddenFileInput.setAttribute("type", "file");
                 this.hiddenFileInput.setAttribute("webkitdirectory", true);
-            },
+            }
             // accept: function (file, done) {
             //     console.log(file);
             //     if (file.type === '.java') done();
