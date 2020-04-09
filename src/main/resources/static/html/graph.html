@@ -353,7 +353,7 @@
     </div>
 </div>
 <!--ambiguous-->
-<div class="modal fade" id="ambiguousModal" tabindex="-1" role="dialog" aria-labelledby="ambiguousModalLabel"
+<div class="modal fade" id="ambiguousModal1" tabindex="-1" role="dialog" aria-labelledby="ambiguousModalLabel1"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -363,8 +363,8 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label for="ambiguousFuncSelect">Ambiguous Functions Select</label>
-                        <select multiple class="form-control overflow-auto" id="ambiguousFuncSelect">
+                        <label for="ambiguousFuncSelect1" id="ambiguousLabel1">Ambiguous Select</label>
+                        <select multiple class="form-control overflow-auto" id="ambiguousFuncSelect1">
                             <option>Func</option>
                         </select>
                     </div>
@@ -372,7 +372,31 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
-                <button type="button" class="btn btn-primary m-2" id="ambiguous_submit">CONFIRM</button>
+                <button type="button" class="btn btn-primary m-2" id="ambiguous_submit1">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="ambiguousModal2" tabindex="-1" role="dialog" aria-labelledby="ambiguousModalLabel2"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Multiple Functions Found</h3>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="ambiguousFuncSelect2" id="ambiguousLabel2">Ambiguous Select</label>
+                        <select multiple class="form-control overflow-auto" id="ambiguousFuncSelect2">
+                            <option>Func</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
+                <button type="button" class="btn btn-primary m-2" id="ambiguous_submit2">CONFIRM</button>
             </div>
         </div>
     </div>

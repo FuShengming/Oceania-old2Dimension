@@ -409,15 +409,16 @@ $(function () {
                     return;
                 }
                 if (data.content.length > 1) {
-                    $("#ambiguousFuncSelect").html("");
+                    $("#ambiguousLabel").text("Input \"Function Name\" is ambiguous. Choose one below:");
+                    $("#ambiguousFuncSelect1").html("");
                     data.content.forEach(function (func) {
-                        $("#ambiguousFuncSelect").append("<option value='" + func.id + "'>" + func.fullName + "</option>");
+                        $("#ambiguousFuncSelect1").append("<option value='" + func.id + "'>" + func.fullName.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</option>");
                     });
                     $("#ambiguousModal").modal('show');
-                    $("#ambiguous_submit").on('click', function () {
-                        let id = 'n' + $("#ambiguousFuncSelect").find("option:selected").val();
+                    $("#ambiguous_submit1").on('click', function () {
+                        let id = 'n' + $("#ambiguousFuncSelect1").find("option:selected").val();
                         search_by_id(id);
-                        $("#ambiguousModal").modal('hide');
+                        $("#ambiguousModal1").modal('hide');
                         $("#searchModal").modal('hide');
                     });
                     return;
@@ -432,94 +433,152 @@ $(function () {
         });
     });
 
+    let search_by_start_end = function (start_id, end_id) {
+        console.log(start_id, end_id);
+        $.ajax({
+            type: "post",
+            url: "/graph/findPath",
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify([{id: start_id}, {id: end_id}]),
+            success: function (data) {
+                console.log(data);
+                if (data.success) {
+                    let n = data.content.pathNum;
+                    let paths = data.content.pathVOS;
+                    if (n === 0) {
+                        alert("No path found");
+                        return;
+                    }
+                    let all_edges = [];
+                    let all_nodes = [];
+                    paths.forEach(function (path) {
+                        path.edges.forEach(function (edge) {
+                            let id = edge.id;
+                            let e = cy.$id('e' + id.toString());
+                            if (e.length === 0) {
+
+                            } else {
+                                all_edges.push(e[0]);
+                                all_nodes.push(e[0].source());
+                                all_nodes.push(e[0].target());
+                            }
+                        })
+                    });
+                    cy.$('node,edge').unselect();
+                    all_edges.forEach(function (edge) {
+                        edge.select();
+                    });
+                    all_nodes.forEach(function (node) {
+                        node.select();
+                    });
+                    cy.fit(cy.$('node:selected'), $('#cy_container').height() * 0.25);
+                } else {
+                    alert("No path found");
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    };
+
     $("#path-search-btn").on("click", function () {
-        if ($("#start-node-input").val() === "" || $("#end-node-input").val() === 0) {
+        if ($("#start-node-input").val() === "" || $("#end-node-input").val() === "") {
             alert("Input can't be empty.");
             return;
         }
         let start_id = -1;
         let end_id = -1;
-        $.ajax({
-            type: "get",
-            url: "/graph/findVertex/" + $("#start-node-input").val(),
-            success: function (data) {
-                console.log(data);
-                if (data.content.length === 0) {
+        $.when(
+            $.ajax({
+                type: "get",
+                url: "/graph/findVertex/" + $("#start-node-input").val(),
+                error: function (err) {
+                    console.log(err);
+                }
+            }),
+            $.ajax({
+                type: "get",
+                url: "/graph/findVertex/" + $("#end-node-input").val(),
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        ).done(
+            function (data1, data2) {
+                console.log(data1);
+                if (data1[0].content.length === 0) {
                     alert("Can't find such start node.");
                     return;
                 }
-                if (data.content.length > 1) {
-                    alert("Start node input is ambiguous. You can choose one in the autocomplete menu.");
+                start_id = data1[0].content[0].id;
+                console.log(data2);
+                if (data2[0].content.length === 0) {
+                    alert("Can't find such end node.");
                     return;
                 }
-                start_id = data.content[0].id;
-                $.ajax({
-                    type: "get",
-                    url: "/graph/findVertex/" + $("#end-node-input").val(),
-                    success: function (data) {
-                        console.log(data);
-                        if (data.content.length === 0) {
-                            alert("Can't find such end node.");
-                            return;
-                        }
-                        if (data.content.length > 1) {
-                            alert("End node input is ambiguous. You can choose one in the autocomplete menu.");
-                            return;
-                        }
-                        end_id = data.content[0].id;
-                        $.ajax({
-                            type: "post",
-                            url: "/graph/findPath",
-                            dataType: "json",
-                            contentType: 'application/json',
-                            data: JSON.stringify([{id: start_id}, {id: end_id}]),
-                            success: function (data) {
-                                console.log(data);
-                                let n = data.content.pathNum;
-                                let paths = data.content.pathVOS;
-                                if (n === 0) {
-                                    alert("No path found");
-                                    return;
-                                }
-                                let all_edges = [];
-                                let all_nodes = [];
-                                paths.forEach(function (path) {
-                                    path.edges.forEach(function (edge) {
-                                        let id = edge.id;
-                                        let e = cy.$id('e' + id.toString());
-                                        if (e.length === 0) {
+                end_id = data2[0].content[0].id;
 
-                                        } else {
-                                            all_edges.push(e[0]);
-                                            all_nodes.push(e[0].source());
-                                            all_nodes.push(e[0].target());
-                                        }
-                                    })
-                                });
-                                $("#searchModal").modal('hide');
-                                cy.$('node,edge').unselect();
-                                all_edges.forEach(function (edge) {
-                                    edge.select();
-                                });
-                                all_nodes.forEach(function (node) {
-                                    node.select();
-                                });
-                                cy.fit(cy.$('node:selected'), $('#cy_container').height() * 0.25);
-                            },
-                            error: function (err) {
-                                console.log(err);
-                            }
+                if (data1[0].content.length > 1 && data2[0].content.length > 1) {
+                    $("#ambiguousLabel1").text("Input \"Start Node\" is ambiguous. Choose one below:");
+                    $("#ambiguousFuncSelect1").html("");
+                    data1[0].content.forEach(function (func) {
+                        $("#ambiguousFuncSelect1").append("<option value='" + func.id + "'>" + func.fullName.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</option>");
+                    });
+                    $("#ambiguousLabel2").text("Input \"End Node\" is ambiguous. Choose one below:");
+                    $("#ambiguousFuncSelect2").html("");
+                    data2[0].content.forEach(function (func) {
+                        $("#ambiguousFuncSelect2").append("<option value='" + func.id + "'>" + func.fullName.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</option>");
+                    });
+                    $("#ambiguousModal1").modal('show');
+                    $("#ambiguous_submit1").on('click', function () {
+                        let start_id = Number($("#ambiguousFuncSelect1").find("option:selected").val());
+                        $("#ambiguous_submit2").on('click', function () {
+                            let end_id = Number($("#ambiguousFuncSelect2").find("option:selected").val());
+                            search_by_start_end(start_id, end_id);
+                            $("#ambiguousModal2").modal('hide');
+                            $("#searchModal").modal('hide');
                         });
-                    },
-                    error: function (err) {
-                        console.log(err);
-                    }
-                });
-            },
-            error: function (err) {
-                console.log(err);
+                        $("#ambiguousModal2").modal('show');
+                        $("#ambiguousModal1").modal('hide');
+                    });
+                    return;
+                } else if (data1[0].content.length > 1) {
+                    $("#ambiguousLabel1").text("Input \"Start Node\" is ambiguous. Choose one below:");
+                    $("#ambiguousFuncSelect1").html("");
+                    data1[0].content.forEach(function (func) {
+                        $("#ambiguousFuncSelect1").append("<option value='" + func.id + "'>" + func.fullName.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</option>");
+                    });
+                    $("#ambiguousModal1").modal('show');
+                    $("#ambiguous_submit1").on('click', function () {
+                        let start_id = Number($("#ambiguousFuncSelect1").find("option:selected").val());
+                        search_by_start_end(start_id, end_id);
+                        $("#ambiguousModal1").modal('hide');
+                        $("#searchModal").modal('hide');
+                    });
+                    return;
+                } else if (data2[0].content.length > 1) {
+                    $("#ambiguousLabel1").text("Input \"End Node\" is ambiguous. Choose one below:");
+                    $("#ambiguousFuncSelect1").html("");
+                    data2[0].content.forEach(function (func) {
+                        $("#ambiguousFuncSelect1").append("<option value='" + func.id + "'>" + func.fullName.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</option>");
+                    });
+                    $("#ambiguousModal1").modal('show');
+                    $("#ambiguous_submit1").on('click', function () {
+                        let end_id = Number($("#ambiguousFuncSelect1").find("option:selected").val());
+                        search_by_start_end(start_id, end_id);
+                        $("#ambiguousModal1").modal('hide');
+                        $("#searchModal").modal('hide');
+                    });
+                    return;
+                } else {
+                    search_by_start_end(start_id, end_id);
+                    $("#searchModal").modal('hide');
+                }
             }
-        });
+        );
+
     });
     //initialize cytoscape
     let cy = cytoscape();
