@@ -1,5 +1,6 @@
 package com.old2dimension.OCEANIA.config;
 
+import com.old2dimension.OCEANIA.security.AuthenticationInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

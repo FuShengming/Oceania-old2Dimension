@@ -36,7 +36,21 @@ public class UserBLImpl implements UserBL, UserDetailsService {
     @Autowired
     AuthorityRepository authorityRepository;
 
+
+    public void setCodeRepository(CodeRepository codeRepository) {
+        this.codeRepository = codeRepository;
+    }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void setAuthorityRepository(AuthorityRepository authorityRepository) {
+        this.authorityRepository = authorityRepository;
+    }
+
     public ResponseVO getAllUser() {
+
         ArrayList<User> allUsers = (ArrayList<User>) userRepository.findAll();
         ArrayList<UserVO> users = userList2UserVOList(allUsers);
         return ResponseVO.buildSuccess(users);
@@ -67,11 +81,12 @@ public class UserBLImpl implements UserBL, UserDetailsService {
                 return ResponseVO.buildFailure("用户名已存在");
             }
             user = userRepository.save(user);
-            Code code = new Code(0, user.getId(), "iTrust", 1982, 3841, 63);
+            Code code = new Code(0, user.getId(), "iTrust", 1979, 3834, 64, 1);
             codeRepository.save(code);
             authorityRepository.insertByUserId(user.getId());
             return ResponseVO.buildSuccess(user);
         } catch (Exception e) {
+
             e.printStackTrace();
             return ResponseVO.buildFailure("sign up fail");
         }

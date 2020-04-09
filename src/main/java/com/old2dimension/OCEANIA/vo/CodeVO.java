@@ -1,5 +1,7 @@
 package com.old2dimension.OCEANIA.vo;
 
+import com.old2dimension.OCEANIA.po.Code;
+
 public class CodeVO {
     private int id;
 
@@ -19,6 +21,16 @@ public class CodeVO {
     private int numOfEdges;
 
     private int numOfDomains;
+
+    private int is_default;
+
+    public int getIs_default() {
+        return is_default;
+    }
+
+    public void setIs_default(int is_default) {
+        this.is_default = is_default;
+    }
 
     public int getNumOfVertices() {
         return numOfVertices;
@@ -44,14 +56,24 @@ public class CodeVO {
         this.numOfDomains = numOfDomains;
     }
 
-    public CodeVO(int userId, int codeId, String name, int numOfVertices, int numOfEdges, int numOfDomains) {
+    public CodeVO(int userId, int codeId, String name, int numOfVertices, int numOfEdges, int numOfDomains,int is_default) {
         this.userId = userId;
         this.name = name;
         this.numOfVertices = numOfVertices;
         this.numOfEdges = numOfEdges;
         this.numOfDomains = numOfDomains;
+        this.is_default=is_default;
     }
 
+    public CodeVO(Code c){
+        this.id=c.getId();
+        this.is_default=c.getIs_default();
+        this.name=c.getName();
+        this.numOfDomains=c.getNumOfDomains();
+        this.numOfEdges=c.getNumOfEdges();
+        this.numOfDomains=c.getNumOfDomains();
+        this.userId=c.getUserId();
+    }
 
     public int getUserId() {
         return userId;

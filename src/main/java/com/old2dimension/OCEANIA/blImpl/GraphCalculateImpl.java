@@ -20,12 +20,27 @@ public class GraphCalculateImpl implements GraphCalculateBL {
     public AdjacencyMatrix adMatrix;
     public ArrayList<Edge> allEdges;
     public DomainSet domainSet;
+
+    public ArrayList<Vertex> getAllVertexes() {
+        return allVertexes;
+    }
+
     public ArrayList<Vertex> allVertexes;
     private boolean[][] visited;
+    int curUserId;
+    int curCodeId;
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private CodeRepository codeRepository;
+
+    public void setCodeRepository(CodeRepository codeRepository) {
+        this.codeRepository = codeRepository;
+    }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public ResponseVO getGraph(UserAndCodeForm userAndCodeForm){
 
@@ -33,11 +48,13 @@ public class GraphCalculateImpl implements GraphCalculateBL {
         if(currentUser == null ){
             return ResponseVO.buildFailure("no such user");
         }
-        Code curCode = codeRepository.findCodeById(userAndCodeForm.getCodeId());
+        Code curCode = codeRepository.findCodeByIdAndUserId(userAndCodeForm.getCodeId(),userAndCodeForm.getUserId());
         if(curCode == null){
             return ResponseVO.buildFailure("no such code");
         }
-        if(curCode.getName().equals("iTrust")){
+        if(curCode.getIs_default()==1){
+            curUserId=userAndCodeForm.getUserId();
+            curCodeId=userAndCodeForm.getCodeId();
             System.out.println("iTrust");
             initializeGraph("call_dependencies_update.txt");
             WeightForm weightForm = new WeightForm();
@@ -73,6 +90,7 @@ public class GraphCalculateImpl implements GraphCalculateBL {
         try {
             domainSet = filterByWeights(weightForms);
             domainSet.sortByVerticesNum();
+
             return ResponseVO.buildSuccess(new DomainSetVO(domainSet));
         } catch (Exception e) {
             e.printStackTrace();
@@ -205,31 +223,42 @@ public class GraphCalculateImpl implements GraphCalculateBL {
         int indexOfEdge = 0;
 
         for (String curLine : lines) {
-
+            boolean isInvalid  = false;
             String v1String = curLine.substring(0, curLine.indexOf(" "));
             String v2String = curLine.substring(curLine.indexOf(" ") + 4);
             if (!vertexMap.containsKey(v1String)) {
                 Vertex curVertex = str2Vertex(v1String);
+                if(curVertex != null) {
                 curVertex.setId(indexOfVertex);
                 indexOfVertex++;
                 vertexMap.put(v1String, curVertex);
                 vertexList.add(curVertex);
+                }
+                else{
+                    isInvalid=true;
+                }
             }
 
             if (!vertexMap.containsKey(v2String)) {
+
                 Vertex curVertex = str2Vertex(v2String);
+                if(curVertex != null) {
                 curVertex.setId(indexOfVertex);
                 indexOfVertex++;
                 vertexMap.put(v2String, curVertex);
                 vertexList.add(curVertex);
+                }
+                else {
+                    isInvalid = true;
+                }
             }
-
+            if(!isInvalid){
             Edge curEdge = new Edge();
             curEdge.setStart(vertexMap.get(v1String));
             curEdge.setEnd(vertexMap.get(v2String));
             curEdge.setId(indexOfEdge);
             edgeList.add(curEdge);
-            indexOfEdge++;
+            indexOfEdge++;}
         }
 
         adMatrix = new AdjacencyMatrix(vertexList.size());
@@ -274,6 +303,10 @@ public class GraphCalculateImpl implements GraphCalculateBL {
         String packageName = withoutArg.substring(0, withoutArg.lastIndexOf("."));
         String className = withoutArg.substring(withoutArg.lastIndexOf(".") + 1, withoutArg.indexOf(":"));
         String funcName = withoutArg.substring(withoutArg.indexOf(":") + 1);
+        if(funcName.contains("$")){
+            return null;
+        }
+
         String[] args = curString.substring(curString.indexOf("(") + 1, curString.indexOf(")")).split(",");
         curVertex.setBelongPackage(packageName);
         curVertex.setBelongClass(className);
@@ -314,6 +347,7 @@ public class GraphCalculateImpl implements GraphCalculateBL {
                 if (domain.getEdges().size() == 0) continue;
                 domain.setId(index);
                 index++;
+
                 domains.add(domain);
             }
         }
@@ -346,4 +380,6 @@ public class GraphCalculateImpl implements GraphCalculateBL {
             generateDomain(domain, i, endId, thresholds);
         }
     }
+
+
 }

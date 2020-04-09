@@ -1,14 +1,9 @@
 package com.old2dimension.OCEANIA.controller;
 
 import com.old2dimension.OCEANIA.bl.CodeBL;
-import com.old2dimension.OCEANIA.vo.VertexVO;
-import com.old2dimension.OCEANIA.vo.ResponseVO;
-import com.old2dimension.OCEANIA.vo.UserAndCodeForm;
+import com.old2dimension.OCEANIA.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/code")
@@ -16,14 +11,19 @@ public class CodeController {
     @Autowired
     CodeBL codeBL;
 
+    @RequestMapping(value = "/getCodesByUserId/{userId}",method = RequestMethod.GET)
+    public ResponseVO getCodesByUserId(@PathVariable("userId") int userId){
+        return  codeBL.getCodesByUserId(userId);
+    }
+
     @RequestMapping(value = "/getCodeStructure",method = RequestMethod.POST)
     public ResponseVO getCodeStructure(@RequestBody UserAndCodeForm userAndCodeForm){
-        return null;
+        return codeBL.getCodeStructure(userAndCodeForm);
     }
 
     @RequestMapping(value = "/getFuncCode",method = RequestMethod.POST)
-    public ResponseVO getFuncCode(@RequestBody VertexVO vertexVO){
-        return null;
+    public ResponseVO getFuncCode(@RequestBody VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId){
+        return codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
     }
 
     /*
@@ -32,7 +32,6 @@ public class CodeController {
      * */
     @RequestMapping(value = "/upload",method = RequestMethod.POST)
     public ResponseVO upload(){
-
         return null;
     }
 
@@ -43,6 +42,11 @@ public class CodeController {
      * */
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public ResponseVO add(@RequestBody UserAndCodeForm userAndCodeForm){
-        return null;
+        return codeBL.addCode(userAndCodeForm);
+    }
+
+    @RequestMapping(value = "/modifyName")
+    public ResponseVO modifyName(@RequestBody CodeIdAndUserIdAndNameForm codeIdAndUserIdAndNameForm){
+        return codeBL.modifyName(codeIdAndUserIdAndNameForm);
     }
 }

@@ -12,14 +12,14 @@ public class PageController {
         return "/html/index.html";
     }
 
-    @RequestMapping("/graphpage")
-    public String test() {
-        return "/html/graphpage.html";
+    @RequestMapping("/graph")
+    public String graph() {
+        return "/html/graph.html";
     }
 
-    @RequestMapping("/cy")
-    public String cy() {
-        return "/html/cytotest.html";
+    @RequestMapping("/statistics")
+    public String statistics() {
+        return "/html/statistics.html";
     }
 
     @RequestMapping("/login")
@@ -31,4 +31,8 @@ public class PageController {
     public String register() {
         return "/html/register.html";
     }
+//    @RequestMapping("/cy")
+//    public String cy() {
+//        return "/html/cytotest.html";
+//    }
 }

@@ -1,14 +1,13 @@
 package com.old2dimension.OCEANIA.config;
 
-import com.old2dimension.OCEANIA.bl.UserBL;
-import com.old2dimension.OCEANIA.blImpl.UserBLImpl;
+import com.old2dimension.OCEANIA.security.JWTAuthenticationFilter;
+import com.old2dimension.OCEANIA.security.JWTAuthorizationFilter;
+import com.old2dimension.OCEANIA.security.JwtAccessDeniedHandler;
+import com.old2dimension.OCEANIA.security.JwtAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,12 +16,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import javax.sql.DataSource;
 
 
 @Configuration
@@ -55,8 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 // 管理员访问控制
-                .antMatchers("/statistics/**")
-                .hasRole("ADMIN")
+//                .antMatchers("/statistics/**")
+//                .hasRole("ADMIN")
                 // 用户访问控制
 //                .antMatchers("/code/**", "/graph/**", "/hello", "/label/**", "/workSpace/**", "/graphql")
 //                .hasRole("USER")

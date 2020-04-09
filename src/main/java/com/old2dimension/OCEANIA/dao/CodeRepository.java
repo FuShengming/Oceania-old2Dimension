@@ -9,14 +9,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface CodeRepository extends JpaRepository<Code,Integer> {
-//    @Transactional
-//    @Modifying
-//    @Query(value = "insert into code values(null,?1,\'iTrust\',1982,3841,63)",nativeQuery = true)
-//    public void saveDefaultCode(int userId);
+
+
+    public Code findCodeByIdAndUserId(int id,int userId);
+
+    List<Code> findCodesByUserId(int userId);
 
     public Code findCodeById(int id);
-
 
 }

@@ -1,23 +1,17 @@
 package com.old2dimension.OCEANIA.blImpl.GraphCalculateImplTest;
-import com.old2dimension.OCEANIA.OceaniaApplication;
 import com.old2dimension.OCEANIA.blImpl.GraphCalculateImpl;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = OceaniaApplication.class)
 public class GraphInitializeTest {
-    @Autowired
-    GraphCalculateImpl graphCalculate;
+
     @Test
     public void graphInitializeTest1(){
+        GraphCalculateImpl graphCalculate =new GraphCalculateImpl();
       graphCalculate.initializeGraph("src/test/resources/test_dependency_data.txt");
       Assert.assertEquals(graphCalculate.allEdges.size(),7);
       Assert.assertEquals(graphCalculate.adMatrix.getVerticesNum(),9);
@@ -25,6 +19,7 @@ public class GraphInitializeTest {
     }
 @Test
     public void graphInitializeTest2(){
+    GraphCalculateImpl graphCalculate =new GraphCalculateImpl();
         graphCalculate.initializeGraph("src/test/resources/runner_test_dependency_data.txt");
         Assert.assertEquals(graphCalculate.allEdges.size(),14);
         Assert.assertEquals(graphCalculate.adMatrix.getVerticesNum(),16);
@@ -33,6 +28,7 @@ public class GraphInitializeTest {
 
     @Test
     public void graphInitializeTest3(){
+        GraphCalculateImpl graphCalculate =new GraphCalculateImpl();
         final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
         graphCalculate.initializeGraph("");
