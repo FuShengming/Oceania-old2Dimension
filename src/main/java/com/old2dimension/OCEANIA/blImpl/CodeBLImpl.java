@@ -29,6 +29,20 @@ public class CodeBLImpl implements CodeBL {
     CodeRepository codeRepository;
     @Autowired
     WorkPlaceRepository workPlaceRepository;
+    @Autowired
+    GraphCalculateImpl graphCalculate;
+
+    public void setGraphCalculate(GraphCalculateImpl graphCalculate) {
+        this.graphCalculate = graphCalculate;
+    }
+
+    public void setCodeRepository(CodeRepository codeRepository) {
+        this.codeRepository = codeRepository;
+    }
+
+    public void setWorkPlaceRepository(WorkPlaceRepository workPlaceRepository) {
+        this.workPlaceRepository = workPlaceRepository;
+    }
 
     public ResponseVO modifyName(CodeIdAndUserIdAndNameForm codeIdAndUserIdAndNameForm){
 
@@ -68,17 +82,6 @@ public class CodeBLImpl implements CodeBL {
         return ResponseVO.buildFailure("目前只支持iTrust分析");
     }
 
-    public void setGraphCalculate(GraphCalculateImpl graphCalculate) {
-        this.graphCalculate = graphCalculate;
-    }
-
-    @Autowired
-    GraphCalculateImpl graphCalculate;
-
-    public void setCodeRepository(CodeRepository codeRepository) {
-        this.codeRepository = codeRepository;
-    }
-
 
     public ResponseVO getCodesByUserId(int userId){
         List<Code> dbRes = codeRepository.findCodesByUserId(userId);
@@ -95,7 +98,6 @@ public class CodeBLImpl implements CodeBL {
             else{
                 codeAndDateForm = new CodeAndDateForm(cur,tempWs.getDate());
             }
-
             res.add(codeAndDateForm);
         }
         return ResponseVO.buildSuccess(res);
