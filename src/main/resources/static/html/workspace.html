@@ -188,31 +188,7 @@
                             <th scope="col"></th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <td>iTrust</td>
-                            <td>2020/4/9 22:22</td>
-                            <td class="td-btn">
-                                <button class="btn btn-light btn-setting px-0" type="button" id="dropdownMenuButton"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-ellipsis-h setting-icon"></i>
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="#">Modify Name</a>
-                                    <a class="dropdown-item" href="#">Remove</a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>iTrust</td>
-                            <td>2020/4/9 22:22</td>
-                            <td class="td-btn">
-                                <button class="btn btn-light btn-setting px-0">
-                                    <i class="fa fa-ellipsis-h setting-icon"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
+                        <tbody id="code-tb"></tbody>
                     </table>
                 </div>
             </div>
@@ -240,11 +216,6 @@
             return "" + this.options.paramName;
         }
     };
-    // sendEvent = function (sel, step) {
-    //     let sel_event = new CustomEvent('next.m.' + step, {detail: {step: step}});
-    //     console.log(sel_event);
-    //     window.dispatchEvent(sel_event);
-    // };
     $(function () {
         $("#cont-1").on('click', function () {
             let sel_event = new CustomEvent('next.m.2', {detail: {step: 2}});
@@ -301,6 +272,34 @@
             //     if (file.type === '.java') done();
             // }
         });
+        $.ajax({
+            type: "get",
+            url: "/code/getCodesByUserId/1",
+            success: function (data) {
+                if (data.success) {
+                    let h = "";
+                    let codes = data.content;
+                    codes.forEach(function (code) {
+                        console.log(code);
+                        h += `<tr>
+                                <td>${code.codeName}</td>
+                                <td>${code.date === null ? "Never" : new Date(Date.parse(code.date)).toLocaleString("en")}</td>
+                                <td class="td-btn">
+                                    <button class="btn btn-light btn-setting px-0" type="button" id="dropdownMenuButton"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-ellipsis-h setting-icon"></i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="#">Modify Name</a>
+                                        <a class="dropdown-item" href="#">Remove</a>
+                                    </div>
+                                </td>
+                            </tr>`
+                    });
+                    $("#code-tb").html(h);
+                }
+            }
+        })
     });
 </script>
 </body>
