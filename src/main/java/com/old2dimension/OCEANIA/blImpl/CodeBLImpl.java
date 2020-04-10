@@ -544,6 +544,7 @@ public class CodeBLImpl implements CodeBL {
 
 
         String basicPath = "analyzeCode/src/"+userAndCodeForm.getCodeId();
+        String tempbasicPath = basicPath;
         System.out.println();
 
         File basic = null;
@@ -564,7 +565,7 @@ public class CodeBLImpl implements CodeBL {
         //-------------------------------------------------
         basicPath = basicPath + "/" + rootPath;
         CodeNode codeNode = new CodeNode(rootPath);
-
+        resource = new ClassPathResource(basicPath);
         File f = null;
         try {
             f = resource.getFile();
@@ -578,7 +579,7 @@ public class CodeBLImpl implements CodeBL {
         }
 
         for (File file : files) {
-            CodeNode child = createChildNode(rootPath, file, vertices,basicPath);
+            CodeNode child = createChildNode(rootPath, file, vertices,tempbasicPath);
             if (child != null)
                 codeNode.addChild(child);
         }
@@ -594,6 +595,7 @@ public class CodeBLImpl implements CodeBL {
         String name = file.getName();
         CodeNode codeNode = new CodeNode(name);
         String path = fatherPath + "/" + name;
+        //System.out.println("shit:"+path);
         if (name.length() > 5 && name.substring(name.length() - 5).equals(".java")) {
             codeNode.setText(name.substring(0, name.length() - 5));
             ArrayList<CodeNode> res = createJavaChild(path.substring(0, path.length() - 5), vertices);
@@ -638,7 +640,7 @@ public class CodeBLImpl implements CodeBL {
 
             String vertexClassName = vertex.getBelongClass();
 
-            if (vertexPkgName.equals(pkgName)) {
+            if (pkgName.contains(vertexPkgName)) {
                 if (vertexClassName.equals(className)) {
                     String funcName = vertex.getFuncName();
                     if (funcName.equals("<init>"))
