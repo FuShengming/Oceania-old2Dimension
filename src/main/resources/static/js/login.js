@@ -107,7 +107,12 @@ function login() {
         success: function (res) {
             if (res.status === "success") {
                 localStorage.setItem("id", res.id);
-                $(window).attr("location", "/graph")
+                if (res.role === "ROLE_USER") {
+                    $(window).attr("location", "/graph")
+                }
+                else if (res.role === "ROLE_ADMIN") {
+                    $(window).attr("location", "/statistics")
+                }
             }
             else if (res === "authentication failed, reason: Bad credentials") {
                 $("#password-warn").addClass("password-error-msg")

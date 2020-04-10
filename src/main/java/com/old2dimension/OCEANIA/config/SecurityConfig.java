@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin().loginPage("/login").permitAll()
-                .and().logout().logoutSuccessUrl("/index").permitAll()
+                .and().logout().logoutUrl("/logout").deleteCookies("token")
                 .and().rememberMe().alwaysRemember(true);
 
         http.cors().and().csrf().disable()

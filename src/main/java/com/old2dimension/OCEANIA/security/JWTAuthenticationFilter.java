@@ -71,6 +71,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Map<String, Object> map = new HashMap<>();
         map.put("status", "success");
         map.put("id", Integer.toString(jwtUser.getId()));
+        map.put("role", role.get(0));
 
         Cookie cookie = new Cookie("token", token);
         cookie.setPath("/");
