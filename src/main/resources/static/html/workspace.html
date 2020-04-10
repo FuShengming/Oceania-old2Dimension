@@ -5,17 +5,232 @@
     <title>My Workspaces</title>
     <link rel="stylesheet" type="text/css" href="../css/basic.min.css">
     <link rel="stylesheet" type="text/css" href="../css/dropzone.min.css">
+    <link rel="stylesheet" href="https://use.typekit.net/cpy1erx.css">
+
+    <link rel="stylesheet" type="text/css" href="webjars/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.4.1-1/css/bootstrap.min.css">
 </head>
+<style>
+    html {
+        height: 100%;
+        margin: 0;
+    }
+
+    body {
+        height: 100%;
+        margin: 0;
+        font-family: fira-sans, sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        font-style: normal;
+        color: #777;
+    }
+
+    .navbar-brand {
+        font-family: flood-std, sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    .nav-link {
+        font-size: 1.2rem;
+    }
+
+    .btn-setting {
+        height: 2rem;
+        width: 2rem;
+        border-radius: 1rem;
+    }
+
+    .setting-icon {
+        font-size: 1rem;
+    }
+
+    .table td, .table th {
+        padding: .75rem;
+        font-size: 1rem;
+        vertical-align: middle;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .td-btn {
+        text-align: right;
+    }
+
+    .new-btn {
+        font-size: 1.25rem;
+    }
+
+    .dropzone {
+        border: 2px dashed rgba(0, 0, 0, 0.3);
+        border-radius: 1rem;
+    }
+</style>
 <body>
-<div class="dropzone dz-clickable" id="myDrop" action="/upload">
-    <div class="dz-message" data-dz-message="">
-        <span>Drop files here or click to upload.</span>
+<div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="newModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">New Project</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body d-flex justify-content-around">
+                <button type="button" class="btn btn-primary new-btn" id="copy-btn">Copy from Existing</button>
+                <button type="button" class="btn btn-primary new-btn" id="upload-btn">Upload New Project</button>
+            </div>
+        </div>
     </div>
 </div>
-<div>
+<div class="modal fade" id="copyModal" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Copy From Existing</h3>
+            </div>
+            <div class="modal-body d-flex justify-content-around">
+                <select class="custom-select">
+                    <option value="1">iTrust</option>
+                    <option value="2">iTrust2</option>
+                    <option value="3">iTrust3</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
+                <button type="button" class="btn btn-primary m-2" id="copy-submit">CONFIRM</button>
+            </div>
+        </div>
+    </div>
 </div>
+<form class="modal fade multi-step" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel"
+      aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title step-1" data-step="1">Upload New Project - 1</h3>
+                <h3 class="modal-title step-2" data-step="2">Upload New Project - 2</h3>
+                <h3 class="modal-title step-3" data-step="3">Upload New Project - 3</h3>
+                <h3 class="modal-title step-4" data-step="4">Upload New Project - 4</h3>
+            </div>
+            <div class="modal-body step step-1">
+                <h4>Upload Your Project JAR</h4>
+                <div class="dropzone dz-clickable" id="jar-upload">
+                    <div class="dz-message">
+                        <span>Drop files here or click to upload.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body step step-2">
+                <h4>Analyzing Dependency...</h4>
+            </div>
+            <div class="modal-body step step-3">
+                <h4>Upload Your Project Codes</h4>
+            </div>
+            <div class="modal-body step step-4">
+                <h4>Mapping Codes to the Graph...</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CANCEL</button>
+                <button type="button" class="btn btn-primary m-2 step step-1" data-step="1"
+                        id="cont-1">CONTINUE
+                </button>
+                <button type="button" class="btn btn-primary m-2 step step-2" data-step="2"
+                        id="cont-2">CONTINUE
+                </button>
+                <button type="button" class="btn btn-primary m-2 step step-3" data-step="3"
+                        id="cont-3">CONTINUE
+                </button>
+                <button type="button" class="btn btn-primary m-2 step step-4" data-step="4"
+                        id="cont-4">Finish
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top p-0">
+    <a class="navbar-brand h1 m-0 col-2" href="#">👴 Old2Dimension</a>
+    <div class="collapse navbar-collapse col-10 px-0">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/index">Home</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">WorkSpace<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Graph</a>
+            </li>
+        </ul>
+        <div class="d-flex">
+            <button class="btn btn-outline-light mx-2">Sign Out</button>
+        </div>
+    </div>
+</nav>
+<div style="padding-top: 40px">
+    <div style="width: 50%;margin-left: 25%;">
+        <div class="card m-2">
+            <div class="card-body">
+                <div class="card-title d-flex justify-content-between">
+                    <h2>My Projects</h2>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#newModal">
+                        <span class="fa fa-plus-square mr-2"></span>New
+                    </button>
+                </div>
+                <div class="card-text">
+                    <table class="table table-hover" id="code-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Last Update</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>iTrust</td>
+                            <td>2020/4/9 22:22</td>
+                            <td class="td-btn">
+                                <button class="btn btn-light btn-setting px-0" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-ellipsis-h setting-icon"></i>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Modify Name</a>
+                                    <a class="dropdown-item" href="#">Remove</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>iTrust</td>
+                            <td>2020/4/9 22:22</td>
+                            <td class="td-btn">
+                                <button class="btn btn-light btn-setting px-0">
+                                    <i class="fa fa-ellipsis-h setting-icon"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="dropzone dz-clickable" id="myDrop">
+            <div class="dz-message" data-dz-message="">
+                <span>Drop files here or click to upload.</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript" src="webjars/popper.js/1.16.0/dist/umd/popper.min.js"></script>
+<script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../js/dropzone.min.js"></script>
+<script type="text/javascript" src="../js/multi-step-modal.js"></script>
 <script>
     Dropzone.autoDiscover = false;
     Dropzone.prototype._getParamName = function (n) {
@@ -25,7 +240,40 @@
             return "" + this.options.paramName;
         }
     };
+    // sendEvent = function (sel, step) {
+    //     let sel_event = new CustomEvent('next.m.' + step, {detail: {step: step}});
+    //     console.log(sel_event);
+    //     window.dispatchEvent(sel_event);
+    // };
     $(function () {
+        $("#cont-1").on('click', function () {
+            let sel_event = new CustomEvent('next.m.2', {detail: {step: 2}});
+            window.dispatchEvent(sel_event);
+        });
+        $("#cont-2").on('click', function () {
+            let sel_event = new CustomEvent('next.m.3', {detail: {step: 3}});
+            window.dispatchEvent(sel_event);
+        });
+        $("#cont-3").on('click', function () {
+            let sel_event = new CustomEvent('next.m.4', {detail: {step: 4}});
+            window.dispatchEvent(sel_event);
+        });
+        $("#cont-4").on('click', function () {
+            location.reload();
+        });
+        $("#copy-btn").on("click", function () {
+            $("#newModal").modal('hide');
+            $("#copyModal").modal('show');
+        });
+        $("#upload-btn").on("click", function () {
+            $("#newModal").modal('hide');
+            $("#uploadModal").modal('show');
+        });
+        let jarDz = new Dropzone("div#jar-upload", {
+            url: '/upload/jar',
+            method: 'post',
+            acceptedFiles: ".jar"
+        });
         let myDZ = new Dropzone("div#myDrop", {
             url: '/upload/code',
             method: "post",
