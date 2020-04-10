@@ -6,7 +6,7 @@ import com.old2dimension.OCEANIA.po.*;
 import com.old2dimension.OCEANIA.vo.CodeMesVO;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
 import com.old2dimension.OCEANIA.vo.StatisticsContentVO;
-import com.old2dimension.OCEANIA.vo.UserIdAndCodeMesesVO;
+import com.old2dimension.OCEANIA.vo.UserIdAndCodeMesVOs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -87,14 +87,14 @@ public class StatisticsBLImpl implements StatisticsBL {
             return ResponseVO.buildFailure("There is no user.");
         StatisticsContentVO statisticsContentVO = new StatisticsContentVO();
         statisticsContentVO.setNumOfUser(numOfUser);
-        ArrayList<UserIdAndCodeMesesVO> userIdAndCodeMesesVOes = new ArrayList<UserIdAndCodeMesesVO>();
+        ArrayList<UserIdAndCodeMesVOs> userIdAndCodeMesVOses = new ArrayList<UserIdAndCodeMesVOs>();
 
         for (User u:users) {
             int userId = u.getId();
             ArrayList<Code> codes = (ArrayList<Code>) codeRepository.findCodesByUserId(userId);
-            UserIdAndCodeMesesVO userIdAndCodeMesesVO = new UserIdAndCodeMesesVO();
-            userIdAndCodeMesesVO.setUserId(userId);
-            ArrayList<CodeMesVO> codeMeses = new ArrayList<>();
+            UserIdAndCodeMesVOs userIdAndCodeMesVOs = new UserIdAndCodeMesVOs();
+            userIdAndCodeMesVOs.setUserId(userId);
+            ArrayList<CodeMesVO> codeMesVOs = new ArrayList<>();
             for (Code c:codes) {
                 ArrayList<VertexLabel> vertexLabels= (ArrayList<VertexLabel>) vertexLabelRepository.findVertexLabelsByCodeIdAndUserId(c.getId(), userId);
                 int numOfVertexLabel = vertexLabels.size();
@@ -105,13 +105,13 @@ public class StatisticsBLImpl implements StatisticsBL {
 
                 CodeMesVO codeMesVO = new CodeMesVO(c.getName(), c.getNumOfVertices(), c.getNumOfEdges(), c.getNumOfDomains(),
                         numOfVertexLabel, numOfEdgeLabel, numOfDomainLabel);
-                codeMeses.add(codeMesVO);
+                codeMesVOs.add(codeMesVO);
             }
-            userIdAndCodeMesesVO.setCodeMesVO(codeMeses);
-            userIdAndCodeMesesVOes.add(userIdAndCodeMesesVO);
+            userIdAndCodeMesVOs.setCodeMesVOs(codeMesVOs);
+            userIdAndCodeMesVOses.add(userIdAndCodeMesVOs);
         }
 
-        statisticsContentVO.setContent(userIdAndCodeMesesVOes);
+        statisticsContentVO.setContent(userIdAndCodeMesVOses);
         return ResponseVO.buildSuccess(statisticsContentVO);
     }
 
