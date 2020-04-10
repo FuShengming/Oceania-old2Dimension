@@ -1,16 +1,14 @@
 package com.old2dimension.OCEANIA.vo;
 
-import com.old2dimension.OCEANIA.vo.UserIdAndCodeMesVO;
-
 import java.util.ArrayList;
 
 public class StatisticsContentVO {
     private int numOfUser;
-    private ArrayList<UserIdAndCodeMesVO> content;
+    private ArrayList<UserIdAndCodeMesesVO> content;
 
     public StatisticsContentVO(){}
 
-    public StatisticsContentVO(int numOfUser, ArrayList<UserIdAndCodeMesVO> content) {
+    public StatisticsContentVO(int numOfUser, ArrayList<UserIdAndCodeMesesVO> content) {
         this.numOfUser = numOfUser;
         this.content = content;
     }
@@ -23,11 +21,11 @@ public class StatisticsContentVO {
         this.numOfUser = numOfUser;
     }
 
-    public ArrayList<UserIdAndCodeMesVO> getContent() {
+    public ArrayList<UserIdAndCodeMesesVO> getContent() {
         return content;
     }
 
-    public void setContent(ArrayList<UserIdAndCodeMesVO> content) {
+    public void setContent(ArrayList<UserIdAndCodeMesesVO> content) {
         this.content = content;
     }
 }

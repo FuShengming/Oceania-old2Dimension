@@ -6,7 +6,7 @@ import com.old2dimension.OCEANIA.po.*;
 import com.old2dimension.OCEANIA.vo.CodeMesVO;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
 import com.old2dimension.OCEANIA.vo.StatisticsContentVO;
-import com.old2dimension.OCEANIA.vo.UserIdAndCodeMesVO;
+import com.old2dimension.OCEANIA.vo.UserIdAndCodeMesesVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -87,14 +87,15 @@ public class StatisticsBLImpl implements StatisticsBL {
             return ResponseVO.buildFailure("There is no user.");
         StatisticsContentVO statisticsContentVO = new StatisticsContentVO();
         statisticsContentVO.setNumOfUser(numOfUser);
-        ArrayList<UserIdAndCodeMesVO> userIdAndCodeMeseVOS = new ArrayList<UserIdAndCodeMesVO>();
+        ArrayList<UserIdAndCodeMesesVO> userIdAndCodeMesesVOes = new ArrayList<UserIdAndCodeMesesVO>();
 
         for (User u:users) {
             int userId = u.getId();
             ArrayList<Code> codes = (ArrayList<Code>) codeRepository.findCodesByUserId(userId);
+            UserIdAndCodeMesesVO userIdAndCodeMesesVO = new UserIdAndCodeMesesVO();
+            userIdAndCodeMesesVO.setUserId(userId);
+            ArrayList<CodeMesVO> codeMeses = new ArrayList<>();
             for (Code c:codes) {
-                UserIdAndCodeMesVO userIdAndCodeMesVO = new UserIdAndCodeMesVO();
-                userIdAndCodeMesVO.setUserId(userId);
                 ArrayList<VertexLabel> vertexLabels= (ArrayList<VertexLabel>) vertexLabelRepository.findVertexLabelsByCodeIdAndUserId(c.getId(), userId);
                 int numOfVertexLabel = vertexLabels.size();
                 ArrayList<EdgeLabel> edgeLabels= (ArrayList<EdgeLabel>) edgeLabelRepository.findEdgeLabelsByCodeIdAndUserId(c.getId(), userId);
@@ -104,12 +105,13 @@ public class StatisticsBLImpl implements StatisticsBL {
 
                 CodeMesVO codeMesVO = new CodeMesVO(c.getName(), c.getNumOfVertices(), c.getNumOfEdges(), c.getNumOfDomains(),
                         numOfVertexLabel, numOfEdgeLabel, numOfDomainLabel);
-                userIdAndCodeMesVO.setCodeMesVO(codeMesVO);
-                userIdAndCodeMeseVOS.add(userIdAndCodeMesVO);
+                codeMeses.add(codeMesVO);
             }
+            userIdAndCodeMesesVO.setCodeMesVO(codeMeses);
+            userIdAndCodeMesesVOes.add(userIdAndCodeMesesVO);
         }
 
-        statisticsContentVO.setContent(userIdAndCodeMeseVOS);
+        statisticsContentVO.setContent(userIdAndCodeMesesVOes);
         return ResponseVO.buildSuccess(statisticsContentVO);
     }
 
