@@ -90,7 +90,13 @@ public class UploadBLImpl implements UploadBL {
 
         PrintStream psOld = System.out; // 保存原来的输出路径
         System.setOut(new PrintStream(dependencies));// 设置输出重新定向到文件
+        try{
         JCallGraph.main(args);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseVO.buildFailure("Call-Graph error");
+        }
         System.setOut(psOld);
         filterDependencies("src/main/resources/dependencies/"+codeId+".txt",packageStrings);
 
@@ -108,7 +114,7 @@ public class UploadBLImpl implements UploadBL {
             throw new FileNotFoundException();
         BufferedReader br=new BufferedReader(new FileReader(file));
         String temp=null;
-        StringBuffer stringBuffer=new StringBuffer();
+        StringBuffer stringBuffer = new StringBuffer();
         temp=br.readLine();
 
         while(temp!=null){
