@@ -115,6 +115,8 @@
 			<version>4.7.0</version>
 		</dependency>
 
+<!--		阿里云oss-->
+
     </dependencies>
 
 	<build>

@@ -9,6 +9,7 @@ import com.old2dimension.OCEANIA.po.Vertex;
 import com.old2dimension.OCEANIA.po.WorkSpace;
 import com.old2dimension.OCEANIA.vo.*;
 
+import org.apache.bcel.generic.BALOAD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -110,41 +111,60 @@ public class CodeBLImpl implements CodeBL {
             return ResponseVO.buildFailure("no such user or code");
         }
         if(code.getIs_default()==1){
-        return getFuncCodeWithVertexVO(vertexVOAndUserIdAndCodeId.getVertexVO());
+        return getFuncCodeWithVertexVO(vertexVOAndUserIdAndCodeId.getVertexVO(),code.getId(),1);
         }
         else{
-            return ResponseVO.buildFailure("目前不支持itrust以外的代码分析");
+            return getFuncCodeWithVertexVO(vertexVOAndUserIdAndCodeId.getVertexVO(),code.getId(),0);
+
+            // return ResponseVO.buildFailure("目前不支持itrust以外的代码分析");
         }
     }
 
-    private ResponseVO getFuncCodeWithVertexVO(VertexVO vertexVO){
-        String basicPath = "analyzeCode/src/";
+    private ResponseVO getFuncCodeWithVertexVO(VertexVO vertexVO, int codeId,int isDefault){
+        String basicPath = "";
+        if(isDefault == 1){
+          basicPath  = "src/main/resources/analyzeCode/src/0";
+        }
+        else{
+        basicPath = "src/main/resources/analyzeCode/src/"+codeId;
+        }
+
+        File basicDir = new File(basicPath);
+        if(!basicDir.exists()){
+            return ResponseVO.buildFailure("dictionary does not exist");
+        }
+
         String packageStr = vertexVO.getBelongPackage();
         String classStr = vertexVO.getBelongClass();
         String internalClass="";
-        StringBuilder sb = new StringBuilder(basicPath);
         String lineSeparator = System.lineSeparator();
         String classNameBf = "";
         boolean isAbstract = false;
+
+
         int tempStrLength = packageStr.length();
-        for(int i = 0; i < tempStrLength; i++){
-            char curChar = packageStr.charAt(i);
-            if(curChar != '.'){
-                sb.append(curChar);
-            }
-            else{
-                sb.append('/');
-            }
+
+
+
+        packageStr = packageStr.replaceAll("[.]","/");
+
+
+
+        //----------------------------------------------------
+        String packPath = getPackagePath(basicPath,packageStr);
+        if(packPath==null){
+
+            return ResponseVO.buildFailure("dictionary does not exist");
         }
-        basicPath = sb.toString();
-        Resource resource = new ClassPathResource(basicPath);
-        File packageDir = new File("");
-        try {
-            packageDir = resource.getFile();
-        }
-        catch (IOException e){
-            return ResponseVO.buildFailure("package dir errors");
-        }
+        File packageDir = new File(packPath);
+        //----------------------------------------------------
+
+//        try {
+//            packageDir = resource.getFile();
+//        }
+//        catch (IOException e){
+//            return ResponseVO.buildFailure("package dir errors");
+//        }
 
         if(classStr.contains("$")){
             internalClass = classStr.substring(classStr.indexOf("$")+1);
@@ -158,10 +178,14 @@ public class CodeBLImpl implements CodeBL {
         }
 
         for (File curFile : files) {
-            if(curFile.isFile()&&curFile.getName().equals(classStr+".java")){
+            if(curFile.isFile()){
+                if(curFile.getName().equals(classStr+".java")){
                 System.out.println("is a className");
                 classFile = curFile;
-                break;
+                break;}
+            }
+            else if(curFile.isDirectory()){
+
             }
         }
 
@@ -424,6 +448,31 @@ public class CodeBLImpl implements CodeBL {
         //return ResponseVO.buildFailure("test");
     }
 
+    private String getPackagePath(String basicPath, String packagePath){
+        String fullPath = basicPath+"/"+packagePath;
+        System.out.println("full:"+fullPath);
+        if(new File(fullPath).exists()){
+            return fullPath;
+        }
+        else {
+            File[] files = new File(basicPath).listFiles();
+            if(files==null||files.length==0){
+                return null;
+            }
+            for(File cur : files){
+                System.out.println(cur.getName());
+                basicPath = cur.getAbsolutePath();
+                String temp = getPackagePath(basicPath,packagePath);
+                if(temp != null){
+                    return temp;
+                }
+            }
+            return null;
+        }
+
+
+    }
+
     private String getFuncBody(String content, int funcIndex,boolean isAbstract){
         String lineSeparator = System.lineSeparator();
         if(isAbstract){
@@ -494,11 +543,28 @@ public class CodeBLImpl implements CodeBL {
         }
 
 
-        String basicPath = "analyzeCode/src";
-        String rootPath = "edu";
+        String basicPath = "analyzeCode/src/"+userAndCodeForm.getCodeId();
+        System.out.println();
+
+        File basic = null;
+        Resource resource = new ClassPathResource(basicPath);
+        try {
+            basic = resource.getFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseVO.buildFailure("nop");
+        }
+
+        File[] basicFiles = basic.listFiles();
+        if(basicFiles == null ){
+            return ResponseVO.buildFailure("dictionary error");
+        }
+        //---------目前只支持一份源码有一个最外层父文件夹------
+        String rootPath = basicFiles[0].getName();
+        //-------------------------------------------------
         basicPath = basicPath + "/" + rootPath;
         CodeNode codeNode = new CodeNode(rootPath);
-        Resource resource = new ClassPathResource(basicPath);
+
         File f = null;
         try {
             f = resource.getFile();
@@ -512,7 +578,7 @@ public class CodeBLImpl implements CodeBL {
         }
 
         for (File file : files) {
-            CodeNode child = createChildNode(rootPath, file, vertices);
+            CodeNode child = createChildNode(rootPath, file, vertices,basicPath);
             if (child != null)
                 codeNode.addChild(child);
         }
@@ -523,8 +589,8 @@ public class CodeBLImpl implements CodeBL {
         return ResponseVO.buildSuccess(codeNode);
     }
 
-    private CodeNode createChildNode(String fatherPath, File file, ArrayList<Vertex> vertices) {
-        String basicPath = "analyzeCode/src";
+    private CodeNode createChildNode(String fatherPath, File file, ArrayList<Vertex> vertices,String basicPath) {
+
         String name = file.getName();
         CodeNode codeNode = new CodeNode(name);
         String path = fatherPath + "/" + name;
@@ -549,7 +615,7 @@ public class CodeBLImpl implements CodeBL {
             }
 
             for (File file1 : files) {
-                CodeNode child = createChildNode(path, file1, vertices);
+                CodeNode child = createChildNode(path, file1, vertices,basicPath);
                 if (child != null)
                     codeNode.addChild(child);
 

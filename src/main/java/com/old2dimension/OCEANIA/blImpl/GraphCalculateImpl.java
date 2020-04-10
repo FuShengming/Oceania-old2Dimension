@@ -6,12 +6,11 @@ import com.old2dimension.OCEANIA.dao.CodeRepository;
 import com.old2dimension.OCEANIA.dao.UserRepository;
 import com.old2dimension.OCEANIA.po.*;
 import com.old2dimension.OCEANIA.vo.*;
+import gr.gousiosg.javacg.stat.JCallGraph;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 @Component
@@ -66,7 +65,21 @@ public class GraphCalculateImpl implements GraphCalculateBL {
             DependencyGraphVO dependencyGraphVO=new DependencyGraphVO(new DomainSetVO(domainSet));
             return ResponseVO.buildSuccess(dependencyGraphVO);
         }
-        return ResponseVO.buildFailure("目前只支持iTrust分析");
+        else{
+            curUserId=userAndCodeForm.getUserId();
+            curCodeId=userAndCodeForm.getCodeId();
+            System.out.println("iTrust");
+            initializeGraph("src/main/resources/dependencies/"+curCode.getId()+".txt");
+            WeightForm weightForm = new WeightForm();
+            weightForm.setWeightName("closeness");
+            weightForm.setWeightValue(0);
+            ArrayList<WeightForm> weightForms = new ArrayList<WeightForm>();
+            weightForms.add(weightForm);
+            getConnectedDomains(weightForms);
+            DependencyGraphVO dependencyGraphVO=new DependencyGraphVO(new DomainSetVO(domainSet));
+            return ResponseVO.buildSuccess(dependencyGraphVO);
+        }
+
     }
 
     public ResponseVO filterByWeightForm(ArrayList<WeightForm> weightForms){
@@ -380,6 +393,4 @@ public class GraphCalculateImpl implements GraphCalculateBL {
             generateDomain(domain, i, endId, thresholds);
         }
     }
-
-
 }
