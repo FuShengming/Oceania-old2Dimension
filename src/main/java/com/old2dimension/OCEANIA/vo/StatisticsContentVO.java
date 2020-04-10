@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class StatisticsContentVO {
     private int numOfUser;
-    private ArrayList<UserIdAndCodeMesesVO> content;
+    private ArrayList<UserIdAndCodeMesVOs> content;
 
     public StatisticsContentVO(){}
 
-    public StatisticsContentVO(int numOfUser, ArrayList<UserIdAndCodeMesesVO> content) {
+    public StatisticsContentVO(int numOfUser, ArrayList<UserIdAndCodeMesVOs> content) {
         this.numOfUser = numOfUser;
         this.content = content;
     }
@@ -21,11 +21,11 @@ public class StatisticsContentVO {
         this.numOfUser = numOfUser;
     }
 
-    public ArrayList<UserIdAndCodeMesesVO> getContent() {
+    public ArrayList<UserIdAndCodeMesVOs> getContent() {
         return content;
     }
 
-    public void setContent(ArrayList<UserIdAndCodeMesesVO> content) {
+    public void setContent(ArrayList<UserIdAndCodeMesVOs> content) {
         this.content = content;
     }
 }
