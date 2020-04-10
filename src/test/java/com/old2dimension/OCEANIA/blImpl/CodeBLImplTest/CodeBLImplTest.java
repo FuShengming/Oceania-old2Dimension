@@ -3,17 +3,17 @@ import com.old2dimension.OCEANIA.blImpl.CodeBLImpl;
 import com.old2dimension.OCEANIA.blImpl.GraphCalculateImpl;
 import com.old2dimension.OCEANIA.dao.CodeRepository;
 import com.old2dimension.OCEANIA.dao.UserRepository;
+import com.old2dimension.OCEANIA.dao.WorkPlaceRepository;
 import com.old2dimension.OCEANIA.po.Code;
 import com.old2dimension.OCEANIA.po.CodeNode;
 import com.old2dimension.OCEANIA.po.User;
-import com.old2dimension.OCEANIA.vo.ResponseVO;
-import com.old2dimension.OCEANIA.vo.UserAndCodeForm;
-import com.old2dimension.OCEANIA.vo.VertexVO;
-import com.old2dimension.OCEANIA.vo.VertexVOAndUserIdAndCodeId;
+import com.old2dimension.OCEANIA.po.WorkSpace;
+import com.old2dimension.OCEANIA.vo.*;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import static org.mockito.Mockito.*;
 
@@ -310,6 +310,42 @@ public class CodeBLImplTest {
         ArrayList<CodeNode> rua = codeNode3.getNodes();
         Assert.assertEquals(rua.size(), 19);
     }
+
+    @Test
+    public void getCodesByUserIdTest1(){
+        ArrayList<Code> res = new ArrayList<Code>();
+        Code code = new Code();
+        code.setId(1);
+        code.setName("name");
+        CodeBLImpl codeBL = new CodeBLImpl();
+        res.add(code);
+        WorkSpace workSpace = new WorkSpace();
+        workSpace.setDate(new Date());
+        CodeRepository codeRepository = mock(CodeRepository.class);
+        WorkPlaceRepository workPlaceRepository = mock(WorkPlaceRepository.class);
+        codeBL.setCodeRepository(codeRepository);
+        codeBL.setWorkPlaceRepository(workPlaceRepository);
+        when(codeRepository.findCodesByUserId(1)).thenReturn(res);
+        when(workPlaceRepository.findLatestWorkSpace(1,1)).thenReturn(workSpace);
+        ResponseVO responseVO = codeBL.getCodesByUserId(1);
+        Assert.assertEquals("name", ((ArrayList<CodeAndDateForm>)(responseVO.getContent())).get(0).getCodeName());
+    }
+
+    @Test
+    public void getCodesByUserIdTest2(){
+        ArrayList<Code> res = new ArrayList<Code>();
+        CodeBLImpl codeBL = new CodeBLImpl();
+        WorkSpace workSpace = new WorkSpace();
+        workSpace.setDate(new Date());
+        CodeRepository codeRepository = mock(CodeRepository.class);
+        WorkPlaceRepository workPlaceRepository = mock(WorkPlaceRepository.class);
+        codeBL.setCodeRepository(codeRepository);
+        codeBL.setWorkPlaceRepository(workPlaceRepository);
+        when(codeRepository.findCodesByUserId(1)).thenReturn(res);
+        ResponseVO responseVO = codeBL.getCodesByUserId(1);
+        Assert.assertEquals(0, ((ArrayList<CodeAndDateForm>)(responseVO.getContent())).size());
+    }
+
 
 }
 
