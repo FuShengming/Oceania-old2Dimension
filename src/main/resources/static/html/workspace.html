@@ -60,6 +60,11 @@
     .new-btn {
         font-size: 1.25rem;
     }
+
+    .dropzone {
+        border: 2px dashed rgba(0, 0, 0, 0.3);
+        border-radius: 1rem;
+    }
 </style>
 <body>
 <div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="newModalLabel"
@@ -112,6 +117,11 @@
             </div>
             <div class="modal-body step step-1">
                 <h4>Upload Your Project JAR</h4>
+                <div class="dropzone dz-clickable" id="jar-upload">
+                    <div class="dz-message">
+                        <span>Drop files here or click to upload.</span>
+                    </div>
+                </div>
             </div>
             <div class="modal-body step step-2">
                 <h4>Analyzing Dependency...</h4>
@@ -207,7 +217,7 @@
                 </div>
             </div>
         </div>
-        <div class="dropzone dz-clickable" id="myDrop" action="/upload">
+        <div class="dropzone dz-clickable" id="myDrop">
             <div class="dz-message" data-dz-message="">
                 <span>Drop files here or click to upload.</span>
             </div>
@@ -258,6 +268,11 @@
         $("#upload-btn").on("click", function () {
             $("#newModal").modal('hide');
             $("#uploadModal").modal('show');
+        });
+        let jarDz = new Dropzone("div#jar-upload", {
+            url: '/upload/jar',
+            method: 'post',
+            acceptedFiles: ".jar"
         });
         let myDZ = new Dropzone("div#myDrop", {
             url: '/upload/code',
