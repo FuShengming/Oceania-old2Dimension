@@ -2,9 +2,11 @@ package com.old2dimension.OCEANIA.blImpl;
 
 import com.old2dimension.OCEANIA.bl.CodeBL;
 import com.old2dimension.OCEANIA.dao.CodeRepository;
+import com.old2dimension.OCEANIA.dao.WorkPlaceRepository;
 import com.old2dimension.OCEANIA.po.Code;
 import com.old2dimension.OCEANIA.po.CodeNode;
 import com.old2dimension.OCEANIA.po.Vertex;
+import com.old2dimension.OCEANIA.po.WorkSpace;
 import com.old2dimension.OCEANIA.vo.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,22 @@ public class CodeBLImpl implements CodeBL {
 
     @Autowired
     CodeRepository codeRepository;
+    @Autowired
+    WorkPlaceRepository workPlaceRepository;
+    @Autowired
+    GraphCalculateImpl graphCalculate;
+
+    public void setGraphCalculate(GraphCalculateImpl graphCalculate) {
+        this.graphCalculate = graphCalculate;
+    }
+
+    public void setCodeRepository(CodeRepository codeRepository) {
+        this.codeRepository = codeRepository;
+    }
+
+    public void setWorkPlaceRepository(WorkPlaceRepository workPlaceRepository) {
+        this.workPlaceRepository = workPlaceRepository;
+    }
 
     public ResponseVO modifyName(CodeIdAndUserIdAndNameForm codeIdAndUserIdAndNameForm){
 
@@ -64,26 +82,23 @@ public class CodeBLImpl implements CodeBL {
         return ResponseVO.buildFailure("目前只支持iTrust分析");
     }
 
-    public void setGraphCalculate(GraphCalculateImpl graphCalculate) {
-        this.graphCalculate = graphCalculate;
-    }
-
-    @Autowired
-    GraphCalculateImpl graphCalculate;
-
-    public void setCodeRepository(CodeRepository codeRepository) {
-        this.codeRepository = codeRepository;
-    }
-
 
     public ResponseVO getCodesByUserId(int userId){
         List<Code> dbRes = codeRepository.findCodesByUserId(userId);
         if(dbRes == null){
-            return ResponseVO.buildFailure("that user doesn't have any codes");
+            return ResponseVO.buildFailure("get codes error");
         }
-        List<CodeVO> res = new ArrayList<CodeVO>();
+        List<CodeAndDateForm> res = new ArrayList<CodeAndDateForm>();
         for(Code cur : dbRes){
-            res.add(new CodeVO(cur));
+            CodeAndDateForm codeAndDateForm = null;
+            WorkSpace tempWs = workPlaceRepository.findLatestWorkSpace(userId,cur.getId());
+            if(tempWs == null){
+                codeAndDateForm = new CodeAndDateForm(cur,null);
+            }
+            else{
+                codeAndDateForm = new CodeAndDateForm(cur,tempWs.getDate());
+            }
+            res.add(codeAndDateForm);
         }
         return ResponseVO.buildSuccess(res);
     }
@@ -216,8 +231,6 @@ public class CodeBLImpl implements CodeBL {
             if(funcName.equals("<clinit>")){
                 return ResponseVO.buildSuccess("this function is class initialize function, it doesn't have a function body.");
             }
-
-
 
 
             boolean funcStringExist = false;
