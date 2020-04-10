@@ -6,7 +6,7 @@ import com.old2dimension.OCEANIA.po.*;
 import com.old2dimension.OCEANIA.vo.CodeMesVO;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
 import com.old2dimension.OCEANIA.vo.StatisticsContentVO;
-import com.old2dimension.OCEANIA.vo.UserIdAndCodeMesVO;
+import com.old2dimension.OCEANIA.vo.UserIdAndCodeMesesVO;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -56,11 +56,11 @@ public class StatisticsBLImplTest {
         ResponseVO responseVO = statisticsBL.getAllMes();
         StatisticsContentVO statisticsContentVO = (StatisticsContentVO) responseVO.getContent();
 
-        ArrayList<UserIdAndCodeMesVO> userIdAndCodeMeseVOS = statisticsContentVO.getContent();
-        UserIdAndCodeMesVO userIdAndCodeMesVO = userIdAndCodeMeseVOS.get(0);
-        CodeMesVO codeMesVO = userIdAndCodeMesVO.getCodeMesVO();
+        ArrayList<UserIdAndCodeMesesVO> userIdAndCodeMesesVOes = statisticsContentVO.getContent();
+        UserIdAndCodeMesesVO userIdAndCodeMesesVO = userIdAndCodeMesesVOes.get(0);
+        CodeMesVO codeMesVO = userIdAndCodeMesesVO.getCodeMesesVO().get(0);
 
-        Assert.assertEquals(userIdAndCodeMeseVOS.size(), 1);
+        Assert.assertEquals(userIdAndCodeMesesVOes.size(), 2);
         Assert.assertEquals(statisticsContentVO.getNumOfUser(), 2);
 
         Assert.assertEquals(codeMesVO.getCodeName(), "itrust");
