@@ -3,6 +3,10 @@ package com.old2dimension.OCEANIA.blImpl;
 import com.old2dimension.OCEANIA.bl.StatisticsBL;
 import com.old2dimension.OCEANIA.dao.*;
 import com.old2dimension.OCEANIA.po.*;
+import com.old2dimension.OCEANIA.vo.CodeMesVO;
+import com.old2dimension.OCEANIA.vo.ResponseVO;
+import com.old2dimension.OCEANIA.vo.StatisticsContentVO;
+import com.old2dimension.OCEANIA.vo.UserIdAndCodeMesVOs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -74,6 +78,41 @@ public class StatisticsBLImpl implements StatisticsBL {
         res[5] = domainLabels.size();
 
         return res;
+    }
+
+    public ResponseVO getAllMes() {
+        ArrayList<User> users = (ArrayList<User>) userRepository.findAll();
+        int numOfUser = users.size();
+        if (numOfUser == 0)
+            return ResponseVO.buildFailure("There is no user.");
+        StatisticsContentVO statisticsContentVO = new StatisticsContentVO();
+        statisticsContentVO.setNumOfUser(numOfUser);
+        ArrayList<UserIdAndCodeMesVOs> userIdAndCodeMesVOses = new ArrayList<UserIdAndCodeMesVOs>();
+
+        for (User u:users) {
+            int userId = u.getId();
+            ArrayList<Code> codes = (ArrayList<Code>) codeRepository.findCodesByUserId(userId);
+            UserIdAndCodeMesVOs userIdAndCodeMesVOs = new UserIdAndCodeMesVOs();
+            userIdAndCodeMesVOs.setUserId(userId);
+            ArrayList<CodeMesVO> codeMesVOs = new ArrayList<>();
+            for (Code c:codes) {
+                ArrayList<VertexLabel> vertexLabels= (ArrayList<VertexLabel>) vertexLabelRepository.findVertexLabelsByCodeIdAndUserId(c.getId(), userId);
+                int numOfVertexLabel = vertexLabels.size();
+                ArrayList<EdgeLabel> edgeLabels= (ArrayList<EdgeLabel>) edgeLabelRepository.findEdgeLabelsByCodeIdAndUserId(c.getId(), userId);
+                int numOfEdgeLabel = edgeLabels.size();
+                ArrayList<DomainLabel> domainLabels= (ArrayList<DomainLabel>) domainLabelRepository.findDomainLabelsByCodeIdAndUserId(c.getId(), userId);
+                int numOfDomainLabel = domainLabels.size();
+
+                CodeMesVO codeMesVO = new CodeMesVO(c.getName(), c.getNumOfVertices(), c.getNumOfEdges(), c.getNumOfDomains(),
+                        numOfVertexLabel, numOfEdgeLabel, numOfDomainLabel);
+                codeMesVOs.add(codeMesVO);
+            }
+            userIdAndCodeMesVOs.setCodeMesVOs(codeMesVOs);
+            userIdAndCodeMesVOses.add(userIdAndCodeMesVOs);
+        }
+
+        statisticsContentVO.setContent(userIdAndCodeMesVOses);
+        return ResponseVO.buildSuccess(statisticsContentVO);
     }
 
 }
