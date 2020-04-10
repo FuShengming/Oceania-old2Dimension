@@ -27,7 +27,7 @@ public class StatisticsController {
         return statisticsBL.getNumOfCode();
     }
 
-    @RequestMapping("/getCodeMes/{codeId}")
+    @RequestMapping("/getCodeMesVO/{codeId}")
     public int[] getCodeMes(@PathVariable("codeId") int codeId){
         return statisticsBL.getCodeMes(codeId);
     }

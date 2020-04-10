@@ -1,6 +1,6 @@
-package com.old2dimension.OCEANIA.po;
+package com.old2dimension.OCEANIA.vo;
 
-public class CodeMes {
+public class CodeMesVO {
     private String codeName;
     private int numOfVertex;
     private int numOfEdge;
@@ -9,9 +9,9 @@ public class CodeMes {
     private int numOfEdgeLabel;
     private int numOfDomainLabel;
 
-    public CodeMes(){}
+    public CodeMesVO(){}
 
-    public CodeMes(String codeName, int numOfVertex, int numOfEdge, int numOfDomain, int numOfVertexLabel, int numOfEdgeLabel, int numOfDomainLabel) {
+    public CodeMesVO(String codeName, int numOfVertex, int numOfEdge, int numOfDomain, int numOfVertexLabel, int numOfEdgeLabel, int numOfDomainLabel) {
         this.codeName = codeName;
         this.numOfVertex = numOfVertex;
         this.numOfEdge = numOfEdge;

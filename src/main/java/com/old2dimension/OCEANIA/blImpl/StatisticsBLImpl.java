@@ -3,7 +3,10 @@ package com.old2dimension.OCEANIA.blImpl;
 import com.old2dimension.OCEANIA.bl.StatisticsBL;
 import com.old2dimension.OCEANIA.dao.*;
 import com.old2dimension.OCEANIA.po.*;
+import com.old2dimension.OCEANIA.vo.CodeMesVO;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
+import com.old2dimension.OCEANIA.vo.StatisticsContentVO;
+import com.old2dimension.OCEANIA.vo.UserIdAndCodeMesVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -82,16 +85,16 @@ public class StatisticsBLImpl implements StatisticsBL {
         int numOfUser = users.size();
         if (numOfUser == 0)
             return ResponseVO.buildFailure("There is no user.");
-        StatisticsContent statisticsContent = new StatisticsContent();
-        statisticsContent.setNumOfUser(numOfUser);
-        ArrayList<UserIdAndCodeMes> userIdAndCodeMeses = new ArrayList<UserIdAndCodeMes>();
+        StatisticsContentVO statisticsContentVO = new StatisticsContentVO();
+        statisticsContentVO.setNumOfUser(numOfUser);
+        ArrayList<UserIdAndCodeMesVO> userIdAndCodeMeseVOS = new ArrayList<UserIdAndCodeMesVO>();
 
         for (User u:users) {
             int userId = u.getId();
             ArrayList<Code> codes = (ArrayList<Code>) codeRepository.findCodesByUserId(userId);
             for (Code c:codes) {
-                UserIdAndCodeMes userIdAndCodeMes = new UserIdAndCodeMes();
-                userIdAndCodeMes.setUserId(userId);
+                UserIdAndCodeMesVO userIdAndCodeMesVO = new UserIdAndCodeMesVO();
+                userIdAndCodeMesVO.setUserId(userId);
                 ArrayList<VertexLabel> vertexLabels= (ArrayList<VertexLabel>) vertexLabelRepository.findVertexLabelsByCodeIdAndUserId(c.getId(), userId);
                 int numOfVertexLabel = vertexLabels.size();
                 ArrayList<EdgeLabel> edgeLabels= (ArrayList<EdgeLabel>) edgeLabelRepository.findEdgeLabelsByCodeIdAndUserId(c.getId(), userId);
@@ -99,15 +102,15 @@ public class StatisticsBLImpl implements StatisticsBL {
                 ArrayList<DomainLabel> domainLabels= (ArrayList<DomainLabel>) domainLabelRepository.findDomainLabelsByCodeIdAndUserId(c.getId(), userId);
                 int numOfDomainLabel = domainLabels.size();
 
-                CodeMes codeMes = new CodeMes(c.getName(), c.getNumOfVertices(), c.getNumOfEdges(), c.getNumOfDomains(),
+                CodeMesVO codeMesVO = new CodeMesVO(c.getName(), c.getNumOfVertices(), c.getNumOfEdges(), c.getNumOfDomains(),
                         numOfVertexLabel, numOfEdgeLabel, numOfDomainLabel);
-                userIdAndCodeMes.setCodeMes(codeMes);
-                userIdAndCodeMeses.add(userIdAndCodeMes);
+                userIdAndCodeMesVO.setCodeMesVO(codeMesVO);
+                userIdAndCodeMeseVOS.add(userIdAndCodeMesVO);
             }
         }
 
-        statisticsContent.setContent(userIdAndCodeMeses);
-        return ResponseVO.buildSuccess(statisticsContent);
+        statisticsContentVO.setContent(userIdAndCodeMeseVOS);
+        return ResponseVO.buildSuccess(statisticsContentVO);
     }
 
 }
