@@ -76,7 +76,16 @@ public class GraphCalculateImpl implements GraphCalculateBL {
             ArrayList<WeightForm> weightForms = new ArrayList<WeightForm>();
             weightForms.add(weightForm);
             getConnectedDomains(weightForms);
+            if(curCode.getNumOfVertices()==0||curCode.getNumOfEdges()==0||curCode.getNumOfDomains()==0){
+                curCode.setNumOfVertices(allVertexes.size());
+                curCode.setNumOfEdges(allEdges.size());
+                curCode.setNumOfDomains(domainSet.getDomainSetSize());
+                codeRepository.save(curCode);
+            }
+            weightForm.setWeightValue(0.15);
+            getConnectedDomains(weightForms);
             DependencyGraphVO dependencyGraphVO=new DependencyGraphVO(new DomainSetVO(domainSet));
+
             return ResponseVO.buildSuccess(dependencyGraphVO);
         }
 
