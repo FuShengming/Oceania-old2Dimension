@@ -40,7 +40,7 @@ public class GraphCalculateImpl implements GraphCalculateBL {
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    
+
     public ResponseVO getGraph(UserAndCodeForm userAndCodeForm){
 
         User currentUser = userRepository.findUserById(userAndCodeForm.getUserId());
