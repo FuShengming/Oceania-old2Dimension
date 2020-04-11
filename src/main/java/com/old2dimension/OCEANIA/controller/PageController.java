@@ -26,6 +26,16 @@ public class PageController {
     public String statistics() {
         return "/html/statistics.html";
     }
+
+    @RequestMapping("/login")
+    public String login() {
+        return "/html/login.html";
+    }
+
+    @RequestMapping("/register")
+    public String register() {
+        return "/html/register.html";
+    }
 //    @RequestMapping("/cy")
 //    public String cy() {
 //        return "/html/cytotest.html";
