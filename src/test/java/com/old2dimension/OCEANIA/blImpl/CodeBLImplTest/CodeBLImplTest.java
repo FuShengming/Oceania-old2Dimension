@@ -10,7 +10,8 @@ import com.old2dimension.OCEANIA.po.User;
 import com.old2dimension.OCEANIA.po.WorkSpace;
 import com.old2dimension.OCEANIA.vo.*;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 
 import java.util.ArrayList;
 import java.util.Date;

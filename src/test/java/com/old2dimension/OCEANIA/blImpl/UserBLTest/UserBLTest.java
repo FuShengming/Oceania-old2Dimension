@@ -9,7 +9,8 @@ import com.old2dimension.OCEANIA.po.User;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
 import com.old2dimension.OCEANIA.vo.UserVO;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import static org.mockito.Mockito.*;
 
 public class UserBLTest {
