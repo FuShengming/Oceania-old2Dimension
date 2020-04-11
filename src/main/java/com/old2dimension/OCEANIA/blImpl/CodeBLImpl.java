@@ -548,18 +548,22 @@ public class CodeBLImpl implements CodeBL {
             tempId = code.getId();
         }
 
-        String basicPath = "analyzeCode/src/"+ tempId;
+        String basicPath = "src/main/resources/analyzeCode/src/"+ tempId;
         String tempbasicPath = basicPath;
         System.out.println();
 
-        File basic = null;
-        Resource resource = new ClassPathResource(basicPath);
-        try {
-            basic = resource.getFile();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseVO.buildFailure("nop");
+        File basic = new File(basicPath);
+//        Resource resource = new ClassPathResource(basicPath);
+//        try {
+//            basic = resource.getFile();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseVO.buildFailure("nop");
+//        }
+        if(!basic.exists()){
+            return ResponseVO.buildFailure("basic path does not exist");
         }
+
 
         File[] basicFiles = basic.listFiles();
         if(basicFiles == null ){
@@ -570,14 +574,20 @@ public class CodeBLImpl implements CodeBL {
         //-------------------------------------------------
         basicPath = basicPath + "/" + rootPath;
         CodeNode codeNode = new CodeNode(rootPath);
-        resource = new ClassPathResource(basicPath);
-        File f = null;
-        try {
-            f = resource.getFile();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseVO.buildFailure("nop");
+//        resource = new ClassPathResource(basicPath);
+//        File f = null;
+//        try {
+//            f = resource.getFile();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseVO.buildFailure("nop");
+//        }
+        File f = new File(basicPath);
+
+        if(!basic.exists()){
+            return ResponseVO.buildFailure("basic child path does not exist");
         }
+
         File[] files = f.listFiles();
         if (files == null) {
             return ResponseVO.buildFailure("empty dir");
@@ -608,12 +618,17 @@ public class CodeBLImpl implements CodeBL {
             //System.out.println(res.size());
             return codeNode;
         } else {
-            Resource resource = new ClassPathResource(basicPath + "/" + path);
-            File f = null;
-            try {
-                f = resource.getFile();
-            } catch (Exception e) {
-                e.printStackTrace();
+//            Resource resource = new ClassPathResource(basicPath + "/" + path);
+//            File f = null;
+//            try {
+//                f = resource.getFile();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                return null;
+//            }
+            File f = new File(basicPath+"/"+path);
+
+            if(!f.exists()){
                 return null;
             }
             File[] files = f.listFiles();
