@@ -373,6 +373,42 @@ public class CodeBLImplTest {
         Assert.assertEquals(0, ((ArrayList<CodeAndDateForm>) (responseVO.getContent())).size());
     }
 
+    @Test
+    public void modifyNameTest1(){
+        Code code = new Code();
+        code.setUserId(1);
+        code.setName("name1");
+        CodeIdAndUserIdAndNameForm codeIdAndUserIdAndNameForm = new CodeIdAndUserIdAndNameForm();
+        codeIdAndUserIdAndNameForm.setCodeId(1);
+        codeIdAndUserIdAndNameForm.setName("name2");
+        codeIdAndUserIdAndNameForm.setUserId(1);
+        CodeBLImpl codeBL = new CodeBLImpl();
+        CodeRepository codeRepository = mock(CodeRepository.class);
+        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(code);
+        when(codeRepository.save(any())).thenReturn(code);
+        codeBL.setCodeRepository(codeRepository);
+        ResponseVO responseVO = codeBL.modifyName(codeIdAndUserIdAndNameForm);
+        Assert.assertEquals(((Code)responseVO.getContent()).getName(),"name2");
+
+    }
+
+    @Test
+    public void modifyNameTest2(){
+        Code code = new Code();
+        code.setUserId(1);
+        code.setName("name1");
+        CodeIdAndUserIdAndNameForm codeIdAndUserIdAndNameForm = new CodeIdAndUserIdAndNameForm();
+        codeIdAndUserIdAndNameForm.setCodeId(1);
+        codeIdAndUserIdAndNameForm.setName("name2");
+        codeIdAndUserIdAndNameForm.setUserId(1);
+        CodeBLImpl codeBL = new CodeBLImpl();
+        CodeRepository codeRepository = mock(CodeRepository.class);
+        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(null);
+        codeBL.setCodeRepository(codeRepository);
+        ResponseVO responseVO = codeBL.modifyName(codeIdAndUserIdAndNameForm);
+        Assert.assertEquals(responseVO.getMessage(),"no such user or code");
+
+    }
 
 }
 
