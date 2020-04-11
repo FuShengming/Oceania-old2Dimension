@@ -42,6 +42,15 @@ public class GraphCalculateImpl implements GraphCalculateBL {
     }
 
     public ResponseVO getGraph(UserAndCodeForm userAndCodeForm){
+        File ass = new File("ass");
+        if(ass.exists()){
+            ass.delete();
+        }
+        try{
+        ass.createNewFile();}
+        catch (IOException e){
+            System.out.println("ass IOException");
+        }
 
         User currentUser = userRepository.findUserById(userAndCodeForm.getUserId());
         if(currentUser == null ){
