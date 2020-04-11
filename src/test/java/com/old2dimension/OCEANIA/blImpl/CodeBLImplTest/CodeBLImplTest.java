@@ -303,37 +303,40 @@ public class CodeBLImplTest {
 
     }
 
-//    @Test
-//    public void TestGetCodeStructure() {
-//        CodeBLImpl codeBL = new CodeBLImpl();
-//        GraphCalculateImpl graphCalculate = new GraphCalculateImpl();
-//        UserAndCodeForm userAndCodeForm = new UserAndCodeForm(1, 1);
-//        UserRepository userRepository = mock(UserRepository.class);
-//        CodeRepository codeRepository = mock(CodeRepository.class);
-//        codeBL.setGraphCalculate(graphCalculate);
-//        User user = new User(1, "gr", "123456");
-//        graphCalculate.setCodeRepository(codeRepository);
-//        graphCalculate.setUserRepository(userRepository);
-//        when(userRepository.findUserById(1)).thenReturn(user);
-//
-//        Code code = new Code(1, 1, "iTrust", 1979, 3834, 64, 1);
-//        when(codeRepository.findCodeByIdAndUserId(1, 1)).thenReturn(code);
-//
-//        ResponseVO responseVO = codeBL.getCodeStructure(userAndCodeForm);
-//        CodeNode codeNode = (CodeNode) responseVO.getContent();
-//        Assert.assertEquals(codeNode.getText(), "edu");
-//        ArrayList<CodeNode> codeNodes1 = codeNode.getNodes();
-//        CodeNode codeNode1 = codeNodes1.get(0);
-//        //Assert.assertEquals(codeNode1.getText(), "ncsu");
-//        ArrayList<CodeNode> codeNodes2 = codeNode1.getNodes();
-//        CodeNode codeNode2 = codeNodes2.get(0);
-//        //Assert.assertEquals(codeNode2.getText(), "csc");
-//        ArrayList<CodeNode> codeNodes3 = codeNode2.getNodes();
-//        CodeNode codeNode3 = codeNodes3.get(0);
-//        //Assert.assertEquals(codeNode3.getText(), "itrust");
-//        ArrayList<CodeNode> rua = codeNode3.getNodes();
-//        Assert.assertEquals(rua.size(), 19);
-//    }
+    @Test
+    public void TestGetCodeStructure1() {
+        CodeBLImpl codeBL = new CodeBLImpl();
+        GraphCalculateImpl graphCalculate = new GraphCalculateImpl();
+        UserAndCodeForm userAndCodeForm = new UserAndCodeForm(1, 1);
+        UserRepository userRepository = mock(UserRepository.class);
+        CodeRepository codeRepository = mock(CodeRepository.class);
+
+        User user = new User(1, "gr", "123456");
+        //graphCalculate.setCodeRepository(codeRepository);
+
+        when(userRepository.findUserById(1)).thenReturn(user);
+        Code code = new Code(1, 1, "iTrust", 1979, 3834, 64, 1);
+        when(codeRepository.findCodeById(1)).thenReturn(code);
+        when(codeRepository.findCodeByIdAndUserId(1, 1)).thenReturn(code);
+        codeBL.setCodeRepository(codeRepository);
+        graphCalculate.setUserRepository(userRepository);
+        codeBL.setGraphCalculate(graphCalculate);
+        graphCalculate.setCodeRepository(codeRepository);
+        ResponseVO responseVO = codeBL.getCodeStructure(userAndCodeForm);
+        CodeNode codeNode = (CodeNode) responseVO.getContent();
+        Assert.assertEquals(codeNode.getText(), "edu");
+        ArrayList<CodeNode> codeNodes1 = codeNode.getNodes();
+        CodeNode codeNode1 = codeNodes1.get(0);
+        //Assert.assertEquals(codeNode1.getText(), "ncsu");
+        ArrayList<CodeNode> codeNodes2 = codeNode1.getNodes();
+        CodeNode codeNode2 = codeNodes2.get(0);
+        //Assert.assertEquals(codeNode2.getText(), "csc");
+        ArrayList<CodeNode> codeNodes3 = codeNode2.getNodes();
+        CodeNode codeNode3 = codeNodes3.get(0);
+        //Assert.assertEquals(codeNode3.getText(), "itrust");
+        ArrayList<CodeNode> rua = codeNode3.getNodes();
+        Assert.assertEquals(rua.size(), 19);
+    }
 
     @Test
     public void getCodesByUserIdTest1() {
