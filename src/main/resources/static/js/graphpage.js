@@ -1,4 +1,10 @@
 $(function () {
+    $(window).bind('beforeunload', function () {
+        return true;
+    });
+    let codeId = sessionStorage['codeId'];
+    if (codeId === undefined) window.location.href = "/workspace";
+
     $("#save-btn").on('click', function () {
         $.ajax({
             type: "post",
@@ -7,7 +13,7 @@ $(function () {
             contentType: 'application/json',
             data: JSON.stringify({
                 userId: 1,
-                codeId: 1,
+                codeId: codeId,
                 date: new Date(),
                 closeness: $("#range_value").val(),
                 cyInfo: JSON.stringify(cy.json())
@@ -37,7 +43,7 @@ $(function () {
             contentType: 'application/json',
             data: JSON.stringify({
                 userId: 1,
-                codeId: 1,
+                codeId: codeId,
                 vertexId: vertexId
             }),
             success: function (data) {
@@ -76,7 +82,7 @@ $(function () {
                             contentType: 'application/json',
                             data: JSON.stringify({
                                 userId: 1,
-                                codeId: 1,
+                                codeId: codeId,
                                 id: id
                             }),
                             success: function (data) {
@@ -108,7 +114,7 @@ $(function () {
             contentType: 'application/json',
             data: JSON.stringify({
                 userId: 1,
-                codeId: 1,
+                codeId: codeId,
                 edgeId: edgeId
             }),
             success: function (data) {
@@ -147,7 +153,7 @@ $(function () {
                             contentType: 'application/json',
                             data: JSON.stringify({
                                 userId: 1,
-                                codeId: 1,
+                                codeId: codeId,
                                 id: id
                             }),
                             success: function (data) {
@@ -179,7 +185,7 @@ $(function () {
             contentType: 'application/json',
             data: JSON.stringify({
                 userId: 1,
-                codeId: 1,
+                codeId: codeId,
                 firstEdgeId: firstEdgeId,
                 numOfVertex: numOfVertex
             }),
@@ -219,7 +225,7 @@ $(function () {
                             contentType: 'application/json',
                             data: JSON.stringify({
                                 userId: 1,
-                                codeId: 1,
+                                codeId: codeId,
                                 id: id
                             }),
                             success: function (data) {
@@ -262,7 +268,7 @@ $(function () {
                 data: JSON.stringify({
                     id: $("#labelModal").attr("label-id"),
                     userId: 1,
-                    codeId: 1,
+                    codeId: codeId,
                     vertexId: x_id,
                     title: $("#title-input").val(),
                     content: $("#content-input").val()
@@ -289,7 +295,7 @@ $(function () {
                 data: JSON.stringify({
                     id: $("#labelModal").attr("label-id"),
                     userId: 1,
-                    codeId: 1,
+                    codeId: codeId,
                     edgeId: x_id,
                     title: $("#title-input").val(),
                     content: $("#content-input").val()
@@ -320,7 +326,7 @@ $(function () {
                     numOfVertex: numOfVertex,
                     id: $("#labelModal").attr("label-id"),
                     userId: 1,
-                    codeId: 1,
+                    codeId: codeId,
                     title: $("#title-input").val(),
                     content: $("#content-input").val()
                 }),
@@ -630,7 +636,7 @@ $(function () {
             contentType: 'application/json',
             data: JSON.stringify({
                 userId: 1,
-                codeId: 1,
+                codeId: codeId,
                 vertexVO: info,
             }),
             success: function (data) {
@@ -666,7 +672,7 @@ $(function () {
         contentType: 'application/json',
         data: JSON.stringify({
             userId: 1,
-            codeId: 1
+            codeId: codeId
         }),
         success: function (data) {
             let tree_json = [data.content];
@@ -737,7 +743,7 @@ $(function () {
         contentType: 'application/json',
         data: JSON.stringify({
             userId: 1,
-            codeId: 1
+            codeId: codeId
         }),
         success: function (data) {
             if (data.success) {
@@ -1014,7 +1020,7 @@ $(function () {
             contentType: 'application/json',
             data: JSON.stringify({
                 userId: 1,
-                codeId: 1
+                codeId: codeId
             }),
             timeout: 10000,
             success: function (data) {

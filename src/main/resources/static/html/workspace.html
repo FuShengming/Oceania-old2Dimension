@@ -161,7 +161,7 @@
                 <a class="nav-link" href="#">WorkSpace<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Graph</a>
+                <a class="nav-link" href="/graph">Graph</a>
             </li>
         </ul>
         <div class="d-flex">
@@ -281,7 +281,7 @@
                     let codes = data.content;
                     codes.forEach(function (code) {
                         console.log(code);
-                        h += `<tr>
+                        h += `<tr class="clickable-row" code-id="${code.codeId}">
                                 <td>${code.codeName}</td>
                                 <td>${code.date === null ? "Never" : new Date(Date.parse(code.date)).toLocaleString("en")}</td>
                                 <td class="td-btn">
@@ -297,9 +297,25 @@
                             </tr>`
                     });
                     $("#code-tb").html(h);
+                    $(".clickable-row").on('click', function (e) {
+                        if (!$(e.target).hasClass("btn-setting") &&
+                            !$(e.target).hasClass("setting-icon") &&
+                            !$(e.target).hasClass("dropdown-menu") &&
+                            !$(e.target).hasClass("dropdown-item")) {
+                            console.log('click', $(this).attr("code-id"));
+                            sessionStorage.setItem('codeId', $(this).attr("code-id"));
+                            window.location.href = "/graph";
+                        }
+                    });
+                } else {
+                    console.log(data.message);
                 }
+            },
+            error: function (err) {
+                console.log(err);
             }
-        })
+        });
+
     });
 </script>
 </body>
