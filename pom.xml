@@ -122,6 +122,8 @@
             <systemPath>${project.basedir}/lib/javacg-0.1-SNAPSHOT-static.jar</systemPath>
         </dependency>
 
+<!--		阿里云oss-->
+
     </dependencies>
 
     <build>
