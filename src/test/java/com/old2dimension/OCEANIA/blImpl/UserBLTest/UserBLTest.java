@@ -2,6 +2,7 @@ package com.old2dimension.OCEANIA.blImpl.UserBLTest;
 
 
 import com.old2dimension.OCEANIA.blImpl.UserBLImpl;
+import com.old2dimension.OCEANIA.dao.AuthorityRepository;
 import com.old2dimension.OCEANIA.dao.CodeRepository;
 import com.old2dimension.OCEANIA.dao.UserRepository;
 import com.old2dimension.OCEANIA.po.Code;
@@ -33,7 +34,7 @@ public class UserBLTest {
     }
     @Test
     public void signUpTest2(){
-        UserVO userVO =new UserVO(0,"test","123456");
+        UserVO userVO =new UserVO(1,"test","123456");
         User user = new User(userVO);
         User expected = new User();
         expected.setId(1);
@@ -45,13 +46,15 @@ public class UserBLTest {
         when(userRepository.findUserByName("test")).thenReturn(null);
         when(userRepository.save(any())).thenReturn(expected);
         when(userRepository.findUserById(1)).thenReturn(expected);
+        AuthorityRepository authorityRepository = mock(AuthorityRepository.class);
         Code code = new Code(0, expected.getId(), "iTrust", 1979, 3834, 64,1);
         CodeRepository codeRepository = mock(CodeRepository.class);
         when(codeRepository.save(any())).thenReturn(code);
         userBL.setUserRepository(userRepository);
         userBL.setCodeRepository(codeRepository);
+        userBL.setAuthorityRepository(authorityRepository);
         ResponseVO responseVO = userBL.signUp(userVO);
-        Assert.assertEquals(responseVO.getContent(),"sign up success");
+        Assert.assertEquals((User)responseVO.getContent(), user);
     }
 
     @Test
