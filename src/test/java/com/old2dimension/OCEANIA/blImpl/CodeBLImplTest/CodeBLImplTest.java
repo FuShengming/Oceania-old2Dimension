@@ -1,4 +1,5 @@
 package com.old2dimension.OCEANIA.blImpl.CodeBLImplTest;
+
 import com.old2dimension.OCEANIA.blImpl.CodeBLImpl;
 import com.old2dimension.OCEANIA.blImpl.GraphCalculateImpl;
 import com.old2dimension.OCEANIA.dao.CodeRepository;
@@ -38,8 +39,8 @@ public class CodeBLImplTest {
         vertexVOAndUserIdAndCodeId.setUserId(1);
         vertexVOAndUserIdAndCodeId.setVertexVO(vertexVO);
         String funcCode = "\n\t\tpublic ReferralListQuery(DAOFactory factory, long userid) {\r\n\t\t\tthis.factory = factory;\r\n\t\t\tthis.userid = userid;\r\n\t\t\t// initialize lookup map\r\n\t\t\tsortColumns = new HashMap<String,String>();\r\n\t\t\tsortColumns.put(\"patientName\", \"CONCAT(patients.lastName, ' ', patients.firstName)\");\r\n\t\t\tsortColumns.put(\"receiverName\", \"CONCAT(preceiver.lastName, preceiver.firstName)\");\r\n\t\t\tsortColumns.put(\"senderName\", \"CONCAT(psender.lastName, psender.firstName)\");\r\n\t\t\tsortColumns.put(\"timestamp\", \"referrals.timestamp\");\r\n\t\t\tsortColumns.put(\"priority\", \"referrals.PriorityCode\");\r\n\t\t}";
-        funcCode.replace("\n",lineSeparator);
-        funcCode.replace("\n",lineSeparator);
+        funcCode.replace("\n", lineSeparator);
+        funcCode.replace("\n", lineSeparator);
         Code expected = new Code();
         expected.setId(1);
         expected.setIs_default(1);
@@ -251,7 +252,7 @@ public class CodeBLImplTest {
         when(codeRepository.findCodeByIdAndUserId(1, 1)).thenReturn(expected);
         codeBL.setCodeRepository(codeRepository);
         ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
-        Assert.assertEquals(responseVO.getContent(), "\n\t\tpublic String getTypeName() {\r\n\t\t\treturn typeName;\r\n\t\t}".replace("\n",lineSeparator));
+        Assert.assertEquals("\n\t\tpublic String getTypeName() {\r\n\t\t\treturn typeName;\r\n\t\t}", responseVO.getContent());
 
     }
 
@@ -268,7 +269,7 @@ public class CodeBLImplTest {
         };
 
         String expectedFuncBody = "\n\tpublic T build(Map map, T bean) throws Exception {\r\n\t\t// JavaBeans should not have overloaded methods, according to their API\r\n\t\t// (a stupid limitation!)\r\n\t\t// Nevertheless, we should check for it\r\n\t\tcheckOverloadedMethods(bean);\r\n\r\n\t\t// Use an introspector to find all of the getXXX or setXXX, we only want\r\n\t\t// the setXXX\r\n\t\tPropertyDescriptor[] propertyDescriptors = Introspector.getBeanInfo(bean.getClass())\r\n\t\t\t\t.getPropertyDescriptors();\r\n\t\tfor (PropertyDescriptor descriptor : propertyDescriptors) {\r\n\t\t\t// if object is null, either it was ignored or empty - just go with\r\n\t\t\t// bean's default\r\n\t\t\tString[] value = (String[]) map.get(descriptor.getName());\r\n\t\t\tMethod writeMethod = descriptor.getWriteMethod();\r\n\t\t\tif (!\"class\".equals(descriptor.getName()) && value != null && writeMethod != null) {\r\n\t\t\t\t// descriptor's name is the name of your property; like\r\n\t\t\t\t// firstName\r\n\t\t\t\t// only take the first string\r\n\t\t\t\ttry {\r\n\t\t\t\t\t// Skip the setters for enumerations\r\n\t\t\t\t\tif (writeMethod.getParameterTypes()[0].getEnumConstants() == null)\r\n\t\t\t\t\t\twriteMethod.invoke(bean, new Object[] { value[0] });\r\n\t\t\t\t} catch (IllegalArgumentException e) {\r\n\t\t\t\t\t// Throw a more informative exception\r\n\t\t\t\t\tthrow new IllegalArgumentException(e.getMessage() + \" with \" + writeMethod.getName()\r\n\t\t\t\t\t\t\t+ \" and \" + value[0]);\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn bean;\r\n\t}";
-        expectedFuncBody.replace("\n",lineSeparator);
+        expectedFuncBody.replace("\n", lineSeparator);
         vertexVO.setArgs(args);
         VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId = new VertexVOAndUserIdAndCodeId();
         vertexVOAndUserIdAndCodeId.setCodeId(1);
@@ -319,7 +320,7 @@ public class CodeBLImplTest {
 //    }
 
     @Test
-    public void getCodesByUserIdTest1(){
+    public void getCodesByUserIdTest1() {
         ArrayList<Code> res = new ArrayList<Code>();
         Code code = new Code();
         code.setId(1);
@@ -333,13 +334,13 @@ public class CodeBLImplTest {
         codeBL.setCodeRepository(codeRepository);
         codeBL.setWorkPlaceRepository(workPlaceRepository);
         when(codeRepository.findCodesByUserId(1)).thenReturn(res);
-        when(workPlaceRepository.findLatestWorkSpace(1,1)).thenReturn(workSpace);
+        when(workPlaceRepository.findLatestWorkSpace(1, 1)).thenReturn(workSpace);
         ResponseVO responseVO = codeBL.getCodesByUserId(1);
-        Assert.assertEquals("name", ((ArrayList<CodeAndDateForm>)(responseVO.getContent())).get(0).getCodeName());
+        Assert.assertEquals("name", ((ArrayList<CodeAndDateForm>) (responseVO.getContent())).get(0).getCodeName());
     }
 
     @Test
-    public void getCodesByUserIdTest2(){
+    public void getCodesByUserIdTest2() {
         ArrayList<Code> res = new ArrayList<Code>();
         CodeBLImpl codeBL = new CodeBLImpl();
         WorkSpace workSpace = new WorkSpace();
@@ -350,7 +351,7 @@ public class CodeBLImplTest {
         codeBL.setWorkPlaceRepository(workPlaceRepository);
         when(codeRepository.findCodesByUserId(1)).thenReturn(res);
         ResponseVO responseVO = codeBL.getCodesByUserId(1);
-        Assert.assertEquals(0, ((ArrayList<CodeAndDateForm>)(responseVO.getContent())).size());
+        Assert.assertEquals(0, ((ArrayList<CodeAndDateForm>) (responseVO.getContent())).size());
     }
 
 
