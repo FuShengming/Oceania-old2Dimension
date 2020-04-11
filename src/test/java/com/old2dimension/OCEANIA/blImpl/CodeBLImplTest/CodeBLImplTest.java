@@ -19,6 +19,9 @@ import java.util.Date;
 import static org.mockito.Mockito.*;
 
 public class CodeBLImplTest {
+
+    String lineSeparator = System.lineSeparator();
+
     @Test
     public void getFuncCodeTest1() {
 
@@ -35,6 +38,7 @@ public class CodeBLImplTest {
         vertexVOAndUserIdAndCodeId.setUserId(1);
         vertexVOAndUserIdAndCodeId.setVertexVO(vertexVO);
         String funcCode = "\n\t\tpublic ReferralListQuery(DAOFactory factory, long userid) {\r\n\t\t\tthis.factory = factory;\r\n\t\t\tthis.userid = userid;\r\n\t\t\t// initialize lookup map\r\n\t\t\tsortColumns = new HashMap<String,String>();\r\n\t\t\tsortColumns.put(\"patientName\", \"CONCAT(patients.lastName, ' ', patients.firstName)\");\r\n\t\t\tsortColumns.put(\"receiverName\", \"CONCAT(preceiver.lastName, preceiver.firstName)\");\r\n\t\t\tsortColumns.put(\"senderName\", \"CONCAT(psender.lastName, psender.firstName)\");\r\n\t\t\tsortColumns.put(\"timestamp\", \"referrals.timestamp\");\r\n\t\t\tsortColumns.put(\"priority\", \"referrals.PriorityCode\");\r\n\t\t}";
+        funcCode.replace("\n",lineSeparator);
         Code expected = new Code();
         expected.setId(1);
         expected.setIs_default(1);
@@ -63,7 +67,7 @@ public class CodeBLImplTest {
         when(codeRepository.findCodeByIdAndUserId(1, 1)).thenReturn(expected);
         codeBL.setCodeRepository(codeRepository);
         ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
-        Assert.assertEquals(responseVO.getMessage(), "目前不支持itrust以外的代码分析");
+        Assert.assertEquals(responseVO.getMessage(), "dictionary does not exist");
     }
 
     @Test
@@ -219,7 +223,7 @@ public class CodeBLImplTest {
         when(codeRepository.findCodeByIdAndUserId(1, 1)).thenReturn(expected);
         codeBL.setCodeRepository(codeRepository);
         ResponseVO responseVO = codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
-        Assert.assertEquals(responseVO.getMessage(), "package dir errors");
+        Assert.assertEquals(responseVO.getMessage(), "dictionary does not exist");
     }
 
     @Test

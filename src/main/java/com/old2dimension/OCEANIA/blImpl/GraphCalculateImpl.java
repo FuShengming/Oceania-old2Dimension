@@ -224,7 +224,6 @@ public class GraphCalculateImpl implements GraphCalculateBL {
             String str;
             // 按行读取字符串
             while ((str = bf.readLine()) != null) {
-                // System.out.println(str.substring(2));
                 String curData = str.substring(2);
                 if (!lines.contains(curData))
                     lines.add(curData);
