@@ -70,21 +70,21 @@ public class DomainLabel {
         this.codeId = codeId;
     }
 
-    public int getFirstEdgeId() {
-        return firstEdgeId;
-    }
-
-    public void setFirstEdgeId(int firstEdgeId) {
-        this.firstEdgeId = firstEdgeId;
-    }
-
-    public int getNumOfVertex() {
-        return numOfVertex;
-    }
-
-    public void setNumOfVertex(int numOfVertex) {
-        this.numOfVertex = numOfVertex;
-    }
+//    public int getFirstEdgeId() {
+//        return firstEdgeId;
+//    }
+//
+//    public void setFirstEdgeId(int firstEdgeId) {
+//        this.firstEdgeId = firstEdgeId;
+//    }
+//
+//    public int getNumOfVertex() {
+//        return numOfVertex;
+//    }
+//
+//    public void setNumOfVertex(int numOfVertex) {
+//        this.numOfVertex = numOfVertex;
+//    }
 
     public String getContent() {
         return content;
