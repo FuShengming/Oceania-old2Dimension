@@ -23,12 +23,13 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
         System.out.println("认证失败：" + authException.getMessage());
-        response.setStatus(200);
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text");
-        PrintWriter printWriter = response.getWriter();
-        String body = "You should sign in first!";
-        printWriter.write(body);
-        printWriter.flush();
+//        response.setStatus(200);
+//        response.setCharacterEncoding("UTF-8");
+//        response.setContentType("text");
+//        PrintWriter printWriter = response.getWriter();
+//        String body = "You should sign in first!";
+//        printWriter.write(body);
+//        printWriter.flush();
+        response.sendRedirect("/login");
     }
 }

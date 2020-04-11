@@ -51,10 +51,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 // 管理员访问控制
-//                .antMatchers("/statistics/**")
+//                .antMatchers("/statistics/++")
 //                .hasRole("ADMIN")
                 // 用户访问控制
-//                .antMatchers("/code/**", "/graph/**", "/hello", "/label/**", "/workSpace/**", "/graphql")
+//                .antMatchers("/code/**", "/graph/++", "/hello", "/label/**",
+//                        "/upload/**", "/workSpace/++")
 //                .hasRole("USER")
                 // 其他都放行了
                 .anyRequest().permitAll()

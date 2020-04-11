@@ -40,6 +40,8 @@ $(document).ready(function () {
             .addClass("hidden-error").addClass("input-required-error").text("");
     });
 
+    // todo: username-input.bind(input) Check the username and login status.
+
     $(".username-input").bind("blur", function (event) {
         let username = event.target.value;
         if (username.length === 0) {
