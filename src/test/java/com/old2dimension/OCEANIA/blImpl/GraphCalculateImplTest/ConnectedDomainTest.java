@@ -102,6 +102,6 @@ class ConnectedDomainTest {
         ResponseVO responseVO = graphCalculate.getConnectedDomains(weights);
         Assert.assertEquals(2, ((DomainSetVO) responseVO.getContent()).getDomainVOs().size());
         Assert.assertEquals(3, ((DomainSetVO) responseVO.getContent()).getDomainVOs().get(0).getVerticesNum());
-        Assert.assertEquals(3, ((DomainSetVO) responseVO.getContent()).getDomainVOs().get(1).getVerticesNum());
+        Assert.assertEquals(4, ((DomainSetVO) responseVO.getContent()).getDomainVOs().get(1).getVerticesNum());
     }
 }
