@@ -1,4 +1,5 @@
 package com.old2dimension.OCEANIA.blImpl.CodeBLImplTest;
+
 import com.old2dimension.OCEANIA.blImpl.CodeBLImpl;
 import com.old2dimension.OCEANIA.blImpl.GraphCalculateImpl;
 import com.old2dimension.OCEANIA.dao.CodeRepository;
@@ -326,7 +327,7 @@ public class CodeBLImplTest {
 //    }
 
     @Test
-    public void getCodesByUserIdTest1(){
+    public void getCodesByUserIdTest1() {
         ArrayList<Code> res = new ArrayList<Code>();
         Code code = new Code();
         code.setId(1);
@@ -340,13 +341,13 @@ public class CodeBLImplTest {
         codeBL.setCodeRepository(codeRepository);
         codeBL.setWorkPlaceRepository(workPlaceRepository);
         when(codeRepository.findCodesByUserId(1)).thenReturn(res);
-        when(workPlaceRepository.findLatestWorkSpace(1,1)).thenReturn(workSpace);
+        when(workPlaceRepository.findLatestWorkSpace(1, 1)).thenReturn(workSpace);
         ResponseVO responseVO = codeBL.getCodesByUserId(1);
-        Assert.assertEquals("name", ((ArrayList<CodeAndDateForm>)(responseVO.getContent())).get(0).getCodeName());
+        Assert.assertEquals("name", ((ArrayList<CodeAndDateForm>) (responseVO.getContent())).get(0).getCodeName());
     }
 
     @Test
-    public void getCodesByUserIdTest2(){
+    public void getCodesByUserIdTest2() {
         ArrayList<Code> res = new ArrayList<Code>();
         CodeBLImpl codeBL = new CodeBLImpl();
         WorkSpace workSpace = new WorkSpace();
@@ -357,7 +358,7 @@ public class CodeBLImplTest {
         codeBL.setWorkPlaceRepository(workPlaceRepository);
         when(codeRepository.findCodesByUserId(1)).thenReturn(res);
         ResponseVO responseVO = codeBL.getCodesByUserId(1);
-        Assert.assertEquals(0, ((ArrayList<CodeAndDateForm>)(responseVO.getContent())).size());
+        Assert.assertEquals(0, ((ArrayList<CodeAndDateForm>) (responseVO.getContent())).size());
     }
 
 
