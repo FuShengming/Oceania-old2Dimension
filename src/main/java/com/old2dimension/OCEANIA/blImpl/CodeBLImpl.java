@@ -542,8 +542,13 @@ public class CodeBLImpl implements CodeBL {
             vertices = graphCalculate.allVertexes;
         }
 
+       Code code =  codeRepository.findCodeById(userAndCodeForm.getCodeId());
+        int tempId = 0;
+        if(code.getIs_default()!=1){
+            tempId = code.getId();
+        }
 
-        String basicPath = "analyzeCode/src/"+userAndCodeForm.getCodeId();
+        String basicPath = "analyzeCode/src/"+ tempId;
         String tempbasicPath = basicPath;
         System.out.println();
 

@@ -66,6 +66,7 @@ public class UserBLImpl implements UserBL, UserDetailsService {
                 return ResponseVO.buildFailure("用户名已存在");
             }
             user = userRepository.save(user);
+            System.out.println("dasd");
             Code code = new Code(0, user.getId(), "iTrust", 1979, 3834, 64, 1);
             codeRepository.save(code);
             authorityRepository.insertByUserId(user.getId());
