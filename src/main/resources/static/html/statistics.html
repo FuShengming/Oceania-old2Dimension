@@ -36,6 +36,7 @@
 </head>
 <body>
 <script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script type="text/javascript" src="webjars/popper.js/1.16.0/dist/umd/popper.min.js"></script>
 <script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
 
@@ -46,6 +47,7 @@
         $.ajax({
             type: "get",
             url: "/statistics/getAllMes",
+            headers: {"Authorization": $.cookie('token')},
             success: function (data) {
                 if (data.success) {
                     let users = data.content.content;
@@ -63,42 +65,42 @@
                                 "</tr>"
                         } else {
                             h += `
-<tr>
-    <th scope="row" rowspan="${user.codeMesVOs.length * 3}">${user.userId}</th>
-    <td rowspan="${user.codeMesVOs.length * 3}">${user.codeMesVOs.length}</td>
-    <td rowspan="3">${user.codeMesVOs[0].codeName}</td>
-    <td>Vertex</td>
-    <td>${user.codeMesVOs[0].numOfVertex}</td>
-    <td>${user.codeMesVOs[0].numOfVertexLabel}</td>
-</tr>
-<tr>
-    <td>Edge</td>
-    <td>${user.codeMesVOs[0].numOfEdge}</td>
-    <td>${user.codeMesVOs[0].numOfEdgeLabel}</td>
-</tr>
-<tr>
-    <td>Domain</td>
-    <td>${user.codeMesVOs[0].numOfDomain}</td>
-    <td>${user.codeMesVOs[0].numOfDomainLabel}</td>
-</tr>`;
+                                <tr>
+                                    <th scope="row" rowspan="${user.codeMesVOs.length * 3}">${user.userId}</th>
+                                    <td rowspan="${user.codeMesVOs.length * 3}">${user.codeMesVOs.length}</td>
+                                    <td rowspan="3">${user.codeMesVOs[0].codeName}</td>
+                                    <td>Vertex</td>
+                                    <td>${user.codeMesVOs[0].numOfVertex}</td>
+                                    <td>${user.codeMesVOs[0].numOfVertexLabel}</td>
+                                </tr>
+                                <tr>
+                                    <td>Edge</td>
+                                    <td>${user.codeMesVOs[0].numOfEdge}</td>
+                                    <td>${user.codeMesVOs[0].numOfEdgeLabel}</td>
+                                </tr>
+                                <tr>
+                                    <td>Domain</td>
+                                    <td>${user.codeMesVOs[0].numOfDomain}</td>
+                                    <td>${user.codeMesVOs[0].numOfDomainLabel}</td>
+                                </tr>`;
                             for (let i = 1; i < user.codeMesVOs.length; i++) {
                                 h += `
-<tr>
-    <td rowspan="3">${user.codeMesVOs[i].codeName}</td>
-    <td>Vertex</td>
-    <td>${user.codeMesVOs[i].numOfVertex}</td>
-    <td>${user.codeMesVOs[i].numOfVertexLabel}</td>
-</tr>
-<tr>
-    <td>Edge</td>
-    <td>${user.codeMesVOs[i].numOfEdge}</td>
-    <td>${user.codeMesVOs[i].numOfEdgeLabel}</td>
-</tr>
-<tr>
-    <td>Domain</td>
-    <td>${user.codeMesVOs[i].numOfDomain}</td>
-    <td>${user.codeMesVOs[i].numOfDomainLabel}</td>
-</tr>`;
+                                <tr>
+                                    <td rowspan="3">${user.codeMesVOs[i].codeName}</td>
+                                    <td>Vertex</td>
+                                    <td>${user.codeMesVOs[i].numOfVertex}</td>
+                                    <td>${user.codeMesVOs[i].numOfVertexLabel}</td>
+                                </tr>
+                                <tr>
+                                    <td>Edge</td>
+                                    <td>${user.codeMesVOs[i].numOfEdge}</td>
+                                    <td>${user.codeMesVOs[i].numOfEdgeLabel}</td>
+                                </tr>
+                                <tr>
+                                    <td>Domain</td>
+                                    <td>${user.codeMesVOs[i].numOfDomain}</td>
+                                    <td>${user.codeMesVOs[i].numOfDomainLabel}</td>
+                                </tr>`;
                             }
 
                         }

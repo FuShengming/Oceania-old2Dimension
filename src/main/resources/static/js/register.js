@@ -147,7 +147,7 @@ function register() {
         data: JSON.stringify(formData),
         success: function (res) {
             if (res.success) {
-                localStorage.setItem("id", res.content.id);
+                localStorage.setItem("userId", res.content.id);
                 $(window).attr("location", "/graph")
             }
             else if (res.message === "用户名已存在") {

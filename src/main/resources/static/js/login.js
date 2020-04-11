@@ -65,8 +65,8 @@ $(document).ready(function () {
     });
 
     $(".captcha-input").bind("focus", function (event) {
-            $("#captcha-warn").addClass("hidden-error").addClass("input-required-error")
-                .removeClass("captcha-error").text("")
+        $("#captcha-warn").addClass("hidden-error").addClass("input-required-error")
+            .removeClass("captcha-error").text("")
     });
 
     $("#captcha-warn").bind("click", function () {
@@ -76,7 +76,7 @@ $(document).ready(function () {
     });
 
     $("#show-password").click(function () {
-        console.log("xxx")
+        console.log("xxx");
         let temp = $(".password-input").val();
         let tp = $(".password-input").attr("type");
         let input_html0 = "<div class=\"input-error-msg input-required-error hidden-error\" id=\"password-warn\"></div>"
@@ -84,12 +84,10 @@ $(document).ready(function () {
         let input_html2 = "<input name=\"password\" type=\"text\" class=\"Input password-input\" placeholder=\"密码\" value=\"" + temp + "\">";
         if (tp === "text") {
             $(".password-wrapper").html(input_html1 + input_html0)
-        }
-        else if (tp === "password") {
+        } else if (tp === "password") {
             $(".password-wrapper").html(input_html2 + input_html0)
         }
     });
-
 
 
 });
@@ -104,19 +102,17 @@ function login() {
     $.ajax({
         url: "/user/login",
         type: "POST",
-        contentType:'application/json;charset=utf-8',
+        contentType: 'application/json;charset=utf-8',
         data: JSON.stringify(formData),
         success: function (res) {
             if (res.status === "success") {
-                localStorage.setItem("id", res.id);
+                localStorage.setItem("userId", res.id);
                 if (res.role === "ROLE_USER") {
                     $(window).attr("location", "/graph")
-                }
-                else if (res.role === "ROLE_ADMIN") {
+                } else if (res.role === "ROLE_ADMIN") {
                     $(window).attr("location", "/statistics")
                 }
-            }
-            else if (res === "authentication failed, reason: Bad credentials") {
+            } else if (res === "authentication failed, reason: Bad credentials") {
                 $("#password-warn").addClass("password-error-msg")
                     .removeClass("hidden-error").removeClass("input-required-error").text("用户名或密码错误");
                 $(".captcha-input").val("");
@@ -132,8 +128,8 @@ function login() {
 
 function getLoginForm() {
     return {
-        name:$(".username-input").val(),
-        pwd:$(".password-input").val()
+        name: $(".username-input").val(),
+        pwd: $(".password-input").val()
     };
 }
 
@@ -161,8 +157,7 @@ function verifyCaptcha() {
     let num = show_num.join("");
     if (val.toUpperCase() === num.toUpperCase()) {
         return true
-    }
-    else {
+    } else {
         $("#captcha-warn").removeClass("hidden-error").removeClass("captcha-required-error")
             .addClass("captcha-error").text("验证码输入错误");
         draw(show_num);

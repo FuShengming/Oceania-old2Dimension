@@ -5,7 +5,7 @@ $(document).ready(function () {
                 url: "/logout",
                 type: "POST",
                 success: function (res) {
-                    localStorage.removeItem("id");
+                    localStorage.removeItem("userId");
                     $(window).attr("location", "/index")
                 },
                 error: function (res) {
@@ -13,8 +13,5 @@ $(document).ready(function () {
                 }
             })
         }
-
     })
-
-
 });
