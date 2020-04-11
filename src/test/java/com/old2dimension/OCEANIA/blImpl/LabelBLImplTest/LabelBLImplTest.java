@@ -9,7 +9,8 @@ import com.old2dimension.OCEANIA.po.EdgeLabel;
 import com.old2dimension.OCEANIA.po.VertexLabel;
 import com.old2dimension.OCEANIA.vo.*;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 
 import java.util.ArrayList;
 import java.util.List;
