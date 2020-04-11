@@ -3,6 +3,8 @@ package com.old2dimension.OCEANIA.vo;
 import com.old2dimension.OCEANIA.po.User;
 
 public class UserVO {
+    public UserVO(){}
+
     public UserVO(int id, String name,String pwd){
         this.id=id;
         this.name=name;

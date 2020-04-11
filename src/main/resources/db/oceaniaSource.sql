@@ -5,18 +5,56 @@ drop table if exists edge_label;
 drop table if exists domain_label;
 drop table if exists work_space;
 drop table if exists code;
-drop table if exists user;
+drop table if exists authority;
+drop table if exists user_authority;
+drop table if exists `user`;
 
 
 
-create table if not exists user
-(
-    id   int auto_increment primary key,
-    name varchar(32) NOT NULL,
-    pwd  varchar(16) NOT NULL
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
 
+
+create table if not exists `user`(
+	id int auto_increment primary key,
+	name varchar(32) NOT NULL,
+	pwd varchar(64) NOT NULL
+	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+BEGIN;
+INSERT INTO `user` (name, pwd) VALUES ('oceania_admin', '$2a$10$kYTlmG/7.TOgQwE/AimJJu7qyuflc31joGCaz70tESA6xYOYu8rw2');
+COMMIT;
+
+create table if not exists authority(
+	id int auto_increment primary key,
+	name varchar(32) NOT NULL
+	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+BEGIN;
+INSERT INTO `authority` VALUES ('1', 'ROLE_ADMIN'), ('2', 'ROLE_USER');
+COMMIT;
+
+create table if not exists user_authority(
+	user_id int NOT NULL,
+	authority_id int NOT NULL,
+	KEY `FKgvxjs381k6f48d5d2yi11uh89` (`authority_id`),
+    KEY `FKpqlsjpkybgos9w2svcri7j8xy` (`user_id`),
+    CONSTRAINT `FKgvxjs381k6f48d5d2yi11uh89` FOREIGN KEY (`authority_id`) REFERENCES `authority` (`id`),
+    CONSTRAINT `FKpqlsjpkybgos9w2svcri7j8xy` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+BEGIN;
+INSERT INTO `user_authority` VALUES (1, 1);
+COMMIT;
+
+create table if not exists code(
+    id int auto_increment primary key,
+	user_id int NOT NULL,
+	name varchar(8192),
+	num_of_vertices int,
+	num_of_edges int,
+	num_of_domains int,
+	is_default int,
+	CONSTRAINT code_fk_user_id FOREIGN KEY(user_id) REFERENCES user(id)  ON DELETE Cascade
+	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 create table if not exists code
 (
     id              int auto_increment primary key,

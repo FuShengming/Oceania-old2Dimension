@@ -1,13 +1,23 @@
 $(function () {
+    $(window).bind('beforeunload', function () {
+        localStorage.removeItem("codeId");
+        return true;
+    });
+    let userId = localStorage['userId'];
+    if (userId === undefined) window.location.href = "/login";
+    let codeId = localStorage['codeId'];
+    if (codeId === undefined) window.location.href = "/workspace";
+
     $("#save-btn").on('click', function () {
         $.ajax({
             type: "post",
             url: "/workSpace/save",
+            headers: {"Authorization": $.cookie('token')},
             dataType: "json",
             contentType: 'application/json',
             data: JSON.stringify({
-                userId: 1,
-                codeId: 1,
+                userId: userId,
+                codeId: codeId,
                 date: new Date(),
                 closeness: $("#range_value").val(),
                 cyInfo: JSON.stringify(cy.json())
@@ -33,11 +43,12 @@ $(function () {
         $.ajax({
             type: "post",
             url: "/label/getOneVertexLabel",
+            headers: {"Authorization": $.cookie('token')},
             dataType: "json",
             contentType: 'application/json',
             data: JSON.stringify({
-                userId: 1,
-                codeId: 1,
+                userId: userId,
+                codeId: codeId,
                 vertexId: vertexId
             }),
             success: function (data) {
@@ -72,11 +83,12 @@ $(function () {
                         $.ajax({
                             type: "post",
                             url: "/label/deleteVertexLabel",
+                            headers: {"Authorization": $.cookie('token')},
                             dataType: "json",
                             contentType: 'application/json',
                             data: JSON.stringify({
-                                userId: 1,
-                                codeId: 1,
+                                userId: userId,
+                                codeId: codeId,
                                 id: id
                             }),
                             success: function (data) {
@@ -104,11 +116,12 @@ $(function () {
         $.ajax({
             type: "post",
             url: "/label/getOneEdgeLabel",
+            headers: {"Authorization": $.cookie('token')},
             dataType: "json",
             contentType: 'application/json',
             data: JSON.stringify({
-                userId: 1,
-                codeId: 1,
+                userId: userId,
+                codeId: codeId,
                 edgeId: edgeId
             }),
             success: function (data) {
@@ -143,11 +156,12 @@ $(function () {
                         $.ajax({
                             type: "post",
                             url: "/label/deleteEdgeLabel",
+                            headers: {"Authorization": $.cookie('token')},
                             dataType: "json",
                             contentType: 'application/json',
                             data: JSON.stringify({
-                                userId: 1,
-                                codeId: 1,
+                                userId: userId,
+                                codeId: codeId,
                                 id: id
                             }),
                             success: function (data) {
@@ -175,11 +189,12 @@ $(function () {
         $.ajax({
             type: "post",
             url: "/label/getOneDomainLabel",
+            headers: {"Authorization": $.cookie('token')},
             dataType: "json",
             contentType: 'application/json',
             data: JSON.stringify({
-                userId: 1,
-                codeId: 1,
+                userId: userId,
+                codeId: codeId,
                 firstEdgeId: firstEdgeId,
                 numOfVertex: numOfVertex
             }),
@@ -215,11 +230,12 @@ $(function () {
                         $.ajax({
                             type: "post",
                             url: "/label/deleteDomainLabel",
+                            headers: {"Authorization": $.cookie('token')},
                             dataType: "json",
                             contentType: 'application/json',
                             data: JSON.stringify({
-                                userId: 1,
-                                codeId: 1,
+                                userId: userId,
+                                codeId: codeId,
                                 id: id
                             }),
                             success: function (data) {
@@ -257,12 +273,13 @@ $(function () {
             $.ajax({
                 type: "post",
                 url: "/label/noteVertex",
+                headers: {"Authorization": $.cookie('token')},
                 dataType: "json",
                 contentType: 'application/json',
                 data: JSON.stringify({
                     id: $("#labelModal").attr("label-id"),
-                    userId: 1,
-                    codeId: 1,
+                    userId: userId,
+                    codeId: codeId,
                     vertexId: x_id,
                     title: $("#title-input").val(),
                     content: $("#content-input").val()
@@ -284,12 +301,13 @@ $(function () {
             $.ajax({
                 type: "post",
                 url: "/label/noteEdge",
+                headers: {"Authorization": $.cookie('token')},
                 dataType: "json",
                 contentType: 'application/json',
                 data: JSON.stringify({
                     id: $("#labelModal").attr("label-id"),
-                    userId: 1,
-                    codeId: 1,
+                    userId: userId,
+                    codeId: codeId,
                     edgeId: x_id,
                     title: $("#title-input").val(),
                     content: $("#content-input").val()
@@ -313,14 +331,15 @@ $(function () {
             $.ajax({
                 type: "post",
                 url: "/label/noteDomain",
+                headers: {"Authorization": $.cookie('token')},
                 dataType: "json",
                 contentType: 'application/json',
                 data: JSON.stringify({
                     firstEdgeId: firstEdgeId,
                     numOfVertex: numOfVertex,
                     id: $("#labelModal").attr("label-id"),
-                    userId: 1,
-                    codeId: 1,
+                    userId: userId,
+                    codeId: codeId,
                     title: $("#title-input").val(),
                     content: $("#content-input").val()
                 }),
@@ -402,6 +421,7 @@ $(function () {
         $.ajax({
             type: "get",
             url: "/graph/findVertex/" + $("#func-name-input").val(),
+            headers: {"Authorization": $.cookie('token')},
             success: function (data) {
                 console.log(data);
                 if (data.content.length === 0) {
@@ -438,6 +458,7 @@ $(function () {
         $.ajax({
             type: "post",
             url: "/graph/findPath",
+            headers: {"Authorization": $.cookie('token')},
             dataType: "json",
             contentType: 'application/json',
             data: JSON.stringify([{id: start_id}, {id: end_id}]),
@@ -494,6 +515,7 @@ $(function () {
             $.ajax({
                 type: "get",
                 url: "/graph/findVertex/" + $("#start-node-input").val(),
+                headers: {"Authorization": $.cookie('token')},
                 error: function (err) {
                     console.log(err);
                 }
@@ -501,6 +523,7 @@ $(function () {
             $.ajax({
                 type: "get",
                 url: "/graph/findVertex/" + $("#end-node-input").val(),
+                headers: {"Authorization": $.cookie('token')},
                 error: function (err) {
                     console.log(err);
                 }
@@ -626,11 +649,12 @@ $(function () {
         $.ajax({
             type: "post",
             url: "/code/getFuncCode",
+            headers: {"Authorization": $.cookie('token')},
             dataType: "json",
             contentType: 'application/json',
             data: JSON.stringify({
-                userId: 1,
-                codeId: 1,
+                userId: userId,
+                codeId: codeId,
                 vertexVO: info,
             }),
             success: function (data) {
@@ -662,11 +686,12 @@ $(function () {
     $.ajax({
         type: "post",
         url: "/code/getCodeStructure",
+        headers: {"Authorization": $.cookie('token')},
         dataType: "json",
         contentType: 'application/json',
         data: JSON.stringify({
-            userId: 1,
-            codeId: 1
+            userId: userId,
+            codeId: codeId
         }),
         success: function (data) {
             let tree_json = [data.content];
@@ -733,11 +758,12 @@ $(function () {
     $.ajax({
         type: "post",
         url: "/workSpace/recover",
+        headers: {"Authorization": $.cookie('token')},
         dataType: "json",
         contentType: 'application/json',
         data: JSON.stringify({
-            userId: 1,
-            codeId: 1
+            userId: userId,
+            codeId: codeId
         }),
         success: function (data) {
             if (data.success) {
@@ -1010,11 +1036,12 @@ $(function () {
         $.ajax({
             type: "post",
             url: "/graph/getGraph",
+            headers: {"Authorization": $.cookie('token')},
             dataType: "json",
             contentType: 'application/json',
             data: JSON.stringify({
-                userId: 1,
-                codeId: 1
+                userId: userId,
+                codeId: codeId
             }),
             timeout: 10000,
             success: function (data) {
@@ -1508,6 +1535,7 @@ $(function () {
         $.ajax({
             type: "post",
             url: "graph/filter",
+            headers: {"Authorization": $.cookie('token')},
             dataType: "json",
             contentType: "application/json",
             data: JSON.stringify([{

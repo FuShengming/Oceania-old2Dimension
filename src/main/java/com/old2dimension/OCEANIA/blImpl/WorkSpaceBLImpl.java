@@ -30,7 +30,9 @@ public class WorkSpaceBLImpl implements WorkSpaceBL {
             if(codeRepository.findCodeByIdAndUserId(workSpaceVO.getCodeId(),workSpaceVO.getUserId()) == null){
                 return ResponseVO.buildFailure("do not have that user or code");
             }
+            System.out.println("date:"+workSpaceVO.getDate());
             workPlaceRepository.save(new WorkSpace(workSpaceVO));
+
             return ResponseVO.buildSuccess("save a workSpace.");}
         catch (Exception e){
             return ResponseVO.buildFailure("save workSpace Error.");

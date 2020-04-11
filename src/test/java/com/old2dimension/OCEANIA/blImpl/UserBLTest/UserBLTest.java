@@ -13,48 +13,6 @@ import org.junit.Test;
 import static org.mockito.Mockito.*;
 
 public class UserBLTest {
-    @Test
-    public void loginTest1(){
-        User expected = new User();
-        expected.setId(1);
-        expected.setName("test");
-        expected.setPwd("123456");
-        UserBLImpl userBL = new UserBLImpl();
-        UserRepository userRepository = mock(UserRepository.class);
-        when(userRepository.findUserByName("test")).thenReturn(expected);
-        userBL.setUserRepository(userRepository);
-        ResponseVO responseVO= userBL.login("test","123456");
-        Assert.assertEquals(((User)responseVO.getContent()).getName(),"test");
-
-    }
-    @Test
-    public void loginTest2(){
-        User expected = new User();
-        expected.setId(1);
-        expected.setName("test");
-        expected.setPwd("12345");
-        UserBLImpl userBL = new UserBLImpl();
-        UserRepository userRepository = mock(UserRepository.class);
-        when(userRepository.findUserByName("test")).thenReturn(expected);
-        userBL.setUserRepository(userRepository);
-        ResponseVO responseVO= userBL.login("test","123456");
-        Assert.assertEquals(responseVO.getMessage(),"name or pwd is not correct");
-
-    }
-
-    @Test
-    public void loginTest3(){
-        User expected = new User();
-        expected.setId(1);
-        expected.setName("test");
-        expected.setPwd("123456");
-        UserBLImpl userBL = new UserBLImpl();
-        UserRepository userRepository = mock(UserRepository.class);
-        when(userRepository.findUserByName("test")).thenReturn(null);
-        userBL.setUserRepository(userRepository);
-        ResponseVO responseVO= userBL.login("test","123456");
-        Assert.assertEquals(responseVO.getMessage(),"no such userName : test");
-    }
 
     @Test
     public void signUpTest1(){

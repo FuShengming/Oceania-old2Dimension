@@ -50,7 +50,7 @@ public class DomainSet {
 
     public void sortByVerticesNum() {
         this.domains.sort((o1, o2) -> {
-            if (o1.getVertices() == null || o2.getVertices() == null) return 0;
+            if (o1.getVertices() == null || o2.getVertices() == null) return 1;
             return o2.getVertices().size() - o1.getVertices().size();
         });
     }

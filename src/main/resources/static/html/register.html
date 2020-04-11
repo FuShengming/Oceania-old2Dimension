@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register to Oceania!</title>
+
+    <!-- JavaScript -->
+    <script type="text/javascript" src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
+    <script src="../js/captcha.js"></script>
+    <script src="../js/md5.min.js"></script>
+    <script src="../js/register.js"></script>
+
+    <!-- Style sheet-->
+    <link rel="stylesheet" href="webjars/bootstrap/4.4.1-1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/register.css"/>
+</head>
+<body>
+<div class="login-container">
+    <div class="login-line-container">
+        <div class="login-form-container">
+            <form class="login-form" style="padding: 0 24px 48px; overflow: hidden;">
+                <div class="login-title"> 注 册 </div>
+                <div class="login-input-outer">
+                    <div class="login-input" id="login-name-input">
+                        <label class="input-wrapper" id="login-username-input">
+                            <input name="username" class="Input name-input" placeholder="用户名" value>
+                        </label>
+                        <div class="input-error-msg input-required-error hidden-error" id="username-warn"></div>
+                    </div>
+                </div>
+                <div class="login-input-outer input-content-holder">
+                    <div class="login-input" id="login-pwd-input">
+                        <label class="input-wrapper password-wrapper">
+                            <input name="password" type="password" class="Input password-input" placeholder="密码" value>
+                        </label>
+                        <div class="input-error-msg input-required-error hidden-error" id="password-warn"></div>
+                    </div>
+                </div>
+                <div class="login-input-outer input-content-holder">
+                    <div class="login-input" id="login-pwd-repeat-input">
+                        <label class="input-wrapper password-repeat-wrapper">
+                            <input name="password" type="password" class="Input password-repeat-input" placeholder="重复密码" value>
+                        </label>
+                        <div class="input-error-msg input-required-error hidden-error" id="password-repeat-warn"></div>
+                    </div>
+                </div>
+                <div class="login-input-outer">
+                    <div class="login-input" id="login-captcha-input">
+                        <label class="input-wrapper">
+                            <input name="captcha" class="Input captcha-input" placeholder="验证码" value>
+                        </label>
+                        <div class="input-error-msg input-required-error hidden-error" id="captcha-warn"></div>
+                    </div>
+                    <span class="captcha-image-outer">
+                        <div class="captcha-image-container">
+                            <canvas class="captcha-image" id="canvas" onclick="draw()"></canvas>
+                        </div>
+                    </span>
+                </div>
+                <div class="login-options">
+                    <button type="button" class="login-register">已有帐号？点击登录</button>
+                </div>
+                <button type="button" class="btn btn-primary login-btn">注册</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

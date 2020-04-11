@@ -24,7 +24,6 @@ public class PathVO {
     }
 
 
-
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof PathVO)) return false;
