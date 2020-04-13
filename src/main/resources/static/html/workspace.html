@@ -294,7 +294,14 @@
                         $("#analyze-state").html("<i class=\"fa fa-check-circle fa-3x fa-fw\"></i>\n" +
                             "<span>Success!</span>");
                         $("#cont-2").prop('disabled', false);
+                    } else {
+                        $("#analyze-state").html("<i class=\"fa fa-times-circle fa-3x fa-fw\"></i>\n" +
+                            "<span>Analyze failed. Please try again Later.</span>\n" +
+                            "<span>Error: " + data.message + "</span>");
                     }
+                },
+                error: function (err) {
+                    console.log(err);
                 }
             });
             window.dispatchEvent(sel_event);
@@ -305,6 +312,32 @@
         });
         $("#cont-3").on('click', function () {
             let sel_event = new CustomEvent('next.m.4', {detail: {step: 4}});
+            $.ajax({
+                type: "post",
+                url: "/upload/mapping",
+                headers: {"Authorization": $.cookie('token')},
+                dataType: "json",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    'userId': Number(localStorage["userId"]),
+                    'uuid': localStorage["f-uuid"]
+                }),
+                timeout: 100000,
+                success: function (data) {
+                    if (data.success) {
+                        $("#mapping-state").html("<i class=\"fa fa-check-circle fa-3x fa-fw\"></i>\n" +
+                            "<span>Success!</span>");
+                        $("#cont-4").prop('disabled', false);
+                    } else {
+                        $("#mapping-state").html("<i class=\"fa fa-times-circle fa-3x fa-fw\"></i>\n" +
+                            "<span>Analyze failed. Please try again Later.</span>\n" +
+                            "<span>Error: " + data.message + "</span>");
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
             window.dispatchEvent(sel_event);
         });
         $("#cont-4").on('click', function () {
@@ -357,6 +390,9 @@
             init: function () {
                 this.hiddenFileInput.setAttribute("type", "file");
                 this.hiddenFileInput.setAttribute("webkitdirectory", true);
+                this.on("success", function () {
+                    $("#cont-3").prop('disabled', false);
+                })
             }
             // accept: function (file, done) {
             //     console.log(file);
