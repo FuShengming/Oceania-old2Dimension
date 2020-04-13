@@ -77,13 +77,12 @@ public class UploadBLImpl implements UploadBL {
         return  ResponseVO.buildSuccess("files upload successfully");
     }
 
-    public ResponseVO uploadJar(String uuid, MultipartFile[] files){
-        if (files == null) return  ResponseVO.buildFailure("NULL");
-        if (files.length == 0) return  ResponseVO.buildFailure("EMPTY");
+    public ResponseVO uploadJar(String uuid, MultipartFile file){
+        if (file == null) return  ResponseVO.buildFailure("NULL");
 
-        for (MultipartFile multipartFile : files) {
+
             //--------------创建目录和文件-------------
-            String fileFullName = multipartFile.getOriginalFilename();
+            String fileFullName = file.getOriginalFilename();
             if (fileFullName == null) {
                 return ResponseVO.buildFailure("file error");
             }
@@ -118,7 +117,7 @@ public class UploadBLImpl implements UploadBL {
 
             //----------------------------------
             try{
-            String content = new BufferedReader(new InputStreamReader(multipartFile.getInputStream())).lines().collect(Collectors.joining(System.lineSeparator()));
+            String content = new BufferedReader(new InputStreamReader(file.getInputStream())).lines().collect(Collectors.joining(System.lineSeparator()));
             FileOutputStream out = new FileOutputStream(jarFile);
             out.write(content.getBytes());
             }
@@ -127,7 +126,7 @@ public class UploadBLImpl implements UploadBL {
                 deleteFile(jarFile);
                 return ResponseVO.buildFailure("write jar file exception");
             }
-        }
+
         return ResponseVO.buildSuccess("upload jar successfully");
     }
 
@@ -161,8 +160,16 @@ public class UploadBLImpl implements UploadBL {
         return ResponseVO.buildSuccess(code);
     }
 
-    public ResponseVO analyzeJar(int codeId) {
-
+    public ResponseVO analyzeJar(int userId, String uuid) {
+        UploadConfirmForm uploadConfirmForm = new UploadConfirmForm();
+        uploadConfirmForm.setName(uuid);
+        uploadConfirmForm.setUserId(userId);
+        uploadConfirmForm.setUuid(uuid);
+        ResponseVO responseVO = uploadConfirm(uploadConfirmForm);
+        if(!responseVO.isSuccess()){
+            return responseVO;
+        }
+        int codeId = ((Code)responseVO.getContent()).getId();
         File basicDir = new File("src/main/resources/analyzeCode/src/" + codeId);
         if (!basicDir.exists()) {
             return ResponseVO.buildFailure("dictionary does not exist,please upload code");
@@ -218,7 +225,8 @@ public class UploadBLImpl implements UploadBL {
             e.printStackTrace();
             return ResponseVO.buildFailure("filter dependencies exception");
         }
-        return ResponseVO.buildSuccess();
+
+        return ResponseVO.buildSuccess(code);
     }
 
     private void filterDependencies(String fileName, ArrayList<String> packageNames) throws IOException {
