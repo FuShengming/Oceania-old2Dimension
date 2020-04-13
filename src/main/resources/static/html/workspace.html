@@ -67,6 +67,27 @@
     }
 </style>
 <body>
+<div class="modal fade" id="nameModal" tabindex="-1" role="dialog" aria-labelledby="nameModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Modify Name</h3>
+            </div>
+            <div class="modal-body d-flex justify-content-around">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">New Name</span>
+                </div>
+                <input type="text" class="form-control typeahead" data-provide="typeahead" placeholder=""
+                       aria-label="func-name" aria-describedby="basic-addon1" id="name-input">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
+                <button type="button" class="btn btn-primary m-2" id="name-submit">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!--<div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="newModalLabel"-->
 <!--     aria-hidden="true">-->
 <!--    <div class="modal-dialog" role="document">-->
@@ -259,7 +280,7 @@
                     dataType: "json",
                     contentType: 'application/json',
                     data: JSON.stringify({
-                        'userId': Number(localStorage["userId"]),
+                        'userId': userId,
                         'uuid': localStorage["f-uuid"]
                     }),
                     success: function (data) {
@@ -285,7 +306,7 @@
                 dataType: "json",
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    'userId': Number(localStorage["userId"]),
+                    'userId': userId,
                     'uuid': localStorage["f-uuid"]
                 }),
                 timeout: 100000,
@@ -319,7 +340,7 @@
                 dataType: "json",
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    'userId': Number(localStorage["userId"]),
+                    'userId': userId,
                     'uuid': localStorage["f-uuid"]
                 }),
                 timeout: 100000,
@@ -357,7 +378,7 @@
             method: 'post',
             acceptedFiles: ".jar",
             params: {
-                'userId': localStorage["userId"],
+                'userId': userId,
                 'uuid': localStorage["f-uuid"]
             },
             headers: {"Authorization": $.cookie('token')},
@@ -379,13 +400,12 @@
             uploadMultiple: true,
             parallelUploads: 500,
             params: {
-                'userId': localStorage["userId"],
+                'userId': userId,
                 'uuid': localStorage["f-uuid"]
             },
             renameFile: function (file) {
                 // console.log(file, file.webkitRelativePath);
-                let newFilename = file.webkitRelativePath;
-                return newFilename;
+                return file.webkitRelativePath;
             },
             init: function () {
                 this.hiddenFileInput.setAttribute("type", "file");
@@ -399,20 +419,22 @@
             //     if (file.type === '.java') done();
             // }
         });
-        $.ajax({
-            type: "get",
-            url: "/code/getCodesByUserId/" + userId.toString(),
-            headers: {"Authorization": $.cookie('token')},
-            // beforeSend: function (xhr) {
-            //     xhr.setRequestHeader("Authorization", $.cookie('token'));
-            // },
-            success: function (data) {
-                if (data.success) {
-                    let h = "";
-                    let codes = data.content;
-                    codes.forEach(function (code) {
-                        console.log(code);
-                        h += `<tr class="clickable-row" code-id="${code.codeId}">
+
+        let getCodesByUserId = function () {
+            $.ajax({
+                type: "get",
+                url: "/code/getCodesByUserId/" + userId.toString(),
+                headers: {"Authorization": $.cookie('token')},
+                // beforeSend: function (xhr) {
+                //     xhr.setRequestHeader("Authorization", $.cookie('token'));
+                // },
+                success: function (data) {
+                    if (data.success) {
+                        let h = "";
+                        let codes = data.content;
+                        codes.forEach(function (code) {
+                            console.log(code);
+                            h += `<tr class="clickable-row" code-id="${code.codeId}">
                                 <td>${code.codeName}</td>
                                 <td>${code.date === null ? "Never" : new Date(Date.parse(code.date)).toLocaleString("en")}</td>
                                 <td class="td-btn">
@@ -421,31 +443,90 @@
                                         <i class="fa fa-ellipsis-h setting-icon"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="#">Modify Name</a>
-                                        <a class="dropdown-item" href="#">Remove</a>
+                                        <a class="dropdown-item modify-name" href="#" code-id="${code.codeId}">Modify Name</a>
+                                        <a class="dropdown-item rmv" href="#" code-id="${code.codeId}">Remove</a>
                                     </div>
                                 </td>
                             </tr>`
-                    });
-                    $("#code-tb").html(h);
-                    $(".clickable-row").on('click', function (e) {
-                        if (!$(e.target).hasClass("btn-setting") &&
-                            !$(e.target).hasClass("setting-icon") &&
-                            !$(e.target).hasClass("dropdown-menu") &&
-                            !$(e.target).hasClass("dropdown-item")) {
-                            console.log('click', $(this).attr("code-id"));
-                            // localStorage.setItem('codeId', $(this).attr("code-id"));
-                            window.location.href = "/graph?code=" + $(this).attr("code-id");
-                        }
-                    });
-                } else {
-                    console.log(data.message);
+                        });
+                        $("#code-tb").html(h);
+                        $(".clickable-row").on('click', function (e) {
+                            if (!$(e.target).hasClass("btn-setting") &&
+                                !$(e.target).hasClass("setting-icon") &&
+                                !$(e.target).hasClass("dropdown-menu") &&
+                                !$(e.target).hasClass("dropdown-item")) {
+                                console.log('click', $(this).attr("code-id"));
+                                // localStorage.setItem('codeId', $(this).attr("code-id"));
+                                window.location.href = "/graph?code=" + $(this).attr("code-id");
+                            }
+                        });
+                        $("#rmv").on('click', function () {
+                            let codeId = $(this).attr("code-id");
+                            if (confirm("Sure to remove this project permanently?")) {
+                                $.ajax({
+                                    type: "post",
+                                    url: "/code/delete",
+                                    headers: {"Authorization": $.cookie('token')},
+                                    dataType: "json",
+                                    contentType: 'application/json',
+                                    data: JSON.stringify({
+                                        "userId": userId,
+                                        "codeId": codeId,
+                                    }),
+                                    success: function (data) {
+                                        if (data.success) {
+                                            getCodesByUserId();
+                                        } else {
+                                            console.log(data.message);
+                                        }
+                                    },
+                                    error: function (err) {
+                                        console.log(err);
+                                    }
+                                });
+                            }
+                        });
+                        $(".modify-name").on('click', function () {
+                            $("#name-input").val("");
+                            let codeId = $(this).attr("code-id");
+                            $("#name-submit").on('click', function () {
+                                $.ajax({
+                                    type: "post",
+                                    url: "/code/modifyName",
+                                    headers: {"Authorization": $.cookie('token')},
+                                    dataType: "json",
+                                    contentType: 'application/json',
+                                    data: JSON.stringify({
+                                        "userId": userId,
+                                        "codeId": codeId,
+                                        "name": $("#name-input").val()
+                                    }),
+                                    success: function (data) {
+                                        if (data.success) {
+                                            getCodesByUserId();
+                                            $("#nameModal").modal('hide');
+                                        } else {
+                                            console.log(data.message);
+                                        }
+                                    },
+                                    error: function (err) {
+                                        console.log(err);
+                                    }
+                                });
+                            });
+                            $("#nameModal").modal('show');
+                        })
+                    } else {
+                        console.log(data.message);
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
                 }
-            },
-            error: function (err) {
-                console.log(err);
-            }
-        });
+            });
+        };
+
+        getCodesByUserId();
 
     });
 </script>
