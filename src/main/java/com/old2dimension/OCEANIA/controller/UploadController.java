@@ -17,37 +17,34 @@ public class UploadController {
 
     @RequestMapping("/code")
     public ResponseVO codeUpload(@RequestParam("userId") int userId,
+                                 @RequestParam("uuid") String uuid,
                                  @RequestParam("file") MultipartFile[] files) throws IOException {
-        return uploadBL.uploadCode(userId, files);
+        return uploadBL.uploadCode(uuid, files);
     }
 
     @RequestMapping("/jar")
     public ResponseVO jarUpload(@RequestParam("userId") int userId,
                                 @RequestParam("uuid") String uuid,
                                 @RequestParam("file") MultipartFile file) throws IOException {
-        System.out.println(userId);
-        System.out.println(uuid);
-        System.out.println(file.getOriginalFilename());
-        return ResponseVO.buildSuccess();
+
+        return uploadBL.uploadJar(uuid,file);
     }
 
     @RequestMapping(value = "/analyze", method = RequestMethod.POST)
     public ResponseVO analyzeJar(@RequestBody UniqueIdentificationVO ui) throws IOException, InterruptedException {
-        System.out.println(ui.getUserId());
-        System.out.println(ui.getUuid());
-        Thread.sleep(2000);
-        return ResponseVO.buildSuccess();
+
+        return uploadBL.analyzeJar(ui.getUserId(),ui.getUuid());
 //        return uploadBL.analyzeJar(codeId);
     }
 
-    @RequestMapping(value = "/mapping", method = RequestMethod.POST)
-    public ResponseVO mapping(@RequestBody UniqueIdentificationVO ui) throws IOException, InterruptedException {
-        System.out.println(ui.getUserId());
-        System.out.println(ui.getUuid());
-        Thread.sleep(2000);
-        return ResponseVO.buildSuccess();
-//        return uploadBL.analyzeJar(codeId);
-    }
+//    @RequestMapping(value = "/mapping", method = RequestMethod.POST)
+//    public ResponseVO mapping(@RequestBody UniqueIdentificationVO ui) throws IOException, InterruptedException {
+//        System.out.println(ui.getUserId());
+//        System.out.println(ui.getUuid());
+//        Thread.sleep(2000);
+//        return ResponseVO.buildSuccess();
+////        return uploadBL.analyzeJar(codeId);
+//    }
 
     @RequestMapping(value = "/cancel", method = RequestMethod.POST)
     public ResponseVO cancel(@RequestBody UniqueIdentificationVO ui) throws IOException, InterruptedException {
