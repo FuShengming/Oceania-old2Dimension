@@ -143,6 +143,11 @@
             <artifactId>font-awesome</artifactId>
             <version>4.7.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery-cookie</artifactId>
+            <version>1.4.1</version>
+        </dependency>
 
         <dependency>
             <groupId>gr.gousoisg</groupId>

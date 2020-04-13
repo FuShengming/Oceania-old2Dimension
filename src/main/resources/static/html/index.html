@@ -106,9 +106,11 @@
         $("#sign-up").on('click', function () {
             window.location.href = "/register";
         });
+
         $("#start-btn").on('click', function () {
             // todo: 判断用户登录状态，根据用户角色跳转页面
-            window.location.href = "/login";
+            if (localStorage["userId"] !== undefined) window.location.href = "/workspace";
+            else window.location.href = "/login";
         });
     });
 </script>

@@ -36,6 +36,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: org.webjars:jquery-cookie:1.4.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-jdbc:2.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.2.4.RELEASE" level="project" />
@@ -188,6 +189,7 @@
     <orderEntry type="library" name="Maven: org.webjars:popper.js:1.14.3" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:popper.js:1.16.0" level="project" />
     <orderEntry type="library" name="Maven: org.webjars:font-awesome:4.7.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars:jquery-cookie:1.4.1" level="project" />
     <orderEntry type="module-library">
       <library name="Maven: gr.gousoisg:javacg.stat:0.1-SNAPSHOT">
         <CLASSES>
