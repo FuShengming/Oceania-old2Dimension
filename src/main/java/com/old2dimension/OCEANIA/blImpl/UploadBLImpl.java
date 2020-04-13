@@ -4,6 +4,7 @@ import com.old2dimension.OCEANIA.bl.UploadBL;
 import com.old2dimension.OCEANIA.dao.CodeRepository;
 import com.old2dimension.OCEANIA.po.Code;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
+import com.old2dimension.OCEANIA.vo.UploadConfirmForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,15 +19,11 @@ public class UploadBLImpl implements UploadBL {
     @Autowired
     CodeRepository codeRepository;
 
-    public ResponseVO uploadCode(int userId, MultipartFile[] files) throws IOException {
-        if (files == null) return ResponseVO.buildFailure("NULL");
-        if (files.length == 0) return ResponseVO.buildFailure("EMPTY");
+    public ResponseVO uploadCode(String uuid, MultipartFile[] files)  {
+        if (files == null) return  ResponseVO.buildFailure("NULL");
+        if (files.length == 0) return  ResponseVO.buildFailure("EMPTY");
 
-        Code code = new Code();
-        code.setName("name");
-        code.setIs_default(0);
-        code.setUserId(userId);
-        Code savedCode = codeRepository.save(code);
+
 
         for (MultipartFile multipartFile : files) {
 
@@ -35,8 +32,63 @@ public class UploadBLImpl implements UploadBL {
             if (fileFullName == null) {
                 return ResponseVO.buildFailure("file error");
             }
-            String dirName = "src/main/resources/analyzeCode/src/" + (savedCode.getId() + "") + "/" + fileFullName.substring(0, fileFullName.lastIndexOf("/"));
-            String fileName = fileFullName.substring(fileFullName.lastIndexOf("/") + 1);
+            String dirName = "src/main/resources/analyzeCode/src/"+ uuid + "/"+fileFullName.substring(0,fileFullName.lastIndexOf("/"));
+            String fileName = fileFullName.substring(fileFullName.lastIndexOf("/")+1);
+            fileFullName = dirName +"/"+ fileName;
+            File dir = new File(dirName);
+            if (!dir.exists()) {
+                boolean isSuccess = dir.mkdirs();
+                if(!isSuccess){
+                    System.out.println(dirName+" mkdir fail");
+                    return ResponseVO.buildFailure("mkdirs fails");}
+            }
+
+            File javaFile = new File(fileFullName);
+            if(!javaFile.exists()){
+                boolean isSuccess = true;
+                try{
+                   isSuccess = javaFile.createNewFile();
+                    if(!isSuccess){
+                        deleteFile(new File("src/main/resources/analyzeCode/src/"+ uuid ));
+                        return ResponseVO.buildFailure("create file fails");}
+                }
+                catch (IOException e){
+                    e.printStackTrace();
+                    deleteFile(new File("src/main/resources/analyzeCode/src/"+ uuid ));
+                    return ResponseVO.buildFailure("create file exception");
+                }
+            }
+
+            else{
+                System.out.println("java file has existed");
+            }
+            //----------------------------------
+            try{
+            String content = new BufferedReader(new InputStreamReader(multipartFile.getInputStream())).lines().collect(Collectors.joining(System.lineSeparator()));
+            FileOutputStream out = new FileOutputStream(javaFile);
+            out.write(content.getBytes());}
+            catch (IOException e){
+                e.printStackTrace();
+                deleteFile(new File("src/main/resources/analyzeCode/src/"+ uuid ));
+                return ResponseVO.buildFailure("write file error");
+            }
+        }
+
+        return  ResponseVO.buildSuccess("files upload successfully");
+    }
+
+    public ResponseVO uploadJar(String uuid, MultipartFile[] files){
+        if (files == null) return  ResponseVO.buildFailure("NULL");
+        if (files.length == 0) return  ResponseVO.buildFailure("EMPTY");
+
+        for (MultipartFile multipartFile : files) {
+            //--------------创建目录和文件-------------
+            String fileFullName = multipartFile.getOriginalFilename();
+            if (fileFullName == null) {
+                return ResponseVO.buildFailure("file error");
+            }
+            String dirName = "src/main/resources/jars";
+            String fileName = uuid + ".jar";
             fileFullName = dirName + "/" + fileName;
             File dir = new File(dirName);
             if (!dir.exists()) {
@@ -47,26 +99,69 @@ public class UploadBLImpl implements UploadBL {
                 }
             }
 
-            File javaFile = new File(fileFullName);
-            if (!javaFile.exists()) {
-
-                boolean isSuccess = javaFile.createNewFile();
-                if (!isSuccess) {
-                    return ResponseVO.buildFailure("create file fails");
+            File jarFile = new File(fileFullName);
+            if (!jarFile.exists()) {
+                try {
+                    boolean isSuccess = jarFile.createNewFile();
+                    if (!isSuccess) {
+                        deleteFile(jarFile);
+                        return ResponseVO.buildFailure("create file fails");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    deleteFile(jarFile);
+                    return ResponseVO.buildFailure("create file error");
                 }
-            }
-            //----------------------------------
-            String content = new BufferedReader(new InputStreamReader(multipartFile.getInputStream())).lines().collect(Collectors.joining(System.lineSeparator()));
-            FileOutputStream out = new FileOutputStream(javaFile);
-            out.write(content.getBytes());
-        }
 
-        return ResponseVO.buildSuccess(savedCode);
+            }
+
+
+            //----------------------------------
+            try{
+            String content = new BufferedReader(new InputStreamReader(multipartFile.getInputStream())).lines().collect(Collectors.joining(System.lineSeparator()));
+            FileOutputStream out = new FileOutputStream(jarFile);
+            out.write(content.getBytes());
+            }
+            catch (IOException e){
+                e.printStackTrace();
+                deleteFile(jarFile);
+                return ResponseVO.buildFailure("write jar file exception");
+            }
+        }
+        return ResponseVO.buildSuccess("upload jar successfully");
     }
 
+    public ResponseVO uploadConfirm(UploadConfirmForm uploadConfirm){
+        File javaDir = new File("src/main/resources/AnalyzeCode/src/"+uploadConfirm.getUuid());
+        if(!javaDir.exists()){
+            return ResponseVO.buildFailure("can not find java files");
+        }
+        File jarFile = new File("src/main/resources/jars/"+uploadConfirm.getUuid()+".jar");
+        if(!jarFile.exists()){
+            return ResponseVO.buildFailure("can not find jar file");
+        }
 
-    public ResponseVO analyzeJar(int codeId) throws IOException {
 
+
+        Code code = new Code();
+        code.setName(uploadConfirm.getName());
+        code.setUserId(uploadConfirm.getUserId());
+        code.setIs_default(0);
+        code = codeRepository.save(code);
+        File renameJavaDir = new File("src/main/resources/AnalyzeCode/src/"+code.getId());
+        File renameJarFile= new File("src/main/resources/jars/"+code.getId()+".jar");
+        boolean isSuccess = javaDir.renameTo(renameJavaDir);
+        if(!isSuccess){
+            System.out.println("java files rename fail");
+        }
+        isSuccess = jarFile.renameTo(renameJarFile);
+        if(!isSuccess){
+            System.out.println("jar file rename fail");
+        }
+        return ResponseVO.buildSuccess(code);
+    }
+
+    public ResponseVO analyzeJar(int codeId) {
 
         File basicDir = new File("src/main/resources/analyzeCode/src/" + codeId);
         if (!basicDir.exists()) {
@@ -91,19 +186,38 @@ public class UploadBLImpl implements UploadBL {
         if (dependencies.exists()) {
             boolean isSuccess = dependencies.delete();
         }
-        boolean isSuccess = dependencies.createNewFile();
 
         PrintStream psOld = System.out; // 保存原来的输出路径
+        try{
+        boolean isSuccess= dependencies.createNewFile();
+        if(!isSuccess){
+            return ResponseVO.buildFailure("create dependencies file fail");
+        }
         System.setOut(new PrintStream(dependencies));// 设置输出重新定向到文件
-        try {
-            JCallGraph.main(args);
-        } catch (Exception e) {
+        }
+        catch (IOException e){
+            e.printStackTrace();
+            boolean isSuccess = dependencies.delete();
+            return ResponseVO.buildFailure("dependencies file creating exception");
+        }
+
+        try{
+        JCallGraph.main(args);
+        }
+        catch (Exception e){
+            boolean isSuccess = dependencies.delete();
             e.printStackTrace();
             return ResponseVO.buildFailure("Call-Graph error");
         }
         System.setOut(psOld);
-        filterDependencies("src/main/resources/dependencies/" + codeId + ".txt", packageStrings);
-
+        try {
+            filterDependencies("src/main/resources/dependencies/" + codeId + ".txt", packageStrings);
+        }
+        catch (IOException e){
+            boolean isSuccess = dependencies.delete();
+            e.printStackTrace();
+            return ResponseVO.buildFailure("filter dependencies exception");
+        }
         return ResponseVO.buildSuccess();
     }
 
@@ -197,5 +311,29 @@ public class UploadBLImpl implements UploadBL {
         }
         return res;
     }
-
+    private boolean deleteFile(File file){
+        boolean res = true;
+        if(file.isFile()){
+            boolean isSuccess = file.delete();
+            if(!isSuccess){
+                System.out.println("删除文件失败");
+                return false;
+            }
+            return true;
+        }
+        File[] files = file.listFiles();
+        if(files == null){
+            System.out.println("list file fail");
+            return false;
+        }
+        for(File cur : files){
+            if(cur.isDirectory()){
+              res=res&deleteFile(cur);
+            }
+        }
+        res = res&file.delete();
+        return res;
+    }
 }
+
+

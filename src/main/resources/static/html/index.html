@@ -108,6 +108,7 @@
         });
 
         $("#start-btn").on('click', function () {
+            // todo: 判断用户登录状态，根据用户角色跳转页面
             if (localStorage["userId"] !== undefined) window.location.href = "/workspace";
             else window.location.href = "/login";
         });

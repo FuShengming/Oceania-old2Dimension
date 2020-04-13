@@ -20,7 +20,7 @@ function draw() {
         let deg = Math.random() * 30 * Math.PI / 180;
         let txt = aCode[j];
         show_num[i] = txt;
-        let x = i * 15;
+        let x = 3 + i * 12;
         let y = 15 + Math.random() * 8;
         context.font = "18px 微软雅黑";
 
