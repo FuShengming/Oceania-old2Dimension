@@ -125,26 +125,39 @@
             </div>
             <div class="modal-body step step-2">
                 <h4>Analyzing Dependency...</h4>
+                <div id="analyze-state">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <span>Analyzing... Please wait a second.</span>
+                </div>
             </div>
             <div class="modal-body step step-3">
                 <h4>Upload Your Project Codes</h4>
+                <div class="dropzone dz-clickable" id="myDrop">
+                    <div class="dz-message" data-dz-message="">
+                        <span>Drop files here or click to upload.</span>
+                    </div>
+                </div>
             </div>
             <div class="modal-body step step-4">
                 <h4>Mapping Codes to the Graph...</h4>
+                <div id="mapping-state">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <span>Mapping... Please wait a second.</span>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CANCEL</button>
+                <button type="button" class="btn btn-secondary m-2" id="cancel-btn">CANCEL</button>
                 <button type="button" class="btn btn-primary m-2 step step-1" data-step="1"
-                        id="cont-1">CONTINUE
+                        id="cont-1" disabled>CONTINUE
                 </button>
                 <button type="button" class="btn btn-primary m-2 step step-2" data-step="2"
-                        id="cont-2">CONTINUE
+                        id="cont-2" disabled>CONTINUE
                 </button>
                 <button type="button" class="btn btn-primary m-2 step step-3" data-step="3"
-                        id="cont-3">CONTINUE
+                        id="cont-3" disabled>CONTINUE
                 </button>
                 <button type="button" class="btn btn-primary m-2 step step-4" data-step="4"
-                        id="cont-4">Finish
+                        id="cont-4" disabled>Finish
                 </button>
             </div>
         </div>
@@ -200,11 +213,6 @@
                 </div>
             </div>
         </div>
-        <div class="dropzone dz-clickable" id="myDrop">
-            <div class="dz-message" data-dz-message="">
-                <span>Drop files here or click to upload.</span>
-            </div>
-        </div>
     </div>
     <div class="col-3"></div>
 </div>
@@ -242,8 +250,53 @@
         let userId = localStorage['userId'];
         if (userId === undefined) window.location.href = "/login";
 
+        $("#cancel-btn").on('click', function () {
+            if (confirm("Are you sure to cancel uploading? Your files will not be saved.")) {
+                $.ajax({
+                    type: "post",
+                    url: "/upload/cancel",
+                    headers: {"Authorization": $.cookie('token')},
+                    dataType: "json",
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        'userId': Number(localStorage["userId"]),
+                        'uuid': localStorage["f-uuid"]
+                    }),
+                    success: function (data) {
+                        if (data.success) {
+                            $("#uploadModal").modal('hide');
+                            localStorage.removeItem("f-uuid");
+                        } else {
+                            console.log(data.message);
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }
+        });
         $("#cont-1").on('click', function () {
             let sel_event = new CustomEvent('next.m.2', {detail: {step: 2}});
+            $.ajax({
+                type: "post",
+                url: "/upload/analyze",
+                headers: {"Authorization": $.cookie('token')},
+                dataType: "json",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    'userId': Number(localStorage["userId"]),
+                    'uuid': localStorage["f-uuid"]
+                }),
+                timeout: 100000,
+                success: function (data) {
+                    if (data.success) {
+                        $("#analyze-state").html("<i class=\"fa fa-check-circle fa-3x fa-fw\"></i>\n" +
+                            "<span>Success!</span>");
+                        $("#cont-2").prop('disabled', false);
+                    }
+                }
+            });
             window.dispatchEvent(sel_event);
         });
         $("#cont-2").on('click', function () {
@@ -255,6 +308,7 @@
             window.dispatchEvent(sel_event);
         });
         $("#cont-4").on('click', function () {
+            localStorage.removeItem("f-uuid");
             location.reload();
         });
         // $("#copy-btn").on("click", function () {
@@ -262,7 +316,8 @@
         //     $("#copyModal").modal('show');
         // });
         $("#upload-btn").on("click", function () {
-            localStorage.setItem("f-uuid", uuid());
+            if (localStorage["f-uuid"] !== undefined)
+                localStorage.setItem("f-uuid", uuid());
         });
         let jarDz = new Dropzone("div#jar-upload", {
             url: '/upload/jar',
@@ -272,6 +327,13 @@
                 'userId': localStorage["userId"],
                 'uuid': localStorage["f-uuid"]
             },
+            headers: {"Authorization": $.cookie('token')},
+            maxFiles: 1,
+            init: function () {
+                this.on("success", function () {
+                    $("#cont-1").prop('disabled', false);
+                })
+            }
         });
         let myDZ = new Dropzone("div#myDrop", {
             url: '/upload/code',
@@ -284,7 +346,8 @@
             uploadMultiple: true,
             parallelUploads: 500,
             params: {
-                'userId': 1
+                'userId': localStorage["userId"],
+                'uuid': localStorage["f-uuid"]
             },
             renameFile: function (file) {
                 // console.log(file, file.webkitRelativePath);
@@ -335,8 +398,8 @@
                             !$(e.target).hasClass("dropdown-menu") &&
                             !$(e.target).hasClass("dropdown-item")) {
                             console.log('click', $(this).attr("code-id"));
-                            localStorage.setItem('codeId', $(this).attr("code-id"));
-                            window.location.href = "/graph";
+                            // localStorage.setItem('codeId', $(this).attr("code-id"));
+                            window.location.href = "/graph?code=" + $(this).attr("code-id");
                         }
                     });
                 } else {
