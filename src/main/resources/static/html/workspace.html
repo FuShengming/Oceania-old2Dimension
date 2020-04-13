@@ -145,27 +145,28 @@
                 </div>
             </div>
             <div class="modal-body step step-2">
-                <h4>Analyzing Dependency...</h4>
-                <div id="analyze-state">
-                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-                    <span>Analyzing... Please wait a second.</span>
-                </div>
-            </div>
-            <div class="modal-body step step-3">
                 <h4>Upload Your Project Codes</h4>
-                <div class="dropzone dz-clickable" id="myDrop">
+                <div class="dropzone dz-clickable" id="codeDrop">
                     <div class="dz-message" data-dz-message="">
                         <span>Drop files here or click to upload.</span>
                     </div>
                 </div>
             </div>
-            <div class="modal-body step step-4">
-                <h4>Mapping Codes to the Graph...</h4>
-                <div id="mapping-state">
+            <div class="modal-body step step-3">
+                <h4>Analyzing Dependency...</h4>
+                <div id="analyze-state">
                     <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-                    <span>Mapping... Please wait a second.</span>
+                    <span>Analyzing... Please wait a second.</span>
                 </div>
+
             </div>
+            <!--            <div class="modal-body step step-4">-->
+            <!--                <h4>Mapping Codes to the Graph...</h4>-->
+            <!--                <div id="mapping-state">-->
+            <!--                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>-->
+            <!--                    <span>Mapping... Please wait a second.</span>-->
+            <!--                </div>-->
+            <!--            </div>-->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary m-2" id="cancel-btn">CANCEL</button>
                 <button type="button" class="btn btn-primary m-2 step step-1" data-step="1"
@@ -175,11 +176,11 @@
                         id="cont-2" disabled>CONTINUE
                 </button>
                 <button type="button" class="btn btn-primary m-2 step step-3" data-step="3"
-                        id="cont-3" disabled>CONTINUE
+                        id="cont-3" disabled>Finish
                 </button>
-                <button type="button" class="btn btn-primary m-2 step step-4" data-step="4"
-                        id="cont-4" disabled>Finish
-                </button>
+                <!--                <button type="button" class="btn btn-primary m-2 step step-4" data-step="4"-->
+                <!--                        id="cont-4" disabled>Finish-->
+                <!--                </button>-->
             </div>
         </div>
     </div>
@@ -299,6 +300,11 @@
         });
         $("#cont-1").on('click', function () {
             let sel_event = new CustomEvent('next.m.2', {detail: {step: 2}});
+            window.dispatchEvent(sel_event);
+        });
+        $("#cont-2").on('click', function () {
+            let sel_event = new CustomEvent('next.m.3', {detail: {step: 3}});
+            window.dispatchEvent(sel_event);
             $.ajax({
                 type: "post",
                 url: "/upload/analyze",
@@ -314,7 +320,7 @@
                     if (data.success) {
                         $("#analyze-state").html("<i class=\"fa fa-check-circle fa-3x fa-fw\"></i>\n" +
                             "<span>Success!</span>");
-                        $("#cont-2").prop('disabled', false);
+                        $("#cont-3").prop('disabled', false);
                     } else {
                         $("#analyze-state").html("<i class=\"fa fa-times-circle fa-3x fa-fw\"></i>\n" +
                             "<span>Analyze failed. Please try again Later.</span>\n" +
@@ -325,43 +331,39 @@
                     console.log(err);
                 }
             });
-            window.dispatchEvent(sel_event);
+
         });
-        $("#cont-2").on('click', function () {
-            let sel_event = new CustomEvent('next.m.3', {detail: {step: 3}});
-            window.dispatchEvent(sel_event);
-        });
+        // $("#cont-3").on('click', function () {
+        //     let sel_event = new CustomEvent('next.m.4', {detail: {step: 4}});
+        //     window.dispatchEvent(sel_event);
+        //     $.ajax({
+        //         type: "post",
+        //         url: "/upload/mapping",
+        //         headers: {"Authorization": $.cookie('token')},
+        //         dataType: "json",
+        //         contentType: 'application/json',
+        //         data: JSON.stringify({
+        //             'userId': userId,
+        //             'uuid': localStorage["f-uuid"]
+        //         }),
+        //         timeout: 100000,
+        //         success: function (data) {
+        //             if (data.success) {
+        //                 $("#mapping-state").html("<i class=\"fa fa-check-circle fa-3x fa-fw\"></i>\n" +
+        //                     "<span>Success!</span>");
+        //                 $("#cont-3").prop('disabled', false);
+        //             } else {
+        //                 $("#mapping-state").html("<i class=\"fa fa-times-circle fa-3x fa-fw\"></i>\n" +
+        //                     "<span>Analyze failed. Please try again Later.</span>\n" +
+        //                     "<span>Error: " + data.message + "</span>");
+        //             }
+        //         },
+        //         error: function (err) {
+        //             console.log(err);
+        //         }
+        //     });
+        // });
         $("#cont-3").on('click', function () {
-            let sel_event = new CustomEvent('next.m.4', {detail: {step: 4}});
-            $.ajax({
-                type: "post",
-                url: "/upload/mapping",
-                headers: {"Authorization": $.cookie('token')},
-                dataType: "json",
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    'userId': userId,
-                    'uuid': localStorage["f-uuid"]
-                }),
-                timeout: 100000,
-                success: function (data) {
-                    if (data.success) {
-                        $("#mapping-state").html("<i class=\"fa fa-check-circle fa-3x fa-fw\"></i>\n" +
-                            "<span>Success!</span>");
-                        $("#cont-4").prop('disabled', false);
-                    } else {
-                        $("#mapping-state").html("<i class=\"fa fa-times-circle fa-3x fa-fw\"></i>\n" +
-                            "<span>Analyze failed. Please try again Later.</span>\n" +
-                            "<span>Error: " + data.message + "</span>");
-                    }
-                },
-                error: function (err) {
-                    console.log(err);
-                }
-            });
-            window.dispatchEvent(sel_event);
-        });
-        $("#cont-4").on('click', function () {
             localStorage.removeItem("f-uuid");
             location.reload();
         });
@@ -389,7 +391,7 @@
                 })
             }
         });
-        let myDZ = new Dropzone("div#myDrop", {
+        let codeDZ = new Dropzone("div#codeDrop", {
             url: '/upload/code',
             method: "post",
             maxFilesize: 1,
@@ -411,7 +413,7 @@
                 this.hiddenFileInput.setAttribute("type", "file");
                 this.hiddenFileInput.setAttribute("webkitdirectory", true);
                 this.on("success", function () {
-                    $("#cont-3").prop('disabled', false);
+                    $("#cont-2").prop('disabled', false);
                 })
             }
             // accept: function (file, done) {
