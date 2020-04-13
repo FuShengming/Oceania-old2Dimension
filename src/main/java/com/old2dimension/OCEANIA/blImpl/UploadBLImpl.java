@@ -20,6 +20,7 @@ public class UploadBLImpl implements UploadBL {
     CodeRepository codeRepository;
 
     public ResponseVO uploadCode(String uuid, MultipartFile[] files)  {
+        System.out.println("uuid:"+uuid);
         if (files == null) return  ResponseVO.buildFailure("NULL");
         if (files.length == 0) return  ResponseVO.buildFailure("EMPTY");
 
@@ -64,9 +65,13 @@ public class UploadBLImpl implements UploadBL {
             }
             //----------------------------------
             try{
-            String content = new BufferedReader(new InputStreamReader(multipartFile.getInputStream())).lines().collect(Collectors.joining(System.lineSeparator()));
+                InputStreamReader isr   = new InputStreamReader(multipartFile.getInputStream());
+            String content = new BufferedReader(isr).lines().collect(Collectors.joining(System.lineSeparator()));
+            isr.close();
             FileOutputStream out = new FileOutputStream(javaFile);
-            out.write(content.getBytes());}
+            out.write(content.getBytes());
+            out.close();
+            }
             catch (IOException e){
                 e.printStackTrace();
                 deleteFile(new File("src/main/resources/analyzeCode/src/"+ uuid ));
@@ -117,9 +122,12 @@ public class UploadBLImpl implements UploadBL {
 
             //----------------------------------
             try{
-            String content = new BufferedReader(new InputStreamReader(file.getInputStream())).lines().collect(Collectors.joining(System.lineSeparator()));
+                InputStreamReader isr = new InputStreamReader(file.getInputStream());
+            String content = new BufferedReader(isr).lines().collect(Collectors.joining(System.lineSeparator()));
+            isr.close();
             FileOutputStream out = new FileOutputStream(jarFile);
             out.write(content.getBytes());
+            out.close();
             }
             catch (IOException e){
                 e.printStackTrace();
@@ -152,10 +160,14 @@ public class UploadBLImpl implements UploadBL {
         boolean isSuccess = javaDir.renameTo(renameJavaDir);
         if(!isSuccess){
             System.out.println("java files rename fail");
+            codeRepository.delete(code);
+            return ResponseVO.buildFailure("java files rename fail");
         }
         isSuccess = jarFile.renameTo(renameJarFile);
         if(!isSuccess){
             System.out.println("jar file rename fail");
+            codeRepository.delete(code);
+            return ResponseVO.buildFailure("java files rename fail");
         }
         return ResponseVO.buildSuccess(code);
     }
@@ -277,7 +289,7 @@ public class UploadBLImpl implements UploadBL {
         file.createNewFile();
         FileOutputStream out = new FileOutputStream(file);
         out.write(stringBuffer.toString().getBytes());
-
+        out.close();
 
     }
 
