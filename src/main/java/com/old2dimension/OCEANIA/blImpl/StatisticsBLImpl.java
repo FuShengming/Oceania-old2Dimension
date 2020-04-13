@@ -89,18 +89,18 @@ public class StatisticsBLImpl implements StatisticsBL {
         statisticsContentVO.setNumOfUser(numOfUser);
         ArrayList<UserIdAndCodeMesVOs> userIdAndCodeMesVOses = new ArrayList<UserIdAndCodeMesVOs>();
 
-        for (User u:users) {
+        for (User u : users) {
             int userId = u.getId();
             ArrayList<Code> codes = (ArrayList<Code>) codeRepository.findCodesByUserId(userId);
             UserIdAndCodeMesVOs userIdAndCodeMesVOs = new UserIdAndCodeMesVOs();
             userIdAndCodeMesVOs.setUserId(userId);
             ArrayList<CodeMesVO> codeMesVOs = new ArrayList<>();
-            for (Code c:codes) {
-                ArrayList<VertexLabel> vertexLabels= (ArrayList<VertexLabel>) vertexLabelRepository.findVertexLabelsByCodeIdAndUserId(c.getId(), userId);
+            for (Code c : codes) {
+                ArrayList<VertexLabel> vertexLabels = (ArrayList<VertexLabel>) vertexLabelRepository.findVertexLabelsByCodeIdAndUserId(c.getId(), userId);
                 int numOfVertexLabel = vertexLabels.size();
-                ArrayList<EdgeLabel> edgeLabels= (ArrayList<EdgeLabel>) edgeLabelRepository.findEdgeLabelsByCodeIdAndUserId(c.getId(), userId);
+                ArrayList<EdgeLabel> edgeLabels = (ArrayList<EdgeLabel>) edgeLabelRepository.findEdgeLabelsByCodeIdAndUserId(c.getId(), userId);
                 int numOfEdgeLabel = edgeLabels.size();
-                ArrayList<DomainLabel> domainLabels= (ArrayList<DomainLabel>) domainLabelRepository.findDomainLabelsByCodeIdAndUserId(c.getId(), userId);
+                ArrayList<DomainLabel> domainLabels = (ArrayList<DomainLabel>) domainLabelRepository.findDomainLabelsByCodeIdAndUserId(c.getId(), userId);
                 int numOfDomainLabel = domainLabels.size();
 
                 CodeMesVO codeMesVO = new CodeMesVO(c.getName(), c.getNumOfVertices(), c.getNumOfEdges(), c.getNumOfDomains(),
