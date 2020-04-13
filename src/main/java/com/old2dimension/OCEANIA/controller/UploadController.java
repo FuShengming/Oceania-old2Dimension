@@ -22,14 +22,25 @@ import java.util.stream.Collectors;
 public class UploadController {
     @Autowired
     UploadBL uploadBL;
+
     @RequestMapping("/code")
     public ResponseVO codeUpload(@RequestParam("userId") int userId,
                                  @RequestParam("file") MultipartFile[] files) throws IOException {
-       return uploadBL.uploadCode(userId,files);
+        return uploadBL.uploadCode(userId, files);
+    }
+
+    @RequestMapping("/jar")
+    public ResponseVO codeUpload(@RequestParam("userId") int userId,
+                                 @RequestParam("uuid") String uuid,
+                                 @RequestParam("file") MultipartFile file) throws IOException {
+        System.out.println(userId);
+        System.out.println(uuid);
+        System.out.println(file.getOriginalFilename());
+        return ResponseVO.buildSuccess();
     }
 
     @RequestMapping("/analyze")
-    public ResponseVO analyzeJar(@RequestParam("codeId") int codeId) throws IOException{
-       return uploadBL.analyzeJar(codeId);
+    public ResponseVO analyzeJar(@RequestParam("codeId") int codeId) throws IOException {
+        return uploadBL.analyzeJar(codeId);
     }
 }

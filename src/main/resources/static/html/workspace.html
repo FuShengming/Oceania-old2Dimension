@@ -67,44 +67,44 @@
     }
 </style>
 <body>
-<div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="newModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">New Project</h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body d-flex justify-content-around">
-                <button type="button" class="btn btn-primary new-btn" id="copy-btn">Copy from Existing</button>
-                <button type="button" class="btn btn-primary new-btn" id="upload-btn">Upload New Project</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="copyModal" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Copy From Existing</h3>
-            </div>
-            <div class="modal-body d-flex justify-content-around">
-                <select class="custom-select">
-                    <option value="1">iTrust</option>
-                    <option value="2">iTrust2</option>
-                    <option value="3">iTrust3</option>
-                </select>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
-                <button type="button" class="btn btn-primary m-2" id="copy-submit">CONFIRM</button>
-            </div>
-        </div>
-    </div>
-</div>
+<!--<div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="newModalLabel"-->
+<!--     aria-hidden="true">-->
+<!--    <div class="modal-dialog" role="document">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <h3 class="modal-title">New Project</h3>-->
+<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                    <span aria-hidden="true">&times;</span>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="modal-body d-flex justify-content-around">-->
+<!--                <button type="button" class="btn btn-primary new-btn" id="copy-btn">Copy from Existing</button>-->
+<!--                <button type="button" class="btn btn-primary new-btn" id="upload-btn">Upload New Project</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="modal fade" id="copyModal" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel"-->
+<!--     aria-hidden="true">-->
+<!--    <div class="modal-dialog" role="document">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <h3 class="modal-title">Copy From Existing</h3>-->
+<!--            </div>-->
+<!--            <div class="modal-body d-flex justify-content-around">-->
+<!--                <select class="custom-select">-->
+<!--                    <option value="1">iTrust</option>-->
+<!--                    <option value="2">iTrust2</option>-->
+<!--                    <option value="3">iTrust3</option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>-->
+<!--                <button type="button" class="btn btn-primary m-2" id="copy-submit">CONFIRM</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 <form class="modal fade multi-step" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel"
       aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -182,7 +182,7 @@
             <div class="card-body">
                 <div class="card-title d-flex justify-content-between">
                     <h2>My Projects</h2>
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#newModal">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#uploadModal" id="upload-btn">
                         <span class="fa fa-plus-square mr-2"></span>New
                     </button>
                 </div>
@@ -211,13 +211,25 @@
 
 
 <script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="webjars/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 <script type="text/javascript" src="webjars/popper.js/1.16.0/dist/umd/popper.min.js"></script>
 <script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../js/dropzone.min.js"></script>
 <script type="text/javascript" src="../js/multi-step-modal.js"></script>
 <script type="text/javascript" src="../js/navbar.js"></script>
 <script>
+    let uuid = function () {
+        let s = [];
+        let hexDigits = "0123456789abcdef";
+        for (let i = 0; i < 36; i++) {
+            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+        }
+        s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+        s[8] = s[13] = s[18] = s[23] = "-";
+
+        return s.join("");
+    };
     Dropzone.autoDiscover = false;
     Dropzone.prototype._getParamName = function (n) {
         if (typeof this.options.paramName === "function") {
@@ -245,18 +257,21 @@
         $("#cont-4").on('click', function () {
             location.reload();
         });
-        $("#copy-btn").on("click", function () {
-            $("#newModal").modal('hide');
-            $("#copyModal").modal('show');
-        });
+        // $("#copy-btn").on("click", function () {
+        //     $("#newModal").modal('hide');
+        //     $("#copyModal").modal('show');
+        // });
         $("#upload-btn").on("click", function () {
-            $("#newModal").modal('hide');
-            $("#uploadModal").modal('show');
+            localStorage.setItem("f-uuid", uuid());
         });
         let jarDz = new Dropzone("div#jar-upload", {
             url: '/upload/jar',
             method: 'post',
-            acceptedFiles: ".jar"
+            acceptedFiles: ".jar",
+            params: {
+                'userId': localStorage["userId"],
+                'uuid': localStorage["f-uuid"]
+            },
         });
         let myDZ = new Dropzone("div#myDrop", {
             url: '/upload/code',
@@ -267,7 +282,7 @@
             createImageThumbnails: false,
             timeout: 0,
             uploadMultiple: true,
-             parallelUploads: 500,
+            parallelUploads: 500,
             params: {
                 'userId': 1
             },
