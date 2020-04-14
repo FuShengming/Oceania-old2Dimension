@@ -725,7 +725,7 @@ $(function () {
                             let info = n.data("full_info");
                             get_code(info);
                         }
-
+                        get_v_labels(data.vertexId);
                     }
                 }
             });
@@ -1093,9 +1093,9 @@ $(function () {
                     });
                 });
                 console.log(graphData);
-                update_info(cy.$("node.vertex").length,
-                    cy.$("edge").length,
-                    cy.$("node.domain").length);
+                update_info(graphData.nodes.length - data.content.domainSetVO.domainVOs.length,
+                    graphData.edges.length,
+                    data.content.domainSetVO.domainVOs.length);
 
                 cy = cytoscape({
 

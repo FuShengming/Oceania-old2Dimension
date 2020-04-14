@@ -374,54 +374,56 @@
         $("#upload-btn").on("click", function () {
             if (localStorage["f-uuid"] === undefined)
                 localStorage.setItem("f-uuid", uuid());
+
+            let jarDz = new Dropzone("div#jar-upload", {
+                url: '/upload/jar',
+                method: 'post',
+                acceptedFiles: ".jar",
+                params: {
+                    'userId': userId,
+                    'uuid': localStorage["f-uuid"]
+                },
+                headers: {"Authorization": $.cookie('token')},
+                maxFiles: 1,
+                init: function () {
+                    this.on("success", function () {
+                        $("#cont-1").prop('disabled', false);
+                    })
+                }
+            });
+
+            let codeDZ = new Dropzone("div#codeDrop", {
+                url: '/upload/code',
+                method: "post",
+                maxFilesize: 1,
+                addRemoveLinks: true,
+                acceptedFiles: ".java",
+                createImageThumbnails: false,
+                timeout: 0,
+                uploadMultiple: true,
+                parallelUploads: 500,
+                params: {
+                    'userId': userId,
+                    'uuid': localStorage["f-uuid"]
+                },
+                renameFile: function (file) {
+                    // console.log(file, file.webkitRelativePath);
+                    return file.webkitRelativePath;
+                },
+                init: function () {
+                    this.hiddenFileInput.setAttribute("type", "file");
+                    this.hiddenFileInput.setAttribute("webkitdirectory", true);
+                    this.on("success", function () {
+                        $("#cont-2").prop('disabled', false);
+                    })
+                }
+                // accept: function (file, done) {
+                //     console.log(file);
+                //     if (file.type === '.java') done();
+                // }
+            });
         });
 
-        let jarDz = new Dropzone("div#jar-upload", {
-            url: '/upload/jar',
-            method: 'post',
-            acceptedFiles: ".jar",
-            params: {
-                'userId': userId,
-                'uuid': localStorage["f-uuid"]
-            },
-            headers: {"Authorization": $.cookie('token')},
-            maxFiles: 1,
-            init: function () {
-                this.on("success", function () {
-                    $("#cont-1").prop('disabled', false);
-                })
-            }
-        });
-        let codeDZ = new Dropzone("div#codeDrop", {
-            url: '/upload/code',
-            method: "post",
-            maxFilesize: 1,
-            addRemoveLinks: true,
-            acceptedFiles: ".java",
-            createImageThumbnails: false,
-            timeout: 0,
-            uploadMultiple: true,
-            parallelUploads: 500,
-            params: {
-                'userId': userId,
-                'uuid': localStorage["f-uuid"]
-            },
-            renameFile: function (file) {
-                // console.log(file, file.webkitRelativePath);
-                return file.webkitRelativePath;
-            },
-            init: function () {
-                this.hiddenFileInput.setAttribute("type", "file");
-                this.hiddenFileInput.setAttribute("webkitdirectory", true);
-                this.on("success", function () {
-                    $("#cont-2").prop('disabled', false);
-                })
-            }
-            // accept: function (file, done) {
-            //     console.log(file);
-            //     if (file.type === '.java') done();
-            // }
-        });
 
         let getCodesByUserId = function () {
             $.ajax({
@@ -463,7 +465,7 @@
                                 window.location.href = "/graph?code=" + $(this).attr("code-id");
                             }
                         });
-                        $("#rmv").on('click', function () {
+                        $(".rmv").on('click', function () {
                             let codeId = $(this).attr("code-id");
                             if (confirm("Sure to remove this project permanently?")) {
                                 $.ajax({
