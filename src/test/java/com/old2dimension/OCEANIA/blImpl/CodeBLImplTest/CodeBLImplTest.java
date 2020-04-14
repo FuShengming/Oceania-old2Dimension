@@ -410,6 +410,35 @@ public class CodeBLImplTest {
 
     }
 
+    @Test
+    public void deleteTest1(){
+        Code code = new Code();
+        code.setUserId(1);
+        code.setName("name1");
+
+        UserAndCodeForm userAndCodeForm = new UserAndCodeForm(1,1);
+        CodeBLImpl codeBL = new CodeBLImpl();
+        CodeRepository codeRepository = mock(CodeRepository.class);
+        when(codeRepository.findCodeByIdAndUserId(1,1)).thenReturn(null);
+        codeBL.setCodeRepository(codeRepository);
+        ResponseVO responseVO = codeBL.delete(userAndCodeForm);
+        Assert.assertEquals(responseVO.getMessage(),"code does not exist");
+    }
+    @Test
+    public void deleteTest2(){
+        Code code = new Code();
+        code.setUserId(1);
+        code.setName("name1");
+        code.setId(-1);
+        UserAndCodeForm userAndCodeForm = new UserAndCodeForm(1,-1);
+        CodeBLImpl codeBL = new CodeBLImpl();
+        CodeRepository codeRepository = mock(CodeRepository.class);
+        when(codeRepository.findCodeByIdAndUserId(-1,1)).thenReturn(code);
+        doNothing().when(codeRepository).delete(any());
+        codeBL.setCodeRepository(codeRepository);
+        ResponseVO responseVO = codeBL.delete(userAndCodeForm);
+        Assert.assertEquals(responseVO.getContent(),"delete successfully");
+    }
 }
 
 

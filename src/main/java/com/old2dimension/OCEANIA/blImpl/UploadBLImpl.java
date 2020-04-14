@@ -221,7 +221,6 @@ public class UploadBLImpl implements UploadBL {
             JCallGraph.main(args);
         } catch (Exception e) {
             boolean isSuccess = dependencies.delete();
-            System.out.println("555555555");
             e.printStackTrace();
             return ResponseVO.buildFailure("Call-Graph error");
         }
@@ -287,7 +286,7 @@ public class UploadBLImpl implements UploadBL {
         FileOutputStream out = new FileOutputStream(file);
         out.write(stringBuffer.toString().getBytes());
         out.close();
-
+        br.close();
     }
 
     private ArrayList<String> getPackages(File file) {
@@ -320,6 +319,7 @@ public class UploadBLImpl implements UploadBL {
                                 break;
                             }
                         }
+                        fr.close();
                         br.close();
                     } catch (IOException e) {
                         e.printStackTrace();
