@@ -202,8 +202,10 @@ public class CodeBLImpl implements CodeBL {
 
 
         BufferedReader br = null;
+        FileReader fr = null;
         try {
-            br = new BufferedReader(new FileReader(classFile));
+            fr = new FileReader(classFile);
+            br = new BufferedReader(fr);
             String tempStr;
             while ((tempStr = br.readLine()) != null) {
                 fileContentBuffer.append(tempStr);
@@ -214,7 +216,13 @@ public class CodeBLImpl implements CodeBL {
             return ResponseVO.buildFailure("io exception 2");
         }
         String content = fileContentBuffer.toString();
-
+        try{
+        fr.close();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+            return ResponseVO.buildFailure("close fileReader exception ");
+        }
         boolean isInternal = false;
 
         if (!internalClass.equals("")) {
@@ -635,14 +643,6 @@ public class CodeBLImpl implements CodeBL {
             //System.out.println(res.size());
             return codeNode;
         } else {
-//            Resource resource = new ClassPathResource(basicPath + "/" + path);
-//            File f = null;
-//            try {
-//                f = resource.getFile();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                return null;
-//            }
             File f = new File(basicPath + "/" + path);
 
             if (!f.exists()) {
@@ -731,6 +731,7 @@ public class CodeBLImpl implements CodeBL {
 
     private boolean deleteFile(File file) {
         boolean res = true;
+        System.out.println(file.getAbsolutePath());
         if (file.isFile()) {
             boolean isSuccess = file.delete();
             if (!isSuccess) {
@@ -747,6 +748,9 @@ public class CodeBLImpl implements CodeBL {
         for (File cur : files) {
             if (cur.isDirectory()) {
                 res = res & deleteFile(cur);
+            }
+            else{
+               res = res& deleteFile(cur);
             }
         }
         res = res & file.delete();

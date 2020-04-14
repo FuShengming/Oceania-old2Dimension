@@ -28,6 +28,7 @@ public class CodeController {
 
     @RequestMapping(value = "/delete")
     public ResponseVO delete(@RequestBody UserAndCodeForm userAndCodeForm){
+        System.out.println("delete");
         return codeBL.delete(userAndCodeForm);
     }
 
