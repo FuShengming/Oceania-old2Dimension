@@ -19,6 +19,10 @@ public class UploadBLImpl implements UploadBL {
     @Autowired
     CodeRepository codeRepository;
 
+    public void setCodeRepository(CodeRepository codeRepository) {
+        this.codeRepository = codeRepository;
+    }
+
     public ResponseVO uploadCode(String uuid, MultipartFile[] files) {
         System.out.println("uuid:" + uuid);
         if (files == null) return ResponseVO.buildFailure("NULL");
@@ -135,9 +139,9 @@ public class UploadBLImpl implements UploadBL {
     }
 
     private ResponseVO uploadConfirm(UploadConfirmForm uploadConfirm) {
-        File javaDir = new File("src/main/resources/AnalyzeCode/src/" + uploadConfirm.getUuid());
+        File javaDir = new File("src/main/resources/analyzeCode/src/" + uploadConfirm.getUuid());
         if (!javaDir.exists()) {
-            System.out.println("asdas");
+            System.out.println("path does not exist:"+javaDir.getAbsolutePath());
             return ResponseVO.buildFailure("can not find java files");
         }
         File jarFile = new File("src/main/resources/jars/" + uploadConfirm.getUuid() + ".jar");
@@ -151,7 +155,7 @@ public class UploadBLImpl implements UploadBL {
         code.setUserId(uploadConfirm.getUserId());
         code.setIs_default(0);
         code = codeRepository.save(code);
-        File renameJavaDir = new File("src/main/resources/AnalyzeCode/src/" + code.getId());
+        File renameJavaDir = new File("src/main/resources/analyzeCode/src/" + code.getId());
         File renameJarFile = new File("src/main/resources/jars/" + code.getId() + ".jar");
         boolean isSuccess = javaDir.renameTo(renameJavaDir);
         if (!isSuccess) {

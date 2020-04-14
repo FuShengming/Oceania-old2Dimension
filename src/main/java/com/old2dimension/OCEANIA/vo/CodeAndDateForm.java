@@ -10,11 +10,11 @@ public class CodeAndDateForm {
     private String codeName;
     private Date date;
 
-    public CodeAndDateForm(int codeId, String codeName, Date date) {
-        this.codeId = codeId;
-        this.codeName = codeName;
-        this.date = date;
-    }
+//    public CodeAndDateForm(int codeId, String codeName, Date date) {
+//        this.codeId = codeId;
+//        this.codeName = codeName;
+//        this.date = date;
+//    }
 
     public CodeAndDateForm(Code code, Date date){
         this.codeId = code.getId();

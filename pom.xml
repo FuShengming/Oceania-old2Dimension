@@ -153,8 +153,6 @@
             <groupId>gr.gousoisg</groupId>
             <artifactId>javacg.stat</artifactId>
             <version>0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/javacg-0.1-SNAPSHOT-static.jar</systemPath>
         </dependency>
 
         <!--		阿里云oss-->
