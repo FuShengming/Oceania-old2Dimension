@@ -108,7 +108,7 @@ function login() {
             if (res.status === "success") {
                 localStorage.setItem("userId", res.id);
                 if (res.role === "ROLE_USER") {
-                    $(window).attr("location", "/graph")
+                    $(window).attr("location", "/workspace")
                 } else if (res.role === "ROLE_ADMIN") {
                     $(window).attr("location", "/statistics")
                 }

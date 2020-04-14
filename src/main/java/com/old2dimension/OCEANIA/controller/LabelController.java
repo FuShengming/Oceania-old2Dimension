@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/label")
 public class LabelController {
-    @Autowired
+    final
     LabelBL labelBL;
+
+    public LabelController(LabelBL labelBL) {
+        this.labelBL = labelBL;
+    }
 
     @RequestMapping(value = "/noteVertex",method = RequestMethod.POST)
     public ResponseVO noteVertex(@RequestBody VertexLabelVO vertexLabelVO){

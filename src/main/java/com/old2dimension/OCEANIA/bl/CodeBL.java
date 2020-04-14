@@ -7,6 +7,6 @@ public interface CodeBL {
     ResponseVO getFuncCode(VertexVOAndUserIdAndCodeId vertexVOAndUserIdAndCodeId);
     ResponseVO getCodesByUserId(int userId);
     ResponseVO getCodeStructure(UserAndCodeForm userAndCodeForm);
-    ResponseVO addCode(UserAndCodeForm userAndCodeForm);
+    ResponseVO delete(UserAndCodeForm userAndCodeForm);
     ResponseVO modifyName(CodeIdAndUserIdAndNameForm codeIdAndUserIdAndNameForm);
 }

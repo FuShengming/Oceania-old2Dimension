@@ -10,5 +10,5 @@ public interface UploadBL {
     public ResponseVO uploadCode(String uuid, MultipartFile[] files);
     public ResponseVO analyzeJar(int userId, String uuid) ;
     public ResponseVO uploadJar(String uuid, MultipartFile file);
-   // public ResponseVO uploadConfirm(UploadConfirmForm uploadConfirmForm);
+    public ResponseVO cancel(int userId, String uuid);
 }

@@ -33,14 +33,14 @@ function draw() {
         context.rotate(-deg);
         context.translate(-x, -y);
     }
-    for (let i = 0; i <= 5; i++) { //验证码上显示线条
+    for (let i = 0; i <= 3; i++) { //验证码上显示线条
         context.strokeStyle = randomColor();
         context.beginPath();
         context.moveTo(Math.random() * canvas_width, Math.random() * canvas_height);
         context.lineTo(Math.random() * canvas_width, Math.random() * canvas_height);
         context.stroke();
     }
-    for (let i = 0; i <= 30; i++) { //验证码上显示小点
+    for (let i = 0; i <= 15; i++) { //验证码上显示小点
         context.strokeStyle = randomColor();
         context.beginPath();
         let x = Math.random() * canvas_width;

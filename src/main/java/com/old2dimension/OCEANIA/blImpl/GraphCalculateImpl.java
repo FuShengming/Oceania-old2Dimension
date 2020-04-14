@@ -67,7 +67,7 @@ public class GraphCalculateImpl implements GraphCalculateBL {
         } else {
             curUserId = userAndCodeForm.getUserId();
             curCodeId = userAndCodeForm.getCodeId();
-            System.out.println("iTrust");
+            System.out.println("not iTrust");
             initializeGraph("src/main/resources/dependencies/" + curCode.getId() + ".txt");
             WeightForm weightForm = new WeightForm();
             weightForm.setWeightName("closeness");

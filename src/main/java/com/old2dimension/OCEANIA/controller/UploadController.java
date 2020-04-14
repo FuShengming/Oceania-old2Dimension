@@ -37,20 +37,8 @@ public class UploadController {
 //        return uploadBL.analyzeJar(codeId);
     }
 
-//    @RequestMapping(value = "/mapping", method = RequestMethod.POST)
-//    public ResponseVO mapping(@RequestBody UniqueIdentificationVO ui) throws IOException, InterruptedException {
-//        System.out.println(ui.getUserId());
-//        System.out.println(ui.getUuid());
-//        Thread.sleep(2000);
-//        return ResponseVO.buildSuccess();
-////        return uploadBL.analyzeJar(codeId);
-//    }
-
     @RequestMapping(value = "/cancel", method = RequestMethod.POST)
     public ResponseVO cancel(@RequestBody UniqueIdentificationVO ui) throws IOException, InterruptedException {
-        System.out.println(ui.getUserId());
-        System.out.println(ui.getUuid());
-        return ResponseVO.buildSuccess();
-//        return uploadBL.analyzeJar(codeId);
+        return uploadBL.cancel(ui.getUserId(), ui.getUuid());
     }
 }

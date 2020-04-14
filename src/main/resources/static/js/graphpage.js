@@ -1,4 +1,13 @@
 $(function () {
+    $(document).on('keydown', function (e) {
+        if (e.ctrlKey && e.which === 83) { // Check for the Ctrl key being pressed, and if the key = [S] (83)
+            console.log('Ctrl+S');
+            e.preventDefault();
+            save();
+            return false;
+        }
+    });
+
     $(window).bind('beforeunload', function () {
         // localStorage.removeItem("codeId");
         return true;
@@ -11,7 +20,7 @@ $(function () {
     // let codeId = localStorage['codeId'];
     // if (codeId === undefined) window.location.href = "/workspace";
 
-    $("#save-btn").on('click', function () {
+    let save = function () {
         $.ajax({
             type: "post",
             url: "/workSpace/save",
@@ -26,13 +35,16 @@ $(function () {
                 cyInfo: JSON.stringify(cy.json())
             }),
             success: function (data) {
-                if (data.success) alert("Success");
+                if (data.success) alert("Save success!");
                 else alert(data.message);
             },
             error: function (err) {
                 console.log(err);
             }
         });
+    };
+    $("#save-btn").on('click', function () {
+        save();
     });
     $("#export-btn").on('click', function () {
         let img = cy.jpg({scala: 10, full: true});
@@ -647,6 +659,18 @@ $(function () {
         }
     };
 
+    let refresh = function () {
+        if (cy.$("node").length < 1000) cy.layout(cose_bilkent_layout).run();
+        else cy.layout(fcose_layout).run();
+    };
+
+    $("#refresh-btn").on('click', function () {
+        if (confirm("Sure to refresh the layout? This will take a few seconds.")) {
+            $("#loading").show();
+            refresh();
+        }
+    });
+
     //code on the right
     let get_code = function (info) {
         $.ajax({
@@ -725,7 +749,7 @@ $(function () {
                             let info = n.data("full_info");
                             get_code(info);
                         }
-
+                        get_v_labels(data.vertexId);
                     }
                 }
             });
@@ -1093,9 +1117,9 @@ $(function () {
                     });
                 });
                 console.log(graphData);
-                update_info(cy.$("node.vertex").length,
-                    cy.$("edge").length,
-                    cy.$("node.domain").length);
+                update_info(graphData.nodes.length - data.content.domainSetVO.domainVOs.length,
+                    graphData.edges.length,
+                    data.content.domainSetVO.domainVOs.length);
 
                 cy = cytoscape({
 
@@ -1174,7 +1198,8 @@ $(function () {
                         },
                     ],
                 });
-                cy.layout(cose_bilkent_layout).run();
+                refresh();
+                // cy.layout(cose_bilkent_layout).run();
 
                 setCyEvents();
 
@@ -1603,7 +1628,8 @@ $(function () {
                         edges: graphData.edges,
                     }
                 });
-                cy.layout(fcose_layout).run();
+                // cy.layout(fcose_layout).run();
+                refresh();
             },
             error: function (err) {
                 console.log(err);

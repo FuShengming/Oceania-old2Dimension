@@ -8,11 +8,7 @@ import com.old2dimension.OCEANIA.po.CodeNode;
 import com.old2dimension.OCEANIA.po.Vertex;
 import com.old2dimension.OCEANIA.po.WorkSpace;
 import com.old2dimension.OCEANIA.vo.*;
-
-import org.apache.bcel.generic.BALOAD;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -60,26 +56,42 @@ public class CodeBLImpl implements CodeBL {
         }
     }
 
-    public ResponseVO addCode(UserAndCodeForm userAndCodeForm) {
-        Code code = codeRepository.findCodeByIdAndUserId(userAndCodeForm.getCodeId(), userAndCodeForm.getUserId());
-        if (code == null) {
-            return ResponseVO.buildFailure("no such user or code");
+    public ResponseVO delete(UserAndCodeForm userAndCodeForm){
+        Code code = codeRepository.findCodeByIdAndUserId(userAndCodeForm.getCodeId(),userAndCodeForm.getUserId());
+        if(code == null){
+            return ResponseVO.buildFailure("code does not exist");
         }
-        if (code.getIs_default() == 1) {
-            Code res = new Code();
-            res.setName(code.getName() + "副本");
-            res.setId(0);
-            res.setUserId(code.getUserId());
-            res.setIs_default(code.getIs_default());
-            res.setNumOfDomains(code.getNumOfDomains());
-            res.setNumOfEdges(code.getNumOfEdges());
-            res.setNumOfVertices(code.getNumOfVertices());
-
-
-            res = codeRepository.save(res);
-            return ResponseVO.buildSuccess(res);
+        if(code.getIs_default()==0){
+            File javaDir = new File("src/main/resources/analyzeCode/src/"+code.getId());
+            File jarFile = new File("src/main/resources/jars/"+code.getId()+".jar");
+            File dependenciesFile = new File("src/main//resources/dependencies/"+code.getId()+".txt");
+            if(javaDir.exists()){
+                boolean isSuccess = deleteFile(javaDir);
+                if(!isSuccess){
+                    return ResponseVO.buildFailure("delete java files fail");
+                }
+            }
+            if(jarFile.exists()){
+                boolean isSuccess = deleteFile(jarFile);
+                if(!isSuccess){
+                    return ResponseVO.buildFailure("delete jar file fail");
+                }
+            }
+            if(dependenciesFile.exists()){
+                boolean isSuccess = deleteFile(dependenciesFile);
+                if(!isSuccess){
+                    return ResponseVO.buildFailure("delete dependencies file fail");
+                }
+            }
         }
-        return ResponseVO.buildFailure("目前只支持iTrust分析");
+        try{
+        codeRepository.delete(code);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseVO.buildFailure("jpa exception");
+        }
+        return ResponseVO.buildSuccess("delete successfully");
     }
 
 
@@ -153,12 +165,6 @@ public class CodeBLImpl implements CodeBL {
         File packageDir = new File(packPath);
         //----------------------------------------------------
 
-//        try {
-//            packageDir = resource.getFile();
-//        }
-//        catch (IOException e){
-//            return ResponseVO.buildFailure("package dir errors");
-//        }
 
         if (classStr.contains("$")) {
             internalClass = classStr.substring(classStr.indexOf("$") + 1);
@@ -192,8 +198,10 @@ public class CodeBLImpl implements CodeBL {
 
 
         BufferedReader br = null;
+        FileReader fr = null;
         try {
-            br = new BufferedReader(new FileReader(classFile));
+            fr = new FileReader(classFile);
+            br = new BufferedReader(fr);
             String tempStr;
             while ((tempStr = br.readLine()) != null) {
                 fileContentBuffer.append(tempStr);
@@ -204,7 +212,13 @@ public class CodeBLImpl implements CodeBL {
             return ResponseVO.buildFailure("io exception 2");
         }
         String content = fileContentBuffer.toString();
-
+        try{
+        fr.close();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+            return ResponseVO.buildFailure("close fileReader exception ");
+        }
         boolean isInternal = false;
 
         if (!internalClass.equals("")) {
@@ -297,7 +311,6 @@ public class CodeBLImpl implements CodeBL {
                 isAbstract = true;
             }
 
-
             int backCurvesIndex = getBackCurves(content, frontCurvesIndex);
             if (frontCurvesIndex == -1 || backCurvesIndex == -1) {
                 return ResponseVO.buildFailure("do not have curves");
@@ -315,7 +328,6 @@ public class CodeBLImpl implements CodeBL {
             }
             //------------------------------------------------
 
-
             String paramsStr = content.substring(frontCurvesIndex + 1, backCurvesIndex);
             System.out.println("param:" + paramsStr);
 
@@ -326,10 +338,7 @@ public class CodeBLImpl implements CodeBL {
                 if (temp != -1) {
                     vertexArgs[k] = vertexArgs[k].substring(temp + 1);
                 }
-
             }
-
-
             if (isInit && isInternal) {
                 String[] temp = new String[vertexArgs.length - 1];
                 for (int k = 1; k < vertexArgs.length; k++) {
@@ -543,10 +552,6 @@ public class CodeBLImpl implements CodeBL {
     }
 
     public ResponseVO getCodeStructure(UserAndCodeForm userAndCodeForm) {
-        //GraphCalculateImpl graphCalculate = new GraphCalculateImpl();
-//        ResponseVO responseVO = graphCalculate.getGraph(userAndCodeForm);
-//        if (!responseVO.isSuccess())
-//            return responseVO;
         System.out.println("user:" + graphCalculate.curUserId);
         System.out.println("code:" + graphCalculate.curCodeId);
         ArrayList<Vertex> vertices = graphCalculate.getAllVertexes();
@@ -634,14 +639,6 @@ public class CodeBLImpl implements CodeBL {
             //System.out.println(res.size());
             return codeNode;
         } else {
-//            Resource resource = new ClassPathResource(basicPath + "/" + path);
-//            File f = null;
-//            try {
-//                f = resource.getFile();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                return null;
-//            }
             File f = new File(basicPath + "/" + path);
 
             if (!f.exists()) {
@@ -726,5 +723,33 @@ public class CodeBLImpl implements CodeBL {
             }
         }
         return codeNodes;
+    }
+
+    private boolean deleteFile(File file) {
+        boolean res = true;
+        System.out.println(file.getAbsolutePath());
+        if (file.isFile()) {
+            boolean isSuccess = file.delete();
+            if (!isSuccess) {
+                System.out.println("删除文件失败");
+                return false;
+            }
+            return true;
+        }
+        File[] files = file.listFiles();
+        if (files == null) {
+            System.out.println("list file fail");
+            return false;
+        }
+        for (File cur : files) {
+            if (cur.isDirectory()) {
+                res = res & deleteFile(cur);
+            }
+            else{
+               res = res& deleteFile(cur);
+            }
+        }
+        res = res & file.delete();
+        return res;
     }
 }

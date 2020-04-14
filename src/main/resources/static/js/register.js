@@ -148,7 +148,7 @@ function register() {
         success: function (res) {
             if (res.success) {
                 localStorage.setItem("userId", res.content.id);
-                $(window).attr("location", "/graph")
+                $(window).attr("location", "/workspace")
             }
             else if (res.message === "用户名已存在") {
                 $("#username-warn").addClass("password-error-msg")
