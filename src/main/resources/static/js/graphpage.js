@@ -1,12 +1,15 @@
 $(function () {
     $(window).bind('beforeunload', function () {
-        localStorage.removeItem("codeId");
+        // localStorage.removeItem("codeId");
         return true;
     });
     let userId = localStorage['userId'];
     if (userId === undefined) window.location.href = "/login";
-    let codeId = localStorage['codeId'];
-    if (codeId === undefined) window.location.href = "/workspace";
+    let url = document.location.toString();
+    if (!url.includes("?code=")) window.location.href = "/workspace";
+    let codeId = Number(url.slice(url.indexOf("?code=") + 6));
+    // let codeId = localStorage['codeId'];
+    // if (codeId === undefined) window.location.href = "/workspace";
 
     $("#save-btn").on('click', function () {
         $.ajax({
@@ -722,7 +725,7 @@ $(function () {
                             let info = n.data("full_info");
                             get_code(info);
                         }
-
+                        get_v_labels(data.vertexId);
                     }
                 }
             });
@@ -1090,9 +1093,9 @@ $(function () {
                     });
                 });
                 console.log(graphData);
-                update_info(cy.$("node.vertex").length,
-                    cy.$("edge").length,
-                    cy.$("node.domain").length);
+                update_info(graphData.nodes.length - data.content.domainSetVO.domainVOs.length,
+                    graphData.edges.length,
+                    data.content.domainSetVO.domainVOs.length);
 
                 cy = cytoscape({
 

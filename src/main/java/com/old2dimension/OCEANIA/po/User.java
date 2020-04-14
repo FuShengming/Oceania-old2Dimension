@@ -3,6 +3,7 @@ package com.old2dimension.OCEANIA.po;
 import com.old2dimension.OCEANIA.vo.UserVO;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "user")
@@ -52,6 +53,20 @@ public class User {
         this.pwd = pwd;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id &&
+                Objects.equals(name, user.name) &&
+                Objects.equals(pwd, user.pwd);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, pwd);
+    }
 
 
     //Getters, Setters, Constructors.

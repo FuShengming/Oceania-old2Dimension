@@ -106,6 +106,12 @@
         $("#sign-up").on('click', function () {
             window.location.href = "/register";
         });
+
+        $("#start-btn").on('click', function () {
+            // todo: 判断用户登录状态，根据用户角色跳转页面
+            if (localStorage["userId"] !== undefined) window.location.href = "/workspace";
+            else window.location.href = "/login";
+        });
     });
 </script>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top p-0">
@@ -195,7 +201,7 @@
 
 <div class="bgimg-1">
     <div class="caption">
-        <button class="btn btn-primary"
+        <button class="btn btn-primary" id="start-btn"
                 style="height: 4rem;font-size: 1.5rem;border: antiquewhite solid 2px;margin-top: -2rem;background-color: #4e9fc1;">
             START NOW
         </button>

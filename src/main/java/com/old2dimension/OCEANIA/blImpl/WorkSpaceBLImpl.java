@@ -25,28 +25,28 @@ public class WorkSpaceBLImpl implements WorkSpaceBL {
         this.workPlaceRepository = workPlaceRepository;
     }
 
-    public ResponseVO save(WorkSpaceVO workSpaceVO){
-        try{
-            if(codeRepository.findCodeByIdAndUserId(workSpaceVO.getCodeId(),workSpaceVO.getUserId()) == null){
+    public ResponseVO save(WorkSpaceVO workSpaceVO) {
+        try {
+            if (codeRepository.findCodeByIdAndUserId(workSpaceVO.getCodeId(), workSpaceVO.getUserId()) == null) {
                 return ResponseVO.buildFailure("do not have that user or code");
             }
-            System.out.println("date:"+workSpaceVO.getDate());
+            System.out.println("date:" + workSpaceVO.getDate());
             workPlaceRepository.save(new WorkSpace(workSpaceVO));
 
-            return ResponseVO.buildSuccess("save a workSpace.");}
-        catch (Exception e){
+            return ResponseVO.buildSuccess("save a workSpace.");
+        } catch (Exception e) {
             return ResponseVO.buildFailure("save workSpace Error.");
         }
     }
-    public ResponseVO recover(UserAndCodeForm userAndCodeForm){
+
+    public ResponseVO recover(UserAndCodeForm userAndCodeForm) {
         try {
-            WorkSpace curWS=workPlaceRepository.findLatestWorkSpace(userAndCodeForm.getUserId(), userAndCodeForm.getCodeId());
-            if(curWS == null ){
+            WorkSpace curWS = workPlaceRepository.findLatestWorkSpace(userAndCodeForm.getUserId(), userAndCodeForm.getCodeId());
+            if (curWS == null) {
                 return ResponseVO.buildFailure("no such workSpace");
             }
             return ResponseVO.buildSuccess(curWS);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return ResponseVO.buildFailure("recover workSpace Error.");
         }
     }

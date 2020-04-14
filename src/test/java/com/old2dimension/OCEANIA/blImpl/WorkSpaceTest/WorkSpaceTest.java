@@ -9,7 +9,8 @@ import com.old2dimension.OCEANIA.vo.ResponseVO;
 import com.old2dimension.OCEANIA.vo.UserAndCodeForm;
 import com.old2dimension.OCEANIA.vo.WorkSpaceVO;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 
 import java.util.Date;
 
