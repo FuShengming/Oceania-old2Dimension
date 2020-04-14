@@ -57,7 +57,7 @@
         /* float buttons */
         #float_container {
             position: absolute;
-            top: calc(100% - 21rem); /* 100% - n*height - 1rem */
+            top: calc(100% - 26rem); /* 100% - n * height - 1rem */
             left: calc(100% - 5rem); /* 100% - weight - 1rem */
             z-index: 99;
             width: 4rem;
@@ -528,6 +528,8 @@ height: 100%;
             <p class="h4" style="position: absolute;top: calc(40% + 84px);">Loading...</p>
         </div>
         <div class="row" id="float_container">
+            <button class="btn btn-success btn-float" id="refresh-btn">
+                <i class="fa fa-refresh"></i></button>
             <button class="btn btn-danger btn-float" id="layout-btn">
                 <i class="fa fa-arrows"></i></button>
             <button class="btn btn-info btn-float" data-toggle="modal" data-target="#searchModal">

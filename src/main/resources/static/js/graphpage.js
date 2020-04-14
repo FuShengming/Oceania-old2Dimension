@@ -647,6 +647,18 @@ $(function () {
         }
     };
 
+    let refresh = function () {
+        if (cy.$("node").length < 1000) cy.layout(cose_bilkent_layout).run();
+        else cy.layout(fcose_layout).run();
+    };
+
+    $("#refresh-btn").on('click', function () {
+        if (confirm("Sure to refresh the layout? This will take a few seconds.")) {
+            $("#loading").show();
+            refresh();
+        }
+    });
+
     //code on the right
     let get_code = function (info) {
         $.ajax({
@@ -1174,7 +1186,8 @@ $(function () {
                         },
                     ],
                 });
-                cy.layout(cose_bilkent_layout).run();
+                refresh();
+                // cy.layout(cose_bilkent_layout).run();
 
                 setCyEvents();
 
@@ -1603,7 +1616,8 @@ $(function () {
                         edges: graphData.edges,
                     }
                 });
-                cy.layout(fcose_layout).run();
+                // cy.layout(fcose_layout).run();
+                refresh();
             },
             error: function (err) {
                 console.log(err);
