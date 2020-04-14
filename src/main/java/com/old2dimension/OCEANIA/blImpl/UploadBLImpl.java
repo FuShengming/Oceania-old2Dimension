@@ -83,6 +83,7 @@ public class UploadBLImpl implements UploadBL {
     }
 
     public ResponseVO uploadJar(String uuid, MultipartFile file){
+        System.out.println("jar:uuid:"+uuid);
         if (file == null) return  ResponseVO.buildFailure("NULL");
 
 
@@ -108,6 +109,7 @@ public class UploadBLImpl implements UploadBL {
                 try {
                     boolean isSuccess = jarFile.createNewFile();
                     if (!isSuccess) {
+                        System.out.println("create file fails");
                         deleteFile(jarFile);
                         return ResponseVO.buildFailure("create file fails");
                     }
@@ -119,19 +121,17 @@ public class UploadBLImpl implements UploadBL {
 
             }
 
-
+            //System.out.println("ass:"+jarFile.getAbsolutePath());
             //----------------------------------
             try{
-                InputStreamReader isr = new InputStreamReader(file.getInputStream());
-            String content = new BufferedReader(isr).lines().collect(Collectors.joining(System.lineSeparator()));
-            isr.close();
-            FileOutputStream out = new FileOutputStream(jarFile);
-            out.write(content.getBytes());
-            out.close();
+              byte[] content = file.getBytes();
+                FileOutputStream out = new FileOutputStream(jarFile);
+                out.write(content);
+                out.close();
             }
             catch (IOException e){
                 e.printStackTrace();
-                deleteFile(jarFile);
+                //deleteFile(jarFile);
                 return ResponseVO.buildFailure("write jar file exception");
             }
 
@@ -225,6 +225,7 @@ public class UploadBLImpl implements UploadBL {
         }
         catch (Exception e){
             boolean isSuccess = dependencies.delete();
+            System.out.println("555555555");
             e.printStackTrace();
             return ResponseVO.buildFailure("Call-Graph error");
         }
