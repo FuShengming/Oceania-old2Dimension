@@ -5,8 +5,8 @@ drop table if exists edge_label;
 drop table if exists domain_label;
 drop table if exists work_space;
 drop table if exists code;
-drop table if exists authority;
 drop table if exists user_authority;
+drop table if exists authority;
 drop table if exists `user`;
 
 
