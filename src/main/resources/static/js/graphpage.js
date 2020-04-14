@@ -1,4 +1,28 @@
 $(function () {
+    let htmlDecodeByRegExp = function (str) {
+        if (str.length == 0) return "";
+        let temp = str.replace(/&amp;/g, "&");
+        temp = temp.replace(/&lt;/g, "<");
+        temp = temp.replace(/&gt;/g, ">");
+        // temp = temp.replace(/&nbsp;/g, " ");
+        temp = temp.replace(/&#39;/g, "\'");
+        temp = temp.replace(/&quot;/g, "\"");
+        console.log(temp);
+        return temp;
+    };
+
+    let htmlEncodeByRegExp = function (str) {
+        if (str.length === 0) return "";
+        let temp = str.replace(/&/g, "&amp;");
+        temp = temp.replace(/</g, "&lt;");
+        temp = temp.replace(/>/g, "&gt;");
+        // temp = temp.replace(/\s/g, "&nbsp;");
+        temp = temp.replace(/\'/g, "&#39;");
+        temp = temp.replace(/\"/g, "&quot;");
+        console.log(temp);
+        return temp;
+    };
+
     $(document).on('keydown', function (e) {
         if (e.ctrlKey && e.which === 83) { // Check for the Ctrl key being pressed, and if the key = [S] (83)
             console.log('Ctrl+S');
@@ -76,7 +100,7 @@ $(function () {
                             "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
                             "<div class=\"card-body\">\n" +
                             "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
-                            label.content.replace(/\n/g, "<br>") +
+                            htmlEncodeByRegExp(label.content).replace(/\n/g, "<br>") +
                             "</div>\n" +
                             "<div class=\"mt-3\" style=\"text-align: right\">\n" +
                             "<button class=\"btn btn-info label-edit\" " + " labelId=" + label.id + ">Edit</button>\n" +
@@ -90,33 +114,35 @@ $(function () {
                         let id = $(event.target).attr('labelId');
                         $("#labelModal").attr("x-id", 'n' + id);
                         $("#title-input").val($("#lt-" + id).text());
-                        $("#content-input").val($("#lc-" + id).html().replace(/<br>/g, "\n"));
+                        $("#content-input").val(htmlDecodeByRegExp($("#lc-" + id).html().replace(/<br>/g, "\n")));
                         $("#labelModal").modal('show');
                     });
                     $(".label-del").on('click', function (event) {
-                        let id = Number($(event.target).attr('labelId'));
-                        $.ajax({
-                            type: "post",
-                            url: "/label/deleteVertexLabel",
-                            headers: {"Authorization": $.cookie('token')},
-                            dataType: "json",
-                            contentType: 'application/json',
-                            data: JSON.stringify({
-                                userId: userId,
-                                codeId: codeId,
-                                id: id
-                            }),
-                            success: function (data) {
-                                if (data.success) {
-                                    get_v_labels(vertexId);
-                                } else {
-                                    console.log(data.message);
+                        if (confirm("Sure to delete this label?")) {
+                            let id = Number($(event.target).attr('labelId'));
+                            $.ajax({
+                                type: "post",
+                                url: "/label/deleteVertexLabel",
+                                headers: {"Authorization": $.cookie('token')},
+                                dataType: "json",
+                                contentType: 'application/json',
+                                data: JSON.stringify({
+                                    userId: userId,
+                                    codeId: codeId,
+                                    id: id
+                                }),
+                                success: function (data) {
+                                    if (data.success) {
+                                        get_v_labels(vertexId);
+                                    } else {
+                                        console.log(data.message);
+                                    }
+                                },
+                                error: function (err) {
+                                    console.log(err);
                                 }
-                            },
-                            error: function (err) {
-                                console.log(err);
-                            }
-                        });
+                            });
+                        }
                     });
                 } else {
                     console.log(data.message);
@@ -149,7 +175,7 @@ $(function () {
                             "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
                             "<div class=\"card-body\">\n" +
                             "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
-                            label.content.replace(/\n/g, "<br>") +
+                            htmlEncodeByRegExp(label.content).replace(/\n/g, "<br>") +
                             "</div>\n" +
                             "<div class=\"mt-3\" style=\"text-align: right\">\n" +
                             "<button class=\"btn btn-info label-edit\" " + " labelId=" + label.id + ">Edit</button>\n" +
@@ -163,33 +189,35 @@ $(function () {
                         let id = $(event.target).attr('labelId');
                         $("#labelModal").attr("x-id", 'n' + id);
                         $("#title-input").val($("#lt-" + id).text());
-                        $("#content-input").val($("#lc-" + id).html().replace(/<br>/g, "\n"));
+                        $("#content-input").val(htmlDecodeByRegExp($("#lc-" + id).html().replace(/<br>/g, "\n")));
                         $("#labelModal").modal('show');
                     });
                     $(".label-del").on('click', function (event) {
-                        let id = Number($(event.target).attr('labelId'));
-                        $.ajax({
-                            type: "post",
-                            url: "/label/deleteEdgeLabel",
-                            headers: {"Authorization": $.cookie('token')},
-                            dataType: "json",
-                            contentType: 'application/json',
-                            data: JSON.stringify({
-                                userId: userId,
-                                codeId: codeId,
-                                id: id
-                            }),
-                            success: function (data) {
-                                if (data.success) {
-                                    get_e_labels(edgeId);
-                                } else {
-                                    console.log(data.message);
+                        if (confirm("Sure to delete this label?")) {
+                            let id = Number($(event.target).attr('labelId'));
+                            $.ajax({
+                                type: "post",
+                                url: "/label/deleteEdgeLabel",
+                                headers: {"Authorization": $.cookie('token')},
+                                dataType: "json",
+                                contentType: 'application/json',
+                                data: JSON.stringify({
+                                    userId: userId,
+                                    codeId: codeId,
+                                    id: id
+                                }),
+                                success: function (data) {
+                                    if (data.success) {
+                                        get_e_labels(edgeId);
+                                    } else {
+                                        console.log(data.message);
+                                    }
+                                },
+                                error: function (err) {
+                                    console.log(err);
                                 }
-                            },
-                            error: function (err) {
-                                console.log(err);
-                            }
-                        });
+                            });
+                        }
                     });
                 } else {
                     console.log(data.message);
@@ -223,7 +251,7 @@ $(function () {
                             "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
                             "<div class=\"card-body\">\n" +
                             "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
-                            label.content.replace(/\n/g, "<br>") +
+                            htmlEncodeByRegExp(label.content).replace(/\n/g, "<br>") +
                             "</div>\n" +
                             "<div class=\"mt-3\" style=\"text-align: right\">\n" +
                             "<button class=\"btn btn-info label-edit\" " + " labelId=" + label.id + ">Edit</button>\n" +
@@ -237,33 +265,35 @@ $(function () {
                         let id = $(event.target).attr('labelId');
                         $("#labelModal").attr("x-id", 'n' + id);
                         $("#title-input").val($("#lt-" + id).text());
-                        $("#content-input").val($("#lc-" + id).html().replace(/<br>/g, "\n"));
+                        $("#content-input").val(htmlDecodeByRegExp($("#lc-" + id).html().replace(/<br>/g, "\n")));
                         $("#labelModal").modal('show');
                     });
                     $(".label-del").on('click', function (event) {
-                        let id = Number($(event.target).attr('labelId'));
-                        $.ajax({
-                            type: "post",
-                            url: "/label/deleteDomainLabel",
-                            headers: {"Authorization": $.cookie('token')},
-                            dataType: "json",
-                            contentType: 'application/json',
-                            data: JSON.stringify({
-                                userId: userId,
-                                codeId: codeId,
-                                id: id
-                            }),
-                            success: function (data) {
-                                if (data.success) {
-                                    get_d_labels(firstEdgeId, numOfVertex);
-                                } else {
-                                    console.log(data.message);
+                        if (confirm("Sure to delete this label?")) {
+                            let id = Number($(event.target).attr('labelId'));
+                            $.ajax({
+                                type: "post",
+                                url: "/label/deleteDomainLabel",
+                                headers: {"Authorization": $.cookie('token')},
+                                dataType: "json",
+                                contentType: 'application/json',
+                                data: JSON.stringify({
+                                    userId: userId,
+                                    codeId: codeId,
+                                    id: id
+                                }),
+                                success: function (data) {
+                                    if (data.success) {
+                                        get_d_labels(firstEdgeId, numOfVertex);
+                                    } else {
+                                        console.log(data.message);
+                                    }
+                                },
+                                error: function (err) {
+                                    console.log(err);
                                 }
-                            },
-                            error: function (err) {
-                                console.log(err);
-                            }
-                        });
+                            });
+                        }
                     });
                 } else {
                     console.log(data.message);
@@ -447,7 +477,7 @@ $(function () {
                     $("#ambiguousLabel").text("Input \"Function Name\" is ambiguous. Choose one below:");
                     $("#ambiguousFuncSelect1").html("");
                     data.content.forEach(function (func) {
-                        $("#ambiguousFuncSelect1").append("<option value='" + func.id + "'>" + func.fullName.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</option>");
+                        $("#ambiguousFuncSelect1").append("<option value='" + func.id + "'>" + htmlEncodeByRegExp(func.fullName) + "</option>");
                     });
                     $("#ambiguousModal").modal('show');
                     $("#ambiguous_submit1").on('click', function () {
@@ -562,12 +592,12 @@ $(function () {
                     $("#ambiguousLabel1").text("Input \"Start Node\" is ambiguous. Choose one below:");
                     $("#ambiguousFuncSelect1").html("");
                     data1[0].content.forEach(function (func) {
-                        $("#ambiguousFuncSelect1").append("<option value='" + func.id + "'>" + func.fullName.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</option>");
+                        $("#ambiguousFuncSelect1").append("<option value='" + func.id + "'>" + htmlEncodeByRegExp(func.fullName) + "</option>");
                     });
                     $("#ambiguousLabel2").text("Input \"End Node\" is ambiguous. Choose one below:");
                     $("#ambiguousFuncSelect2").html("");
                     data2[0].content.forEach(function (func) {
-                        $("#ambiguousFuncSelect2").append("<option value='" + func.id + "'>" + func.fullName.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</option>");
+                        $("#ambiguousFuncSelect2").append("<option value='" + func.id + "'>" + htmlEncodeByRegExp(func.fullName) + "</option>");
                     });
                     $("#ambiguousModal1").modal('show');
                     $("#ambiguous_submit1").on('click', function () {
@@ -586,7 +616,7 @@ $(function () {
                     $("#ambiguousLabel1").text("Input \"Start Node\" is ambiguous. Choose one below:");
                     $("#ambiguousFuncSelect1").html("");
                     data1[0].content.forEach(function (func) {
-                        $("#ambiguousFuncSelect1").append("<option value='" + func.id + "'>" + func.fullName.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</option>");
+                        $("#ambiguousFuncSelect1").append("<option value='" + func.id + "'>" + htmlEncodeByRegExp(func.fullName) + "</option>");
                     });
                     $("#ambiguousModal1").modal('show');
                     $("#ambiguous_submit1").on('click', function () {
@@ -600,7 +630,7 @@ $(function () {
                     $("#ambiguousLabel1").text("Input \"End Node\" is ambiguous. Choose one below:");
                     $("#ambiguousFuncSelect1").html("");
                     data2[0].content.forEach(function (func) {
-                        $("#ambiguousFuncSelect1").append("<option value='" + func.id + "'>" + func.fullName.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</option>");
+                        $("#ambiguousFuncSelect1").append("<option value='" + func.id + "'>" + htmlEncodeByRegExp(func.fullName) + "</option>");
                     });
                     $("#ambiguousModal1").modal('show');
                     $("#ambiguous_submit1").on('click', function () {
