@@ -375,7 +375,7 @@
             if (localStorage["f-uuid"] === undefined)
                 localStorage.setItem("f-uuid", uuid());
         });
-        alert(localStorage["f-uuid"]);
+
         let jarDz = new Dropzone("div#jar-upload", {
             url: '/upload/jar',
             method: 'post',
