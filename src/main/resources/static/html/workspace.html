@@ -364,6 +364,7 @@
         //     });
         // });
         $("#cont-3").on('click', function () {
+            $(window).unbind('beforeunload');
             localStorage.removeItem("f-uuid");
             location.reload();
         });
@@ -372,6 +373,11 @@
         //     $("#copyModal").modal('show');
         // });
         $("#upload-btn").on("click", function () {
+            $(window).bind('beforeunload', function () {
+                // localStorage.removeItem("codeId");
+                return true;
+            });
+
             if (localStorage["f-uuid"] === undefined)
                 localStorage.setItem("f-uuid", uuid());
 

@@ -24,56 +24,56 @@ public class CodeVO {
 
     private int is_default;
 
-    public int getIs_default() {
-        return is_default;
-    }
+//    public int getIs_default() {
+//        return is_default;
+//    }
+//
+//    public void setIs_default(int is_default) {
+//        this.is_default = is_default;
+//    }
+//
+//    public int getNumOfVertices() {
+//        return numOfVertices;
+//    }
+//
+//    public void setNumOfVertices(int numOfVertices) {
+//        this.numOfVertices = numOfVertices;
+//    }
+//
+//    public int getNumOfEdges() {
+//        return numOfEdges;
+//    }
+//
+//    public void setNumOfEdges(int numOfEdges) {
+//        this.numOfEdges = numOfEdges;
+//    }
+//
+//    public int getNumOfDomains() {
+//        return numOfDomains;
+//    }
+//
+//    public void setNumOfDomains(int numOfDomains) {
+//        this.numOfDomains = numOfDomains;
+//    }
 
-    public void setIs_default(int is_default) {
-        this.is_default = is_default;
-    }
-
-    public int getNumOfVertices() {
-        return numOfVertices;
-    }
-
-    public void setNumOfVertices(int numOfVertices) {
-        this.numOfVertices = numOfVertices;
-    }
-
-    public int getNumOfEdges() {
-        return numOfEdges;
-    }
-
-    public void setNumOfEdges(int numOfEdges) {
-        this.numOfEdges = numOfEdges;
-    }
-
-    public int getNumOfDomains() {
-        return numOfDomains;
-    }
-
-    public void setNumOfDomains(int numOfDomains) {
-        this.numOfDomains = numOfDomains;
-    }
-
-    public CodeVO(int userId, int codeId, String name, int numOfVertices, int numOfEdges, int numOfDomains,int is_default) {
-        this.userId = userId;
-        this.name = name;
-        this.numOfVertices = numOfVertices;
-        this.numOfEdges = numOfEdges;
-        this.numOfDomains = numOfDomains;
-        this.is_default=is_default;
-    }
-
-    public CodeVO(Code c){
-        this.id=c.getId();
-        this.is_default=c.getIs_default();
-        this.name=c.getName();
-        this.numOfDomains=c.getNumOfDomains();
-        this.numOfEdges=c.getNumOfEdges();
-        this.numOfDomains=c.getNumOfDomains();
-        this.userId=c.getUserId();
-    }
+//    public CodeVO(int userId, int codeId, String name, int numOfVertices, int numOfEdges, int numOfDomains,int is_default) {
+//        this.userId = userId;
+//        this.name = name;
+//        this.numOfVertices = numOfVertices;
+//        this.numOfEdges = numOfEdges;
+//        this.numOfDomains = numOfDomains;
+//        this.is_default=is_default;
+//    }
+//
+//    public CodeVO(Code c){
+//        this.id=c.getId();
+//        this.is_default=c.getIs_default();
+//        this.name=c.getName();
+//        this.numOfDomains=c.getNumOfDomains();
+//        this.numOfEdges=c.getNumOfEdges();
+//        this.numOfDomains=c.getNumOfDomains();
+//        this.userId=c.getUserId();
+//    }
 
     public int getUserId() {
         return userId;

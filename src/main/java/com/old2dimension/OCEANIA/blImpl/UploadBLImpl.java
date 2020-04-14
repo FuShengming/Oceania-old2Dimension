@@ -134,9 +134,10 @@ public class UploadBLImpl implements UploadBL {
         return ResponseVO.buildSuccess("upload jar successfully");
     }
 
-    public ResponseVO uploadConfirm(UploadConfirmForm uploadConfirm) {
+    private ResponseVO uploadConfirm(UploadConfirmForm uploadConfirm) {
         File javaDir = new File("src/main/resources/AnalyzeCode/src/" + uploadConfirm.getUuid());
         if (!javaDir.exists()) {
+            System.out.println("asdas");
             return ResponseVO.buildFailure("can not find java files");
         }
         File jarFile = new File("src/main/resources/jars/" + uploadConfirm.getUuid() + ".jar");
@@ -202,12 +203,14 @@ public class UploadBLImpl implements UploadBL {
         }
 
         PrintStream psOld = System.out; // 保存原来的输出路径
+        PrintStream ps = null;
         try {
             boolean isSuccess = dependencies.createNewFile();
             if (!isSuccess) {
                 return ResponseVO.buildFailure("create dependencies file fail");
             }
-            System.setOut(new PrintStream(dependencies));// 设置输出重新定向到文件
+            ps = new PrintStream(dependencies);
+            System.setOut(ps);// 设置输出重新定向到文件
         } catch (IOException e) {
             e.printStackTrace();
             boolean isSuccess = dependencies.delete();
@@ -218,10 +221,10 @@ public class UploadBLImpl implements UploadBL {
             JCallGraph.main(args);
         } catch (Exception e) {
             boolean isSuccess = dependencies.delete();
-            System.out.println("555555555");
             e.printStackTrace();
             return ResponseVO.buildFailure("Call-Graph error");
         }
+        ps.close();
         System.setOut(psOld);
         try {
             filterDependencies("src/main/resources/dependencies/" + codeId + ".txt", packageStrings);
@@ -283,7 +286,7 @@ public class UploadBLImpl implements UploadBL {
         FileOutputStream out = new FileOutputStream(file);
         out.write(stringBuffer.toString().getBytes());
         out.close();
-
+        br.close();
     }
 
     private ArrayList<String> getPackages(File file) {
@@ -304,7 +307,8 @@ public class UploadBLImpl implements UploadBL {
                 if (curName.substring(curName.length() - 5, curName.length()).equals(".java")) {
                     BufferedReader br = null;
                     try {
-                        br = new BufferedReader(new FileReader(cur));
+                        FileReader fr = new FileReader(cur);
+                        br = new BufferedReader(fr);
                         String tempStr;
                         while ((tempStr = br.readLine()) != null) {
                             if (tempStr.contains("package")) {
@@ -315,6 +319,8 @@ public class UploadBLImpl implements UploadBL {
                                 break;
                             }
                         }
+                        fr.close();
+                        br.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -323,6 +329,25 @@ public class UploadBLImpl implements UploadBL {
             }
         }
         return res;
+    }
+
+    public ResponseVO cancel(int userId, String uuid){
+        File javaDir = new File("src/main/resources/analyzeCode/src/"+uuid);
+        File jarFile = new File("src/main/resources/jars/"+uuid+".jar");
+        if(javaDir.exists()){
+            boolean isSuccess = deleteFile(javaDir);
+            if(!isSuccess){
+                return ResponseVO.buildFailure("cancel delete java files fail");
+            }
+        }
+        if(jarFile.exists()){
+            boolean isSuccess = deleteFile(jarFile);
+            if(!isSuccess){
+                return ResponseVO.buildFailure("cancel delete jar file fail");
+            }
+        }
+
+        return ResponseVO.buildSuccess("cancel successfully");
     }
 
     private boolean deleteFile(File file) {
@@ -343,6 +368,9 @@ public class UploadBLImpl implements UploadBL {
         for (File cur : files) {
             if (cur.isDirectory()) {
                 res = res & deleteFile(cur);
+            }
+            else{
+                res = res& deleteFile(cur);
             }
         }
         res = res & file.delete();
