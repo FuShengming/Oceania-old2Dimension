@@ -8,23 +8,23 @@ public class CodeNodeVO {
 
     private int vertexId;
 
-    public CodeNodeVO(){
-        this.text="";
-        this.nodes=new ArrayList<CodeNodeVO>();
-        this.vertexId = -1;
-    }
-
-    public CodeNodeVO(String text){
-        this.text=text;
-        this.nodes=new ArrayList<CodeNodeVO>();
-        this.vertexId = -1;
-    }
-
-    public CodeNodeVO(String text, ArrayList<CodeNodeVO> nodes) {
-        this.text = text;
-        this.nodes = nodes;
-        this.vertexId = -1;
-    }
+//    public CodeNodeVO(){
+//        this.text="";
+//        this.nodes=new ArrayList<CodeNodeVO>();
+//        this.vertexId = -1;
+//    }
+//
+//    public CodeNodeVO(String text){
+//        this.text=text;
+//        this.nodes=new ArrayList<CodeNodeVO>();
+//        this.vertexId = -1;
+//    }
+//
+//    public CodeNodeVO(String text, ArrayList<CodeNodeVO> nodes) {
+//        this.text = text;
+//        this.nodes = nodes;
+//        this.vertexId = -1;
+//    }
 
     public String getText() {
         return text;
