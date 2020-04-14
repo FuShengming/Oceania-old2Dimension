@@ -131,7 +131,7 @@ public class UploadBLImpl implements UploadBL {
             }
             catch (IOException e){
                 e.printStackTrace();
-                //deleteFile(jarFile);
+                deleteFile(jarFile);
                 return ResponseVO.buildFailure("write jar file exception");
             }
 
