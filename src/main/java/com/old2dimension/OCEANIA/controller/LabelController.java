@@ -63,20 +63,20 @@ public class LabelController {
         return labelBL.getOneDomainLabels(domainLabelVO);
     }
 
-    @RequestMapping(value = "/getAllVertexLabels",method = RequestMethod.POST)
-    public ResponseVO getAllVertexLabels(@RequestBody UserAndCodeForm userAndCodeForm){
-        return labelBL.getAllVertexLabel(userAndCodeForm);
-    }
-
-    @RequestMapping(value = "/getAllEdgeLabels",method = RequestMethod.POST)
-    public ResponseVO getAllEdgeLabels(@RequestBody UserAndCodeForm userAndCodeForm){
-        return labelBL.getAllEdgeLabel(userAndCodeForm);
-    }
-
-    @RequestMapping(value = "/getAllDomainLabels",method = RequestMethod.POST)
-    public ResponseVO getAllDomainLabels(@RequestBody UserAndCodeForm userAndCodeForm){
-        return labelBL.getAllDomainLabel(userAndCodeForm);
-    }
+//    @RequestMapping(value = "/getAllVertexLabels",method = RequestMethod.POST)
+//    public ResponseVO getAllVertexLabels(@RequestBody UserAndCodeForm userAndCodeForm){
+//        return labelBL.getAllVertexLabel(userAndCodeForm);
+//    }
+//
+//    @RequestMapping(value = "/getAllEdgeLabels",method = RequestMethod.POST)
+//    public ResponseVO getAllEdgeLabels(@RequestBody UserAndCodeForm userAndCodeForm){
+//        return labelBL.getAllEdgeLabel(userAndCodeForm);
+//    }
+//
+//    @RequestMapping(value = "/getAllDomainLabels",method = RequestMethod.POST)
+//    public ResponseVO getAllDomainLabels(@RequestBody UserAndCodeForm userAndCodeForm){
+//        return labelBL.getAllDomainLabel(userAndCodeForm);
+//    }
 
 
 }

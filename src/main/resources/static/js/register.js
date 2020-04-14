@@ -154,6 +154,9 @@ function register() {
                 $("#username-warn").addClass("password-error-msg")
                     .removeClass("hidden-error").removeClass("input-required-error").text("用户名已存在")
             }
+            else {
+                alert("Error occurred.")
+            }
         },
         error: function (res) {
             console.log(res)

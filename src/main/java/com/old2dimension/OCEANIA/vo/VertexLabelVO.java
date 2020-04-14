@@ -1,6 +1,10 @@
 package com.old2dimension.OCEANIA.vo;
 
+import java.util.Objects;
+
 public class VertexLabelVO {
+    public VertexLabelVO(){}
+
     private int id;
 
     public int getId() {
@@ -69,4 +73,21 @@ public class VertexLabelVO {
         this.content = content;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VertexLabelVO that = (VertexLabelVO) o;
+        return id == that.id &&
+                userId == that.userId &&
+                codeId == that.codeId &&
+                vertexId == that.vertexId &&
+                Objects.equals(title, that.title) &&
+                Objects.equals(content, that.content);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userId, codeId, vertexId, title, content);
+    }
 }

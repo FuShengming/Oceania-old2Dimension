@@ -18,11 +18,11 @@ public class UserController {
     final
     UserBL userBL;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserController(UserBL userBL) {
+    public UserController(UserBL userBL, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userBL = userBL;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @PostMapping("/signUp")

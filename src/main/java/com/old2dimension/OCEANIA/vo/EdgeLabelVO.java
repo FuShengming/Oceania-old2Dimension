@@ -1,6 +1,10 @@
 package com.old2dimension.OCEANIA.vo;
 
+import java.util.Objects;
+
 public class EdgeLabelVO {
+
+    public EdgeLabelVO(){}
 
     private int id;
 
@@ -70,4 +74,21 @@ public class EdgeLabelVO {
         this.content = content;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EdgeLabelVO that = (EdgeLabelVO) o;
+        return id == that.id &&
+                userId == that.userId &&
+                edgeId == that.edgeId &&
+                codeId == that.codeId &&
+                Objects.equals(title, that.title) &&
+                Objects.equals(content, that.content);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userId, edgeId, codeId, title, content);
+    }
 }
