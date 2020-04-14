@@ -134,7 +134,7 @@ public class UploadBLImpl implements UploadBL {
         return ResponseVO.buildSuccess("upload jar successfully");
     }
 
-    public ResponseVO uploadConfirm(UploadConfirmForm uploadConfirm) {
+    private ResponseVO uploadConfirm(UploadConfirmForm uploadConfirm) {
         File javaDir = new File("src/main/resources/AnalyzeCode/src/" + uploadConfirm.getUuid());
         if (!javaDir.exists()) {
             return ResponseVO.buildFailure("can not find java files");
@@ -323,6 +323,25 @@ public class UploadBLImpl implements UploadBL {
             }
         }
         return res;
+    }
+
+    public ResponseVO cancel(int userId, String uuid){
+        File javaDir = new File("src/main/resources/analyzeCode/src/"+uuid);
+        File jarFile = new File("src/main/resources/jars/"+uuid+".jar");
+        if(javaDir.exists()){
+            boolean isSuccess = deleteFile(javaDir);
+            if(!isSuccess){
+                return ResponseVO.buildFailure("cancel delete java files fail");
+            }
+        }
+        if(jarFile.exists()){
+            boolean isSuccess = deleteFile(jarFile);
+            if(!isSuccess){
+                return ResponseVO.buildFailure("cancel delete jar file fail");
+            }
+        }
+
+        return ResponseVO.buildSuccess("cancel successfully");
     }
 
     private boolean deleteFile(File file) {

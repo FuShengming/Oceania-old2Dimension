@@ -26,23 +26,9 @@ public class CodeController {
         return codeBL.getFuncCode(vertexVOAndUserIdAndCodeId);
     }
 
-    /*
-     *上传代码接口
-     * 接口未定
-     * */
-    @RequestMapping(value = "/upload",method = RequestMethod.POST)
-    public ResponseVO upload(){
-        return null;
-    }
-
-
-    /*
-     *从现有代码（iTrust）中添加
-     *
-     * */
-    @RequestMapping(value = "/add",method = RequestMethod.POST)
-    public ResponseVO add(@RequestBody UserAndCodeForm userAndCodeForm){
-        return codeBL.addCode(userAndCodeForm);
+    @RequestMapping(value = "/delete")
+    public ResponseVO delete(@RequestBody UserAndCodeForm userAndCodeForm){
+        return codeBL.delete(userAndCodeForm);
     }
 
     @RequestMapping(value = "/modifyName")
