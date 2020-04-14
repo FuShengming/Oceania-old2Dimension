@@ -271,7 +271,7 @@ public class UploadBLImplTest {
         Assert.assertFalse(jarFile.exists());
     }
 
-    
+
     private boolean deleteFile(File file) {
         boolean res = true;
         if (file.isFile()) {

@@ -141,7 +141,7 @@ public class UploadBLImpl implements UploadBL {
     private ResponseVO uploadConfirm(UploadConfirmForm uploadConfirm) {
         File javaDir = new File("src/main/resources/AnalyzeCode/src/" + uploadConfirm.getUuid());
         if (!javaDir.exists()) {
-            System.out.println("asdas");
+            System.out.println("path does not exist:"+javaDir.getAbsolutePath());
             return ResponseVO.buildFailure("can not find java files");
         }
         File jarFile = new File("src/main/resources/jars/" + uploadConfirm.getUuid() + ".jar");
