@@ -65,25 +65,27 @@ public class CodeBLImpl implements CodeBL {
         if(code == null){
             return ResponseVO.buildFailure("code does not exist");
         }
-        File javaDir = new File("src/main/resources/analyzeCode/src/"+code.getId());
-        File jarFile = new File("src/main/resources/jars/"+code.getId()+".jar");
-        File dependenciesFile = new File("src/main//resources/dependencies/"+code.getId()+".txt");
-        if(javaDir.exists()){
-            boolean isSuccess = deleteFile(javaDir);
-            if(!isSuccess){
-                return ResponseVO.buildFailure("delete java files fail");
+        if(code.getIs_default()==0){
+            File javaDir = new File("src/main/resources/analyzeCode/src/"+code.getId());
+            File jarFile = new File("src/main/resources/jars/"+code.getId()+".jar");
+            File dependenciesFile = new File("src/main//resources/dependencies/"+code.getId()+".txt");
+            if(javaDir.exists()){
+                boolean isSuccess = deleteFile(javaDir);
+                if(!isSuccess){
+                    return ResponseVO.buildFailure("delete java files fail");
+                }
             }
-        }
-        if(jarFile.exists()){
-            boolean isSuccess = deleteFile(jarFile);
-            if(!isSuccess){
-                return ResponseVO.buildFailure("delete jar file fail");
+            if(jarFile.exists()){
+                boolean isSuccess = deleteFile(jarFile);
+                if(!isSuccess){
+                    return ResponseVO.buildFailure("delete jar file fail");
+                }
             }
-        }
-        if(dependenciesFile.exists()){
-            boolean isSuccess = deleteFile(dependenciesFile);
-            if(!isSuccess){
-                return ResponseVO.buildFailure("delete dependencies file fail");
+            if(dependenciesFile.exists()){
+                boolean isSuccess = deleteFile(dependenciesFile);
+                if(!isSuccess){
+                    return ResponseVO.buildFailure("delete dependencies file fail");
+                }
             }
         }
         try{
