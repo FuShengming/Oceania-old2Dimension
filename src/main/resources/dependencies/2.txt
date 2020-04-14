@@ -1,4 +1,0 @@
-M:com.example.db.jpa.JpaCargoRepository:count() (M)com.example.db.jpa.JpaCargoRepository:findAll()
-M:com.example.db.jpa.JpaCargoRepository:findRecent() (M)com.example.db.jpa.JpaCargoRepository:findRecent(int)
-M:com.example.db.jpa.JpaCargoRepository:delete(long) (M)com.example.db.jpa.JpaCargoRepository:findOne(long)
-M:com.example.db.jpa.JpaCustomerRepository:count() (M)com.example.db.jpa.JpaCustomerRepository:findAll()
