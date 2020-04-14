@@ -19,6 +19,10 @@ public class UploadBLImpl implements UploadBL {
     @Autowired
     CodeRepository codeRepository;
 
+    public void setCodeRepository(CodeRepository codeRepository) {
+        this.codeRepository = codeRepository;
+    }
+
     public ResponseVO uploadCode(String uuid, MultipartFile[] files) {
         System.out.println("uuid:" + uuid);
         if (files == null) return ResponseVO.buildFailure("NULL");
