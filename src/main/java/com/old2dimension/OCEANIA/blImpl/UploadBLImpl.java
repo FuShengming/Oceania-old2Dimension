@@ -11,8 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 import gr.gousiosg.javacg.stat.JCallGraph;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -82,6 +80,7 @@ public class UploadBLImpl implements UploadBL {
     }
 
     public ResponseVO uploadJar(String uuid, MultipartFile file) {
+        System.out.println("jar:uuid:" + uuid);
         if (file == null) return ResponseVO.buildFailure("NULL");
 
 
@@ -92,7 +91,7 @@ public class UploadBLImpl implements UploadBL {
         }
         String dirName = "src/main/resources/jars";
         String fileName = uuid + ".jar";
-//        fileFullName = dirName + "/" + fileName;
+        fileFullName = dirName + "/" + fileName;
         File dir = new File(dirName);
         if (!dir.exists()) {
             boolean isSuccess = dir.mkdirs();
@@ -102,37 +101,33 @@ public class UploadBLImpl implements UploadBL {
             }
         }
 
-//        File jarFile = new File(fileFullName);
-//        if (!jarFile.exists()) {
-//            try {
-//                boolean isSuccess = jarFile.createNewFile();
-//                if (!isSuccess) {
-//                    deleteFile(jarFile);
-//                    return ResponseVO.buildFailure("create file fails");
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                deleteFile(jarFile);
-//                return ResponseVO.buildFailure("create file error");
-//            }
-//
-//        }
+        File jarFile = new File(fileFullName);
+        if (!jarFile.exists()) {
+            try {
+                boolean isSuccess = jarFile.createNewFile();
+                if (!isSuccess) {
+                    System.out.println("create file fails");
+                    deleteFile(jarFile);
+                    return ResponseVO.buildFailure("create file fails");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                deleteFile(jarFile);
+                return ResponseVO.buildFailure("create file error");
+            }
 
+        }
 
+        //System.out.println("ass:"+jarFile.getAbsolutePath());
         //----------------------------------
         try {
-            OutputStream os = Files.newOutputStream(Paths.get(dirName, fileName));
-            os.write(file.getBytes());
-            os.close();
-//            InputStreamReader isr = new InputStreamReader(file.getInputStream());
-//            String content = new BufferedReader(isr).lines().collect(Collectors.joining(System.lineSeparator()));
-//            isr.close();
-//            FileOutputStream out = new FileOutputStream(jarFile);
-//            out.write(content.getBytes());
-//            out.close();
+            byte[] content = file.getBytes();
+            FileOutputStream out = new FileOutputStream(jarFile);
+            out.write(content);
+            out.close();
         } catch (IOException e) {
             e.printStackTrace();
-//            deleteFile(jarFile);
+            deleteFile(jarFile);
             return ResponseVO.buildFailure("write jar file exception");
         }
 
@@ -223,6 +218,7 @@ public class UploadBLImpl implements UploadBL {
             JCallGraph.main(args);
         } catch (Exception e) {
             boolean isSuccess = dependencies.delete();
+            System.out.println("555555555");
             e.printStackTrace();
             return ResponseVO.buildFailure("Call-Graph error");
         }
