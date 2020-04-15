@@ -1,8 +1,6 @@
 package com.old2dimension.OCEANIA.po;
 
 
-
-
 public class AdjacencyMatrix {
 
     private int verticesNum;
@@ -28,7 +26,7 @@ public class AdjacencyMatrix {
         matrix[index1][index2] = b;
     }
 
-    public boolean getMatrix(int index1,int index2) {
+    public boolean getMatrix(int index1, int index2) {
         return matrix[index1][index2];
     }
 }

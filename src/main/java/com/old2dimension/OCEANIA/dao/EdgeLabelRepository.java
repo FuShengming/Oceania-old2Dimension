@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public interface EdgeLabelRepository extends JpaRepository<EdgeLabel, Integer>  {
+public interface EdgeLabelRepository extends JpaRepository<EdgeLabel, Integer> {
     List<EdgeLabel> findEdgeLabelsByCodeId(int codeId);
 
     List<EdgeLabel> findEdgeLabelsByCodeIdAndUserIdAndEdgeId(int codeId, int userId, int edgeId);

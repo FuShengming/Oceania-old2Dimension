@@ -3,7 +3,8 @@ package com.old2dimension.OCEANIA.vo;
 import java.util.Objects;
 
 public class DomainLabelVO {
-    public DomainLabelVO(){}
+    public DomainLabelVO() {
+    }
 
     private int id;
 
@@ -14,6 +15,7 @@ public class DomainLabelVO {
     public void setId(int id) {
         this.id = id;
     }
+
     private int userId;
 
     private int codeId;
@@ -26,7 +28,7 @@ public class DomainLabelVO {
 
     private String content;
 
-    public DomainLabelVO(int userId, int codeId, int firstEdgeId, int numOfVertex, String title,String content) {
+    public DomainLabelVO(int userId, int codeId, int firstEdgeId, int numOfVertex, String title, String content) {
         this.userId = userId;
         this.codeId = codeId;
         this.firstEdgeId = firstEdgeId;

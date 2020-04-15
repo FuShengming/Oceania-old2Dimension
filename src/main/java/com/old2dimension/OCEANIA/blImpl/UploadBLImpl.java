@@ -141,7 +141,7 @@ public class UploadBLImpl implements UploadBL {
     private ResponseVO uploadConfirm(UploadConfirmForm uploadConfirm) {
         File javaDir = new File("src/main/resources/analyzeCode/src/" + uploadConfirm.getUuid());
         if (!javaDir.exists()) {
-            System.out.println("path does not exist:"+javaDir.getAbsolutePath());
+            System.out.println("path does not exist:" + javaDir.getAbsolutePath());
             return ResponseVO.buildFailure("can not find java files");
         }
         File jarFile = new File("src/main/resources/jars/" + uploadConfirm.getUuid() + ".jar");
@@ -335,18 +335,18 @@ public class UploadBLImpl implements UploadBL {
         return res;
     }
 
-    public ResponseVO cancel(int userId, String uuid){
-        File javaDir = new File("src/main/resources/analyzeCode/src/"+uuid);
-        File jarFile = new File("src/main/resources/jars/"+uuid+".jar");
-        if(javaDir.exists()){
+    public ResponseVO cancel(int userId, String uuid) {
+        File javaDir = new File("src/main/resources/analyzeCode/src/" + uuid);
+        File jarFile = new File("src/main/resources/jars/" + uuid + ".jar");
+        if (javaDir.exists()) {
             boolean isSuccess = deleteFile(javaDir);
-            if(!isSuccess){
+            if (!isSuccess) {
                 return ResponseVO.buildFailure("cancel delete java files fail");
             }
         }
-        if(jarFile.exists()){
+        if (jarFile.exists()) {
             boolean isSuccess = deleteFile(jarFile);
-            if(!isSuccess){
+            if (!isSuccess) {
                 return ResponseVO.buildFailure("cancel delete jar file fail");
             }
         }
@@ -372,9 +372,8 @@ public class UploadBLImpl implements UploadBL {
         for (File cur : files) {
             if (cur.isDirectory()) {
                 res = res & deleteFile(cur);
-            }
-            else{
-                res = res& deleteFile(cur);
+            } else {
+                res = res & deleteFile(cur);
             }
         }
         res = res & file.delete();

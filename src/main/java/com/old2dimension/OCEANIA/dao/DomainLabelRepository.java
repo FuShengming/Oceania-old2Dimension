@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface DomainLabelRepository extends JpaRepository<DomainLabel, Integer> {
-    List<DomainLabel> findDomainLabelsByCodeIdAndUserIdAndFirstEdgeIdAndNumOfVertex(int codeId, int userId,int firstEdgeId, int numOfVertex);
+    List<DomainLabel> findDomainLabelsByCodeIdAndUserIdAndFirstEdgeIdAndNumOfVertex(int codeId, int userId, int firstEdgeId, int numOfVertex);
 
 
     List<DomainLabel> findDomainLabelsByCodeId(int codeId);
@@ -20,5 +20,6 @@ public interface DomainLabelRepository extends JpaRepository<DomainLabel, Intege
     void deleteDomainLabelById(int id);
 
     DomainLabel findDomainLabelById(int id);
-    List<DomainLabel> findDomainLabelsByCodeIdAndUserId(int codeId,int userId);
+
+    List<DomainLabel> findDomainLabelsByCodeIdAndUserId(int codeId, int userId);
 }

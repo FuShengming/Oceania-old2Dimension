@@ -1,10 +1,10 @@
 package com.old2dimension.OCEANIA.vo;
 
 public class DependencyGraphVO {
-  private   DomainSetVO domainSetVO;
+    private DomainSetVO domainSetVO;
 
     public DependencyGraphVO(DomainSetVO domainSetVO) {
-        this.domainSetVO=domainSetVO;
+        this.domainSetVO = domainSetVO;
     }
 
     public DomainSetVO getDomainSetVO() {

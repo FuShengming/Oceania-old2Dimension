@@ -1,4 +1,5 @@
 package com.old2dimension.OCEANIA.po;
+
 import javax.persistence.Cacheable;
 import java.util.ArrayList;
 
@@ -9,15 +10,15 @@ public class CodeNode {
 
     private int vertexId;
 
-    public CodeNode(){
-        this.text="";
-        this.nodes=new ArrayList<CodeNode>();
+    public CodeNode() {
+        this.text = "";
+        this.nodes = new ArrayList<CodeNode>();
         this.vertexId = -1;
     }
 
-    public CodeNode(String text){
-        this.text=text;
-        this.nodes=new ArrayList<CodeNode>();
+    public CodeNode(String text) {
+        this.text = text;
+        this.nodes = new ArrayList<CodeNode>();
         this.vertexId = -1;
     }
 
@@ -43,7 +44,7 @@ public class CodeNode {
         this.nodes = nodes;
     }
 
-    public void addChild(CodeNode child){
+    public void addChild(CodeNode child) {
         this.nodes.add(child);
     }
 

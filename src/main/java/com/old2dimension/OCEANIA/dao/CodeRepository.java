@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public interface CodeRepository extends JpaRepository<Code,Integer> {
+public interface CodeRepository extends JpaRepository<Code, Integer> {
 
 
-    public Code findCodeByIdAndUserId(int id,int userId);
+    public Code findCodeByIdAndUserId(int id, int userId);
 
     List<Code> findCodesByUserId(int userId);
 

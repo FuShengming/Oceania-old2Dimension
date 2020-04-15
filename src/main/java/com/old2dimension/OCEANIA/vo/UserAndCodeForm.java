@@ -1,7 +1,7 @@
 package com.old2dimension.OCEANIA.vo;
 
 public class UserAndCodeForm {
-   private int userId;
+    private int userId;
 
     private int codeId;
 
