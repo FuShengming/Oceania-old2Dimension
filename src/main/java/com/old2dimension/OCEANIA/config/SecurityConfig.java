@@ -54,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/statistics/++")
 //                .hasRole("ADMIN")
                 // 用户访问控制
-//                .antMatchers("/code/**", "/graph/++", "/hello", "/label/**",
+//                .antMatchers("/code/**", "/graph/++", "/label/**",
 //                        "/upload/**", "/workSpace/++")
 //                .hasRole("USER")
                 // 其他都放行了

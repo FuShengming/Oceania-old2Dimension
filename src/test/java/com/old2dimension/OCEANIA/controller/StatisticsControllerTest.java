@@ -10,7 +10,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -25,7 +24,8 @@ public class StatisticsControllerTest {
         StatisticsBLImpl statisticsBL = mock(StatisticsBLImpl.class);
         when(statisticsBL.getNumOfUser()).thenReturn(DEFAULT);
 
-        StatisticsController controller = new StatisticsController(statisticsBL);
+        StatisticsController controller = new StatisticsController();
+        controller.setStatisticsBL(statisticsBL);
         MockMvc mockMvc = standaloneSetup(controller).build();
         mockMvc.perform(get("/statistics/countUser"))
                 .andExpect(MockMvcResultMatchers.content().string(Integer.toString(DEFAULT)))
@@ -41,7 +41,8 @@ public class StatisticsControllerTest {
 
         when(statisticsBL.getCodeMes(CODE_ID)).thenReturn(CODE_MES_VO);
 
-        StatisticsController controller = new StatisticsController(statisticsBL);
+        StatisticsController controller = new StatisticsController();
+        controller.setStatisticsBL(statisticsBL);
         MockMvc mockMvc = standaloneSetup(controller).build();
         mockMvc.perform(get("/statistics/getCodeMesVO/" + Integer.toString(CODE_ID)))
                 .andDo(print())
@@ -70,7 +71,8 @@ public class StatisticsControllerTest {
 
         when(statisticsBL.getAllMes()).thenReturn(ResponseVO.buildSuccess(statisticsContentVO));
 
-        StatisticsController controller = new StatisticsController(statisticsBL);
+        StatisticsController controller = new StatisticsController();
+        controller.setStatisticsBL(statisticsBL);
         MockMvc mockMvc = standaloneSetup(controller).build();
         mockMvc.perform(get("/statistics/getAllMes/"))
                 .andDo(print())

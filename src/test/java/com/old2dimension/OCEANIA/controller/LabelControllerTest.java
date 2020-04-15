@@ -35,7 +35,8 @@ public class LabelControllerTest {
         when(labelBL.noteVertex(vertexLabelVO)).thenReturn(ResponseVO.buildSuccess(vertexLabel));
 
         String requestJson = JSONObject.toJSONString(vertexLabelVO);
-        LabelController controller = new LabelController(labelBL);
+        LabelController controller = new LabelController();
+        controller.setLabelBL(labelBL);
         MockMvc mockMvc = standaloneSetup(controller).build();
         mockMvc.perform(post("/label/noteVertex")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -61,7 +62,8 @@ public class LabelControllerTest {
         when(labelBL.noteVertex(vertexLabelVO)).thenReturn(ResponseVO.buildFailure("the vertex label to update does not exist"));
 
         String requestJson = JSONObject.toJSONString(vertexLabelVO);
-        LabelController controller = new LabelController(labelBL);
+        LabelController controller = new LabelController();
+        controller.setLabelBL(labelBL);
         MockMvc mockMvc = standaloneSetup(controller).build();
         mockMvc.perform(post("/label/noteVertex")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -83,7 +85,8 @@ public class LabelControllerTest {
         when(labelBL.noteEdge(edgeLabelVO)).thenReturn(ResponseVO.buildSuccess(edgeLabel));
 
         String requestJson = JSONObject.toJSONString(edgeLabelVO);
-        LabelController controller = new LabelController(labelBL);
+        LabelController controller = new LabelController();
+        controller.setLabelBL(labelBL);
         MockMvc mockMvc = standaloneSetup(controller).build();
         mockMvc.perform(post("/label/noteEdge")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -110,7 +113,8 @@ public class LabelControllerTest {
         when(labelBL.noteDomain(domainLabelVO)).thenReturn(ResponseVO.buildSuccess(domainLabel));
 
         String requestJson = JSONObject.toJSONString(domainLabelVO);
-        LabelController controller = new LabelController(labelBL);
+        LabelController controller = new LabelController();
+        controller.setLabelBL(labelBL);
         MockMvc mockMvc = standaloneSetup(controller).build();
         mockMvc.perform(post("/label/noteDomain")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -136,7 +140,8 @@ public class LabelControllerTest {
         when(labelBL.deleteVertexLabel(vertexLabelVO)).thenReturn(ResponseVO.buildSuccess("delete label successfully"));
 
         String requestJson = JSONObject.toJSONString(vertexLabelVO);
-        LabelController controller = new LabelController(labelBL);
+        LabelController controller = new LabelController();
+        controller.setLabelBL(labelBL);
         MockMvc mockMvc = standaloneSetup(controller).build();
         mockMvc.perform(post("/label/deleteVertexLabel")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -158,7 +163,8 @@ public class LabelControllerTest {
         when(labelBL.deleteEdgeLabel(edgeLabelVO)).thenReturn(ResponseVO.buildSuccess("delete label successfully"));
 
         String requestJson = JSONObject.toJSONString(edgeLabelVO);
-        LabelController controller = new LabelController(labelBL);
+        LabelController controller = new LabelController();
+        controller.setLabelBL(labelBL);
         MockMvc mockMvc = standaloneSetup(controller).build();
         mockMvc.perform(post("/label/deleteEdgeLabel")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -180,7 +186,8 @@ public class LabelControllerTest {
         when(labelBL.deleteDomainLabel(domainLabelVO)).thenReturn(ResponseVO.buildSuccess("delete label successfully"));
 
         String requestJson = JSONObject.toJSONString(domainLabelVO);
-        LabelController controller = new LabelController(labelBL);
+        LabelController controller = new LabelController();
+        controller.setLabelBL(labelBL);
         MockMvc mockMvc = standaloneSetup(controller).build();
         mockMvc.perform(post("/label/deleteDomainLabel")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -204,7 +211,8 @@ public class LabelControllerTest {
         when(labelBL.getOneVertexLabels(vertexLabelVO)).thenReturn(ResponseVO.buildSuccess(vertexLabels));
 
         String requestJson = JSONObject.toJSONString(vertexLabelVO);
-        LabelController controller = new LabelController(labelBL);
+        LabelController controller = new LabelController();
+        controller.setLabelBL(labelBL);
         MockMvc mockMvc = standaloneSetup(controller).build();
         mockMvc.perform(post("/label/getOneVertexLabel")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -233,7 +241,8 @@ public class LabelControllerTest {
         when(labelBL.getOneEdgeLabels(edgeLabelVO)).thenReturn(ResponseVO.buildSuccess(edgeLabels));
 
         String requestJson = JSONObject.toJSONString(edgeLabelVO);
-        LabelController controller = new LabelController(labelBL);
+        LabelController controller = new LabelController();
+        controller.setLabelBL(labelBL);
         MockMvc mockMvc = standaloneSetup(controller).build();
         mockMvc.perform(post("/label/getOneEdgeLabel")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -262,7 +271,8 @@ public class LabelControllerTest {
         when(labelBL.getOneDomainLabels(domainLabelVO)).thenReturn(ResponseVO.buildSuccess(domainLabels));
 
         String requestJson = JSONObject.toJSONString(domainLabelVO);
-        LabelController controller = new LabelController(labelBL);
+        LabelController controller = new LabelController();
+        controller.setLabelBL(labelBL);
         MockMvc mockMvc = standaloneSetup(controller).build();
         mockMvc.perform(post("/label/getOneDomainLabel")
                 .contentType(MediaType.APPLICATION_JSON)

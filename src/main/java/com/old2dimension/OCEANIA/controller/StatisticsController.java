@@ -14,10 +14,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/statistics")
 public class StatisticsController {
-    final
+    @Autowired
     StatisticsBL statisticsBL;
 
-    public StatisticsController(StatisticsBL statisticsBL) {
+    public void setStatisticsBL(StatisticsBL statisticsBL) {
         this.statisticsBL = statisticsBL;
     }
 
