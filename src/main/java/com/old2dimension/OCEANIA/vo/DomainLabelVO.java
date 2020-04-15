@@ -39,49 +39,49 @@ public class DomainLabelVO {
         return userId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+//    public void setUserId(int userId) {
+//        this.userId = userId;
+//    }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+//    public void setTitle(String title) {
+//        this.title = title;
+//    }
 
     public int getCodeId() {
         return codeId;
     }
 
-    public void setCodeId(int codeId) {
-        this.codeId = codeId;
-    }
+//    public void setCodeId(int codeId) {
+//        this.codeId = codeId;
+//    }
 
     public int getFirstEdgeId() {
         return firstEdgeId;
     }
 
-    public void setFirstEdgeId(int firstEdgeId) {
-        this.firstEdgeId = firstEdgeId;
-    }
+//    public void setFirstEdgeId(int firstEdgeId) {
+//        this.firstEdgeId = firstEdgeId;
+//    }
 
     public int getNumOfVertex() {
         return numOfVertex;
     }
 
-    public void setNumOfVertex(int numOfVertex) {
-        this.numOfVertex = numOfVertex;
-    }
+//    public void setNumOfVertex(int numOfVertex) {
+//        this.numOfVertex = numOfVertex;
+//    }
 
     public String getContent() {
         return content;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+//    public void setContent(String content) {
+//        this.content = content;
+//    }
 
     @Override
     public boolean equals(Object o) {
