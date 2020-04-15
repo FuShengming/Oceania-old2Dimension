@@ -26,9 +26,9 @@ public class EdgeLabelVO {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+//    public void setTitle(String title) {
+//        this.title = title;
+//    }
 
     private String title;
 
@@ -46,33 +46,33 @@ public class EdgeLabelVO {
         return userId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+//    public void setUserId(int userId) {
+//        this.userId = userId;
+//    }
 
     public int getEdgeId() {
         return edgeId;
     }
 
-    public void setEdgeId(int edgeId) {
-        this.edgeId = edgeId;
-    }
+//    public void setEdgeId(int edgeId) {
+//        this.edgeId = edgeId;
+//    }
 
     public int getCodeId() {
         return codeId;
     }
 
-    public void setCodeId(int codeId) {
-        this.codeId = codeId;
-    }
+//    public void setCodeId(int codeId) {
+//        this.codeId = codeId;
+//    }
 
     public String getContent() {
         return content;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+//    public void setContent(String content) {
+//        this.content = content;
+//    }
 
     @Override
     public boolean equals(Object o) {
