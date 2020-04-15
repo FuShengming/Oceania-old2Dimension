@@ -15,11 +15,15 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
+    final
     UserBL userBL;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public UserController(UserBL userBL, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userBL = userBL;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     @PostMapping("/signUp")
     public ResponseVO signUp(@RequestBody UserVO user, HttpServletResponse response) {

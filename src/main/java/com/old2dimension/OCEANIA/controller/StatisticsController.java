@@ -14,18 +14,22 @@ import java.util.Map;
 @RestController
 @RequestMapping("/statistics")
 public class StatisticsController {
-    @Autowired
+    final
     StatisticsBL statisticsBL;
+
+    public StatisticsController(StatisticsBL statisticsBL) {
+        this.statisticsBL = statisticsBL;
+    }
 
     @RequestMapping("/countUser")
     public int getNumOfUser() {
         return statisticsBL.getNumOfUser();
     }
 
-    @RequestMapping("/countCode")
-    public Map<Integer, Integer> getNumOfCode() {
-        return statisticsBL.getNumOfCode();
-    }
+//    @RequestMapping("/countCode")
+//    public Map<Integer, Integer> getNumOfCode() {
+//        return statisticsBL.getNumOfCode();
+//    }
 
     @RequestMapping("/getCodeMesVO/{codeId}")
     public int[] getCodeMes(@PathVariable("codeId") int codeId){
