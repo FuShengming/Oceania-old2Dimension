@@ -17,8 +17,8 @@ public interface LabelBL {
     ResponseVO getOneEdgeLabels(EdgeLabelVO edgeLabelVO);
     ResponseVO getOneDomainLabels(DomainLabelVO domainLabelVO);
 
-    ResponseVO getAllVertexLabel(UserAndCodeForm userAndCodeForm);
-    ResponseVO getAllEdgeLabel(UserAndCodeForm userAndCodeForm);
-    ResponseVO getAllDomainLabel(UserAndCodeForm userAndCodeForm);
+//    ResponseVO getAllVertexLabel(UserAndCodeForm userAndCodeForm);
+//    ResponseVO getAllEdgeLabel(UserAndCodeForm userAndCodeForm);
+//    ResponseVO getAllDomainLabel(UserAndCodeForm userAndCodeForm);
 
 }

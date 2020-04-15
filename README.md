@@ -1,3 +1,99 @@
+# Group_old2Dimension Project Oceania iteration 2
+
+本项目为南京大学2020年春软件工程与计算三课程项目
+
+## 小组成员
+
+171250640 付圣铭
+171250532 苗朗宁
+171250559 王煜霄
+171250638 葛闰
+
+## 项目说明
+
+### 开发框架
+
+后端使用了Spring boot，Spring Data框架，Spring MVC模型，前端使用了jQuery，Bootstrap框架，使用jwt进行身份安全认证，cytoscape.js用于图形展示。
+
+
+### 使用与相关功能代码说明
+
+本项目为maven项目，使用前请先用maven导入相关依赖再运行springboot。
+
+项目启动后访问8086端口/或/index可以进入网站主页，根据页面提示可以进入登录和注册页面。
+
+如果是管理员：
+
+![](https://i.bmp.ovh/imgs/2020/04/d62f91c677f9e481.png)
+
+可以查看需求中的各项统计。
+
+如果是普通用户：
+
+![](https://i.bmp.ovh/imgs/2020/04/717b2709d5ec2b6b.png)
+
+登录或注册完成后会自动跳转到/workspace，该页面中可以选择一个项目查看依赖图（1）；新建一个项目，上传jar包与代码进行分析（2）；更改项目名称（3）；删除该项目（4）。
+
+![](https://i.bmp.ovh/imgs/2020/04/d4d1936853e491f9.png)
+
+在/workspace选择一个项目后会跳转至该项目的依赖图/graph页面。
+
+该页面中可以选择左侧结构树中的函数（1）自动定位图上的节点；
+
+右键或左键长按节点/边/连通域会出现菜单，可以将该元素及其邻居元素选中并居中（2）；
+
+可以为该元素添加标签（3），在右侧显示；
+
+可以高亮该元素（紫色）（4）；
+
+在选中左侧结构树中的函数或图中节点时会显示该节点代码（10）；
+
+可以重新刷新图的布局（5）；
+
+可以将全图居中并适应屏幕（6）；
+
+可以查找节点与路径（7）；
+
+可以更改阈值，过滤连通域（8）；
+
+可以查看该阈值下元素个数（9）；
+
+可以保存当前布局（11），在下次打开项目时不再重新生成布局；
+
+可以将依赖图保存生成JPG文件（12）。
+
+
+### 检查点与功能实现说明
+
+1. 功能点1：抽取依赖并生成有向图
+
+   此功能的实现类为com.old2dimension.OCEANIA.blImpl包下的GraphCalculateImpl类中的方法，void initializeGraph(String filename)。实现为通过传入的文件名来读取文件数据，而后将数据根据顶点进行分割并初始化每个点和边的信息，再通过边信息初始化邻接矩阵，最后通过邻接矩阵计算出初始的连通域集合。
+
+2. 功能点2：生成的代码依赖图中点、边、连通域的数量
+
+   此功能的实现即为功能点1中对点、边、连通域的初始化，初始化完成后可以直接获得点、边、连通域的信息。
+
+3. 功能点3：顶点需保留函数全名，计算每条边的紧密度并保存
+
+   此功能的实现也为GraphCalculateImpl类中的void initializeGraph(String filename)方法所包含。我们先通过生成的邻接矩阵来统计每个点对应的出度和入度，并作为点的属性保存。而后，每条边持有起点和终点两个点信息。最后可以通过每个边所持有的点信息得到起点与终点的出度入度，从而计算出紧密度并进行保存。紧密度本身我们使用一个Weight类来保存，为了适应今后（迭代二、迭代三）可能出现的多种权重等情况，每条边实际持有的是weight的List。
+
+4. 功能点4：紧密度阈值过滤
+
+   此功能的实现为com.old2dimension.OCEANIA.blImpl包下的GraphCalculateImpl类中的方法，ResponseVO getConnectedDomains(ArrayList<WeightForm> weightForms)。此方法中会调用关键的过滤方法，DomainSet filterByWeights(ArrayList<WeightForm> thresholds)进行紧密度的过滤与过滤后连通域的计算。
+
+5. 功能点5：路径查找
+
+   此功能的实现为com.old2dimension.OCEANIA.blImpl包下的PathBLImpl类中的方法，ResponseVO findPath(FuncInfoForm startVertex, FuncInfoForm endVertex)。本方法利用邻接矩阵，使用深度优先方法进行路径查找。
+
+注：接口使用ResponseVO是为第二阶段的前后端交互做准备
+
+
+### 其他说明
+
+本项目已经部署在腾讯云上（jenkins地址http://212.64.93.130:8080/  ）。此外，本小组在http://212.64.93.130:9999/ 上部署了静态分析工具，检查者可以访问此地址查看静态分析结果。
+
+
+
 # Group_old2Dimension Project Oceania iteration 1
 
 
@@ -29,15 +125,15 @@ GraphCalculateImpl实现了从文件读数据并完成图的初始化、重名�
 实现迭代一的三个输入输出功能的方法在com.old2dimension.OCEANIA.OceaniaRunner中，方法以及对应功能如下：
 
 	1. 打印顶点、边、连通域数目：public void printGraphInfo(GraphCalculateImpl graphCalculate)
-
+	
 		graphCalculate参数为OceaniaRunner类中又springboot自动注入的graphCalculate成员变量
-
+	
 	2. 输入紧密度阈值进行连通域过滤并输出：public void closenessFilter(GraphCalculateImpl graphCalculate)
-
+	
 		graphCalculate参数为OceaniaRunner类中又springboot自动注入的graphCalculate成员变量
-
+	
 	3. 输入顶点数据查找路径数目与最短路径信息：public void findPath()
-
+	
 		输出为按路径长度从小到大输出路径信息
 
 在使用本项目时可以在OceaniaRunner类中的run()方法中调用这三个方法，run()方法即为迭代一的入口。注意，这三个方法的使用要放在run()方法中的初始化相关代码之后。

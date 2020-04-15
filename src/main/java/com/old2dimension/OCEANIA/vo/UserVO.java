@@ -2,6 +2,8 @@ package com.old2dimension.OCEANIA.vo;
 
 import com.old2dimension.OCEANIA.po.User;
 
+import java.util.Objects;
+
 public class UserVO {
     public UserVO(){}
 
@@ -44,5 +46,20 @@ public class UserVO {
 
     public void setPwd(String pwd) {
         this.pwd = pwd;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserVO userVO = (UserVO) o;
+        return id == userVO.id &&
+                Objects.equals(name, userVO.name) &&
+                Objects.equals(pwd, userVO.pwd);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, pwd);
     }
 }

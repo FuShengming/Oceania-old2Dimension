@@ -53,6 +53,7 @@
                     let users = data.content.content;
                     console.log(users);
                     let h = "";
+                    users.splice(0, 1);
                     users.forEach(function (user) {
                         if (user.codeMesVOs.length === 0) {
                             h += "<tr>\n" +
@@ -105,7 +106,7 @@
 
                         }
                     });
-                    $("#user-num").text(data.content.numOfUser);
+                    $("#user-num").text(Number(data.content.numOfUser) - 1);
                     $("#all-info").html(h);
                 }
             },

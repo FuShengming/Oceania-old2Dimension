@@ -161,51 +161,51 @@ public class LabelBLImplTest {
         Assert.assertEquals(((ArrayList<DomainLabel>)responseVO.getContent()).get(0).getContent(), "rua");
     }
 
-    @Test
-    public void TestGetAllVertexLabel() {
-        LabelBLImpl labelBL = new LabelBLImpl();
-        VertexLabelRepository vertexLabelRepository = mock(VertexLabelRepository.class);
-        labelBL.setVertexLabelRepository(vertexLabelRepository);
-
-        UserAndCodeForm userAndCodeForm = new UserAndCodeForm(1, 1);
-        ArrayList<VertexLabel> vertexLabelArrayList = new ArrayList<>();
-        VertexLabel vertexLabel = new VertexLabel(1, 1, 1,"title", "rua");
-        vertexLabelArrayList.add(vertexLabel);
-        when(vertexLabelRepository.findVertexLabelsByCodeIdAndUserId(1,1)).thenReturn(vertexLabelArrayList);
-
-        ResponseVO responseVO = labelBL.getAllVertexLabel(userAndCodeForm);
-        Assert.assertEquals(((ArrayList<VertexLabel>) responseVO.getContent()).size(), 1);
-    }
-
-    @Test
-    public void TestGetAllEdgeLabel() {
-        LabelBLImpl labelBL = new LabelBLImpl();
-        EdgeLabelRepository edgeLabelRepository = mock(EdgeLabelRepository.class);
-        labelBL.setEdgeLabelRepository(edgeLabelRepository);
-
-        UserAndCodeForm userAndCodeForm = new UserAndCodeForm(1, 1);
-        ArrayList<EdgeLabel> edgeLabelArrayList = new ArrayList<>();
-        EdgeLabel edgeLabel = new EdgeLabel(1, 1, 1,"title", "rua");
-        edgeLabelArrayList.add(edgeLabel);
-        when(edgeLabelRepository.findEdgeLabelsByCodeIdAndUserId(1,1)).thenReturn(edgeLabelArrayList);
-
-        ResponseVO responseVO = labelBL.getAllEdgeLabel(userAndCodeForm);
-        Assert.assertEquals(((ArrayList<EdgeLabel>) responseVO.getContent()).size(), 1);
-    }
-
-    @Test
-    public void TestGetAllDomainLabel() {
-        LabelBLImpl labelBL = new LabelBLImpl();
-        DomainLabelRepository domainLabelRepository = mock(DomainLabelRepository.class);
-        labelBL.setDomainLabelRepository(domainLabelRepository);
-
-        UserAndCodeForm userAndCodeForm = new UserAndCodeForm(1, 1);
-        ArrayList<DomainLabel> domainLabelArrayList = new ArrayList<>();
-        DomainLabel domainLabel = new DomainLabel(1, 1, 1, 1,"title", "rua");
-        domainLabelArrayList.add(domainLabel);
-        when(domainLabelRepository.findDomainLabelsByCodeIdAndUserId(1,1)).thenReturn(domainLabelArrayList);
-
-        ResponseVO responseVO = labelBL.getAllDomainLabel(userAndCodeForm);
-        Assert.assertEquals(((ArrayList<DomainLabel>) responseVO.getContent()).size(), 1);
-    }
+//    @Test
+//    public void TestGetAllVertexLabel() {
+//        LabelBLImpl labelBL = new LabelBLImpl();
+//        VertexLabelRepository vertexLabelRepository = mock(VertexLabelRepository.class);
+//        labelBL.setVertexLabelRepository(vertexLabelRepository);
+//
+//        UserAndCodeForm userAndCodeForm = new UserAndCodeForm(1, 1);
+//        ArrayList<VertexLabel> vertexLabelArrayList = new ArrayList<>();
+//        VertexLabel vertexLabel = new VertexLabel(1, 1, 1,"title", "rua");
+//        vertexLabelArrayList.add(vertexLabel);
+//        when(vertexLabelRepository.findVertexLabelsByCodeIdAndUserId(1,1)).thenReturn(vertexLabelArrayList);
+//
+//        ResponseVO responseVO = labelBL.getAllVertexLabel(userAndCodeForm);
+//        Assert.assertEquals(((ArrayList<VertexLabel>) responseVO.getContent()).size(), 1);
+//    }
+//
+//    @Test
+//    public void TestGetAllEdgeLabel() {
+//        LabelBLImpl labelBL = new LabelBLImpl();
+//        EdgeLabelRepository edgeLabelRepository = mock(EdgeLabelRepository.class);
+//        labelBL.setEdgeLabelRepository(edgeLabelRepository);
+//
+//        UserAndCodeForm userAndCodeForm = new UserAndCodeForm(1, 1);
+//        ArrayList<EdgeLabel> edgeLabelArrayList = new ArrayList<>();
+//        EdgeLabel edgeLabel = new EdgeLabel(1, 1, 1,"title", "rua");
+//        edgeLabelArrayList.add(edgeLabel);
+//        when(edgeLabelRepository.findEdgeLabelsByCodeIdAndUserId(1,1)).thenReturn(edgeLabelArrayList);
+//
+//        ResponseVO responseVO = labelBL.getAllEdgeLabel(userAndCodeForm);
+//        Assert.assertEquals(((ArrayList<EdgeLabel>) responseVO.getContent()).size(), 1);
+//    }
+//
+//    @Test
+//    public void TestGetAllDomainLabel() {
+//        LabelBLImpl labelBL = new LabelBLImpl();
+//        DomainLabelRepository domainLabelRepository = mock(DomainLabelRepository.class);
+//        labelBL.setDomainLabelRepository(domainLabelRepository);
+//
+//        UserAndCodeForm userAndCodeForm = new UserAndCodeForm(1, 1);
+//        ArrayList<DomainLabel> domainLabelArrayList = new ArrayList<>();
+//        DomainLabel domainLabel = new DomainLabel(1, 1, 1, 1,"title", "rua");
+//        domainLabelArrayList.add(domainLabel);
+//        when(domainLabelRepository.findDomainLabelsByCodeIdAndUserId(1,1)).thenReturn(domainLabelArrayList);
+//
+//        ResponseVO responseVO = labelBL.getAllDomainLabel(userAndCodeForm);
+//        Assert.assertEquals(((ArrayList<DomainLabel>) responseVO.getContent()).size(), 1);
+//    }
 }

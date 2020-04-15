@@ -252,21 +252,21 @@ public class LabelBLImpl implements LabelBL {
     }
 
 
-    public ResponseVO getAllVertexLabel(UserAndCodeForm userAndCodeForm) {
-        ArrayList<VertexLabel> res = (ArrayList<VertexLabel>) vertexLabelRepository.
-                findVertexLabelsByCodeIdAndUserId(userAndCodeForm.getCodeId(), userAndCodeForm.getUserId());
-        return ResponseVO.buildSuccess(res);
-    }
-
-    public ResponseVO getAllEdgeLabel(UserAndCodeForm userAndCodeForm) {
-        ArrayList<EdgeLabel> res = (ArrayList<EdgeLabel>) edgeLabelRepository.findEdgeLabelsByCodeIdAndUserId(userAndCodeForm.getCodeId(), userAndCodeForm.getUserId());
-        return ResponseVO.buildSuccess(res);
-    }
-
-    public ResponseVO getAllDomainLabel(UserAndCodeForm userAndCodeForm) {
-        ArrayList<DomainLabel> res = (ArrayList<DomainLabel>) domainLabelRepository.findDomainLabelsByCodeIdAndUserId(userAndCodeForm.getCodeId(), userAndCodeForm.getUserId());
-        return ResponseVO.buildSuccess(res);
-    }
+//    public ResponseVO getAllVertexLabel(UserAndCodeForm userAndCodeForm) {
+//        ArrayList<VertexLabel> res = (ArrayList<VertexLabel>) vertexLabelRepository.
+//                findVertexLabelsByCodeIdAndUserId(userAndCodeForm.getCodeId(), userAndCodeForm.getUserId());
+//        return ResponseVO.buildSuccess(res);
+//    }
+//
+//    public ResponseVO getAllEdgeLabel(UserAndCodeForm userAndCodeForm) {
+//        ArrayList<EdgeLabel> res = (ArrayList<EdgeLabel>) edgeLabelRepository.findEdgeLabelsByCodeIdAndUserId(userAndCodeForm.getCodeId(), userAndCodeForm.getUserId());
+//        return ResponseVO.buildSuccess(res);
+//    }
+//
+//    public ResponseVO getAllDomainLabel(UserAndCodeForm userAndCodeForm) {
+//        ArrayList<DomainLabel> res = (ArrayList<DomainLabel>) domainLabelRepository.findDomainLabelsByCodeIdAndUserId(userAndCodeForm.getCodeId(), userAndCodeForm.getUserId());
+//        return ResponseVO.buildSuccess(res);
+//    }
 
 
 }
