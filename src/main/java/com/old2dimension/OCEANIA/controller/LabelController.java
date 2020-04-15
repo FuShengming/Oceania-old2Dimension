@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/label")
 public class LabelController {
-    final
+    @Autowired
     LabelBL labelBL;
 
-    public LabelController(LabelBL labelBL) {
+    public void setLabelBL(LabelBL labelBL) {
         this.labelBL = labelBL;
     }
 
