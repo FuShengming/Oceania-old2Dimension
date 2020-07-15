@@ -4,6 +4,9 @@ drop table if exists vertex_label;
 drop table if exists edge_label;
 drop table if exists domain_label;
 drop table if exists work_space;
+drop table if exists team_members;
+drop table if exists team_code;
+drop table if exists team;
 drop table if exists code;
 drop table if exists user_authority;
 drop table if exists authority;
@@ -126,4 +129,62 @@ create table if not exists work_space
     CONSTRAINT work_fk_code_id FOREIGN KEY (code_id) REFERENCES code (id) ON DELETE Cascade
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
+
+  create table if not exists team
+(
+    id              int auto_increment primary key,
+    group_name       varchar(255) NOT NULL
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+create table if not exists team_members
+(
+    id              int auto_increment primary key,
+    group_id        int  NOT NULL,
+    user_id         int  NOT NULL,
+    is_leader       int  NOT NULL,
+     CONSTRAINT group_members_fk_user_identity FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE Cascade,
+    CONSTRAINT group_members_fk_group_id FOREIGN KEY (group_id) REFERENCES team (id) ON DELETE Cascade
+
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+create table if not exists team_code
+(
+
+    id              int auto_increment primary key,
+    group_id        int  NOT NULL,
+    code_id         int  NOT NULL,
+    CONSTRAINT group_code_fk_code_identity FOREIGN KEY (code_id) REFERENCES code (id) ON DELETE Cascade,
+    CONSTRAINT group_code_fk_group_id FOREIGN KEY (group_id) REFERENCES team (id) ON DELETE Cascade
+
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+
+create table if not exists team_task
+(
+    id              int auto_increment primary key,
+    group_id        int  NOT NULL,
+    name            varchar(255) NOT NULL,
+    description     varchar(8192) NOT NULL,
+    label           varchar(255) NOT NULL,
+    start_date timestamp NOT NULL,
+    end_date timestamp NOT NULL,
+    CONSTRAINT group_task_fk_group_id FOREIGN KEY (group_id) REFERENCES team (id) ON DELETE Cascade
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+create table if not exists team_annoucement
+(
+    id              int auto_increment primary key,
+    group_id        int  NOT NULL,
+    title           varchar(255) NOT NULL,
+    content     varchar(8192) NOT NULL,
+    release_date timestamp NOT NULL,
+    CONSTRAINT group_task_fk_group_id FOREIGN KEY (group_id) REFERENCES team (id) ON DELETE Cascade
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
 
