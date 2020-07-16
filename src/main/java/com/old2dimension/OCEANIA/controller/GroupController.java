@@ -21,7 +21,7 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/setGroupLeader",method = RequestMethod.POST)
-    public ResponseVO setGroupLeader(@RequestBody GroupIdAndLeaderForm groupIdAndLeaderForm){
+    public ResponseVO setGroupLeader(@RequestBody GroupIdAndUserForm groupIdAndLeaderForm){
         return null;
     }
 
@@ -39,13 +39,41 @@ public class GroupController {
     public ResponseVO getTaskByName(@RequestBody GroupIdAndTaskNameForm groupIdAndTaskNameForm){
         return null;
     }
-/*    @RequestMapping(value = "/getAllTask/{}",method = RequestMethod.GET)
-    public ResponseVO getAllTask(@PathVariable int groupId){
+
+    @RequestMapping(value = "/inviteUser/{name}",method = RequestMethod.GET)
+    public ResponseVO inviteUser(@PathVariable String name){
         return null;
     }
-    */
 
+    @RequestMapping(value = "/quitGroup",method = RequestMethod.POST)
+    public ResponseVO quitGroup(@RequestBody GroupIdAndUserForm groupIdAndUserForm){
+        return null;
+    }
 
+    @RequestMapping(value = "/joinGroup/{groupId}",method = RequestMethod.GET)
+    public ResponseVO quitGroup(@PathVariable String groupId){
+        return null;
+    }
+
+    @RequestMapping(value = "/addCode",method = RequestMethod.POST)
+    public ResponseVO addCode(@RequestBody GroupIdAndCodeIdForm groupIdAndCodeIdForm){
+        return null;
+    }
+
+    @RequestMapping(value = "/deleteCode",method = RequestMethod.POST)
+    public ResponseVO deleteCode(@RequestBody GroupIdAndCodeIdForm groupIdAndCodeIdForm){
+        return null;
+    }
+
+    @RequestMapping(value = "/findGroupCode/{groupId}",method = RequestMethod.GET)
+    public ResponseVO findGroupCode(@PathVariable String groupId){
+        return null;
+    }
+
+    @RequestMapping(value = "/search/{userId}",method = RequestMethod.GET)
+    public ResponseVO searchGroupByUser(@PathVariable String userId){
+        return null;
+    }
 
     @RequestMapping(value = "/deleteTask/{taskId}",method = RequestMethod.GET)
     public ResponseVO deleteTask(@PathVariable int taskId){
@@ -72,5 +100,9 @@ public class GroupController {
         return null;
     }
 
+    @RequestMapping(value = "/getCodeStatistics",method = RequestMethod.GET)
+    public ResponseVO getCodeStatistics(@RequestBody GroupIdAndCodeIdForm groupIdAndCodeIdForm){
+        return null;
+    }
 
 }

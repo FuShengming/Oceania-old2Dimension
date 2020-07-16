@@ -1,8 +1,8 @@
 package com.old2dimension.OCEANIA.vo;
 
-public class GroupIdAndLeaderForm {
+public class GroupIdAndCodeIdForm {
     private int groupId;
-    private int leaderId;
+    private int codeId;
 
     public int getGroupId() {
         return groupId;
@@ -13,11 +13,11 @@ public class GroupIdAndLeaderForm {
     }
 
     public int getLeaderId() {
-        return leaderId;
+        return codeId;
     }
 
     public void setLeaderId(int leaderId) {
-        this.leaderId = leaderId;
+        this.codeId = leaderId;
     }
 
 }
