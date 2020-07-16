@@ -1,9 +1,14 @@
 package com.old2dimension.OCEANIA.po;
 
+import javax.persistence.*;
 import java.util.List;
-
+@Entity
+@Table(name = "team")
 public class Group {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "group_name")
     private String name;
     private List<Integer> members;
     private int leaderId;

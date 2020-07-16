@@ -1,4 +1,7 @@
 package com.old2dimension.OCEANIA.dao;
 
-public interface GroupRepository {
+import com.old2dimension.OCEANIA.po.Group;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface GroupRepository extends JpaRepository<Group,Integer> {
 }
