@@ -1,7 +1,11 @@
 package com.old2dimension.OCEANIA.controller;
 
+import com.old2dimension.OCEANIA.bl.GroupBL;
+import com.old2dimension.OCEANIA.bl.GroupCodeBL;
+import com.old2dimension.OCEANIA.bl.TaskBL;
 import com.old2dimension.OCEANIA.po.Announcement;
 import com.old2dimension.OCEANIA.vo.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -9,6 +13,13 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/group")
 public class GroupController {
+
+    @Autowired
+    GroupBL groupBL;
+    @Autowired
+    TaskBL taskBL;
+    @Autowired
+    GroupCodeBL groupCodeBL;
 
     @RequestMapping(value = "/findUser/{name}",method = RequestMethod.GET)
     public ResponseVO findUser(@PathVariable String name){
