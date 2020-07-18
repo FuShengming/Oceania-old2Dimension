@@ -11,14 +11,14 @@ public class GroupMember {
     @Column(name = "group_id")
     private int groupId;
     @Column(name = "user_id")
-    private  int memberId;
+    private  int userId;
     @Column(name = "is_leader")
     private int isLeader;
 
-    public GroupMember(int groupId, int memberId, int isLeader) {
+    public GroupMember(int groupId, int userId, int isLeader) {
 
         this.groupId = groupId;
-        this.memberId = memberId;
+        this.userId = userId;
         this.isLeader = isLeader;
     }
 
@@ -38,12 +38,12 @@ public class GroupMember {
         this.groupId = groupId;
     }
 
-    public int getMemberId() {
-        return memberId;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setMemberId(int memberId) {
-        this.memberId = memberId;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getIsLeader() {

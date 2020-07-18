@@ -27,7 +27,7 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/createGroup",method = RequestMethod.POST)
-    public ResponseVO createGroup(@RequestBody GroupNameAndMembersForm groupNameAndMembersForm){
+    public ResponseVO createGroup(@RequestBody GroupNameAndCreatorIdForm groupNameAndCreatorIdForm){
         return null;
     }
 
@@ -61,8 +61,8 @@ public class GroupController {
         return null;
     }
 
-    @RequestMapping(value = "/joinGroup/{groupId}",method = RequestMethod.GET)
-    public ResponseVO quitGroup(@PathVariable String groupId){
+    @RequestMapping(value = "/joinGroup",method = RequestMethod.GET)
+    public ResponseVO joinGroup(@RequestBody GroupIdAndUserForm groupIdAndUserForm){
         return null;
     }
 
@@ -113,6 +113,16 @@ public class GroupController {
 
     @RequestMapping(value = "/getCodeStatistics",method = RequestMethod.GET)
     public ResponseVO getCodeStatistics(@RequestBody GroupIdAndCodeIdForm groupIdAndCodeIdForm){
+        return null;
+    }
+
+    @RequestMapping(value = "/getGroupMember/{groupId}",method = RequestMethod.GET)
+    public ResponseVO getGroupMembers(@PathVariable String groupId){
+        return null;
+    }
+
+    @RequestMapping(value = "/getGroupAnnouncements/{groupId}",method = RequestMethod.GET)
+    public ResponseVO getGroupAnnouncements(@PathVariable String groupId){
         return null;
     }
 

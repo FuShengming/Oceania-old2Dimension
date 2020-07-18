@@ -12,12 +12,12 @@ public class GroupIdAndUserForm {
         this.groupId = groupId;
     }
 
-    public int getLeaderId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setLeaderId(int leaderId) {
-        this.userId = leaderId;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
 }

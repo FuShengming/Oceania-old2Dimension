@@ -20,6 +20,9 @@ public class Group {
         this.leaderId = leaderId;
     }
 
+    public Group() {
+    }
+
 
     public int getId() {
         return id;
