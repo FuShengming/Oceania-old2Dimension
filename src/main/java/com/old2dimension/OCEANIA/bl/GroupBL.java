@@ -15,10 +15,10 @@ public interface GroupBL {
     public ResponseVO quitGroup(GroupIdAndUserForm groupIdAndUserForm);
     public ResponseVO joinGroup(GroupIdAndUserForm groupIdAndUserForm);
 
-    public ResponseVO searchGroupByUser(String userId);
-    public ResponseVO getGroupMembers(String groupId);
+    public ResponseVO searchGroupByUser(int userId);
+    public ResponseVO getGroupMembers(int groupId);
     public ResponseVO releaseAnnouncement(Announcement announcement);
-    public ResponseVO getGroupAnnouncements(String groupId);
+    public ResponseVO getGroupAnnouncements(int groupId);
 
 
 }

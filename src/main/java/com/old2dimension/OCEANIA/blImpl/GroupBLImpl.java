@@ -1,6 +1,7 @@
 package com.old2dimension.OCEANIA.blImpl;
 
 import com.old2dimension.OCEANIA.bl.GroupBL;
+import com.old2dimension.OCEANIA.dao.AnnouncementRepository;
 import com.old2dimension.OCEANIA.dao.GroupMemberRepository;
 import com.old2dimension.OCEANIA.dao.GroupRepository;
 import com.old2dimension.OCEANIA.dao.UserRepository;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Component
@@ -27,6 +29,8 @@ public class GroupBLImpl implements GroupBL {
     GroupRepository groupRepository;
     @Autowired
     GroupMemberRepository groupMemberRepository;
+    @Autowired
+    AnnouncementRepository announcementRepository;
 
     @Override
     public ResponseVO findUser(String name) {
@@ -61,14 +65,14 @@ public class GroupBLImpl implements GroupBL {
 
     @Override
     public ResponseVO setGroupLeader(GroupIdAndUserForm groupIdAndLeaderForm) {
-        List<GroupMember> groupMembers = groupMemberRepository.getAllGroupMemberByGroupIdAndIsLeader(groupIdAndLeaderForm.getGroupId(),1);
+        List<GroupMember> groupMembers = groupMemberRepository.findAllGroupMemberByGroupIdAndIsLeader(groupIdAndLeaderForm.getGroupId(),1);
         if(groupMembers.size()!=1){
             return ResponseVO.buildFailure("this group has no leader!");
         }
         GroupMember leader = groupMembers.get(0);
         leader.setIsLeader(0);
         List<GroupMember> members = new ArrayList<>();
-        GroupMember newLeader = groupMemberRepository.getGroupMemberByGroupIdAndUserId
+        GroupMember newLeader = groupMemberRepository.findGroupMemberByGroupIdAndUserId
                 (groupIdAndLeaderForm.getGroupId(),groupIdAndLeaderForm.getUserId());
         if(newLeader==null){
             return ResponseVO.buildFailure("This user is not in the group.");
@@ -91,7 +95,7 @@ public class GroupBLImpl implements GroupBL {
 
     @Override
     public ResponseVO quitGroup(GroupIdAndUserForm groupIdAndUserForm) {
-        GroupMember groupMember = groupMemberRepository.getGroupMemberByGroupIdAndUserId
+        GroupMember groupMember = groupMemberRepository.findGroupMemberByGroupIdAndUserId
                 (groupIdAndUserForm.getGroupId(),groupIdAndUserForm.getUserId());
         if(groupMember==null){
             return ResponseVO.buildFailure("The group do not have this user.");
@@ -99,7 +103,7 @@ public class GroupBLImpl implements GroupBL {
         if(groupMember.getIsLeader()==1){
             return ResponseVO.buildFailure("leader must transfer the possession of leader before quiting group");
         }
-        //------------------------------------------------------
+
 
         groupMemberRepository.delete(groupMember);
         int cnt = groupMemberRepository.countByGroupId(groupIdAndUserForm.getGroupId());
@@ -114,17 +118,54 @@ public class GroupBLImpl implements GroupBL {
 
     @Override
     public ResponseVO joinGroup(GroupIdAndUserForm groupIdAndUserForm) {
-        return null;
+        GroupMember member = new GroupMember(groupIdAndUserForm.getGroupId(),groupIdAndUserForm.getUserId(),0);
+        member = groupMemberRepository.save(member);
+        if(member.getId()==0){
+            return ResponseVO.buildFailure("Joining group failed");
+        }
+        return ResponseVO.buildSuccess(member);
     }
 
     @Override
-    public ResponseVO searchGroupByUser(String userId) {
-        return null;
+    public ResponseVO searchGroupByUser(int userId) {
+        List<GroupMember> groupMembers = groupMemberRepository.findGroupMembersByUserId(userId);
+        List<Group> res = new ArrayList<>();
+        if(groupMembers==null){
+            return ResponseVO.buildFailure("Getting group list failed.");
+        }
+        if(groupMembers.size()==0){
+            res = new ArrayList<>();
+            return ResponseVO.buildSuccess(res);
+        }
+
+        HashSet<Integer> groupIdSet = new HashSet<>();
+        for(GroupMember cur:groupMembers){
+            groupIdSet.add(cur.getGroupId());
+        }
+
+        ArrayList<Integer>  groupIds = new ArrayList<>(groupIdSet);
+        for(int i : groupIds){
+            Group cur =  groupRepository.findGroupById(i);
+            if(cur==null){
+                return ResponseVO.buildFailure("Getting group list failed.");
+            }
+            res.add(cur);
+        }
+
+        return ResponseVO.buildSuccess(res);
     }
 
     @Override
-    public ResponseVO getGroupMembers(String groupId) {
-        return null;
+    public ResponseVO getGroupMembers(int groupId) {
+        List<GroupMember> members = groupMemberRepository.findGroupMembersByGroupId(groupId);
+        if(members==null){
+            return ResponseVO.buildFailure("Getting member list failed.");
+        }
+        if(members.size()==0){
+            return ResponseVO.buildFailure("group does not exist.");
+        }
+        return ResponseVO.buildSuccess(members);
+
     }
 
     @Override
@@ -133,8 +174,15 @@ public class GroupBLImpl implements GroupBL {
     }
 
     @Override
-    public ResponseVO getGroupAnnouncements(String groupId) {
-        return null;
+    public ResponseVO getGroupAnnouncements(int groupId) {
+        List<Announcement> res = announcementRepository.findAllByGroupId(groupId);
+        if(res==null){
+            return ResponseVO.buildFailure("Getting announcement list failed.");
+        }
+
+        return ResponseVO.buildSuccess(res);
+
+
     }
 
 

@@ -77,7 +77,7 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/findGroupCode/{groupId}",method = RequestMethod.GET)
-    public ResponseVO findGroupCode(@PathVariable String groupId){
+    public ResponseVO findGroupCode(@PathVariable int groupId){
         return null;
     }
 
@@ -117,12 +117,12 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/getGroupMember/{groupId}",method = RequestMethod.GET)
-    public ResponseVO getGroupMembers(@PathVariable String groupId){
+    public ResponseVO getGroupMembers(@PathVariable int groupId){
         return null;
     }
 
     @RequestMapping(value = "/getGroupAnnouncements/{groupId}",method = RequestMethod.GET)
-    public ResponseVO getGroupAnnouncements(@PathVariable String groupId){
+    public ResponseVO getGroupAnnouncements(@PathVariable int groupId){
         return null;
     }
 
