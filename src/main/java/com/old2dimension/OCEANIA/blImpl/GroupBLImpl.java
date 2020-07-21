@@ -32,6 +32,7 @@ public class GroupBLImpl implements GroupBL {
     @Autowired
     AnnouncementRepository announcementRepository;
 
+
     @Override
     public ResponseVO findUser(String name) {
         User user = userRepository.findUserByName(name);
@@ -43,6 +44,13 @@ public class GroupBLImpl implements GroupBL {
 
     @Override
     public ResponseVO createGroup(GroupNameAndCreatorIdForm groupNameAndCreatorIdForm) {
+
+        //------------------检查userId是否存在-----------------
+        if(userRepository.findUserById(groupNameAndCreatorIdForm.getCreatorId())==null){
+            return ResponseVO.buildFailure("This user does not exist.");
+        }
+
+
         List<Integer> memberIds = new ArrayList<Integer>();
         GroupMember leader;
         leader = new GroupMember(0,groupNameAndCreatorIdForm.getCreatorId(),1);
@@ -65,10 +73,17 @@ public class GroupBLImpl implements GroupBL {
 
     @Override
     public ResponseVO setGroupLeader(GroupIdAndUserForm groupIdAndLeaderForm) {
+        if(groupRepository.findGroupById(groupIdAndLeaderForm.getGroupId())==null){
+            return ResponseVO.buildFailure("this group does not exist!");
+        }
+        if(userRepository.findUserById(groupIdAndLeaderForm.getUserId())==null){
+            return ResponseVO.buildFailure("This user does not exist.");
+        }
         List<GroupMember> groupMembers = groupMemberRepository.findAllGroupMemberByGroupIdAndIsLeader(groupIdAndLeaderForm.getGroupId(),1);
         if(groupMembers.size()!=1){
             return ResponseVO.buildFailure("this group has no leader!");
         }
+
         GroupMember leader = groupMembers.get(0);
         leader.setIsLeader(0);
         List<GroupMember> members = new ArrayList<>();
@@ -95,6 +110,13 @@ public class GroupBLImpl implements GroupBL {
 
     @Override
     public ResponseVO quitGroup(GroupIdAndUserForm groupIdAndUserForm) {
+        if(groupRepository.findGroupById(groupIdAndUserForm.getGroupId())==null){
+            return ResponseVO.buildFailure("this group does not exist!");
+        }
+        if(userRepository.findUserById(groupIdAndUserForm.getUserId())==null){
+            return ResponseVO.buildFailure("This user does not exist.");
+        }
+
         GroupMember groupMember = groupMemberRepository.findGroupMemberByGroupIdAndUserId
                 (groupIdAndUserForm.getGroupId(),groupIdAndUserForm.getUserId());
         if(groupMember==null){
@@ -118,6 +140,14 @@ public class GroupBLImpl implements GroupBL {
 
     @Override
     public ResponseVO joinGroup(GroupIdAndUserForm groupIdAndUserForm) {
+        if(groupRepository.findGroupById(groupIdAndUserForm.getGroupId())==null){
+            return ResponseVO.buildFailure("this group does not exist!");
+        }
+        if(userRepository.findUserById(groupIdAndUserForm.getUserId())==null){
+            return ResponseVO.buildFailure("This user does not exist.");
+        }
+
+
         GroupMember member = new GroupMember(groupIdAndUserForm.getGroupId(),groupIdAndUserForm.getUserId(),0);
         member = groupMemberRepository.save(member);
         if(member.getId()==0){
@@ -128,6 +158,8 @@ public class GroupBLImpl implements GroupBL {
 
     @Override
     public ResponseVO searchGroupByUser(int userId) {
+
+
         List<GroupMember> groupMembers = groupMemberRepository.findGroupMembersByUserId(userId);
         List<Group> res = new ArrayList<>();
         if(groupMembers==null){
@@ -157,6 +189,11 @@ public class GroupBLImpl implements GroupBL {
 
     @Override
     public ResponseVO getGroupMembers(int groupId) {
+        if(groupRepository.findGroupById(groupId)==null){
+            return ResponseVO.buildFailure("this group does not exist!");
+        }
+
+
         List<GroupMember> members = groupMemberRepository.findGroupMembersByGroupId(groupId);
         if(members==null){
             return ResponseVO.buildFailure("Getting member list failed.");
@@ -175,6 +212,10 @@ public class GroupBLImpl implements GroupBL {
 
     @Override
     public ResponseVO getGroupAnnouncements(int groupId) {
+        if(groupRepository.findGroupById(groupId)==null){
+            return ResponseVO.buildFailure("this group does not exist!");
+        }
+
         List<Announcement> res = announcementRepository.findAllByGroupId(groupId);
         if(res==null){
             return ResponseVO.buildFailure("Getting announcement list failed.");

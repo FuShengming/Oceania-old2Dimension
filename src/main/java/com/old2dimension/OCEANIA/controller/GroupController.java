@@ -4,6 +4,7 @@ import com.old2dimension.OCEANIA.bl.GroupBL;
 import com.old2dimension.OCEANIA.bl.GroupCodeBL;
 import com.old2dimension.OCEANIA.bl.TaskBL;
 import com.old2dimension.OCEANIA.po.Announcement;
+import com.old2dimension.OCEANIA.po.Task;
 import com.old2dimension.OCEANIA.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/createTask",method = RequestMethod.POST)
-    public ResponseVO createTask(@RequestBody TaskVO taskVO){
+    public ResponseVO createTask(@RequestBody Task task){
         return null;
     }
 
@@ -92,7 +93,7 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/modifyTask",method = RequestMethod.POST)
-    public ResponseVO modifyTask(@RequestBody TaskVO taskVO){
+    public ResponseVO modifyTask(@RequestBody Task task){
         return null;
     }
 

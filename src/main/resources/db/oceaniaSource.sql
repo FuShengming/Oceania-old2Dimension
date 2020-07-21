@@ -176,6 +176,19 @@ create table if not exists team_task
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+  create table if not exists team_task_assignment
+(
+    id              int auto_increment primary key,
+    group_id        int  NOT NULL,
+    task_id         int  NOT NULL,
+    user_id         int  NOT NULL,
+    CONSTRAINT group_task_assignment_fk_user_id FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE Cascade,
+    CONSTRAINT group_task_assignment_fk_task_id FOREIGN KEY (task_id) REFERENCES team_task (id) ON DELETE Cascade,
+    CONSTRAINT group_task_assignment_fk_group_id FOREIGN KEY (group_id) REFERENCES team (id) ON DELETE Cascade
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+
 create table if not exists team_announcement
 (
     id              int auto_increment primary key,
