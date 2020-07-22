@@ -56,7 +56,7 @@ public class GroupBLImpl implements GroupBL {
         leader = new GroupMember(0,groupNameAndCreatorIdForm.getCreatorId(),1);
         memberIds.add(groupNameAndCreatorIdForm.getCreatorId());
 
-        Group res = new Group(0, groupNameAndCreatorIdForm.getName(),memberIds, groupNameAndCreatorIdForm.getCreatorId());
+        Group res = new Group(0, groupNameAndCreatorIdForm.getName());
         res = groupRepository.save(res);
 
         if(res.getId()==0){

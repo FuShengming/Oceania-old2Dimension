@@ -107,6 +107,14 @@ public class GroupController {
         return null;
     }
 
+    @RequestMapping(value = "/test",method = RequestMethod.GET)
+    public ResponseVO test(){
+        HashMap<String,Integer> map = new HashMap<String,Integer>();
+        map.put("ass",1);
+        map.put("asdas",2);
+        return ResponseVO.buildSuccess(map);
+    }
+
     @RequestMapping(value = "/releaseAnnouncement",method = RequestMethod.POST)
     public ResponseVO releaseAnnouncement(@RequestBody Announcement announcement){
         return null;
