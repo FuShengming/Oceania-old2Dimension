@@ -104,7 +104,7 @@ public class GroupBLImpl implements GroupBL {
     }
 
     @Override
-    public ResponseVO inviteUser(String name) {
+    public ResponseVO inviteUser(int userId) {
         return null;
     }
 

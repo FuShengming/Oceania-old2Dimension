@@ -5,6 +5,7 @@ import com.old2dimension.OCEANIA.bl.GroupCodeBL;
 import com.old2dimension.OCEANIA.bl.TaskBL;
 import com.old2dimension.OCEANIA.po.Announcement;
 import com.old2dimension.OCEANIA.po.Task;
+import com.old2dimension.OCEANIA.po.TaskAssignment;
 import com.old2dimension.OCEANIA.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,47 +25,48 @@ public class GroupController {
 
     @RequestMapping(value = "/findUser/{name}",method = RequestMethod.GET)
     public ResponseVO findUser(@PathVariable String name){
-        return null;
+
+        return groupBL.findUser(name);
     }
 
     @RequestMapping(value = "/createGroup",method = RequestMethod.POST)
     public ResponseVO createGroup(@RequestBody GroupNameAndCreatorIdForm groupNameAndCreatorIdForm){
-        return null;
+        return groupBL.createGroup(groupNameAndCreatorIdForm);
     }
 
     @RequestMapping(value = "/setGroupLeader",method = RequestMethod.POST)
     public ResponseVO setGroupLeader(@RequestBody GroupIdAndUserForm groupIdAndLeaderForm){
-        return null;
+        return groupBL.setGroupLeader(groupIdAndLeaderForm);
     }
 
     @RequestMapping(value = "/createTask",method = RequestMethod.POST)
     public ResponseVO createTask(@RequestBody Task task){
-        return null;
+        return taskBL.createTask(task);
     }
 
     @RequestMapping(value = "/getAllTask/{groupId}",method = RequestMethod.GET)
     public ResponseVO getAllTask(@PathVariable int groupId){
-        return null;
+        return taskBL.getAllTask(groupId);
     }
 
     @RequestMapping(value = "/getTaskByName",method = RequestMethod.GET)
     public ResponseVO getTaskByName(@RequestBody GroupIdAndTaskNameForm groupIdAndTaskNameForm){
-        return null;
+        return taskBL.getTaskByName(groupIdAndTaskNameForm);
     }
 
-    @RequestMapping(value = "/inviteUser/{name}",method = RequestMethod.GET)
-    public ResponseVO inviteUser(@PathVariable String name){
-        return null;
+    @RequestMapping(value = "/inviteUser/{userId}",method = RequestMethod.GET)
+    public ResponseVO inviteUser(@PathVariable int userId){
+        return groupBL.inviteUser(userId);
     }
 
     @RequestMapping(value = "/quitGroup",method = RequestMethod.POST)
     public ResponseVO quitGroup(@RequestBody GroupIdAndUserForm groupIdAndUserForm){
-        return null;
+        return groupBL.quitGroup(groupIdAndUserForm);
     }
 
     @RequestMapping(value = "/joinGroup",method = RequestMethod.GET)
     public ResponseVO joinGroup(@RequestBody GroupIdAndUserForm groupIdAndUserForm){
-        return null;
+        return groupBL.joinGroup(groupIdAndUserForm);
     }
 
     @RequestMapping(value = "/addCode",method = RequestMethod.POST)
@@ -83,41 +85,34 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/search/{userId}",method = RequestMethod.GET)
-    public ResponseVO searchGroupByUser(@PathVariable String userId){
-        return null;
+    public ResponseVO searchGroupByUser(@PathVariable int userId){
+        return groupBL.searchGroupByUser(userId);
     }
 
     @RequestMapping(value = "/deleteTask/{taskId}",method = RequestMethod.GET)
     public ResponseVO deleteTask(@PathVariable int taskId){
-        return null;
+        return taskBL.deleteTask(taskId);
     }
 
     @RequestMapping(value = "/modifyTask",method = RequestMethod.POST)
     public ResponseVO modifyTask(@RequestBody Task task){
-        return null;
+        return taskBL.modifyTask(task);
     }
 
     @RequestMapping(value = "/deliverTaskForOneMember",method = RequestMethod.POST)
-    public ResponseVO deliverTaskForOneMember(@RequestBody UserIdAndTaskIdForm userIdAndTaskIdForm){
-        return null;
+    public ResponseVO deliverTaskForOneMember(@RequestBody TaskAssignment taskAssignment){
+        return taskBL.deliverTaskForOneMember(taskAssignment);
     }
 
     @RequestMapping(value = "/deliverTasks",method = RequestMethod.POST)
     public ResponseVO deliverTask(@RequestParam HashMap tasksForMember){
-        return null;
+        return taskBL.deliverTask(tasksForMember);
     }
 
-    @RequestMapping(value = "/test",method = RequestMethod.GET)
-    public ResponseVO test(){
-        HashMap<String,Integer> map = new HashMap<String,Integer>();
-        map.put("ass",1);
-        map.put("asdas",2);
-        return ResponseVO.buildSuccess(map);
-    }
 
     @RequestMapping(value = "/releaseAnnouncement",method = RequestMethod.POST)
     public ResponseVO releaseAnnouncement(@RequestBody Announcement announcement){
-        return null;
+        return groupBL.releaseAnnouncement(announcement);
     }
 
     @RequestMapping(value = "/getCodeStatistics",method = RequestMethod.GET)
@@ -127,12 +122,12 @@ public class GroupController {
 
     @RequestMapping(value = "/getGroupMember/{groupId}",method = RequestMethod.GET)
     public ResponseVO getGroupMembers(@PathVariable int groupId){
-        return null;
+        return groupBL.getGroupMembers(groupId);
     }
 
     @RequestMapping(value = "/getGroupAnnouncements/{groupId}",method = RequestMethod.GET)
     public ResponseVO getGroupAnnouncements(@PathVariable int groupId){
-        return null;
+        return groupBL.getGroupAnnouncements(groupId);
     }
 
 }

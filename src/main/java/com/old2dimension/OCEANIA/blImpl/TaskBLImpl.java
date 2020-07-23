@@ -5,7 +5,7 @@ import com.old2dimension.OCEANIA.po.Task;
 import com.old2dimension.OCEANIA.po.TaskAssignment;
 import com.old2dimension.OCEANIA.vo.GroupIdAndTaskNameForm;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
-import com.old2dimension.OCEANIA.vo.UserIdAndTaskIdForm;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

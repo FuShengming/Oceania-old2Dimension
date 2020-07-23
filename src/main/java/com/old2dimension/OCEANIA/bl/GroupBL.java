@@ -11,7 +11,7 @@ public interface GroupBL {
     public ResponseVO findUser(String name);
     public ResponseVO createGroup(GroupNameAndCreatorIdForm groupNameAndCreatorIdForm);
     public ResponseVO setGroupLeader(GroupIdAndUserForm groupIdAndLeaderForm);
-    public ResponseVO inviteUser( String name);
+    public ResponseVO inviteUser(int userId);
     public ResponseVO quitGroup(GroupIdAndUserForm groupIdAndUserForm);
     public ResponseVO joinGroup(GroupIdAndUserForm groupIdAndUserForm);
 
