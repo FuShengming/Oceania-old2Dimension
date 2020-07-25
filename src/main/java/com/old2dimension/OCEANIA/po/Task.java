@@ -21,7 +21,11 @@ public class Task {
     private Date startDate;
     @Column(name = "end_date")
     private Date endDate;
-    public Task(int id, int groupId,String name, String label, String description, Date startDate, Date endDate) {
+
+    @Column(name = "state")
+    private int state;
+
+    public Task(int id, int groupId,String name, String label, String description, Date startDate, Date endDate,int state) {
         this.id = id;
         this.groupId=groupId;
         this.name = name;
@@ -29,6 +33,14 @@ public class Task {
         this.description=description;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.state=state;
+    }
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 
     public String getDescription() {

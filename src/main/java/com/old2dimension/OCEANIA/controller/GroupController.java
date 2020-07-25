@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/group")
@@ -25,6 +26,7 @@ public class GroupController {
 
     @RequestMapping(value = "/findUser/{name}",method = RequestMethod.GET)
     public ResponseVO findUser(@PathVariable String name){
+        HashMap<String,String[]> map = new HashMap<>();
 
         return groupBL.findUser(name);
     }
@@ -103,6 +105,12 @@ public class GroupController {
     public ResponseVO deliverTaskForOneMember(@RequestBody TaskAssignment taskAssignment){
         return taskBL.deliverTaskForOneMember(taskAssignment);
     }
+
+    @RequestMapping(value = "/task/complete/{taskId}",method = RequestMethod.POST)
+    public ResponseVO completeTask(@PathVariable int taskId){
+        return taskBL.completeTask(taskId);
+    }
+
 
     @RequestMapping(value = "/deliverTasks",method = RequestMethod.POST)
     public ResponseVO deliverTask(@RequestParam HashMap tasksForMember){

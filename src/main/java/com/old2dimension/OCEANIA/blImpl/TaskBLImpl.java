@@ -118,4 +118,14 @@ public class TaskBLImpl implements TaskBL {
         //是否需要？
         return null;
     }
+
+    @Override
+    public ResponseVO completeTask(int taskId){
+        Task t = taskRepository.findTaskById(taskId);
+        if(t==null){return ResponseVO.buildFailure("This task does not exist.");}
+        if(t.getState()==1){return  ResponseVO.buildFailure("This task has already completed.");}
+        t.setState(1);
+        taskRepository.save(t);
+        return ResponseVO.buildSuccess("The task has completed successfully.");
+    }
 }

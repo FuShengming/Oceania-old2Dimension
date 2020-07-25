@@ -170,6 +170,7 @@ create table if not exists team_task
     name            varchar(255) NOT NULL,
     description     varchar(8192) NOT NULL,
     label           varchar(255) NOT NULL,
+    state           int NOT NULL,
     start_date timestamp NOT NULL,
     end_date timestamp NOT NULL,
     CONSTRAINT group_task_fk_group_id FOREIGN KEY (group_id) REFERENCES team (id) ON DELETE Cascade
