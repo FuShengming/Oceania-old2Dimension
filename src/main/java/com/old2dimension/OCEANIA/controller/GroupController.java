@@ -26,8 +26,6 @@ public class GroupController {
 
     @RequestMapping(value = "/findUser/{name}",method = RequestMethod.GET)
     public ResponseVO findUser(@PathVariable String name){
-        HashMap<String,String[]> map = new HashMap<>();
-
         return groupBL.findUser(name);
     }
 
@@ -112,10 +110,10 @@ public class GroupController {
     }
 
 
-    @RequestMapping(value = "/deliverTasks",method = RequestMethod.POST)
-    public ResponseVO deliverTask(@RequestParam HashMap tasksForMember){
-        return taskBL.deliverTask(tasksForMember);
-    }
+//    @RequestMapping(value = "/deliverTasks",method = RequestMethod.POST)
+//    public ResponseVO deliverTask(@RequestParam HashMap tasksForMember){
+//        return taskBL.deliverTask(tasksForMember);
+//    }
 
 
     @RequestMapping(value = "/releaseAnnouncement",method = RequestMethod.POST)
