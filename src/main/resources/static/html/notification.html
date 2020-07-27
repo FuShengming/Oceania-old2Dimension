@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistics</title>
+    <link rel="stylesheet" href="https://use.typekit.net/cpy1erx.css">
+
+    <link rel="stylesheet" type="text/css" href="webjars/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.4.1-1/css/bootstrap.min.css">
+    <style>
+        html {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: fira-sans, sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            font-style: normal;
+            color: #777;
+        }
+
+        .navbar-brand {
+            font-family: flood-std, sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .nav-link {
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+<script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="webjars/popper.js/1.16.0/dist/umd/popper.min.js"></script>
+<script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="../js/navbar.js"></script>
+
+<script>
+    $(function () {
+        $.ajax({
+            type: "get",
+            url: "/statistics/getAllMes",
+            headers: {"Authorization": $.cookie('token')},
+            success: function (data) {
+                if (data.success) {
+                    let users = data.content.content;
+                    console.log(users);
+                    let h = "";
+                    users.splice(0, 1);
+                    users.forEach(function (user) {
+                        if (user.codeMesVOs.length === 0) {
+                            h += "<tr>\n" +
+                                "<th scope=\"row\" rowspan=\"1\">" + user.userId + "</th>\n" +
+                                "<td rowspan=\"1\">0</td>\n" +
+                                "<td>-</td>\n" +
+                                "<td>-</td>\n" +
+                                "<td>-</td>\n" +
+                                "<td>-</td>\n" +
+                                "</tr>"
+                        } else {
+                            h += `
+                                <tr>
+                                    <th scope="row" rowspan="${user.codeMesVOs.length * 3}">${user.userId}</th>
+                                    <td rowspan="${user.codeMesVOs.length * 3}">${user.codeMesVOs.length}</td>
+                                    <td rowspan="3">${user.codeMesVOs[0].codeName}</td>
+                                    <td>Vertex</td>
+                                    <td>${user.codeMesVOs[0].numOfVertex}</td>
+                                    <td>${user.codeMesVOs[0].numOfVertexLabel}</td>
+                                </tr>
+                                <tr>
+                                    <td>Edge</td>
+                                    <td>${user.codeMesVOs[0].numOfEdge}</td>
+                                    <td>${user.codeMesVOs[0].numOfEdgeLabel}</td>
+                                </tr>
+                                <tr>
+                                    <td>Domain</td>
+                                    <td>${user.codeMesVOs[0].numOfDomain}</td>
+                                    <td>${user.codeMesVOs[0].numOfDomainLabel}</td>
+                                </tr>`;
+                            for (let i = 1; i < user.codeMesVOs.length; i++) {
+                                h += `
+                                <tr>
+                                    <td rowspan="3">${user.codeMesVOs[i].codeName}</td>
+                                    <td>Vertex</td>
+                                    <td>${user.codeMesVOs[i].numOfVertex}</td>
+                                    <td>${user.codeMesVOs[i].numOfVertexLabel}</td>
+                                </tr>
+                                <tr>
+                                    <td>Edge</td>
+                                    <td>${user.codeMesVOs[i].numOfEdge}</td>
+                                    <td>${user.codeMesVOs[i].numOfEdgeLabel}</td>
+                                </tr>
+                                <tr>
+                                    <td>Domain</td>
+                                    <td>${user.codeMesVOs[i].numOfDomain}</td>
+                                    <td>${user.codeMesVOs[i].numOfDomainLabel}</td>
+                                </tr>`;
+                            }
+
+                        }
+                    });
+                    $("#user-num").text(Number(data.content.numOfUser) - 1);
+                    $("#all-info").html(h);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    });
+</script>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top p-0">
+    <a class="navbar-brand h1 m-0 col-2" href="#">👴 Old2Dimension</a>
+    <div class="collapse navbar-collapse col-10 px-0">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Statistics<span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <div class="d-flex">
+            <button class="btn btn-outline-light mx-2" id="sign-out-btn">Sign Out</button>
+        </div>
+    </div>
+</nav>
+<div style="padding-top: 40px">
+    <div style="width: 50%;margin-left: 25%;">
+        <div class="card m-2">
+            <div class="card-body">
+                <div class="card-title h2">Users</div>
+                <div class="card-text h3" id="user-num">0</div>
+            </div>
+        </div>
+        <div class="card m-2">
+            <div class="card-body">
+                <div class="card-title h2">Graphs & Elements</div>
+                <div class="card-text">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">User Id</th>
+                            <th scope="col">Graphs Count</th>
+                            <th scope="col">Graph</th>
+                            <th scope="col" colspan="2">Elements</th>
+                            <th scope="col">Labels</th>
+                        </tr>
+                        </thead>
+                        <tbody id="all-info"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
