@@ -1,26 +1,54 @@
 package com.old2dimension.OCEANIA.po;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-
+@Entity
+@Table(name = "team_task")
 public class Task {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
+    @Column(name = "group_id")
     private int groupId;
-
+    @Column(name = "name")
     private String name;
+    @Column(name = "label")
     private String label;
-    private List<Integer> members_id;
+    @Column(name = "description")
+    private String description;
+    @Column(name = "start_date")
     private Date startDate;
+    @Column(name = "end_date")
     private Date endDate;
-    public Task(int id, int groupId,String name, String label, List<Integer> members_id, Date startDate, Date endDate) {
+
+    @Column(name = "state")
+    private int state;
+
+    public Task(int id, int groupId,String name, String label, String description, Date startDate, Date endDate,int state) {
         this.id = id;
         this.groupId=groupId;
         this.name = name;
         this.label = label;
-        this.members_id = members_id;
+        this.description=description;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.state=state;
+    }
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getGroupId() {
@@ -56,13 +84,7 @@ public class Task {
         this.label = label;
     }
 
-    public List<Integer> getMembers_id() {
-        return members_id;
-    }
 
-    public void setMembers_id(List<Integer> members_id) {
-        this.members_id = members_id;
-    }
 
     public Date getStartDate() {
         return startDate;

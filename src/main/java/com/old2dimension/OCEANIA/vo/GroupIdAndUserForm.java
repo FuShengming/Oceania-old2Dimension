@@ -1,9 +1,16 @@
 package com.old2dimension.OCEANIA.vo;
 
-public class UserIdAndTaskIdForm {
+public class GroupIdAndUserForm {
+    private int groupId;
     private int userId;
-    private int taskId;
 
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
 
     public int getUserId() {
         return userId;
@@ -13,11 +20,4 @@ public class UserIdAndTaskIdForm {
         this.userId = userId;
     }
 
-    public int getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(int taskId) {
-        this.taskId = taskId;
-    }
 }
