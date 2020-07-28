@@ -39,7 +39,6 @@ public class Code {
     @Column(name = "is_default")
     private int is_default;
 
-
     public Code(){}
 
 
@@ -54,7 +53,6 @@ public class Code {
         this.numOfDomains = numOfDomains;
         this.is_default= is_default;
     }
-
 
 
     public Code(int id,int userId, String name, int numOfVertices, int numOfEdges, int numOfDomains, int is_default) {

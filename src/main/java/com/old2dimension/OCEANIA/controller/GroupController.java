@@ -79,8 +79,8 @@ public class GroupController {
         return null;
     }
 
-    @RequestMapping(value = "/findGroupCode/{groupId}",method = RequestMethod.GET)
-    public ResponseVO findGroupCode(@PathVariable int groupId){
+    @RequestMapping(value = "/getGroupCodeList/{groupId}",method = RequestMethod.GET)
+    public ResponseVO getGroupCodeList(@PathVariable int groupId){
         return null;
     }
 

@@ -12,11 +12,11 @@ public class GroupIdAndCodeIdForm {
         this.groupId = groupId;
     }
 
-    public int getLeaderId() {
+    public int getCodeId() {
         return codeId;
     }
 
-    public void setLeaderId(int leaderId) {
+    public void setCodeId(int leaderId) {
         this.codeId = leaderId;
     }
 

@@ -30,6 +30,9 @@ public class UploadController {
         return uploadBL.uploadJar(uuid,file);
     }
 
+
+
+
     @RequestMapping(value = "/analyze", method = RequestMethod.POST)
     public ResponseVO analyzeJar(@RequestBody UniqueIdentificationVO ui) throws IOException, InterruptedException {
 
