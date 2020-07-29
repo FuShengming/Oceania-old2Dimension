@@ -20,6 +20,8 @@ import java.util.List;
 public class GroupBLImpl implements GroupBL {
 
 
+
+
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -30,12 +32,37 @@ public class GroupBLImpl implements GroupBL {
     AnnouncementRepository announcementRepository;
     @Autowired
     AnnouncementReadRepository announcementReadRepository;
+
     @Autowired
     AnnouncementServer announcementServer;
     @Autowired
     InvitationRepository invitationRepository;
     @Autowired
     InvitationServer invitationServer;
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void setGroupRepository(GroupRepository groupRepository) {
+        this.groupRepository = groupRepository;
+    }
+
+    public void setGroupMemberRepository(GroupMemberRepository groupMemberRepository) {
+        this.groupMemberRepository = groupMemberRepository;
+    }
+
+    public void setAnnouncementRepository(AnnouncementRepository announcementRepository) {
+        this.announcementRepository = announcementRepository;
+    }
+
+    public void setAnnouncementReadRepository(AnnouncementReadRepository announcementReadRepository) {
+        this.announcementReadRepository = announcementReadRepository;
+    }
+
+    public void setAnnouncementServer(AnnouncementServer announcementServer) {
+        this.announcementServer = announcementServer;
+    }
 
     @Override
     public ResponseVO findUser(String name) {
@@ -317,7 +344,6 @@ public class GroupBLImpl implements GroupBL {
     }
 
 
-
     @Override
     public ResponseVO readInvitation(int userId, int invitationId) {
         Invitation invitation = invitationRepository.findInvitationById(invitationId);
@@ -356,4 +382,5 @@ public class GroupBLImpl implements GroupBL {
         invitationServer.sendInfo(userId,invitationRepository.findInvitationsByUserIdAndHasRead(userId,0).size());
         return ResponseVO.buildSuccess(invitation);
     }
+
 }
