@@ -13,6 +13,7 @@ public class GroupCode {
     @Column(name = "code_id")
     private int codeId;
 
+    public GroupCode(){}
     public GroupCode(int groupId, int codeId) {
         this.groupId = groupId;
         this.codeId = codeId;

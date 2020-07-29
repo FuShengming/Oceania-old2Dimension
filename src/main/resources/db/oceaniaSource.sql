@@ -153,7 +153,7 @@ create table if not exists work_space
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-create table if not exists team_members
+create table if not exists team_member
 (
     id              int auto_increment primary key,
     group_id        int  NOT NULL,

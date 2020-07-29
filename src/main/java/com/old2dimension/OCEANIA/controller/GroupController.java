@@ -71,17 +71,18 @@ public class GroupController {
 
     @RequestMapping(value = "/addCode",method = RequestMethod.POST)
     public ResponseVO addCode(@RequestBody GroupIdAndCodeIdForm groupIdAndCodeIdForm){
-        return null;
+
+        return groupCodeBL.addCode(groupIdAndCodeIdForm);
     }
 
     @RequestMapping(value = "/deleteCode",method = RequestMethod.POST)
     public ResponseVO deleteCode(@RequestBody GroupIdAndCodeIdForm groupIdAndCodeIdForm){
-        return null;
+        return groupCodeBL.deleteCode(groupIdAndCodeIdForm);
     }
 
     @RequestMapping(value = "/getGroupCodeList/{groupId}",method = RequestMethod.GET)
     public ResponseVO getGroupCodeList(@PathVariable int groupId){
-        return null;
+        return groupCodeBL.getGroupCodeList(groupId);
     }
 
     @RequestMapping(value = "/search/{userId}",method = RequestMethod.GET)
@@ -123,7 +124,7 @@ public class GroupController {
 
     @RequestMapping(value = "/getCodeStatistics",method = RequestMethod.GET)
     public ResponseVO getCodeStatistics(@RequestBody GroupIdAndCodeIdForm groupIdAndCodeIdForm){
-        return null;
+        return groupCodeBL.getCodeStatistics(groupIdAndCodeIdForm);
     }
 
     @RequestMapping(value = "/getGroupMember/{groupId}",method = RequestMethod.GET)
