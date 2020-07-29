@@ -187,6 +187,8 @@ public class GroupBLImpl implements GroupBL {
 
     }
 
+
+
     @Override
     public ResponseVO joinGroup(Invitation invitation) {
 
@@ -223,6 +225,15 @@ public class GroupBLImpl implements GroupBL {
         }
         invitationServer.sendInfo(invitation.getUserId(),invitationRepository.findInvitationsByUserIdAndHasRead(invitation.getUserId(),0).size());
         return ResponseVO.buildSuccess(member);
+    }
+
+    @Override
+    public ResponseVO getUserInvitation(int userId) {
+        List<Invitation> res = invitationRepository.findInvitationsByUserId(userId);
+        if(res==null){
+            return ResponseVO.buildFailure("Getting invitations failed.");
+        }
+        return ResponseVO.buildSuccess(res);
     }
 
     @Override

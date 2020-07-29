@@ -25,6 +25,11 @@ public class GroupController {
     @Autowired
     GroupCodeBL groupCodeBL;
 
+    @RequestMapping(value = "/getUserInvitations/{userId}",method = RequestMethod.GET)
+    public ResponseVO getUserInvitation(@PathVariable int userId){
+        return groupBL.getUserInvitation(userId);
+    }
+
     @RequestMapping(value = "/findUser/{name}",method = RequestMethod.GET)
     public ResponseVO findUser(@PathVariable String name){
         return groupBL.findUser(name);

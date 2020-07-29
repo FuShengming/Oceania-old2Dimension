@@ -17,6 +17,7 @@ public interface GroupBL {
     public ResponseVO ignoreInvitation(int userId,int invitationId);
     public ResponseVO quitGroup(GroupIdAndUserForm groupIdAndUserForm);
     public ResponseVO joinGroup(Invitation invitation);
+    public ResponseVO getUserInvitation(int userId);
 
     public ResponseVO searchGroupByUser(int userId);
     public ResponseVO getGroupMembers(int groupId);
