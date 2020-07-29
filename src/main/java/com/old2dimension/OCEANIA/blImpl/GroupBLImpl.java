@@ -2,10 +2,7 @@ package com.old2dimension.OCEANIA.blImpl;
 
 import com.old2dimension.OCEANIA.bl.GroupBL;
 import com.old2dimension.OCEANIA.dao.*;
-import com.old2dimension.OCEANIA.po.Announcement;
-import com.old2dimension.OCEANIA.po.Group;
-import com.old2dimension.OCEANIA.po.GroupMember;
-import com.old2dimension.OCEANIA.po.User;
+import com.old2dimension.OCEANIA.po.*;
 import com.old2dimension.OCEANIA.vo.GroupIdAndUserForm;
 import com.old2dimension.OCEANIA.vo.GroupNameAndCreatorIdForm;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
@@ -205,6 +202,11 @@ public class GroupBLImpl implements GroupBL {
 
     @Override
     public ResponseVO releaseAnnouncement(Announcement announcement) {
+        announcement = announcementRepository.save(announcement);
+        int groupId = announcement.getGroupId();
+        int announcementId = announcement.getId();
+        List<GroupMember> members = groupMemberRepository.findGroupMembersByGroupId(groupId);
+
         return null;
     }
 
@@ -226,6 +228,16 @@ public class GroupBLImpl implements GroupBL {
 
     @Override
     public ResponseVO readAnnouncement(int userId, int announcementId) {
-        return null;
+        AnnouncementRead announcementRead = announcementReadRepository.findAnnouncementReadByUserIdAndAnnouncementId(userId,announcementId);
+        if(announcementRead==null){
+            return  ResponseVO.buildFailure("Getting has_read failed.");
+        }
+        announcementRead.setHasRead(1);
+        announcementRead = announcementReadRepository.save(announcementRead);
+        if(announcementRead.getHasRead()==0){
+            return  ResponseVO.buildFailure("Modifying has_read failed.");
+        }
+
+        return ResponseVO.buildSuccess(announcementRead);
     }
 }

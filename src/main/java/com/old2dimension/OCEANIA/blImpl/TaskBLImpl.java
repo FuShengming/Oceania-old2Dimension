@@ -9,6 +9,8 @@ import com.old2dimension.OCEANIA.vo.ResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -117,7 +119,14 @@ public class TaskBLImpl implements TaskBL {
     public ResponseVO getUserTaskList(int groupId, int userId) {
         List<TaskAssignment> taskAssignments = taskAssignmentRepository.findTaskAssignmentsByGroupIdAndUserId(groupId,userId);
         if(taskAssignments==null){return ResponseVO.buildFailure("getting task list failed.");}
-        return ResponseVO.buildSuccess(taskAssignments);
+
+        List<Integer> ids = new ArrayList<>();
+        for(TaskAssignment a:taskAssignments){
+            ids.add(a.getId());
+        }
+        List<Task> res = taskRepository.findAllById(ids);
+
+        return ResponseVO.buildSuccess(res);
     }
 
     @Override

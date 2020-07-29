@@ -143,7 +143,7 @@ public class GroupController {
 
     @RequestMapping(value = "/readAnnouncements",method = RequestMethod.GET)
     public ResponseVO readAnnouncements(@RequestBody UserIdAndAnnouncementId userIdAndAnnouncementId){
-        return groupBL.readAnnouncement(userIdAndAnnouncementId.userId,userIdAndAnnouncementId.announcementId);
+        return groupBL.readAnnouncement(userIdAndAnnouncementId.getUserId(),userIdAndAnnouncementId.getAnnouncementId());
     }
 
 }
