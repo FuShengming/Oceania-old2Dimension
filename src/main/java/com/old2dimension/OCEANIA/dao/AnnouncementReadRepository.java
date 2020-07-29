@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface AnnouncementReadRepository extends JpaRepository<AnnouncementRead,Integer> {
     List<AnnouncementRead> findAnnouncementReadsByUserIdAndHasRead(int userId,int hasRead);
+    AnnouncementRead findAnnouncementReadByUserIdAndAnnouncementId(int userId,int announcementId);
 }
