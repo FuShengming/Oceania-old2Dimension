@@ -32,6 +32,97 @@
         .nav-link {
             font-size: 1.2rem;
         }
+
+        .received_msg {
+            display: inline-block;
+            padding: 0 0 0 10px;
+            vertical-align: top;
+            width: 92%;
+        }
+
+        .received_withd_msg p {
+            background: #ebebeb none repeat scroll 0 0;
+            border-radius: 3px;
+            color: #646464;
+            font-size: 14px;
+            margin: 0;
+            padding: 5px 10px 5px 12px;
+            width: 100%;
+        }
+
+        .time_date {
+            color: #747474;
+            display: block;
+            font-size: 12px;
+            margin: 8px 0 0;
+        }
+
+        .received_withd_msg {
+            width: 57%;
+        }
+
+        .mesgs {
+            float: left;
+            padding: 30px 15px 0 25px;
+            width: 60%;
+        }
+
+        .sent_msg p {
+            background: #05728f none repeat scroll 0 0;
+            border-radius: 3px;
+            font-size: 14px;
+            margin: 0;
+            color: #fff;
+            padding: 5px 10px 5px 12px;
+            width: 100%;
+        }
+
+        .outgoing_msg {
+            overflow: hidden;
+            margin: 26px 0 26px;
+        }
+
+        .sent_msg {
+            float: right;
+            width: 46%;
+        }
+
+        .input_msg_write input {
+            background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+            border: medium none;
+            color: #4c4c4c;
+            font-size: 15px;
+            min-height: 48px;
+            width: 100%;
+        }
+
+        .type_msg {
+            border-top: 1px solid #c4c4c4;
+            position: relative;
+        }
+
+        .msg_send_btn {
+            background: #05728f none repeat scroll 0 0;
+            border: medium none;
+            border-radius: 50%;
+            color: #fff;
+            cursor: pointer;
+            font-size: 17px;
+            height: 33px;
+            position: absolute;
+            right: 0;
+            top: 11px;
+            width: 33px;
+        }
+
+        .messaging {
+            padding: 0 0 50px 0;
+        }
+
+        .msg_history {
+            height: 516px;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body>
@@ -142,27 +233,121 @@ width: 60%;
 padding-top: 40px;
 height: 100%;
 ">
-    <div class="col-3 nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical"
-         style="background-color: rgba(218,255,255,0.35)">
-        <a class="h2">NOTIFICATION</a>
-        <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab"
+    <div class="col-3 nav flex-column nav-pills bg-light" id="v-pills-tab" role="tablist" aria-orientation="vertical"
+    >
+        <a class="h2 mx-auto my-3">NOTIFICATION</a>
+        <a class="nav-link active" id="invitation-tab" data-toggle="pill" href="#invitation" role="tab"
            aria-controls="v-pills-home" aria-selected="true">Invitation</a>
-        <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab"
+        <a class="nav-link" id="group-tab" data-toggle="pill" href="#group" role="tab"
            aria-controls="v-pills-profile" aria-selected="false">Group</a>
-        <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab"
+        <a class="nav-link" id="message-tab" data-toggle="pill" href="#message" role="tab"
            aria-controls="v-pills-messages" aria-selected="false">Message</a>
     </div>
     <div class="col-9 tab-content" id="v-pills-tabContent">
-        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-            <div class="card">Invitation</div>
+        <div class="tab-pane fade show active" id="invitation" role="tabpanel" aria-labelledby="invitation-tab">
+            <div class="card m-2">
+                <div class="card-body m-0 h4">
+                    Invitation
+                </div>
+            </div>
+            <div class="card m-2">
+                <div class="card-body m-0 h5">
+                    <div>xxx invite you to join in a group.</div>
+                    <div class="my-2" style="text-align: right">
+                        <button class="btn btn-primary">Agree</button>
+                        <button class="btn btn-danger">Reject</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">...</div>
-        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">...
+        <div class="tab-pane fade" id="group" role="tabpanel" aria-labelledby="group-tab">
+            <div class="card m-2">
+                <div class="card-body m-0 h4">
+                    Group
+                </div>
+            </div>
         </div>
+        <div class="tab-pane fade" id="message" role="tabpanel" aria-labelledby="message-tab">
+            <div class="messaging container-fluid row" style="height: 100%">
+                <div class="inbox_people col-4">
+                    <div class="recent_heading my-2">
+                        <h4>Recent</h4>
+                    </div>
+                    <div class="inbox_chat">
+                        <div class="chat_list active_chat card m-1">
+                            <div class="card-body">
+                                <h5 class="card-title">Sunil Rajput</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Dec 25</h6>
+                                <p class="card-text">Some quick example ...</p>
+                            </div>
+                        </div>
+                        <div class="chat_list card m-1">
+                            <div class="card-body">
+                                <h5 class="card-title">Sunil Rajput</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Dec 25</h6>
+                                <p class="card-text">Some quick example ...</p>
+                            </div>
+                        </div>
+                        <div class="chat_list card m-1">
+                            <div class="card-body">
+                                <h5 class="card-title">Sunil Rajput</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Dec 25</h6>
+                                <p class="card-text">Some quick example ...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mesgs col-8">
+                    <div class="msg_history">
+                        <div class="incoming_msg">
+                            <div class="received_msg">
+                                <div class="received_withd_msg">
+                                    <p>Test which is a new approach to have all
+                                        solutions</p>
+                                    <span class="time_date"> 11:01 AM    |    June 9</span></div>
+                            </div>
+                        </div>
+                        <div class="outgoing_msg">
+                            <div class="sent_msg">
+                                <p>Test which is a new approach to have all
+                                    solutions</p>
+                                <span class="time_date"> 11:01 AM    |    June 9</span></div>
+                        </div>
+                        <div class="incoming_msg">
+                            <div class="received_msg">
+                                <div class="received_withd_msg">
+                                    <p>Test, which is a new approach to have</p>
+                                    <span class="time_date"> 11:01 AM    |    Yesterday</span></div>
+                            </div>
+                        </div>
+                        <div class="outgoing_msg">
+                            <div class="sent_msg">
+                                <p>Apollo University, Delhi, India Test</p>
+                                <span class="time_date"> 11:01 AM    |    Today</span></div>
+                        </div>
+                        <div class="incoming_msg">
+                            <div class="received_msg">
+                                <div class="received_withd_msg">
+                                    <p>We work directly with our designers and suppliers,
+                                        and sell direct to you, which means quality, exclusive
+                                        products, at a price anyone can afford.</p>
+                                    <span class="time_date"> 11:01 AM    |    Today</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="type_msg">
+                        <div class="input_msg_write">
+                            <input type="text" class="write_msg" placeholder="Type a message"/>
+                            <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o"
+                                                                          aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--    <nav class="col-3 bg-light sidebar sidebar-left overflow-auto" id="nt-type">-->
+        <!--        -->
+        <!--    </nav>-->
     </div>
-    <!--    <nav class="col-3 bg-light sidebar sidebar-left overflow-auto" id="nt-type">-->
-    <!--        -->
-    <!--    </nav>-->
-</div>
 </body>
 </html>
