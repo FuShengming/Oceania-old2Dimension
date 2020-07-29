@@ -15,7 +15,6 @@ import java.util.List;
 @Component
 public class TaskBLImpl implements TaskBL {
 
-
     @Autowired
     TaskRepository taskRepository;
     @Autowired
@@ -26,6 +25,26 @@ public class TaskBLImpl implements TaskBL {
     TaskAssignmentRepository taskAssignmentRepository;
     @Autowired
     GroupMemberRepository groupMemberRepository;
+
+    public void setTaskRepository(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void setGroupRepository(GroupRepository groupRepository) {
+        this.groupRepository = groupRepository;
+    }
+
+    public void setTaskAssignmentRepository(TaskAssignmentRepository taskAssignmentRepository) {
+        this.taskAssignmentRepository = taskAssignmentRepository;
+    }
+
+    public void setGroupMemberRepository(GroupMemberRepository groupMemberRepository) {
+        this.groupMemberRepository = groupMemberRepository;
+    }
 
     @Override
     public ResponseVO createTask(Task task) {

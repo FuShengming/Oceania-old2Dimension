@@ -32,6 +32,21 @@ public class GroupBLImpl implements GroupBL {
     @Autowired
     AnnouncementRepository announcementRepository;
 
+    public void setUserRepository(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
+
+    public void setGroupRepository(GroupRepository groupRepository) {
+        this.groupRepository = groupRepository;
+    }
+
+    public void setGroupMemberRepository(GroupMemberRepository groupMemberRepository) {
+        this.groupMemberRepository = groupMemberRepository;
+    }
+
+    public void setAnnouncementRepository(AnnouncementRepository announcementRepository) {
+        this.announcementRepository = announcementRepository;
+    }
 
     @Override
     public ResponseVO findUser(String name) {
@@ -96,6 +111,7 @@ public class GroupBLImpl implements GroupBL {
         members.add(leader);
         members.add(newLeader);
         members = groupMemberRepository.saveAll(members);
+
         if(members.size()==0){
             return ResponseVO.buildFailure("Modifying group leader failed.");
         }
