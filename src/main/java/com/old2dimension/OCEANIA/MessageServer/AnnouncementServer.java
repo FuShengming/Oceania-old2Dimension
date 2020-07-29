@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@ServerEndpoint("websocket/announcement/{userId}")
+@ServerEndpoint("/websocket/announcement/{userId}")
 @Component
 public class AnnouncementServer {
     @Autowired
