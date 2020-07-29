@@ -33,6 +33,26 @@
             font-size: 1.2rem;
         }
 
+        #v-pills-tab > .nav-link {
+            color: #05728f;
+        }
+
+        #v-pills-tab > .nav-link > .badge {
+            background-color: #05728f;
+            position: absolute;
+            right: 5%;
+        }
+
+        #v-pills-tab > .nav-link.active {
+            color: #fff;
+            background-color: #05728f;
+        }
+
+        #v-pills-tab > .nav-link.active > .badge {
+            color: #05728f;
+            background-color: #fff;
+        }
+
         #invitation, #group {
             width: 60%;
             margin-left: 20%;
@@ -170,7 +190,7 @@ position: absolute;
 top: 0;
 left: 0;
 width: 100%;
-padding-top: 40px;
+padding-top: 44px;
 height: 100%;
 ">
     <div class="col-2 nav flex-column nav-pills bg-light" id="v-pills-tab" role="tablist" aria-orientation="vertical"
