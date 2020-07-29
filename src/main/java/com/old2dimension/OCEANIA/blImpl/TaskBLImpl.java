@@ -62,6 +62,9 @@ public class TaskBLImpl implements TaskBL {
         }
 
         List<TaskAssignment> taskAssignments = taskAssignmentRepository.findTaskAssignmentsByGroupId(groupId);
+        if(taskAssignments==null){
+            return ResponseVO.buildFailure("Getting task assignments failed.");
+        }
         map.put("assignments",taskAssignments);
 
         return ResponseVO.buildSuccess(map);
@@ -131,8 +134,11 @@ public class TaskBLImpl implements TaskBL {
             ids.add(a.getId());
         }
         List<Task> res = taskRepository.findAllById(ids);
+        HashMap<String,List> map = new HashMap<>();
+        map.put("tasks",res);
+        map.put("assignments",taskAssignments);
 
-        return ResponseVO.buildSuccess(res);
+        return ResponseVO.buildSuccess(map);
     }
 
     @Override
