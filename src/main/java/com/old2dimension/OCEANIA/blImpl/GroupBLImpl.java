@@ -43,6 +43,7 @@ public class GroupBLImpl implements GroupBL {
             return ResponseVO.buildFailure("do not find this user");
         }
         return ResponseVO.buildSuccess(user);
+        
     }
 
     @Override
