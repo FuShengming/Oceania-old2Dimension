@@ -1,12 +1,10 @@
 $(document).ready(function () {
 
-    $("#task-item").on("click", function () {
-
-    });
-
     getTasksByUserId()
 
 })
+
+// todo: 任务完成、任务过期 标注实时展现
 
 let getTasksByUserId = function () {
     let userId = localStorage['userId'];
@@ -39,7 +37,7 @@ let getTasksByUserId = function () {
                                 <td>${task.endDate === null ? "--" : new Date(Date.parse(task.endDate)).toLocaleString("en")}</td>
                             </tr>`
                 });
-                $("#code-tb").html(h);
+                $("#task-tb").html(h);
                 $(".clickable-row").on('click', function (e) {
                     let taskId = e['currentTarget']['attributes'][1]['value']
                     for (let i = 0; i < tasks.length; i++) {
@@ -59,12 +57,12 @@ let getTasksByUserId = function () {
                     let userIds = []
                     let usrStr = ""
                     for (let i = 0; i < assignments.length; i++) {
-                        if (assignments[i].userId !== userId && assignments[i].taskId == taskId) {
+                        if (assignments[i].userId != userId && assignments[i].taskId == taskId) {
                             userIds.push(assignments[i].userId);
                             usrStr += assignments[i].userId + ", "
                         }
                     }
-                    $("#modal-coworkers").text(usrStr.slice(0, -2)) // todo: username
+                    $("#modal-coworkers").text(usrStr.slice(0, -2) === "" ? "--" : usrStr.slice(0, -2)) // todo: username
 
                     console.log(task)
                 });

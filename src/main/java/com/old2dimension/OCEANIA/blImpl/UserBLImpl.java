@@ -106,4 +106,14 @@ public class UserBLImpl implements UserBL, UserDetailsService {
     public User findUserById(int id) {
         return userRepository.findUserById(id);
     }
+
+    @Override
+    public ResponseVO getNameById(int userID) {
+        User user = userRepository.findUserById(userID);
+        if (user == null) {
+            return ResponseVO.buildFailure("User does not exist.");
+        }
+        user.setPwd(null);
+        return ResponseVO.buildSuccess(new UserVO(user));
+    }
 }

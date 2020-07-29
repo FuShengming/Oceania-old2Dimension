@@ -33,29 +33,8 @@
             font-size: 1.2rem;
         }
 
-        #v-pills-tab > .nav-link {
-            color: #05728f;
-        }
-
-        #v-pills-tab > .nav-link > .badge {
-            background-color: #05728f;
-            position: absolute;
-            right: 5%;
-        }
-
-        #v-pills-tab > .nav-link.active {
-            color: #fff;
-            background-color: #05728f;
-        }
-
-        #v-pills-tab > .nav-link.active > .badge {
-            color: #05728f;
-            background-color: #fff;
-        }
-
-        #invitation, #group {
-            width: 60%;
-            margin-left: 20%;
+        .head-card {
+            height: 80px;
         }
 
         .chat_list.active_chat {
@@ -63,11 +42,28 @@
             background-color: #05728f;
         }
 
+        .group-btn {
+            width: 48%;
+        }
+
+        .group-menu > .nav-item > .nav-link {
+            color: #05728f;
+            background-color: #fff;
+        }
+
+        .group-menu > .nav-item > .active {
+            color: #fff;
+            background-color: #05728f;
+        }
+
+        .info-card {
+            width: 32%;
+        }
+
         .msgs {
-            border-left: 1px solid rgba(0, 0, 0, 0.15);
             float: left;
-            height: 100%;
-            width: 60%;
+            height: calc(100% - 120px);
+            position: absolute;
         }
 
         .received_msg {
@@ -146,17 +142,11 @@
             width: 36px;
         }
 
-        .messaging {
-            height: 100%;
-            position: absolute;
-            padding-top: 20px;
-            padding-bottom: 20px;
-        }
-
         .msg_history {
             height: calc(100% - 48px);
             overflow-y: auto;
         }
+
     </style>
 </head>
 <body>
@@ -167,11 +157,37 @@
 
 <script type="text/javascript" src="../js/navbar.js"></script>
 
-<script>
-    $(function () {
+<script type="text/javascript" src="../js/groups.js"></script>
 
-    });
-</script>
+<script type="text/javascript" src="../js/tasks.js"></script>
+
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New Group</h3>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="name-input">Group Name</label>
+                        <input type="email" class="form-control" id="name-input" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="description-input">Description</label>
+                        <textarea class="form-control" id="description-input" rows="5"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CANCEL</button>
+                <button type="button" class="btn btn-primary m-2" id="create_submit">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top p-0">
     <a class="navbar-brand h1 m-0 col-2" href="#">👴 Old2Dimension</a>
     <div class="collapse navbar-collapse col-10 px-0">
@@ -184,6 +200,9 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/graph">Graph</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Group<span class="sr-only">(current)</span></a>
             </li>
         </ul>
         <div class="d-flex">
@@ -204,82 +223,168 @@ width: 100%;
 padding-top: 44px;
 height: 100%;
 ">
-    <div class="col-2 nav flex-column nav-pills bg-light" id="v-pills-tab" role="tablist" aria-orientation="vertical"
-    >
-        <a class="h2 mx-auto my-3">NOTIFICATION</a>
-        <a class="nav-link active" id="invitation-tab" data-toggle="pill" href="#invitation" role="tab"
-           aria-controls="v-pills-home" aria-selected="true">● Invitation<span
-                class="badge badge-primary badge-pill">5</span></a>
-        <a class="nav-link" id="group-tab" data-toggle="pill" href="#group" role="tab"
-           aria-controls="v-pills-profile" aria-selected="false">● Group<span
-                class="badge badge-primary badge-pill">5</span></a>
-        <a class="nav-link" id="message-tab" data-toggle="pill" href="#message" role="tab"
-           aria-controls="v-pills-messages" aria-selected="false">● Message<span class="badge badge-primary badge-pill">10</span></a>
+    <div class="group_list col-3">
+        <div class="card head-card m-2">
+            <div class="card-body m-0 h4">
+                Groups
+            </div>
+        </div>
+        <div class="inbox_chat" id="all_groups">
+        </div>
+        <div class="d-flex my-2 justify-content-around" style="position: absolute;bottom: 0;width: 100%;">
+            <button class="btn group-btn btn-primary" data-toggle="modal" data-target="#createModal"><i
+                    class="fa fa-plus-circle"></i> Create
+            </button>
+            <button class="btn group-btn btn-success"><i class="fa fa-users"></i> Join in</button>
+        </div>
     </div>
-    <div class="col-10 tab-content" id="v-pills-tabContent">
-        <div class="tab-pane fade show active" id="invitation" role="tabpanel" aria-labelledby="invitation-tab">
-            <div class="card m-2">
-                <div class="card-body m-0 h4">
-                    Invitation
-                </div>
-            </div>
-            <div class="card m-2">
-                <div class="card-body m-0 h5">
-                    <div>xxx invite you to join in a group.</div>
-                    <div class="my-2" style="text-align: right">
-                        <button class="btn btn-primary">Agree</button>
-                        <button class="btn btn-danger">Reject</button>
-                    </div>
-                </div>
+    <div class="group_content col-9">
+        <div class="card head-card m-2">
+            <div class="card-body m-0 h4">
+                <ul class="nav nav-pills justify-content-center group-menu">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="group-info" data-toggle="pill" href="#info" role="tab"
+                           aria-controls="v-pills-info" aria-selected="true">Info</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="group-announcement" data-toggle="pill" href="#announcement" role="tab"
+                           aria-controls="v-pills-announcement" aria-selected="false">Announcement</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="group-project" data-toggle="pill" href="#project" role="tab"
+                           aria-controls="v-pills-project" aria-selected="false">Project</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="group-task" data-toggle="pill" href="#task" role="tab"
+                           aria-controls="v-pills-project" aria-selected="false">Task</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="group-message" data-toggle="pill" href="#message" role="tab"
+                           aria-controls="v-pills-message" aria-selected="false">Message</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Management</a>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="tab-pane fade" id="group" role="tabpanel" aria-labelledby="group-tab">
-            <div class="card m-2">
-                <div class="card-body m-0 h4">
-                    Group
-                </div>
-            </div>
-            <div class="card m-2">
-                <div class="card-body m-0">
-                    <h5 class="card-title">Announcement</h5>
-                    <h6 class="card-subtitle mb-2">Dec 25</h6>
-                    <p class="card-text">Group xxx has made a new announcement. Click <a href="#">here</a> to view details.</p>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="message" role="tabpanel" aria-labelledby="message-tab">
-            <div class="messaging container-fluid row">
-                <div class="inbox_people col-4">
-                    <div class="card m-2">
-                        <div class="card-body m-0 h4">
-                            Recent
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
+                <div class="d-flex justify-content-between">
+                    <div class="info-card card m-2">
+                        <div class="card-body m-0">
+                            <h4 class="card-title">Group Owner</h4>
+                        </div>
+                        <div class="card-body text-right m-0">
+                            <h5 class="card-title">XXX</h5>
                         </div>
                     </div>
-                    <div class="inbox_chat">
-                        <div class="chat_list active_chat card m-2">
-                            <div class="card-body">
-                                <h5 class="card-title">Sunil Rajput</h5>
-                                <h6 class="card-subtitle mb-2">Dec 25</h6>
-                                <p class="card-text">Some quick example ...</p>
-                            </div>
+                    <div class="info-card card m-2">
+                        <div class="card-body m-0">
+                            <h4 class="card-title">Group Members</h4>
                         </div>
-                        <div class="chat_list card m-2">
-                            <div class="card-body">
-                                <h5 class="card-title">Sunil Rajput</h5>
-                                <h6 class="card-subtitle mb-2">Dec 25</h6>
-                                <p class="card-text">Some quick example ...</p>
-                            </div>
+                        <div class="card-body text-right m-0">
+                            <h5 class="card-title">20</h5>
                         </div>
-                        <div class="chat_list card m-2">
-                            <div class="card-body">
-                                <h5 class="card-title">Sunil Rajput</h5>
-                                <h6 class="card-subtitle mb-2">Dec 25</h6>
-                                <p class="card-text">Some quick example ...</p>
-                            </div>
+                    </div>
+                    <div class="info-card card m-2">
+                        <div class="card-body m-0">
+                            <h4 class="card-title">Group Graphs</h4>
+                        </div>
+                        <div class="card-body text-right m-0">
+                            <h5 class="card-title">2</h5>
                         </div>
                     </div>
                 </div>
-                <div class="msgs col-8">
+                <div class="card m-2">
+                    <div class="card-body m-0">
+                        <h4 class="card-title">Description</h4>
+                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                            fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                            culpa qui officia deserunt mollit anim id est laborum.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="announcement" role="tabpanel" aria-labelledby="announcement-tab">
+                <div class="card m-2">
+                    <div class="card-body m-0">
+                        <h4 class="card-title">Title</h4>
+                        <h5 class="card-subtitle">Dec 25</h5>
+                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                            fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                            culpa qui officia deserunt mollit anim id est laborum.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="project" role="tabpanel" aria-labelledby="project-tab">
+                <div class="card m-2">
+                    <div class="card-body">
+                        <div class="card-title d-flex justify-content-between">
+                            <h2>Group Projects</h2>
+                            <div>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#copyModal"
+                                        id="copy-btn">
+                                    <span class="fa fa-files-o mr-2"></span>Copy from Personal Project
+                                </button>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#uploadModal"
+                                        id="upload-btn">
+                                    <span class="fa fa-plus-square mr-2"></span>New
+                                </button>
+                            </div>
+
+                        </div>
+                        <div class="card-text">
+                            <table class="table table-hover" id="code-table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Last Update</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody id="code-tb"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="task" role="tabpanel" aria-labelledby="task-tab">
+                <div class="card m-2">
+                    <div class="card-body">
+                        <div class="card-title d-flex justify-content-between">
+                            <h2>My Tasks</h2>
+                            <div style="width: 33%" class="input-group">
+                                <input type="text" class="form-control" placeholder="Task name" aria-label="Task name" aria-describedby="basic-addon2">
+                                <div>
+                                    <button class="btn btn-outline-secondary" type="button">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-text">
+                            <table class="table table-hover" id="task-table" style="overflow-x: scroll">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Task Name</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Label</th>
+                                    <th scope="col">Start Time</th>
+                                    <th scope="col">End Time</th>
+                                </tr>
+                                </thead>
+                                <tbody id="task-tb"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="message" role="tabpanel" aria-labelledby="message-tab">
+                <div class="msgs m-2">
                     <div class="msg_history">
                         <div class="incoming_msg">
                             <div class="received_msg">
@@ -333,10 +438,53 @@ height: 100%;
                     </div>
                 </div>
             </div>
+            <div class="tab-pane fade" id="management" role="tabpanel" aria-labelledby="management">
+            </div>
+
+
         </div>
-        <!--    <nav class="col-3 bg-light sidebar sidebar-left overflow-auto" id="nt-type">-->
-        <!--        -->
-        <!--    </nav>-->
+    </div>
+
+</div>
+<div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="task-modal-label"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">Status: </div>
+                    <div style="width: 60%" id="modal-status"></div>
+                </div>
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">Label: </div>
+                    <div style="width: 60%" id="modal-label"></div>
+                </div>
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">Description: </div>
+                    <div style="width: 60%" id="modal-desc"></div>
+                </div>
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">Coworkers: </div>
+                    <div style="width: 60%" id="modal-coworkers"></div>
+                </div>
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">Start time: </div>
+                    <div style="width: 60%" id="modal-start"></div>
+                </div>
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">End time: </div>
+                    <div style="width: 60%" id="modal-end"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Modify</button>
+<!--                todo: modify-->
+            </div>
+        </div>
     </div>
 </div>
 </body>

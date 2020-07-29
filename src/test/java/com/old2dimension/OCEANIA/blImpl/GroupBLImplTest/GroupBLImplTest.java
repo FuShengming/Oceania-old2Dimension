@@ -1,10 +1,14 @@
-//
 //package com.old2dimension.OCEANIA.blImpl.GroupBLImplTest;
 //
-//import com.old2dimension.OCEANIA.MessageServer.AnnouncementServer;
 //import com.old2dimension.OCEANIA.blImpl.GroupBLImpl;
-//import com.old2dimension.OCEANIA.dao.*;
-//import com.old2dimension.OCEANIA.po.*;
+//import com.old2dimension.OCEANIA.dao.AnnouncementRepository;
+//import com.old2dimension.OCEANIA.dao.GroupMemberRepository;
+//import com.old2dimension.OCEANIA.dao.GroupRepository;
+//import com.old2dimension.OCEANIA.dao.UserRepository;
+//import com.old2dimension.OCEANIA.po.Announcement;
+//import com.old2dimension.OCEANIA.po.Group;
+//import com.old2dimension.OCEANIA.po.GroupMember;
+//import com.old2dimension.OCEANIA.po.User;
 //import com.old2dimension.OCEANIA.vo.*;
 //import org.junit.Assert;
 //import org.junit.jupiter.api.Test;
@@ -711,90 +715,4 @@
 //        ResponseVO responseVO = groupBL.getGroupAnnouncements(1);
 //        Assert.assertEquals(responseVO.getMessage(), "Getting announcement list failed.");
 //    }
-//
-//    @Test
-//    public void releaseAnnouncementTest() {
-//        GroupBLImpl groupBL = new GroupBLImpl();
-//        AnnouncementRepository announcementRepository = mock(AnnouncementRepository.class);
-//        GroupMemberRepository groupMemberRepository = mock(GroupMemberRepository.class);
-//        AnnouncementReadRepository announcementReadRepository = mock(AnnouncementReadRepository.class);
-//        AnnouncementServer announcementServer = mock(AnnouncementServer.class);
-//        groupBL.setAnnouncementRepository(announcementRepository);
-//        groupBL.setGroupMemberRepository(groupMemberRepository);
-//        groupBL.setAnnouncementReadRepository(announcementReadRepository);
-//        groupBL.setAnnouncementServer(announcementServer);
-//
-//        Announcement announcement = new Announcement();
-//        announcement.setId(1);
-//        announcement.setTitle("testTitle");
-//        announcement.setContent("testContent");
-//        announcement.setGroupId(1);
-//        announcement.setReleaseDate(new Date(120, 7, 1));
-//        ArrayList<Announcement> announcements = new ArrayList<>();
-//        announcements.add(announcement);
-//        ArrayList<GroupMember> groupMembers = new ArrayList<>();
-//        GroupMember groupMember1 = new GroupMember(1, 1, 1);
-//        GroupMember groupMember2 = new GroupMember(1, 2, 0);
-//        groupMembers.add(groupMember1);
-//        groupMembers.add(groupMember2);
-//        ArrayList<AnnouncementRead> announcementReads = new ArrayList<>();
-//        AnnouncementRead announcementRead1 = new AnnouncementRead(1, 1, 0);
-//        AnnouncementRead announcementRead2 = new AnnouncementRead(2, 1, 0);
-//        announcementReads.add(announcementRead1);
-//        announcementReads.add(announcementRead2);
-//
-//        when(announcementRepository.save(any())).thenReturn(announcement);
-//        when(groupMemberRepository.findGroupMembersByGroupId(1)).thenReturn(groupMembers);
-//        when(announcementReadRepository.save(any())).thenReturn(announcementReads);
-//        doNothing().when(announcementServer).sendInfo(1, announcements);
-//        doNothing().when(announcementServer).sendInfo(2, announcements);
-//        ResponseVO responseVO = groupBL.releaseAnnouncement(announcement);
-//        Assert.assertEquals(((Announcement) responseVO.getContent()).getTitle(), "testTitle");
-//    }
-//
-//    @Test
-//    public void readAnnouncementTest1() {
-//        GroupBLImpl groupBL = new GroupBLImpl();
-//        AnnouncementReadRepository announcementReadRepository = mock(AnnouncementReadRepository.class);
-//        groupBL.setAnnouncementReadRepository(announcementReadRepository);
-//
-//        AnnouncementRead announcementRead = new AnnouncementRead(1, 1, 0);
-//        AnnouncementRead res = new AnnouncementRead(1, 1, 1);
-//
-//        when(announcementReadRepository.findAnnouncementReadByUserIdAndAnnouncementId(1, 1)).thenReturn(announcementRead);
-//        when(announcementReadRepository.save(any())).thenReturn(res);
-//
-//        ResponseVO responseVO = groupBL.readAnnouncement(1, 1);
-//        Assert.assertEquals(((AnnouncementRead) responseVO.getContent()).getAnnouncementId(), 1);
-//        Assert.assertEquals(((AnnouncementRead) responseVO.getContent()).getHasRead(), 1);
-//    }
-//
-//    @Test
-//    public void readAnnouncementTest2() {
-//        GroupBLImpl groupBL = new GroupBLImpl();
-//        AnnouncementReadRepository announcementReadRepository = mock(AnnouncementReadRepository.class);
-//        groupBL.setAnnouncementReadRepository(announcementReadRepository);
-//
-//        when(announcementReadRepository.findAnnouncementReadByUserIdAndAnnouncementId(1, 1)).thenReturn(null);
-//
-//        ResponseVO responseVO = groupBL.readAnnouncement(1, 1);
-//        Assert.assertEquals(responseVO.getMessage(), "Getting has_read failed.");
-//    }
-//
-//    @Test
-//    public void readAnnouncementTest3() {
-//        GroupBLImpl groupBL = new GroupBLImpl();
-//        AnnouncementReadRepository announcementReadRepository = mock(AnnouncementReadRepository.class);
-//        groupBL.setAnnouncementReadRepository(announcementReadRepository);
-//
-//        AnnouncementRead announcementRead = new AnnouncementRead(1, 1, 0);
-//        AnnouncementRead announcementRead2 = new AnnouncementRead(1, 1, 0);
-//
-//        when(announcementReadRepository.findAnnouncementReadByUserIdAndAnnouncementId(1, 1)).thenReturn(announcementRead);
-//        when(announcementReadRepository.save(any())).thenReturn(announcementRead2);
-//
-//        ResponseVO responseVO = groupBL.readAnnouncement(1, 1);
-//        Assert.assertEquals(responseVO.getMessage(), "Modifying has_read failed.");
-//    }
 //}
-//
