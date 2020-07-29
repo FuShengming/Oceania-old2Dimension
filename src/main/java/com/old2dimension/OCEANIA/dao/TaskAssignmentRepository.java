@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface TaskAssignmentRepository extends JpaRepository<TaskAssignment,Integer> {
     List<TaskAssignment> findTaskAssignmentsByGroupIdAndUserId(int groupId,int userId);
+    List<TaskAssignment> findTaskAssignmentsByGroupId(int groupId);
 }

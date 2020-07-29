@@ -35,8 +35,8 @@ public class PageController {
     public String register() {
         return "/html/register.html";
     }
-//    @RequestMapping("/cy")
-//    public String cy() {
-//        return "/html/cytotest.html";
-//    }
+    @RequestMapping("/test")
+    public String cy() {
+        return "/html/test.html";
+    }
 }

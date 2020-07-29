@@ -1,5 +1,6 @@
 package com.old2dimension.OCEANIA.blImpl;
 
+import com.old2dimension.OCEANIA.MessageServer.AnnouncementServer;
 import com.old2dimension.OCEANIA.bl.GroupBL;
 import com.old2dimension.OCEANIA.dao.*;
 import com.old2dimension.OCEANIA.po.*;
@@ -27,6 +28,8 @@ public class GroupBLImpl implements GroupBL {
     AnnouncementRepository announcementRepository;
     @Autowired
     AnnouncementReadRepository announcementReadRepository;
+    @Autowired
+    AnnouncementServer announcementServer;
 
     @Override
     public ResponseVO findUser(String name) {
@@ -206,8 +209,23 @@ public class GroupBLImpl implements GroupBL {
         int groupId = announcement.getGroupId();
         int announcementId = announcement.getId();
         List<GroupMember> members = groupMemberRepository.findGroupMembersByGroupId(groupId);
+        List<Integer> ids = new ArrayList<>();
+        for(GroupMember member:members){
+            ids.add(member.getUserId());
+        }
+        List<AnnouncementRead> announcementReads = new ArrayList<>();
+        for(Integer id:ids){
+            AnnouncementRead cur = new AnnouncementRead(id,announcementId,0);
+            announcementReads.add(cur);
+        }
+        announcementReadRepository.saveAll(announcementReads);
+        List<Announcement> temp = new ArrayList<>();
+        temp.add(announcement);
+        for(Integer id:ids){
+            announcementServer.sendInfo(id,temp);
+        }
 
-        return null;
+        return ResponseVO.buildSuccess(announcement);
     }
 
     @Override
