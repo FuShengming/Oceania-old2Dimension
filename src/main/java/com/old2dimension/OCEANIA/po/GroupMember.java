@@ -14,7 +14,7 @@ public class GroupMember {
     private  int userId;
     @Column(name = "is_leader")
     private int isLeader;
-
+public GroupMember(){}
     public GroupMember(int groupId, int userId, int isLeader) {
 
         this.groupId = groupId;
