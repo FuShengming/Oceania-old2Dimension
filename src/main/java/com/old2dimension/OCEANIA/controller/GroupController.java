@@ -50,7 +50,7 @@ public class GroupController {
         return taskBL.getAllTask(groupId);
     }
 
-    @RequestMapping(value = "/getTaskByName",method = RequestMethod.GET)
+    @RequestMapping(value = "/getTaskByName",method = RequestMethod.POST)
     public ResponseVO getTaskByName(@RequestBody GroupIdAndTaskNameForm groupIdAndTaskNameForm){
         return taskBL.getTaskByName(groupIdAndTaskNameForm);
     }
