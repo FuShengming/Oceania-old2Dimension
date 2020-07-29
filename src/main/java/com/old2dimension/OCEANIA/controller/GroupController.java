@@ -4,6 +4,7 @@ import com.old2dimension.OCEANIA.bl.GroupBL;
 import com.old2dimension.OCEANIA.bl.GroupCodeBL;
 import com.old2dimension.OCEANIA.bl.TaskBL;
 import com.old2dimension.OCEANIA.po.Announcement;
+import com.old2dimension.OCEANIA.po.Invitation;
 import com.old2dimension.OCEANIA.po.Task;
 import com.old2dimension.OCEANIA.po.TaskAssignment;
 import com.old2dimension.OCEANIA.vo.*;
@@ -23,6 +24,11 @@ public class GroupController {
     TaskBL taskBL;
     @Autowired
     GroupCodeBL groupCodeBL;
+
+    @RequestMapping(value = "/getUserInvitations/{userId}",method = RequestMethod.GET)
+    public ResponseVO getUserInvitation(@PathVariable int userId){
+        return groupBL.getUserInvitation(userId);
+    }
 
     @RequestMapping(value = "/findUser/{name}",method = RequestMethod.GET)
     public ResponseVO findUser(@PathVariable String name){
@@ -49,14 +55,14 @@ public class GroupController {
         return taskBL.getAllTask(groupId);
     }
 
-    @RequestMapping(value = "/getTaskByName",method = RequestMethod.GET)
+    @RequestMapping(value = "/getTaskByName",method = RequestMethod.POST)
     public ResponseVO getTaskByName(@RequestBody GroupIdAndTaskNameForm groupIdAndTaskNameForm){
         return taskBL.getTaskByName(groupIdAndTaskNameForm);
     }
 
-    @RequestMapping(value = "/inviteUser/{userId}",method = RequestMethod.GET)
-    public ResponseVO inviteUser(@PathVariable int userId){
-        return groupBL.inviteUser(userId);
+    @RequestMapping(value = "/inviteUser",method = RequestMethod.POST)
+    public ResponseVO inviteUser(@RequestBody Invitation invitation){
+        return groupBL.inviteUser(invitation);
     }
 
     @RequestMapping(value = "/quitGroup",method = RequestMethod.POST)
@@ -64,9 +70,9 @@ public class GroupController {
         return groupBL.quitGroup(groupIdAndUserForm);
     }
 
-    @RequestMapping(value = "/joinGroup",method = RequestMethod.GET)
-    public ResponseVO joinGroup(@RequestBody GroupIdAndUserForm groupIdAndUserForm){
-        return groupBL.joinGroup(groupIdAndUserForm);
+    @RequestMapping(value = "/joinGroup",method = RequestMethod.POST)
+    public ResponseVO joinGroup(@RequestBody Invitation invitation){
+        return groupBL.joinGroup(invitation);
     }
 
     @RequestMapping(value = "/addCode",method = RequestMethod.POST)
@@ -126,7 +132,7 @@ public class GroupController {
         return groupBL.releaseAnnouncement(announcement);
     }
 
-    @RequestMapping(value = "/getCodeStatistics",method = RequestMethod.GET)
+    @RequestMapping(value = "/getCodeStatistics",method = RequestMethod.POST)
     public ResponseVO getCodeStatistics(@RequestBody GroupIdAndCodeIdForm groupIdAndCodeIdForm){
         return groupCodeBL.getCodeStatistics(groupIdAndCodeIdForm);
     }
@@ -136,14 +142,24 @@ public class GroupController {
         return groupBL.getGroupMembers(groupId);
     }
 
-    @RequestMapping(value = "/getGroupAnnouncements/{groupId}",method = RequestMethod.GET)
-    public ResponseVO getGroupAnnouncements(@PathVariable int groupId){
-        return groupBL.getGroupAnnouncements(groupId);
+    @RequestMapping(value = "/getGroupAnnouncements",method = RequestMethod.POST)
+    public ResponseVO getGroupAnnouncements(@RequestBody GroupIdAndUserForm groupIdAndUserForm){
+        return groupBL.getGroupAnnouncements(groupIdAndUserForm.getGroupId(),groupIdAndUserForm.getUserId());
     }
 
-    @RequestMapping(value = "/readAnnouncements",method = RequestMethod.GET)
-    public ResponseVO readAnnouncements(@RequestBody UserIdAndAnnouncementId userIdAndAnnouncementId){
+    @RequestMapping(value = "/readAnnouncement",method = RequestMethod.POST)
+    public ResponseVO readAnnouncement(@RequestBody UserIdAndAnnouncementId userIdAndAnnouncementId){
         return groupBL.readAnnouncement(userIdAndAnnouncementId.getUserId(),userIdAndAnnouncementId.getAnnouncementId());
+    }
+
+    @RequestMapping(value = "/readInvitation",method = RequestMethod.POST)
+    public ResponseVO readInvitation(@RequestBody UserIdAndInvitationIdForm userIdAndInvitationIdForm){
+        return groupBL.readInvitation(userIdAndInvitationIdForm.getUserId(),userIdAndInvitationIdForm.getInvitationId());
+    }
+
+    @RequestMapping(value = "/ignoreInvitation",method = RequestMethod.POST)
+    public ResponseVO ignoreInvitation(@RequestBody UserIdAndInvitationIdForm userIdAndInvitationIdForm){
+        return groupBL.ignoreInvitation(userIdAndInvitationIdForm.getUserId(),userIdAndInvitationIdForm.getInvitationId());
     }
 
 }

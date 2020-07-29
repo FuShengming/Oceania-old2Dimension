@@ -58,6 +58,11 @@
             margin-left: 20%;
         }
 
+        .chat_list.active_chat {
+            color: #fff;
+            background-color: #05728f;
+        }
+
         .msgs {
             border-left: 1px solid rgba(0, 0, 0, 0.15);
             float: left;
@@ -171,8 +176,14 @@
     <a class="navbar-brand h1 m-0 col-2" href="#">👴 Old2Dimension</a>
     <div class="collapse navbar-collapse col-10 px-0">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Statistics<span class="sr-only">(current)</span></a>
+            <li class="nav-item">
+                <a class="nav-link" href="/index">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/workspace">WorkSpace</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/graph">Graph</a>
             </li>
         </ul>
         <div class="d-flex">
@@ -228,6 +239,13 @@ height: 100%;
                     Group
                 </div>
             </div>
+            <div class="card m-2">
+                <div class="card-body m-0">
+                    <h5 class="card-title">Announcement</h5>
+                    <h6 class="card-subtitle mb-2">Dec 25</h6>
+                    <p class="card-text">Group xxx has made a new announcement. Click <a href="#">here</a> to view details.</p>
+                </div>
+            </div>
         </div>
         <div class="tab-pane fade" id="message" role="tabpanel" aria-labelledby="message-tab">
             <div class="messaging container-fluid row">
@@ -241,21 +259,21 @@ height: 100%;
                         <div class="chat_list active_chat card m-2">
                             <div class="card-body">
                                 <h5 class="card-title">Sunil Rajput</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Dec 25</h6>
+                                <h6 class="card-subtitle mb-2">Dec 25</h6>
                                 <p class="card-text">Some quick example ...</p>
                             </div>
                         </div>
                         <div class="chat_list card m-2">
                             <div class="card-body">
                                 <h5 class="card-title">Sunil Rajput</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Dec 25</h6>
+                                <h6 class="card-subtitle mb-2">Dec 25</h6>
                                 <p class="card-text">Some quick example ...</p>
                             </div>
                         </div>
                         <div class="chat_list card m-2">
                             <div class="card-body">
                                 <h5 class="card-title">Sunil Rajput</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Dec 25</h6>
+                                <h6 class="card-subtitle mb-2">Dec 25</h6>
                                 <p class="card-text">Some quick example ...</p>
                             </div>
                         </div>
