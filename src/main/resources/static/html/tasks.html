@@ -18,11 +18,14 @@
             <li class="nav-item">
                 <a class="nav-link" href="/index">Home</a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="#">WorkSpace<span class="sr-only">(current)</span></a>
+            <li class="nav-item">
+                <a class="nav-link" href="/workspace">WorkSpace<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/graph">Graph</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Tasks</a>
             </li>
         </ul>
         <div class="d-flex">
@@ -30,5 +33,39 @@
         </div>
     </div>
 </nav>
+<div class="container-fluid row px-0 no-gutters" style="padding-top: 40px">
+    <div class="col-2"></div>
+    <div class="col-8">
+        <div class="card m-2">
+            <div class="card-body">
+                <div class="card-title d-flex justify-content-between">
+                    <h2>My Tasks</h2>
+                    <div style="width: 33%" class="input-group">
+                        <input type="text" class="form-control" placeholder="Task name" aria-label="Task name" aria-describedby="basic-addon2">
+                        <div>
+                            <button class="btn btn-outline-secondary" type="button">Search</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-text">
+                    <table class="table table-hover" id="code-table" style="overflow-x: scroll">
+                        <thead>
+                        <tr>
+                            <th scope="col">Group</th>
+                            <th scope="col">Task Name</th>
+                            <th scope="col">Labels</th>
+                            <th scope="col">Start Time</th>
+                            <th scope="col">End Time</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="code-tb"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-2"></div>
+</div>
 </body>
 </html>

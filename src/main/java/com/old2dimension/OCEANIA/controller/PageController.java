@@ -35,6 +35,11 @@ public class PageController {
     public String register() {
         return "/html/register.html";
     }
+
+    @RequestMapping("/tasks")
+    public String tasks() {
+        return "/html/tasks.html";
+    }
 //    @RequestMapping("/cy")
 //    public String cy() {
 //        return "/html/cytotest.html";
