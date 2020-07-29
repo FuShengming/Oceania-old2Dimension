@@ -49,28 +49,42 @@ BEGIN;
 INSERT INTO `user_authority` VALUES (1, 1);
 COMMIT;
 
-create table if not exists code(
-    id int auto_increment primary key,
-	user_id int NOT NULL,
-	name varchar(8192),
-	num_of_vertices int,
-	num_of_edges int,
-	num_of_domains int,
-	is_default int,
-	CONSTRAINT code_fk_user_id FOREIGN KEY(user_id) REFERENCES user(id)  ON DELETE Cascade
-	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  create table if not exists team
+(
+    id              int auto_increment primary key,
+    group_name       varchar(255) NOT NULL
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
 create table if not exists code
 (
     id              int auto_increment primary key,
-    user_id         int NOT NULL,
+    user_id         int not null,
     name            varchar(8192),
     num_of_vertices int,
     num_of_edges    int,
     num_of_domains  int,
     is_default      int,
+
     CONSTRAINT code_fk_user_id FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE Cascade
+
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
+
+  create table if not exists team_code
+(
+    id              int auto_increment primary key,
+    group_id         int not null,
+    code_id          int not null,
+
+    CONSTRAINT group_code_fk_user_id FOREIGN KEY (group_id) REFERENCES team (id) ON DELETE Cascade,
+    CONSTRAINT group_code_fk_code_id FOREIGN KEY (code_id) REFERENCES code (id) ON DELETE Cascade
+
+
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
 
 create table if not exists vertex_label
 (
@@ -139,7 +153,7 @@ create table if not exists work_space
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-create table if not exists team_members
+create table if not exists team_member
 (
     id              int auto_increment primary key,
     group_id        int  NOT NULL,
@@ -220,10 +234,21 @@ create table if not exists invitation_message
     user_id     int NOT NULL,
     inviter_id     int NOT NULL,
     has_read    int NOT NULL,
+    state       int NOT NULL,
     CONSTRAINT invitation_message_fk_user_id FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE Cascade,
     CONSTRAINT invitation_message_fk_inviter_id FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE Cascade,
     CONSTRAINT invitation_message_fk_group_id FOREIGN KEY (group_id) REFERENCES team(id) ON DELETE Cascade
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
+create table if not exists chat_message(
+    id   int auto_increment primary key,
+    sender_id INT NOT NULL,
+    recipient_id INT NOT NULL,
+    send_date timestamp NOT NULL,
+    has_read INT NOT NULL,
+    CONSTRAINT chat_message_fk_sender_id FOREIGN KEY (sender_id) REFERENCES user(id) ON DELETE Cascade,
+    CONSTRAINT chat_message_fk_recipient_id FOREIGN KEY (recipient_id) REFERENCES user(id) ON DELETE Cascade
+)
 
 

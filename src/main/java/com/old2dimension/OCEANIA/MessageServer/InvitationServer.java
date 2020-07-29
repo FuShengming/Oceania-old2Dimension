@@ -44,7 +44,7 @@ public class InvitationServer {
         }
     }
     //给指定用户发送信息
-    public void sendInfo(int userId, List<Invitation> message){
+    public void sendInfo(int userId, Integer message){
         Session session = sessionPools.get(userId);
         if(session==null){
             return;
@@ -68,11 +68,9 @@ public class InvitationServer {
         if(message==null){
             return;
         }
-        try {
-            sendMessage(session, message);
-        } catch (IOException | EncodeException e) {
-            e.printStackTrace();
-        }
+
+            sendInfo(userId,message.size());
+
     }
 
     //关闭连接时调用

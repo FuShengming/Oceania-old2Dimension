@@ -124,7 +124,7 @@ public class GroupBLImpl implements GroupBL {
         }
         List<Invitation> temp = new ArrayList<>();
         temp.add(invitation);
-        invitationServer.sendInfo(invitation.getUserId(),temp);
+        invitationServer.sendInfo(invitation.getUserId(),invitationRepository.findInvitationsByUserIdAndHasRead(invitation.getUserId(),0).size());
 
         return ResponseVO.buildSuccess(invitation);
     }
@@ -193,7 +193,7 @@ public class GroupBLImpl implements GroupBL {
         if(oldInvitation.getHasRead()!=1||oldInvitation.getState()!=1){
             return ResponseVO.buildFailure("Setting state of invitation failed.");
         }
-
+        invitationServer.sendInfo(invitation.getUserId(),invitationRepository.findInvitationsByUserIdAndHasRead(invitation.getUserId(),0).size());
         return ResponseVO.buildSuccess(member);
     }
 
@@ -264,8 +264,9 @@ public class GroupBLImpl implements GroupBL {
         announcementReadRepository.saveAll(announcementReads);
         List<Announcement> temp = new ArrayList<>();
         temp.add(announcement);
+
         for(Integer id:ids){
-            announcementServer.sendInfo(id,temp);
+            announcementServer.sendInfo(id,announcementReadRepository.findAnnouncementReadsByUserIdAndHasRead(id,0).size());
         }
 
         return ResponseVO.buildSuccess(announcement);
@@ -299,6 +300,7 @@ public class GroupBLImpl implements GroupBL {
             return  ResponseVO.buildFailure("Modifying has_read failed.");
         }
 
+        announcementServer.sendInfo(userId,announcementReadRepository.findAnnouncementReadsByUserIdAndHasRead(userId,0).size());
         return ResponseVO.buildSuccess(announcementRead);
     }
 
@@ -319,7 +321,7 @@ public class GroupBLImpl implements GroupBL {
         if(invitation.getHasRead()!=1){
             return ResponseVO.buildFailure("Setting the has-reading of invitation failed.");
         }
-
+        invitationServer.sendInfo(userId,invitationRepository.findInvitationsByUserIdAndHasRead(userId,0).size());
         return ResponseVO.buildSuccess(invitation);
     }
 
@@ -339,6 +341,7 @@ public class GroupBLImpl implements GroupBL {
         if(invitation.getState()!=2||invitation.getHasRead()!=1){
             return ResponseVO.buildFailure("Setting the state of invitation failed.");
         }
+        invitationServer.sendInfo(userId,invitationRepository.findInvitationsByUserIdAndHasRead(userId,0).size());
         return ResponseVO.buildSuccess(invitation);
     }
 }
