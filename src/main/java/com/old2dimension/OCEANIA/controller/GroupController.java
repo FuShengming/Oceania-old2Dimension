@@ -110,6 +110,10 @@ public class GroupController {
         return taskBL.completeTask(taskId);
     }
 
+    @RequestMapping(value = "/getUserTask",method = RequestMethod.POST)
+    public ResponseVO modifyTask(@RequestParam("groupId") int groupId,@RequestParam("userId") int userId){
+        return taskBL.getUserTaskList(groupId,userId);
+    }
 
 //    @RequestMapping(value = "/deliverTasks",method = RequestMethod.POST)
 //    public ResponseVO deliverTask(@RequestParam HashMap tasksForMember){
