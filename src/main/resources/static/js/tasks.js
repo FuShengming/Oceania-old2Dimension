@@ -1,5 +1,9 @@
 $(document).ready(function () {
 
+    $("#task-item").on("click", function () {
+
+    });
+
     getTasksByUserId()
 
 })
@@ -22,37 +26,49 @@ let getTasksByUserId = function () {
         success: function (data) {
             if (data.success) {
                 let h = "";
-                let tasks = data.content;
+                let tasks = data.content['tasks'];
+                let num = 0;
                 tasks.forEach(function (task) {
-                    console.log(task);
-                    h += `<tr class="clickable-row" task-id="${task.id}">
+                    // console.log(task);
+                    num += 1
+                    h += `<tr class="clickable-row" task-id="${task.id}" data-toggle="modal" data-target="#taskModal" id="task-item-` + task.name + `">
                                 <td>${task.name}</td>
+                                <td>${task.state === 0 ? "unfinished" : "finished"}</td>
                                 <td>${task.label}</td>
-                                <td>${task.startDate === null ? "Never" : new Date(Date.parse(task.startDate)).toLocaleString("en")}</td>
-                                <td>${task.endDate === null ? "Never" : new Date(Date.parse(task.endDate)).toLocaleString("en")}</td>
-                                <td class="td-btn">
-                                    <button class="btn btn-light btn-setting px-0" type="button" id="dropdownMenuButton"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa fa-ellipsis-h setting-icon"></i>
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item modify-name" href="#" task-id="${task.id}">Modify Name</a>
-                                        <a class="dropdown-item rmv" href="#" task-id="${task.id}">Remove</a>
-                                    </div>
-                                </td>
+                                <td>${task.startDate === null ? "--" : new Date(Date.parse(task.startDate)).toLocaleString("en")}</td>
+                                <td>${task.endDate === null ? "--" : new Date(Date.parse(task.endDate)).toLocaleString("en")}</td>
                             </tr>`
                 });
                 $("#code-tb").html(h);
                 $(".clickable-row").on('click', function (e) {
-                    if (!$(e.target).hasClass("btn-setting") &&
-                        !$(e.target).hasClass("setting-icon") &&
-                        !$(e.target).hasClass("dropdown-menu") &&
-                        !$(e.target).hasClass("dropdown-item")) {
-                        console.log('click', $(this).attr("code-id"));
-                        // localStorage.setItem('codeId', $(this).attr("code-id"));
-                        window.location.href = "/graph?code=" + $(this).attr("code-id");
+                    let taskId = e['currentTarget']['attributes'][1]['value']
+                    for (let i = 0; i < tasks.length; i++) {
+                        if (taskId == tasks[i].id) {
+                            var task = tasks[i]
+                            break;
+                        }
                     }
+                    $("#task-modal-label").text(task.name)
+                    $("#modal-status").text(task.state === 0 ? "unfinished" : "finished")
+                    $("#modal-label").text(task.label)
+                    $("#modal-desc").text(task.description)
+                    $("#modal-start").text(task.startDate === null ? "--" : new Date(Date.parse(task.startDate)).toLocaleString("en"))
+                    $("#modal-end").text(task.endDate === null ? "--" : new Date(Date.parse(task.endDate)).toLocaleString("en"))
+
+                    let assignments = data.content['assignments'];
+                    let userIds = []
+                    let usrStr = ""
+                    for (let i = 0; i < assignments.length; i++) {
+                        if (assignments[i].userId !== userId && assignments[i].taskId == taskId) {
+                            userIds.push(assignments[i].userId);
+                            usrStr += assignments[i].userId + ", "
+                        }
+                    }
+                    $("#modal-coworkers").text(usrStr.slice(0, -2)) // todo: username
+
+                    console.log(task)
                 });
+
                 // $(".rmv").on('click', function () {
                 //     let codeId = $(this).attr("code-id");
                 //     if (confirm("Sure to remove this project permanently?")) {
