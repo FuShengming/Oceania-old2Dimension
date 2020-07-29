@@ -111,8 +111,8 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/getUserTask",method = RequestMethod.POST)
-    public ResponseVO modifyTask(@RequestParam("groupId") int groupId,@RequestParam("userId") int userId){
-        return taskBL.getUserTaskList(groupId,userId);
+    public ResponseVO getUserTask(@RequestBody GroupIdAndUserForm groupIdAndUserForm){
+        return taskBL.getUserTaskList(groupIdAndUserForm.getGroupId(),groupIdAndUserForm.getUserId());
     }
 
 //    @RequestMapping(value = "/deliverTasks",method = RequestMethod.POST)
@@ -139,6 +139,11 @@ public class GroupController {
     @RequestMapping(value = "/getGroupAnnouncements/{groupId}",method = RequestMethod.GET)
     public ResponseVO getGroupAnnouncements(@PathVariable int groupId){
         return groupBL.getGroupAnnouncements(groupId);
+    }
+
+    @RequestMapping(value = "/readAnnouncements",method = RequestMethod.GET)
+    public ResponseVO readAnnouncements(@RequestBody UserIdAndAnnouncementId userIdAndAnnouncementId){
+        return groupBL.readAnnouncement(userIdAndAnnouncementId.userId,userIdAndAnnouncementId.announcementId);
     }
 
 }

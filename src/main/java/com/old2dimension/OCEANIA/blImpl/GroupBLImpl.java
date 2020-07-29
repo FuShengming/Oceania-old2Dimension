@@ -1,10 +1,7 @@
 package com.old2dimension.OCEANIA.blImpl;
 
 import com.old2dimension.OCEANIA.bl.GroupBL;
-import com.old2dimension.OCEANIA.dao.AnnouncementRepository;
-import com.old2dimension.OCEANIA.dao.GroupMemberRepository;
-import com.old2dimension.OCEANIA.dao.GroupRepository;
-import com.old2dimension.OCEANIA.dao.UserRepository;
+import com.old2dimension.OCEANIA.dao.*;
 import com.old2dimension.OCEANIA.po.Announcement;
 import com.old2dimension.OCEANIA.po.Group;
 import com.old2dimension.OCEANIA.po.GroupMember;
@@ -31,7 +28,8 @@ public class GroupBLImpl implements GroupBL {
     GroupMemberRepository groupMemberRepository;
     @Autowired
     AnnouncementRepository announcementRepository;
-
+    @Autowired
+    AnnouncementReadRepository announcementReadRepository;
 
     @Override
     public ResponseVO findUser(String name) {
@@ -226,5 +224,8 @@ public class GroupBLImpl implements GroupBL {
 
     }
 
-
+    @Override
+    public ResponseVO readAnnouncement(int userId, int announcementId) {
+        return null;
+    }
 }
