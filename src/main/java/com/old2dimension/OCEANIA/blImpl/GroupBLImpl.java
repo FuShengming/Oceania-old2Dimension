@@ -99,6 +99,7 @@ public class GroupBLImpl implements GroupBL {
         members.add(leader);
         members.add(newLeader);
         members = groupMemberRepository.saveAll(members);
+
         if(members.size()==0){
             return ResponseVO.buildFailure("Modifying group leader failed.");
         }
