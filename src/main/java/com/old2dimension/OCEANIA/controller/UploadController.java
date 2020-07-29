@@ -36,14 +36,11 @@ public class UploadController {
                                       ) throws IOException, InterruptedException {
 
         return uploadBL.groupAnalyzeJar(groupIdAndUuidForm.getGroupId(),groupIdAndUuidForm.getUuid());
-
     }
 
     @RequestMapping(value = "/analyze", method = RequestMethod.POST)
     public ResponseVO analyzeJar(@RequestBody UniqueIdentificationVO ui) throws IOException, InterruptedException {
-
         return uploadBL.analyzeJar(ui.getUserId(),ui.getUuid());
-//        return uploadBL.analyzeJar(codeId);
     }
 
     @RequestMapping(value = "/cancel", method = RequestMethod.POST)

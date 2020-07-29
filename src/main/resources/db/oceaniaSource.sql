@@ -241,4 +241,14 @@ create table if not exists invitation_message
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+create table if not exists chat_message(
+    id   int auto_increment primary key,
+    sender_id INT NOT NULL,
+    recipient_id INT NOT NULL,
+    send_date timestamp NOT NULL,
+    has_read INT NOT NULL,
+    CONSTRAINT chat_message_fk_sender_id FOREIGN KEY (sender_id) REFERENCES user(id) ON DELETE Cascade,
+    CONSTRAINT chat_message_fk_recipient_id FOREIGN KEY (recipient_id) REFERENCES user(id) ON DELETE Cascade
+)
+
 
