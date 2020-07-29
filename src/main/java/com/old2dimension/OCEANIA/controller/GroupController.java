@@ -86,7 +86,7 @@ public class GroupController {
         return groupCodeBL.getGroupCodeList(groupId);
     }
 
-    @RequestMapping(value = "/search/{userId}",method = RequestMethod.GET)
+    @RequestMapping(value = "/getAllGroups/{userId}",method = RequestMethod.GET)
     public ResponseVO searchGroupByUser(@PathVariable int userId){
         return groupBL.searchGroupByUser(userId);
     }

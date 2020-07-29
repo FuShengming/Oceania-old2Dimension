@@ -88,44 +88,7 @@
         </div>
     </div>
 </div>
-<!--<div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="newModalLabel"-->
-<!--     aria-hidden="true">-->
-<!--    <div class="modal-dialog" role="document">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <h3 class="modal-title">New Project</h3>-->
-<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                    <span aria-hidden="true">&times;</span>-->
-<!--                </button>-->
-<!--            </div>-->
-<!--            <div class="modal-body d-flex justify-content-around">-->
-<!--                <button type="button" class="btn btn-primary new-btn" id="copy-btn">Copy from Existing</button>-->
-<!--                <button type="button" class="btn btn-primary new-btn" id="upload-btn">Upload New Project</button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--<div class="modal fade" id="copyModal" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel"-->
-<!--     aria-hidden="true">-->
-<!--    <div class="modal-dialog" role="document">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <h3 class="modal-title">Copy From Existing</h3>-->
-<!--            </div>-->
-<!--            <div class="modal-body d-flex justify-content-around">-->
-<!--                <select class="custom-select">-->
-<!--                    <option value="1">iTrust</option>-->
-<!--                    <option value="2">iTrust2</option>-->
-<!--                    <option value="3">iTrust3</option>-->
-<!--                </select>-->
-<!--            </div>-->
-<!--            <div class="modal-footer">-->
-<!--                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>-->
-<!--                <button type="button" class="btn btn-primary m-2" id="copy-submit">CONFIRM</button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+
 <form class="modal fade multi-step" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel"
       aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -160,13 +123,7 @@
                 </div>
 
             </div>
-            <!--            <div class="modal-body step step-4">-->
-            <!--                <h4>Mapping Codes to the Graph...</h4>-->
-            <!--                <div id="mapping-state">-->
-            <!--                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>-->
-            <!--                    <span>Mapping... Please wait a second.</span>-->
-            <!--                </div>-->
-            <!--            </div>-->
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary m-2" id="cancel-btn">CANCEL</button>
                 <button type="button" class="btn btn-primary m-2 step step-1" data-step="1"
@@ -197,6 +154,9 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/graph">Graph</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/groups">Group</a>
             </li>
         </ul>
         <div class="d-flex">
@@ -333,45 +293,13 @@
             });
 
         });
-        // $("#cont-3").on('click', function () {
-        //     let sel_event = new CustomEvent('next.m.4', {detail: {step: 4}});
-        //     window.dispatchEvent(sel_event);
-        //     $.ajax({
-        //         type: "post",
-        //         url: "/upload/mapping",
-        //         headers: {"Authorization": $.cookie('token')},
-        //         dataType: "json",
-        //         contentType: 'application/json',
-        //         data: JSON.stringify({
-        //             'userId': userId,
-        //             'uuid': localStorage["f-uuid"]
-        //         }),
-        //         timeout: 100000,
-        //         success: function (data) {
-        //             if (data.success) {
-        //                 $("#mapping-state").html("<i class=\"fa fa-check-circle fa-3x fa-fw\"></i>\n" +
-        //                     "<span>Success!</span>");
-        //                 $("#cont-3").prop('disabled', false);
-        //             } else {
-        //                 $("#mapping-state").html("<i class=\"fa fa-times-circle fa-3x fa-fw\"></i>\n" +
-        //                     "<span>Analyze failed. Please try again Later.</span>\n" +
-        //                     "<span>Error: " + data.message + "</span>");
-        //             }
-        //         },
-        //         error: function (err) {
-        //             console.log(err);
-        //         }
-        //     });
-        // });
+
         $("#cont-3").on('click', function () {
             $(window).unbind('beforeunload');
             localStorage.removeItem("f-uuid");
             location.reload();
         });
-        // $("#copy-btn").on("click", function () {
-        //     $("#newModal").modal('hide');
-        //     $("#copyModal").modal('show');
-        // });
+
         $("#upload-btn").on("click", function () {
             $(window).bind('beforeunload', function () {
                 // localStorage.removeItem("codeId");

@@ -42,6 +42,10 @@
             background-color: #05728f;
         }
 
+        .group-btn {
+            width: 48%;
+        }
+
         .group-menu > .nav-item > .nav-link {
             color: #05728f;
             background-color: #fff;
@@ -153,11 +157,35 @@
 
 <script type="text/javascript" src="../js/navbar.js"></script>
 
-<script>
-    $(function () {
+<script type="text/javascript" src="../js/groups.js"></script>
 
-    });
-</script>
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New Group</h3>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="name-input">Group Name</label>
+                        <input type="email" class="form-control" id="name-input" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="description-input">Description</label>
+                        <textarea class="form-control" id="description-input" rows="5"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CANCEL</button>
+                <button type="button" class="btn btn-primary m-2" id="create_submit">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top p-0">
     <a class="navbar-brand h1 m-0 col-2" href="#">👴 Old2Dimension</a>
     <div class="collapse navbar-collapse col-10 px-0">
@@ -170,6 +198,9 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/graph">Graph</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Group<span class="sr-only">(current)</span></a>
             </li>
         </ul>
         <div class="d-flex">
@@ -196,28 +227,13 @@ height: 100%;
                 Groups
             </div>
         </div>
-        <div class="inbox_chat">
-            <div class="chat_list active_chat card m-2">
-                <div class="card-body">
-                    <h5 class="card-title">Sunil Rajput</h5>
-                    <h6 class="card-subtitle mb-2">Dec 25</h6>
-                    <p class="card-text">Some quick example ...</p>
-                </div>
-            </div>
-            <div class="chat_list card m-2">
-                <div class="card-body">
-                    <h5 class="card-title">Sunil Rajput</h5>
-                    <h6 class="card-subtitle mb-2">Dec 25</h6>
-                    <p class="card-text">Some quick example ...</p>
-                </div>
-            </div>
-            <div class="chat_list card m-2">
-                <div class="card-body">
-                    <h5 class="card-title">Sunil Rajput</h5>
-                    <h6 class="card-subtitle mb-2">Dec 25</h6>
-                    <p class="card-text">Some quick example ...</p>
-                </div>
-            </div>
+        <div class="inbox_chat" id="all_groups">
+        </div>
+        <div class="d-flex my-2 justify-content-around" style="position: absolute;bottom: 0;width: 100%;">
+            <button class="btn group-btn btn-primary" data-toggle="modal" data-target="#createModal"><i
+                    class="fa fa-plus-circle"></i> Create
+            </button>
+            <button class="btn group-btn btn-success"><i class="fa fa-users"></i> Join in</button>
         </div>
     </div>
     <div class="group_content col-9">
