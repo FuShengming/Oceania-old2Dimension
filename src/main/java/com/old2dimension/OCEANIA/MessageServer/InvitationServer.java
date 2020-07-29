@@ -1,12 +1,13 @@
 package com.old2dimension.OCEANIA.MessageServer;
 
 import com.old2dimension.OCEANIA.Encoder.AnnouncementListEncoder;
-import com.old2dimension.OCEANIA.dao.AnnouncementReadRepository;
+import com.old2dimension.OCEANIA.Encoder.InvitationListEncoder;
 import com.old2dimension.OCEANIA.dao.AnnouncementRepository;
+import com.old2dimension.OCEANIA.dao.InvitationRepository;
 import com.old2dimension.OCEANIA.po.Announcement;
 import com.old2dimension.OCEANIA.po.AnnouncementRead;
+import com.old2dimension.OCEANIA.po.Invitation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -18,28 +19,18 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@ServerEndpoint(value = "/websocket/announcement/{userId}",encoders = { AnnouncementListEncoder.class })
+@ServerEndpoint(value = "/websocket/invitation/{userId}",encoders = {InvitationListEncoder.class})
 @Component
-public class AnnouncementServer {
+public class InvitationServer {
 
-
-
-
+    private static InvitationRepository invitationRepository;
     @Autowired
-    public void setAnnouncementReadRepository(AnnouncementReadRepository announcementReadRepository){
-        AnnouncementServer.announcementReadRepository = announcementReadRepository;
+    public void setAnnouncementRepository(InvitationRepository invitationRepository){
+       InvitationServer.invitationRepository=invitationRepository;
     }
-    @Autowired
-    public void setAnnouncementRepository(AnnouncementRepository announcementRepository){
-        AnnouncementServer.announcementRepository = announcementRepository;
-    }
-    private static AnnouncementRepository announcementRepository;
-
-    private static AnnouncementReadRepository announcementReadRepository;
 
 
     private static AtomicInteger onlineNum = new AtomicInteger();
-
     //concurrent包的线程安全Set，用来存放每个客户端对应的WebSocketServer对象。
     private static ConcurrentHashMap<Integer, Session> sessionPools = new ConcurrentHashMap<>();
 
@@ -54,7 +45,7 @@ public class AnnouncementServer {
         }
     }
     //给指定用户发送信息
-    public void sendInfo(int userId, List<Announcement> message){
+    public void sendInfo(int userId, List<Invitation> message){
         Session session = sessionPools.get(userId);
         if(session==null){
             return;
@@ -73,15 +64,11 @@ public class AnnouncementServer {
         sessionPools.put(userId,session);
         addOnlineCount();
         System.out.println(userId + "加入webSocket！当前人数为" + onlineNum);
-//        announcementRepository = applicationContext.getBean(announcementRepository.getClass());
-//        announcementReadRepository = applicationContext.getBean(announcementReadRepository.getClass());
-        List<AnnouncementRead> announcementReads = announcementReadRepository.findAnnouncementReadsByUserIdAndHasRead(userId,0);
 
-        List<Integer> ids = new ArrayList<>();
-        for(AnnouncementRead a:announcementReads){
-            ids.add(a.getAnnouncementId());
+        List<Invitation> message = invitationRepository.findInvitationsByUserIdAndHasRead(userId,0);
+        if(message==null){
+            return;
         }
-        List<Announcement> message = announcementRepository.findAllById(ids);
         try {
             sendMessage(session, message);
         } catch (IOException | EncodeException e) {

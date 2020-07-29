@@ -234,6 +234,7 @@ create table if not exists invitation_message
     user_id     int NOT NULL,
     inviter_id     int NOT NULL,
     has_read    int NOT NULL,
+    state       int NOT NULL,
     CONSTRAINT invitation_message_fk_user_id FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE Cascade,
     CONSTRAINT invitation_message_fk_inviter_id FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE Cascade,
     CONSTRAINT invitation_message_fk_group_id FOREIGN KEY (group_id) REFERENCES team(id) ON DELETE Cascade

@@ -1,6 +1,7 @@
 package com.old2dimension.OCEANIA.blImpl;
 
 import com.old2dimension.OCEANIA.MessageServer.AnnouncementServer;
+import com.old2dimension.OCEANIA.MessageServer.InvitationServer;
 import com.old2dimension.OCEANIA.bl.GroupBL;
 import com.old2dimension.OCEANIA.dao.*;
 import com.old2dimension.OCEANIA.po.*;
@@ -30,6 +31,10 @@ public class GroupBLImpl implements GroupBL {
     AnnouncementReadRepository announcementReadRepository;
     @Autowired
     AnnouncementServer announcementServer;
+    @Autowired
+    InvitationRepository invitationRepository;
+    @Autowired
+    InvitationServer invitationServer;
 
     @Override
     public ResponseVO findUser(String name) {
@@ -102,8 +107,24 @@ public class GroupBLImpl implements GroupBL {
     }
 
     @Override
-    public ResponseVO inviteUser(int userId) {
-        return null;
+    public ResponseVO inviteUser(Invitation invitation) {
+        invitation.setHasRead(0);
+        invitation.setState(0);
+        if(groupMemberRepository.findGroupMemberByGroupIdAndUserId(invitation.getGroupId(),invitation.getInviterId())==null){
+            return ResponseVO.buildFailure("Do not have the access of inviting user.");
+        }
+        if(invitation.getId()!=0){
+            return ResponseVO.buildFailure("The invitation has to be a new one.");
+        }
+        invitation = invitationRepository.save(invitation);
+        if(invitation.getId()==0){
+            return ResponseVO.buildFailure("Saving invitation failed.");
+        }
+        List<Invitation> temp = new ArrayList<>();
+        temp.add(invitation);
+        invitationServer.sendInfo(invitation.getUserId(),temp);
+
+        return ResponseVO.buildSuccess(invitation);
     }
 
     @Override
@@ -137,20 +158,40 @@ public class GroupBLImpl implements GroupBL {
     }
 
     @Override
-    public ResponseVO joinGroup(GroupIdAndUserForm groupIdAndUserForm) {
-        if(groupRepository.findGroupById(groupIdAndUserForm.getGroupId())==null){
+    public ResponseVO joinGroup(Invitation invitation) {
+
+
+
+        if(groupRepository.findGroupById(invitation.getGroupId())==null){
             return ResponseVO.buildFailure("this group does not exist!");
         }
-        if(userRepository.findUserById(groupIdAndUserForm.getUserId())==null){
+        if(userRepository.findUserById(invitation.getUserId())==null){
             return ResponseVO.buildFailure("This user does not exist.");
         }
 
 
-        GroupMember member = new GroupMember(groupIdAndUserForm.getGroupId(),groupIdAndUserForm.getUserId(),0);
+
+        GroupMember member = new GroupMember(invitation.getGroupId(),invitation.getUserId(),0);
         member = groupMemberRepository.save(member);
         if(member.getId()==0){
             return ResponseVO.buildFailure("Joining group failed");
         }
+
+         Invitation oldInvitation = invitationRepository.findInvitationById(invitation.getId());
+
+        if(oldInvitation==null){
+            return ResponseVO.buildFailure("Finding invitation failed.");
+        }
+        if(invitation.getUserId()!=oldInvitation.getUserId()){
+            return ResponseVO.buildFailure("Do not have the access of reading invitation.");
+        }
+        oldInvitation.setHasRead(1);
+        oldInvitation.setState(1);
+        oldInvitation = invitationRepository.save(oldInvitation);
+        if(oldInvitation.getHasRead()!=1||oldInvitation.getState()!=1){
+            return ResponseVO.buildFailure("Setting state of invitation failed.");
+        }
+
         return ResponseVO.buildSuccess(member);
     }
 
@@ -257,5 +298,45 @@ public class GroupBLImpl implements GroupBL {
         }
 
         return ResponseVO.buildSuccess(announcementRead);
+    }
+
+
+
+    @Override
+    public ResponseVO readInvitation(int userId, int invitationId) {
+        Invitation invitation = invitationRepository.findInvitationById(invitationId);
+
+        if(invitation==null){
+            return ResponseVO.buildFailure("Finding invitation failed.");
+        }
+        if(invitation.getUserId()!=userId){
+            return ResponseVO.buildFailure("Do not have the access of reading invitation.");
+        }
+        invitation.setHasRead(1);
+        invitation = invitationRepository.save(invitation);
+        if(invitation.getHasRead()!=1){
+            return ResponseVO.buildFailure("Setting the has-reading of invitation failed.");
+        }
+
+        return ResponseVO.buildSuccess(invitation);
+    }
+
+    @Override
+    public ResponseVO ignoreInvitation(int userId, int invitationId) {
+        Invitation invitation = invitationRepository.findInvitationById(invitationId);
+
+        if(invitation==null){
+            return ResponseVO.buildFailure("Finding invitation failed.");
+        }
+        if(invitation.getUserId()!=userId){
+            return ResponseVO.buildFailure("Do not have the access of ignoring invitation.");
+        }
+        invitation.setHasRead(1);
+        invitation.setState(2);
+        invitation = invitationRepository.save(invitation);
+        if(invitation.getState()!=2||invitation.getHasRead()!=1){
+            return ResponseVO.buildFailure("Setting the state of invitation failed.");
+        }
+        return ResponseVO.buildSuccess(invitation);
     }
 }
