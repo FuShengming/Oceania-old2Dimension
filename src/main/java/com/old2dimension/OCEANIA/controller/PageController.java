@@ -36,6 +36,11 @@ public class PageController {
         return "/html/register.html";
     }
 
+    @RequestMapping("/notification")
+    public String notification() {
+        return "/html/notification.html";
+    }
+
     @RequestMapping("/tasks")
     public String tasks() {
         return "/html/tasks.html";
