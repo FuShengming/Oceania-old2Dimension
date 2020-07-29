@@ -114,6 +114,13 @@ public class TaskBLImpl implements TaskBL {
     }
 
     @Override
+    public ResponseVO getUserTaskList(int groupId, int userId) {
+        List<TaskAssignment> taskAssignments = taskAssignmentRepository.findTaskAssignmentsByGroupIdAndUserId(groupId,userId);
+        if(taskAssignments==null){return ResponseVO.buildFailure("getting task list failed.");}
+        return ResponseVO.buildSuccess(taskAssignments);
+    }
+
+    @Override
     public ResponseVO deliverTask(HashMap tasksForMember) {
         //是否需要？
         return null;
