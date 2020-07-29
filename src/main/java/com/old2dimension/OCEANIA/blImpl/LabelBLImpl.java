@@ -252,21 +252,66 @@ public class LabelBLImpl implements LabelBL {
     }
 
 
-//    public ResponseVO getAllVertexLabel(UserAndCodeForm userAndCodeForm) {
-//        ArrayList<VertexLabel> res = (ArrayList<VertexLabel>) vertexLabelRepository.
-//                findVertexLabelsByCodeIdAndUserId(userAndCodeForm.getCodeId(), userAndCodeForm.getUserId());
-//        return ResponseVO.buildSuccess(res);
-//    }
-//
-//    public ResponseVO getAllEdgeLabel(UserAndCodeForm userAndCodeForm) {
-//        ArrayList<EdgeLabel> res = (ArrayList<EdgeLabel>) edgeLabelRepository.findEdgeLabelsByCodeIdAndUserId(userAndCodeForm.getCodeId(), userAndCodeForm.getUserId());
-//        return ResponseVO.buildSuccess(res);
-//    }
-//
-//    public ResponseVO getAllDomainLabel(UserAndCodeForm userAndCodeForm) {
-//        ArrayList<DomainLabel> res = (ArrayList<DomainLabel>) domainLabelRepository.findDomainLabelsByCodeIdAndUserId(userAndCodeForm.getCodeId(), userAndCodeForm.getUserId());
-//        return ResponseVO.buildSuccess(res);
-//    }
+    public List<VertexLabel> getAllVertexLabel(UserAndCodeForm userAndCodeForm) {
+        ArrayList<VertexLabel> res = (ArrayList<VertexLabel>) vertexLabelRepository.
+                findVertexLabelsByCodeIdAndUserId(userAndCodeForm.getCodeId(), userAndCodeForm.getUserId());
 
+        return res;
+    }
+//
+    public List<EdgeLabel> getAllEdgeLabel(UserAndCodeForm userAndCodeForm) {
+        ArrayList<EdgeLabel> res = (ArrayList<EdgeLabel>) edgeLabelRepository.findEdgeLabelsByCodeIdAndUserId(userAndCodeForm.getCodeId(), userAndCodeForm.getUserId());
+        return res;
+    }
 
+    public List<DomainLabel> getAllDomainLabel(UserAndCodeForm userAndCodeForm) {
+        ArrayList<DomainLabel> res = (ArrayList<DomainLabel>) domainLabelRepository.findDomainLabelsByCodeIdAndUserId(userAndCodeForm.getCodeId(), userAndCodeForm.getUserId());
+        return res;
+    }
+
+    @Override
+    public List<VertexLabel> saveAllVertexLabel(List<VertexLabel> vertexLabels) {
+        return vertexLabelRepository.saveAll(vertexLabels);
+    }
+
+    @Override
+    public List<EdgeLabel> saveAllEdgeLabel(List<EdgeLabel> edgeLabels) {
+        return edgeLabelRepository.saveAll(edgeLabels);
+    }
+
+    @Override
+    public List<DomainLabel> saveAllDomainLabel(List<DomainLabel> domainLabels) {
+        return domainLabelRepository.saveAll(domainLabels);
+    }
+
+    @Override
+    public void deleteAllDomainLabel(List<DomainLabel> domainLabels) {
+        domainLabelRepository.deleteAll(domainLabels);
+    }
+
+    @Override
+    public int countVertexLabel(int userId, int codeId) {
+
+        return vertexLabelRepository.countByUserIdAndCodeId(userId,codeId);
+    }
+
+    @Override
+    public int countEdgeLabel(int userId, int codeId) {
+        return edgeLabelRepository.countByUserIdAndCodeId(userId,codeId);
+    }
+
+    @Override
+    public int countDomainLabel(int userId, int codeId) {
+        return domainLabelRepository.countByUserIdAndCodeId(userId,codeId);
+    }
+
+    @Override
+    public void deleteAllEdgeLabel(List<EdgeLabel> edgeLabels) {
+        edgeLabelRepository.deleteAll(edgeLabels);
+    }
+
+    @Override
+    public void deleteAllVertexLabel(List<VertexLabel> vertexLabels) {
+        vertexLabelRepository.deleteAll(vertexLabels);
+    }
 }

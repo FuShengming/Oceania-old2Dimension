@@ -30,6 +30,15 @@ public class UploadController {
         return uploadBL.uploadJar(uuid,file);
     }
 
+    @RequestMapping(value = "/group/analyze", method = RequestMethod.POST)
+    public ResponseVO groupAnalyzeJar(@RequestParam("groupId") int groupId,
+                                 @RequestParam("uuid") String uuid
+                                      ) throws IOException, InterruptedException {
+
+        return uploadBL.groupAnalyzeJar(groupId,uuid);
+
+    }
+
     @RequestMapping(value = "/analyze", method = RequestMethod.POST)
     public ResponseVO analyzeJar(@RequestBody UniqueIdentificationVO ui) throws IOException, InterruptedException {
 

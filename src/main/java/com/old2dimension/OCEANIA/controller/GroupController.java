@@ -71,17 +71,18 @@ public class GroupController {
 
     @RequestMapping(value = "/addCode",method = RequestMethod.POST)
     public ResponseVO addCode(@RequestBody GroupIdAndCodeIdForm groupIdAndCodeIdForm){
-        return null;
+
+        return groupCodeBL.addCode(groupIdAndCodeIdForm);
     }
 
     @RequestMapping(value = "/deleteCode",method = RequestMethod.POST)
     public ResponseVO deleteCode(@RequestBody GroupIdAndCodeIdForm groupIdAndCodeIdForm){
-        return null;
+        return groupCodeBL.deleteCode(groupIdAndCodeIdForm);
     }
 
-    @RequestMapping(value = "/findGroupCode/{groupId}",method = RequestMethod.GET)
-    public ResponseVO findGroupCode(@PathVariable int groupId){
-        return null;
+    @RequestMapping(value = "/getGroupCodeList/{groupId}",method = RequestMethod.GET)
+    public ResponseVO getGroupCodeList(@PathVariable int groupId){
+        return groupCodeBL.getGroupCodeList(groupId);
     }
 
     @RequestMapping(value = "/search/{userId}",method = RequestMethod.GET)
@@ -109,6 +110,10 @@ public class GroupController {
         return taskBL.completeTask(taskId);
     }
 
+    @RequestMapping(value = "/getUserTask",method = RequestMethod.POST)
+    public ResponseVO getUserTask(@RequestBody GroupIdAndUserForm groupIdAndUserForm){
+        return taskBL.getUserTaskList(groupIdAndUserForm.getGroupId(),groupIdAndUserForm.getUserId());
+    }
 
 //    @RequestMapping(value = "/deliverTasks",method = RequestMethod.POST)
 //    public ResponseVO deliverTask(@RequestParam HashMap tasksForMember){
@@ -123,7 +128,7 @@ public class GroupController {
 
     @RequestMapping(value = "/getCodeStatistics",method = RequestMethod.GET)
     public ResponseVO getCodeStatistics(@RequestBody GroupIdAndCodeIdForm groupIdAndCodeIdForm){
-        return null;
+        return groupCodeBL.getCodeStatistics(groupIdAndCodeIdForm);
     }
 
     @RequestMapping(value = "/getGroupMember/{groupId}",method = RequestMethod.GET)
@@ -134,6 +139,11 @@ public class GroupController {
     @RequestMapping(value = "/getGroupAnnouncements/{groupId}",method = RequestMethod.GET)
     public ResponseVO getGroupAnnouncements(@PathVariable int groupId){
         return groupBL.getGroupAnnouncements(groupId);
+    }
+
+    @RequestMapping(value = "/readAnnouncements",method = RequestMethod.GET)
+    public ResponseVO readAnnouncements(@RequestBody UserIdAndAnnouncementId userIdAndAnnouncementId){
+        return groupBL.readAnnouncement(userIdAndAnnouncementId.getUserId(),userIdAndAnnouncementId.getAnnouncementId());
     }
 
 }

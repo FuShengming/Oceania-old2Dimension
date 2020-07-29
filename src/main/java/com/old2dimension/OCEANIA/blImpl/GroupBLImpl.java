@@ -1,14 +1,9 @@
 package com.old2dimension.OCEANIA.blImpl;
 
+import com.old2dimension.OCEANIA.MessageServer.AnnouncementServer;
 import com.old2dimension.OCEANIA.bl.GroupBL;
-import com.old2dimension.OCEANIA.dao.AnnouncementRepository;
-import com.old2dimension.OCEANIA.dao.GroupMemberRepository;
-import com.old2dimension.OCEANIA.dao.GroupRepository;
-import com.old2dimension.OCEANIA.dao.UserRepository;
-import com.old2dimension.OCEANIA.po.Announcement;
-import com.old2dimension.OCEANIA.po.Group;
-import com.old2dimension.OCEANIA.po.GroupMember;
-import com.old2dimension.OCEANIA.po.User;
+import com.old2dimension.OCEANIA.dao.*;
+import com.old2dimension.OCEANIA.po.*;
 import com.old2dimension.OCEANIA.vo.GroupIdAndUserForm;
 import com.old2dimension.OCEANIA.vo.GroupNameAndCreatorIdForm;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
@@ -31,22 +26,10 @@ public class GroupBLImpl implements GroupBL {
     GroupMemberRepository groupMemberRepository;
     @Autowired
     AnnouncementRepository announcementRepository;
-
-    public void setUserRepository(UserRepository userRepository){
-        this.userRepository = userRepository;
-    }
-
-    public void setGroupRepository(GroupRepository groupRepository) {
-        this.groupRepository = groupRepository;
-    }
-
-    public void setGroupMemberRepository(GroupMemberRepository groupMemberRepository) {
-        this.groupMemberRepository = groupMemberRepository;
-    }
-
-    public void setAnnouncementRepository(AnnouncementRepository announcementRepository) {
-        this.announcementRepository = announcementRepository;
-    }
+    @Autowired
+    AnnouncementReadRepository announcementReadRepository;
+    @Autowired
+    AnnouncementServer announcementServer;
 
     @Override
     public ResponseVO findUser(String name) {
@@ -67,13 +50,13 @@ public class GroupBLImpl implements GroupBL {
 
 
         List<Integer> memberIds = new ArrayList<Integer>();
-        GroupMember leader;
-        leader = new GroupMember(0,groupNameAndCreatorIdForm.getCreatorId(),1);
+
         memberIds.add(groupNameAndCreatorIdForm.getCreatorId());
 
         Group res = new Group(0, groupNameAndCreatorIdForm.getName());
         res = groupRepository.save(res);
-
+        GroupMember leader;
+        leader = new GroupMember(res.getId(),groupNameAndCreatorIdForm.getCreatorId(),1);
         if(res.getId()==0){
             return ResponseVO.buildFailure("creating group failed");
         }
@@ -223,7 +206,27 @@ public class GroupBLImpl implements GroupBL {
 
     @Override
     public ResponseVO releaseAnnouncement(Announcement announcement) {
-        return null;
+        announcement = announcementRepository.save(announcement);
+        int groupId = announcement.getGroupId();
+        int announcementId = announcement.getId();
+        List<GroupMember> members = groupMemberRepository.findGroupMembersByGroupId(groupId);
+        List<Integer> ids = new ArrayList<>();
+        for(GroupMember member:members){
+            ids.add(member.getUserId());
+        }
+        List<AnnouncementRead> announcementReads = new ArrayList<>();
+        for(Integer id:ids){
+            AnnouncementRead cur = new AnnouncementRead(id,announcementId,0);
+            announcementReads.add(cur);
+        }
+        announcementReadRepository.saveAll(announcementReads);
+        List<Announcement> temp = new ArrayList<>();
+        temp.add(announcement);
+        for(Integer id:ids){
+            announcementServer.sendInfo(id,temp);
+        }
+
+        return ResponseVO.buildSuccess(announcement);
     }
 
     @Override
@@ -242,5 +245,18 @@ public class GroupBLImpl implements GroupBL {
 
     }
 
+    @Override
+    public ResponseVO readAnnouncement(int userId, int announcementId) {
+        AnnouncementRead announcementRead = announcementReadRepository.findAnnouncementReadByUserIdAndAnnouncementId(userId,announcementId);
+        if(announcementRead==null){
+            return  ResponseVO.buildFailure("Getting has_read failed.");
+        }
+        announcementRead.setHasRead(1);
+        announcementRead = announcementReadRepository.save(announcementRead);
+        if(announcementRead.getHasRead()==0){
+            return  ResponseVO.buildFailure("Modifying has_read failed.");
+        }
 
+        return ResponseVO.buildSuccess(announcementRead);
+    }
 }
