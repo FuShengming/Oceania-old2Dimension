@@ -53,12 +53,18 @@ public class TaskBLImpl implements TaskBL {
         if(groupRepository.findGroupById(groupId)==null){
             return ResponseVO.buildFailure("This group does not exist!");
         }
+        HashMap<String,List> map = new HashMap<>();
         List<Task> res = taskRepository.findTasksByGroupId(groupId);
+        map.put("tasks",res);
+
         if(res==null){
             return ResponseVO.buildFailure("Getting task list failed");
         }
 
-        return ResponseVO.buildSuccess(res);
+        List<TaskAssignment> taskAssignments = taskAssignmentRepository.findTaskAssignmentsByGroupId(groupId);
+        map.put("assignments",taskAssignments);
+
+        return ResponseVO.buildSuccess(map);
     }
 
     @Override

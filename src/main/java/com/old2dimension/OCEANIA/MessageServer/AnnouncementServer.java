@@ -1,10 +1,12 @@
 package com.old2dimension.OCEANIA.MessageServer;
 
+import com.old2dimension.OCEANIA.Encoder.AnnouncementListEncoder;
 import com.old2dimension.OCEANIA.dao.AnnouncementReadRepository;
 import com.old2dimension.OCEANIA.dao.AnnouncementRepository;
 import com.old2dimension.OCEANIA.po.Announcement;
 import com.old2dimension.OCEANIA.po.AnnouncementRead;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -16,13 +18,29 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@ServerEndpoint("/websocket/announcement/{userId}")
+@ServerEndpoint(value = "/websocket/announcement/{userId}",encoders = { AnnouncementListEncoder.class })
 @Component
 public class AnnouncementServer {
+
+    private static ApplicationContext applicationContext;
+    //你要注入的service或者dao
+
+//    public static void setApplicationContext(ApplicationContext applicationContext) {
+//        AnnouncementServer.applicationContext = applicationContext;
+//    }
     @Autowired
-    AnnouncementRepository announcementRepository;
+    public void setAnnouncementReadRepository(AnnouncementReadRepository announcementReadRepository){
+        AnnouncementServer.announcementReadRepository = announcementReadRepository;
+    }
     @Autowired
-    AnnouncementReadRepository announcementReadRepository;
+    public void setAnnouncementRepository(AnnouncementRepository announcementRepository){
+        AnnouncementServer.announcementRepository = announcementRepository;
+    }
+    private static AnnouncementRepository announcementRepository;
+
+    private static AnnouncementReadRepository announcementReadRepository;
+
+
     private static AtomicInteger onlineNum = new AtomicInteger();
 
     //concurrent包的线程安全Set，用来存放每个客户端对应的WebSocketServer对象。
@@ -41,6 +59,9 @@ public class AnnouncementServer {
     //给指定用户发送信息
     public void sendInfo(int userId, List<Announcement> message){
         Session session = sessionPools.get(userId);
+        if(session==null){
+            return;
+        }
 
         try {
             sendMessage(session, message);
@@ -55,6 +76,8 @@ public class AnnouncementServer {
         sessionPools.put(userId,session);
         addOnlineCount();
         System.out.println(userId + "加入webSocket！当前人数为" + onlineNum);
+//        announcementRepository = applicationContext.getBean(announcementRepository.getClass());
+//        announcementReadRepository = applicationContext.getBean(announcementReadRepository.getClass());
         List<AnnouncementRead> announcementReads = announcementReadRepository.findAnnouncementReadsByUserIdAndHasRead(userId,0);
 
         List<Integer> ids = new ArrayList<>();
