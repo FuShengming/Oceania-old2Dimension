@@ -4,6 +4,7 @@ import com.old2dimension.OCEANIA.bl.GroupBL;
 import com.old2dimension.OCEANIA.bl.GroupCodeBL;
 import com.old2dimension.OCEANIA.bl.TaskBL;
 import com.old2dimension.OCEANIA.po.Announcement;
+import com.old2dimension.OCEANIA.po.Invitation;
 import com.old2dimension.OCEANIA.po.Task;
 import com.old2dimension.OCEANIA.po.TaskAssignment;
 import com.old2dimension.OCEANIA.vo.*;
@@ -54,9 +55,9 @@ public class GroupController {
         return taskBL.getTaskByName(groupIdAndTaskNameForm);
     }
 
-    @RequestMapping(value = "/inviteUser/{userId}",method = RequestMethod.GET)
-    public ResponseVO inviteUser(@PathVariable int userId){
-        return groupBL.inviteUser(userId);
+    @RequestMapping(value = "/inviteUser",method = RequestMethod.POST)
+    public ResponseVO inviteUser(@RequestBody Invitation invitation){
+        return groupBL.inviteUser(invitation);
     }
 
     @RequestMapping(value = "/quitGroup",method = RequestMethod.POST)
@@ -65,8 +66,8 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/joinGroup",method = RequestMethod.GET)
-    public ResponseVO joinGroup(@RequestBody GroupIdAndUserForm groupIdAndUserForm){
-        return groupBL.joinGroup(groupIdAndUserForm);
+    public ResponseVO joinGroup(@RequestBody Invitation invitation){
+        return groupBL.joinGroup(invitation);
     }
 
     @RequestMapping(value = "/addCode",method = RequestMethod.POST)
@@ -111,8 +112,8 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/getUserTask",method = RequestMethod.POST)
-    public ResponseVO modifyTask(@RequestParam("groupId") int groupId,@RequestParam("userId") int userId){
-        return taskBL.getUserTaskList(groupId,userId);
+    public ResponseVO getUserTask(@RequestBody GroupIdAndUserForm groupIdAndUserForm){
+        return taskBL.getUserTaskList(groupIdAndUserForm.getGroupId(),groupIdAndUserForm.getUserId());
     }
 
 //    @RequestMapping(value = "/deliverTasks",method = RequestMethod.POST)
@@ -139,6 +140,21 @@ public class GroupController {
     @RequestMapping(value = "/getGroupAnnouncements/{groupId}",method = RequestMethod.GET)
     public ResponseVO getGroupAnnouncements(@PathVariable int groupId){
         return groupBL.getGroupAnnouncements(groupId);
+    }
+
+    @RequestMapping(value = "/readAnnouncement",method = RequestMethod.GET)
+    public ResponseVO readAnnouncement(@RequestBody UserIdAndAnnouncementId userIdAndAnnouncementId){
+        return groupBL.readAnnouncement(userIdAndAnnouncementId.getUserId(),userIdAndAnnouncementId.getAnnouncementId());
+    }
+
+    @RequestMapping(value = "/readInvitation",method = RequestMethod.GET)
+    public ResponseVO readInvitation(@RequestBody UserIdAndInvitationIdForm userIdAndInvitationIdForm){
+        return groupBL.readInvitation(userIdAndInvitationIdForm.getUserId(),userIdAndInvitationIdForm.getInvitationId());
+    }
+
+    @RequestMapping(value = "/ignoreInvitation",method = RequestMethod.GET)
+    public ResponseVO ignoreInvitation(@RequestBody UserIdAndInvitationIdForm userIdAndInvitationIdForm){
+        return groupBL.ignoreInvitation(userIdAndInvitationIdForm.getUserId(),userIdAndInvitationIdForm.getInvitationId());
     }
 
 }

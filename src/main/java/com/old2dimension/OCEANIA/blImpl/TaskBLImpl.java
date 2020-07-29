@@ -9,12 +9,13 @@ import com.old2dimension.OCEANIA.vo.ResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 @Component
 public class TaskBLImpl implements TaskBL {
-
 
     @Autowired
     TaskRepository taskRepository;
@@ -26,6 +27,26 @@ public class TaskBLImpl implements TaskBL {
     TaskAssignmentRepository taskAssignmentRepository;
     @Autowired
     GroupMemberRepository groupMemberRepository;
+
+    public void setTaskRepository(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void setGroupRepository(GroupRepository groupRepository) {
+        this.groupRepository = groupRepository;
+    }
+
+    public void setTaskAssignmentRepository(TaskAssignmentRepository taskAssignmentRepository) {
+        this.taskAssignmentRepository = taskAssignmentRepository;
+    }
+
+    public void setGroupMemberRepository(GroupMemberRepository groupMemberRepository) {
+        this.groupMemberRepository = groupMemberRepository;
+    }
 
     @Override
     public ResponseVO createTask(Task task) {
@@ -51,12 +72,21 @@ public class TaskBLImpl implements TaskBL {
         if(groupRepository.findGroupById(groupId)==null){
             return ResponseVO.buildFailure("This group does not exist!");
         }
+        HashMap<String,List> map = new HashMap<>();
         List<Task> res = taskRepository.findTasksByGroupId(groupId);
+        map.put("tasks",res);
+
         if(res==null){
             return ResponseVO.buildFailure("Getting task list failed");
         }
 
-        return ResponseVO.buildSuccess(res);
+        List<TaskAssignment> taskAssignments = taskAssignmentRepository.findTaskAssignmentsByGroupId(groupId);
+        if(taskAssignments==null){
+            return ResponseVO.buildFailure("Getting task assignments failed.");
+        }
+        map.put("assignments",taskAssignments);
+
+        return ResponseVO.buildSuccess(map);
     }
 
     @Override
@@ -117,7 +147,17 @@ public class TaskBLImpl implements TaskBL {
     public ResponseVO getUserTaskList(int groupId, int userId) {
         List<TaskAssignment> taskAssignments = taskAssignmentRepository.findTaskAssignmentsByGroupIdAndUserId(groupId,userId);
         if(taskAssignments==null){return ResponseVO.buildFailure("getting task list failed.");}
-        return ResponseVO.buildSuccess(taskAssignments);
+
+        List<Integer> ids = new ArrayList<>();
+        for(TaskAssignment a:taskAssignments){
+            ids.add(a.getId());
+        }
+        List<Task> res = taskRepository.findAllById(ids);
+        HashMap<String,List> map = new HashMap<>();
+        map.put("tasks",res);
+        map.put("assignments",taskAssignments);
+
+        return ResponseVO.buildSuccess(map);
     }
 
     @Override
