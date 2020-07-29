@@ -18,6 +18,8 @@ import java.util.List;
 public class GroupBLImpl implements GroupBL {
 
 
+
+
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -28,8 +30,33 @@ public class GroupBLImpl implements GroupBL {
     AnnouncementRepository announcementRepository;
     @Autowired
     AnnouncementReadRepository announcementReadRepository;
+
     @Autowired
     AnnouncementServer announcementServer;
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void setGroupRepository(GroupRepository groupRepository) {
+        this.groupRepository = groupRepository;
+    }
+
+    public void setGroupMemberRepository(GroupMemberRepository groupMemberRepository) {
+        this.groupMemberRepository = groupMemberRepository;
+    }
+
+    public void setAnnouncementRepository(AnnouncementRepository announcementRepository) {
+        this.announcementRepository = announcementRepository;
+    }
+
+    public void setAnnouncementReadRepository(AnnouncementReadRepository announcementReadRepository) {
+        this.announcementReadRepository = announcementReadRepository;
+    }
+
+    public void setAnnouncementServer(AnnouncementServer announcementServer) {
+        this.announcementServer = announcementServer;
+    }
 
     @Override
     public ResponseVO findUser(String name) {
@@ -259,4 +286,6 @@ public class GroupBLImpl implements GroupBL {
 
         return ResponseVO.buildSuccess(announcementRead);
     }
+
+
 }
