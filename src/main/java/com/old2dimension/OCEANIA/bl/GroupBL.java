@@ -21,7 +21,7 @@ public interface GroupBL {
     public ResponseVO searchGroupByUser(int userId);
     public ResponseVO getGroupMembers(int groupId);
     public ResponseVO releaseAnnouncement(Announcement announcement);
-    public ResponseVO getGroupAnnouncements(int groupId);
+    public ResponseVO getGroupAnnouncements(int groupId,int userId);
     public ResponseVO readAnnouncement(int userId,int announcementId);
 
 

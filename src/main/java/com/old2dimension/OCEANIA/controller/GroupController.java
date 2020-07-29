@@ -137,9 +137,9 @@ public class GroupController {
         return groupBL.getGroupMembers(groupId);
     }
 
-    @RequestMapping(value = "/getGroupAnnouncements/{groupId}",method = RequestMethod.GET)
-    public ResponseVO getGroupAnnouncements(@PathVariable int groupId){
-        return groupBL.getGroupAnnouncements(groupId);
+    @RequestMapping(value = "/getGroupAnnouncements",method = RequestMethod.POST)
+    public ResponseVO getGroupAnnouncements(@RequestBody GroupIdAndUserForm groupIdAndUserForm){
+        return groupBL.getGroupAnnouncements(groupIdAndUserForm.getGroupId(),groupIdAndUserForm.getUserId());
     }
 
     @RequestMapping(value = "/readAnnouncement",method = RequestMethod.POST)

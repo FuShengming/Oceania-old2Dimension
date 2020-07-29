@@ -5,6 +5,7 @@ import com.old2dimension.OCEANIA.MessageServer.InvitationServer;
 import com.old2dimension.OCEANIA.bl.GroupBL;
 import com.old2dimension.OCEANIA.dao.*;
 import com.old2dimension.OCEANIA.po.*;
+import com.old2dimension.OCEANIA.vo.AnnouncementAndUserReadForm;
 import com.old2dimension.OCEANIA.vo.GroupIdAndUserForm;
 import com.old2dimension.OCEANIA.vo.GroupNameAndCreatorIdForm;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
@@ -273,14 +274,25 @@ public class GroupBLImpl implements GroupBL {
     }
 
     @Override
-    public ResponseVO getGroupAnnouncements(int groupId) {
-        if(groupRepository.findGroupById(groupId)==null){
+    public ResponseVO getGroupAnnouncements(int groupId,int userId) {
+       Group group = groupRepository.findGroupById(groupId);
+        if(group==null){
             return ResponseVO.buildFailure("this group does not exist!");
         }
+        if(groupMemberRepository.findGroupMemberByGroupIdAndUserId(groupId,userId)==null){
+            return ResponseVO.buildFailure("Do not have the access of getting announcements.");
+        }
+        List<Announcement> announcements = announcementRepository.findAnnouncementsByGroupId(groupId);
 
-        List<Announcement> res = announcementRepository.findAllByGroupId(groupId);
-        if(res==null){
+        if(announcements==null){
             return ResponseVO.buildFailure("Getting announcement list failed.");
+        }
+
+        List<AnnouncementAndUserReadForm> res = new ArrayList<>();
+        for(Announcement a:announcements){
+            AnnouncementAndUserReadForm cur = new AnnouncementAndUserReadForm(a,userId,
+                    announcementReadRepository.findAnnouncementReadByUserIdAndAnnouncementId(userId,a.getId()).getHasRead());
+            res.add(cur);
         }
 
         return ResponseVO.buildSuccess(res);
