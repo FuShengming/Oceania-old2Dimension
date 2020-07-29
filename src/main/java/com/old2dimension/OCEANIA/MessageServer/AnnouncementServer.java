@@ -53,6 +53,7 @@ public class AnnouncementServer {
             }
         }
     }
+    
     //给指定用户发送信息
     public void sendInfo(int userId, Integer message){
         Session session = sessionPools.get(userId);
