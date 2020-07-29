@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class PageController {
-    @RequestMapping(value = {"/index","/"})
+    @RequestMapping(value = {"/index", "/"})
     public String index() {
         return "/html/index.html";
     }
@@ -35,8 +35,18 @@ public class PageController {
     public String register() {
         return "/html/register.html";
     }
-    @RequestMapping("/test")
-    public String cy() {
-        return "/html/test.html";
+
+    @RequestMapping("/notification")
+    public String notification() {
+        return "/html/notification.html";
     }
+
+    @RequestMapping("/groups")
+    public String groups() {
+        return "/html/groups.html";
+    }
+//    @RequestMapping("/cy")
+//    public String cy() {
+//        return "/html/cytotest.html";
+//    }
 }
