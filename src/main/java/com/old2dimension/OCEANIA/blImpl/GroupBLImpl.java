@@ -52,13 +52,13 @@ public class GroupBLImpl implements GroupBL {
 
 
         List<Integer> memberIds = new ArrayList<Integer>();
-        GroupMember leader;
-        leader = new GroupMember(0,groupNameAndCreatorIdForm.getCreatorId(),1);
+
         memberIds.add(groupNameAndCreatorIdForm.getCreatorId());
 
         Group res = new Group(0, groupNameAndCreatorIdForm.getName());
         res = groupRepository.save(res);
-
+        GroupMember leader;
+        leader = new GroupMember(res.getId(),groupNameAndCreatorIdForm.getCreatorId(),1);
         if(res.getId()==0){
             return ResponseVO.buildFailure("creating group failed");
         }

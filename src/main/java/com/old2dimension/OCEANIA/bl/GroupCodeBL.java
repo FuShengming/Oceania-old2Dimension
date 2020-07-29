@@ -6,6 +6,6 @@ import com.old2dimension.OCEANIA.vo.ResponseVO;
 public interface GroupCodeBL {
     public ResponseVO addCode(GroupIdAndCodeIdForm groupIdAndCodeIdForm);
     public ResponseVO deleteCode(GroupIdAndCodeIdForm groupIdAndCodeIdForm);
-    public ResponseVO findGroupCode(String groupId);
+    public ResponseVO getGroupCodeList(int groupId);
     public ResponseVO getCodeStatistics(GroupIdAndCodeIdForm groupIdAndCodeIdForm);
 }

@@ -1,8 +1,11 @@
 package com.old2dimension.OCEANIA.blImpl;
 
+import com.old2dimension.OCEANIA.bl.GroupCodeBL;
 import com.old2dimension.OCEANIA.bl.UploadBL;
 import com.old2dimension.OCEANIA.dao.CodeRepository;
+import com.old2dimension.OCEANIA.dao.GroupCodeRepository;
 import com.old2dimension.OCEANIA.po.Code;
+import com.old2dimension.OCEANIA.po.GroupCode;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
 import com.old2dimension.OCEANIA.vo.UploadConfirmForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,8 @@ import java.util.stream.Collectors;
 public class UploadBLImpl implements UploadBL {
     @Autowired
     CodeRepository codeRepository;
+    @Autowired
+    GroupCodeRepository groupCodeRepository;
 
     public void setCodeRepository(CodeRepository codeRepository) {
         this.codeRepository = codeRepository;
@@ -155,6 +160,7 @@ public class UploadBLImpl implements UploadBL {
         code.setUserId(uploadConfirm.getUserId());
         code.setIs_default(0);
         code = codeRepository.save(code);
+
         File renameJavaDir = new File("src/main/resources/analyzeCode/src/" + code.getId());
         File renameJarFile = new File("src/main/resources/jars/" + code.getId() + ".jar");
         boolean isSuccess = javaDir.renameTo(renameJavaDir);
@@ -170,6 +176,21 @@ public class UploadBLImpl implements UploadBL {
             return ResponseVO.buildFailure("java files rename fail");
         }
         return ResponseVO.buildSuccess(code);
+    }
+
+    @Override
+    public ResponseVO groupAnalyzeJar(int groupId, String uuid) {
+        ResponseVO res = analyzeJar(1,uuid);
+        if(!res.isSuccess()){
+            return res;
+        }
+        Code code = (Code)res.getContent();
+        GroupCode groupCode = new GroupCode(groupId,code.getId());
+        groupCode = groupCodeRepository.save(groupCode);
+        if(groupCode.getId()==0){
+            return ResponseVO.buildFailure("save group code data failed.");
+        }
+        return ResponseVO.buildSuccess(groupCode);
     }
 
     public ResponseVO analyzeJar(int userId, String uuid) {

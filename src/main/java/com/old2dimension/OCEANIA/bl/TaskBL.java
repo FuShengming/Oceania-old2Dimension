@@ -19,5 +19,6 @@ public interface TaskBL {
     public ResponseVO deliverTaskForOneMember(TaskAssignment taskAssignment);
     public ResponseVO deliverTask(HashMap tasksForMember);
     public ResponseVO completeTask(int taskId);
+    public ResponseVO getUserTaskList(int groupId,int userId);
 
 }

@@ -3,10 +3,18 @@ $(document).ready(function () {
     if (userId === undefined) window.location.href = "/login";
 
     let getTasksByUserId = function () {
+
         $.ajax({
             type: "get",
-            url: "/group/getAllTasks/" + userId.toString(),
+            url: "/group/getUserTask/",
             headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                'userId': userId,
+                'groupId': 1 // todo: groupId
+            }),
+            timeout: 100000,
             success: function (data) {
                 if (data.success) {
                     let h = "";

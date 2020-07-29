@@ -9,13 +9,14 @@ public class GroupCode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "group_id")
-    private int group_id;
+    private int groupId;
     @Column(name = "code_id")
-    private int code_id;
+    private int codeId;
 
-    public GroupCode(int group_id, int code_id) {
-        this.group_id = group_id;
-        this.code_id = code_id;
+    public GroupCode(){}
+    public GroupCode(int groupId, int codeId) {
+        this.groupId = groupId;
+        this.codeId = codeId;
     }
 
     public int getId() {
@@ -26,20 +27,20 @@ public class GroupCode {
         this.id = id;
     }
 
-    public int getGroup_id() {
-        return group_id;
+    public int getGroupId() {
+        return groupId;
     }
 
-    public void setGroup_id(int group_id) {
-        this.group_id = group_id;
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
 
-    public int getCode_id() {
-        return code_id;
+    public int getCodeId() {
+        return codeId;
     }
 
-    public void setCode_id(int code_id) {
-        this.code_id = code_id;
+    public void setCodeId(int codeId) {
+        this.codeId = codeId;
     }
 
 }

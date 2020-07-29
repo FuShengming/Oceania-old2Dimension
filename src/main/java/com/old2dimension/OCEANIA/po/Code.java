@@ -25,46 +25,45 @@ public class Code {
         this.userId = userId;
     }
 
-    @Column(name = "user_id")
+    @Column(name="user_id")
     private int userId;
 
-    @Column(name = "name")
+    @Column(name="name")
     private String name;
-    @Column(name = "num_of_vertices")
+    @Column(name="num_of_vertices")
     private int numOfVertices;
-    @Column(name = "num_of_edges")
+    @Column(name="num_of_edges")
     private int numOfEdges;
-    @Column(name = "num_of_domains")
+    @Column(name="num_of_domains")
     private int numOfDomains;
     @Column(name = "is_default")
     private int is_default;
 
+    public Code(){}
 
-    public Code() {
-    }
 
 
     public Code(int userId, String name, int numOfVertices, int numOfEdges, int numOfDomains, int is_default) {
 
-        this.userId = userId;
+        this.userId=userId;
 
         this.name = name;
         this.numOfVertices = numOfVertices;
         this.numOfEdges = numOfEdges;
         this.numOfDomains = numOfDomains;
-        this.is_default = is_default;
+        this.is_default= is_default;
     }
 
 
-    public Code(int id, int userId, String name, int numOfVertices, int numOfEdges, int numOfDomains, int is_default) {
+    public Code(int id,int userId, String name, int numOfVertices, int numOfEdges, int numOfDomains, int is_default) {
 
-        this.userId = userId;
+        this.userId=userId;
         this.id = id;
         this.name = name;
         this.numOfVertices = numOfVertices;
         this.numOfEdges = numOfEdges;
         this.numOfDomains = numOfDomains;
-        this.is_default = is_default;
+        this.is_default=is_default;
     }
 
     public int getIs_default() {
