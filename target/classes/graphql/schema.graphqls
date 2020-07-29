@@ -1,0 +1,41 @@
+type Vertex {
+    id: Int!
+    funcName: String!
+    belongClass: String!
+    belongPackage: String!
+    args: [String]!
+}
+
+type Weight {
+    weightName: String!
+    weightValue: Float!
+}
+
+type WeightForm {
+    weightName: String!
+    weightValue: Float!
+}
+
+type Edge {
+    id: Int!
+    start: Vertex!
+    end: Vertex!
+    weights: [Weight]!
+}
+
+type Domain {
+    id: Int!
+    vertices: [Vertex]!
+    edges: [Edge]!
+}
+
+type DomainSet {
+    thresholds: [WeightForm]!
+    domains: [Domain]!
+}
+
+#type User {
+#    id: Int!
+#    firstName: String!
+#    lastName: String!
+#}
