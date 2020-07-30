@@ -161,6 +161,7 @@ $(function () {
                     let h = "";
                     let codes = data.content;
                     console.log(data);
+                    $("#p-count").text(codes.length);
                     codes.forEach(function (code) {
                         console.log(code);
                         h += `<tr class="clickable-row" code-id="${code.codeId}">
@@ -194,12 +195,12 @@ $(function () {
                         if (confirm("Sure to remove this project permanently?")) {
                             $.ajax({
                                 type: "post",
-                                url: "/code/delete",
+                                url: "/group/deleteCode",
                                 headers: {"Authorization": $.cookie('token')},
                                 dataType: "json",
                                 contentType: 'application/json',
                                 data: JSON.stringify({
-                                    "userId": userId,
+                                    "groupId": group_id,
                                     "codeId": codeId,
                                 }),
                                 success: function (data) {
@@ -226,7 +227,7 @@ $(function () {
                                 dataType: "json",
                                 contentType: 'application/json',
                                 data: JSON.stringify({
-                                    "userId": userId,
+                                    "userId": 1,
                                     "codeId": codeId,
                                     "name": $("#code-name-input").val()
                                 }),
