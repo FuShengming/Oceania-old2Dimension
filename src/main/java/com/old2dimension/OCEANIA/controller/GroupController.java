@@ -108,7 +108,7 @@ public class GroupController {
         return taskBL.deliverTaskForOneMember(taskAssignment);
     }
 
-    @RequestMapping(value = "/task/complete/{taskId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/task/complete/{taskId}", method = RequestMethod.GET)
     public ResponseVO completeTask(@PathVariable int taskId) {
         return taskBL.completeTask(taskId);
     }

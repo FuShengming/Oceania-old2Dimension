@@ -33,26 +33,95 @@ $(function () {
 
     })
 
+    $("#task-delete").on('click', function () {
+        let taskId = $("#task-delete").attr("task-id")
+        $.ajax({
+            type: "get",
+            url: "/group/deleteTask/" + taskId,
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            success: function (data) {
+                $("#taskModal").modal("hide")
+                window.location.reload()
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    })
+
     $("#task-create").on('click', function () {
         $("#task-modify-modal-label").text("New Task");
-    })
+    });
+
+    $("#task-complete").on('click', function (e) {
+        let taskId = $("#task-complete").attr("task-id")
+        $.ajax({
+            type: "get",
+            url: "/group/task/complete/" + taskId,
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+
+            success: function (data) {
+                $("#taskModal").modal("hide")
+                window.location.reload()
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    });
 
     $("#task-modal-submit").on('click', function () {
         let str = checkInput();
         if (str.length !== 0) {
             $("#task-create-error").text(str + " can't be null!")
         } else {
-            let upString = "{"
             $.ajax({
                 type: "post",
                 url: "/group/createTask",
                 headers: {"Authorization": $.cookie('token')},
                 dataType: "json",
                 contentType: 'application/json',
-                data: JSON.stringify()
+                data: JSON.stringify({
+                    "groupId": group_id,
+                    "state": 0,
+                    "name": $("#task-create-name").val(),
+                    "label": $("#task-create-label").val(),
+                    "description": $("#task-create-desc").val(),
+                    "startDate": $("#task-create-start-time").val(),
+                    "endDate": $("#task-create-end-time").val()
+                }),
+                success: function (data) {
+                    if (data.success) {
+
+                        $.ajax({
+                            type: "post",
+                            url: "/group/deliverTaskForOneMember",
+                            headers: {"Authorization": $.cookie('token')},
+                            dataType: "json",
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                "groupId": group_id,
+                                "taskId": data.content.id,
+                                "userId": 2
+                            }),
+                            success: function (data) {
+                                $("#task-modify-modal").modal('hide');
+                                window.location.reload()
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
             })
         }
-    })
+    });
 
     $(".form-control").bind('focus', function () {
         $("#task-create-error").text("")
@@ -397,7 +466,7 @@ $(function () {
                         $("#edit-btn").show();
                         if (!$("#project-statistics").length) {
                             $("#project-modify").before(`
-                                        <a class="dropdown-item code-stats" href="#" code-id="${code.codeId}" id="project-statistics">Statistics</a>`
+                                        <a class="dropdown-item code-stats" href="#" id="project-statistics">Statistics</a>`
                             );
 
                         }
@@ -476,7 +545,7 @@ $(function () {
             }),
             timeout: 100000,
             success: function (data) {
-                if (is_leader) {
+                if (is_leader && $("#task-create").length === 0) {
                     $("#task-title-button").prepend(`
                     <button class="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#task-modify-modal"
                             id="task-create">
@@ -484,7 +553,7 @@ $(function () {
                     </button>
                 `)
                 }
-                else {
+                else if (!is_leader) {
                     $("#task-create").remove();
                 }
                 if (data.success) {
@@ -510,6 +579,8 @@ $(function () {
                                 break;
                             }
                         }
+                        $("#task-complete").attr("task-id", taskId)
+                        $("#task-delete").attr("task-id", taskId)
                         $("#task-modal-label").text(task.name)
                         $("#modal-status").text(task.state === 0 ? "unfinished" : "finished")
                         $("#modal-label").text(task.label)
@@ -517,25 +588,24 @@ $(function () {
                         $("#modal-start").text(task.startDate === null ? "--" : new Date(Date.parse(task.startDate)).toLocaleString("en"))
                         $("#modal-end").text(task.endDate === null ? "--" : new Date(Date.parse(task.endDate)).toLocaleString("en"))
 
+                        if (task.state === 0) {
+                            if ($("#task-complete").length === 0) {
+                                $("#task-close").after(`<button type="button" class="btn btn-success" id="task-complete">Complete</button>`)
+                            }
+                        }else {
+                            $("#task-complete").remove()
+                        }
 
                         if (is_leader) {
-                            $("#task-button").addClass("justify-content-between").html(`
-                                            <div class="justify-content-flex-start">
+                            $("#task-button").addClass("justify-content-between");
+                            if ($("#task-btn1").length === 0) {
+                                $("#task-btn2").before(`<div class="justify-content-flex-start">
                                                 <button type="button" class="btn btn-outline-danger" id="task-delete">Delete</button>
-                                                <button type="button" class="btn btn-outline-primary" id="task-modify">Modify</button>
-                                            </div>
-                                            <div class="justify-content-flex-end">
-                                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-success" id="task-complete">Complete</button>
-                                            </div>
-                                        `)
+                                            </div>`)
+                            }
                         } else {
-                            $("#task-button").removeClass("justify-content-between").html(`
-                                            <div class="justify-content-flex-end" style="float: right">
-                                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-success" id="task-complete">Complete</button>
-                                            </div>
-                                        `)
+                            $("#task-button").removeClass("justify-content-between");
+                            $("#task-btn1").remove()
                         }
                     });
                 } else {

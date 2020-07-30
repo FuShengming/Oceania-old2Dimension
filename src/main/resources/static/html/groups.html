@@ -679,6 +679,13 @@ height: 100%;
                 </div>
             </div>
             <div class="modal-footer justify-content-between" id="task-button">
+                <div class="justify-content-flex-start" id="task-btn1">
+                    <button type="button" class="btn btn-outline-danger" id="task-delete">Delete</button>
+                </div>
+                <div class="justify-content-flex-end" id="task-btn2">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" id="task-close">Close</button>
+                    <button type="button" class="btn btn-success" id="task-complete">Complete</button>
+                </div>
             </div>
         </div>
     </div>
@@ -687,7 +694,7 @@ height: 100%;
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="task-modify-modal-label"></h4>
+                <h4 class="modal-title" id="task-modify-modal-label">New Task</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <div class="modal-body">
@@ -697,6 +704,13 @@ height: 100%;
                     </div>
                     <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default-1"
                     id="task-create-name">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default-6">UserName</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default-6"
+                           id="task-create-user-name">
                 </div>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
@@ -778,7 +792,5 @@ height: 100%;
 <script type="text/javascript" src="../js/navbar.js"></script>
 
 <script type="text/javascript" src="../js/groups.js"></script>
-
-<script type="text/javascript" src="../js/tasks.js"></script>
 </body>
 </html>
