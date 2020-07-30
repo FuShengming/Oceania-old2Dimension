@@ -457,6 +457,49 @@ $(function () {
         })
     });
 
+    $("#invite_submit").on('click', function () {
+        $.ajax({
+            type: "get",
+            url: "/group/findUser/" + $("#username-input").val(),
+            headers: {"Authorization": $.cookie('token')},
+            success: function (data) {
+                if (data.success) {
+                    let id = data.content.id;
+                    $.ajax({
+                        type: "post",
+                        url: "/group/inviteUser",
+                        headers: {"Authorization": $.cookie('token')},
+                        dataType: "json",
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            groupId: group_id,
+                            userId: id,
+                            inviterId: userId
+                        }),
+                        success: function (data) {
+                            if (data.success) {
+                                console.log("success");
+                                alert("Send invitation successfully");
+                                $("#inviteModal").modal('hide');
+                            } else {
+                                console.log(data.message);
+                            }
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    });
+                } else {
+                    alert("Can't find such user.")
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    });
+
     $("#a_publish_submit").on('click', function () {
         $.ajax({
             type: "post",
@@ -467,7 +510,7 @@ $(function () {
             data: JSON.stringify({
                 title: $("#a-title-input").val(),
                 content: $("#a-content-input").val(),
-                groupId: 1,
+                groupId: group_id,
                 releaseDate: new Date()
             }),
             success: function (data) {
@@ -481,7 +524,7 @@ $(function () {
             error: function (err) {
                 console.log(err);
             }
-        })
+        });
     });
     $("#create_submit").on('click', function () {
         $.ajax({
@@ -498,6 +541,7 @@ $(function () {
             success: function (data) {
                 if (data.success) {
                     console.log("success");
+                    get_group_list();
                     $("#createModal").modal('hide');
                 } else {
                     console.log(data.message);
