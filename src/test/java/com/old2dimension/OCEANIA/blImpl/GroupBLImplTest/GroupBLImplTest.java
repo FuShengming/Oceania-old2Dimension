@@ -1140,6 +1140,35 @@ public class GroupBLImplTest {
         Assert.assertEquals(responseVO.getMessage(), "Saving invitation failed.");
     }
 
+    @Test
+    public void getUserInvitation1() {
+        GroupBLImpl groupBL = new GroupBLImpl();
+        InvitationRepository invitationRepository = mock(InvitationRepository.class);
+        groupBL.setInvitationRepository(invitationRepository);
+
+        ArrayList<Invitation> invitations = new ArrayList<>();
+        Invitation invitation = new Invitation(1, 1, 2, 1, 0, 0);
+        invitations.add(invitation);
+
+        when(invitationRepository.findInvitationsByUserId(2)).thenReturn(invitations);
+
+        ResponseVO responseVO = groupBL.getUserInvitation(2);
+        Assert.assertEquals(((ArrayList<Invitation>) responseVO.getContent()).size(), 1);
+        Assert.assertEquals(((ArrayList<Invitation>) responseVO.getContent()).get(0).getHasRead(), 0);
+    }
+
+    @Test
+    public void getUserInvitation2() {
+        GroupBLImpl groupBL = new GroupBLImpl();
+        InvitationRepository invitationRepository = mock(InvitationRepository.class);
+        groupBL.setInvitationRepository(invitationRepository);
+
+        when(invitationRepository.findInvitationsByUserId(2)).thenReturn(null);
+
+        ResponseVO responseVO = groupBL.getUserInvitation(2);
+        Assert.assertEquals(responseVO.getMessage(), "Getting invitations failed.");
+    }
+
 }
 
 
