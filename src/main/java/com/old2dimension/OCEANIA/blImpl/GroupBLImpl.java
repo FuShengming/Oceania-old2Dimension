@@ -144,11 +144,16 @@ public class GroupBLImpl implements GroupBL {
     public ResponseVO inviteUser(Invitation invitation) {
         invitation.setHasRead(0);
         invitation.setState(0);
+
         if(groupMemberRepository.findGroupMemberByGroupIdAndUserId(invitation.getGroupId(),invitation.getInviterId())==null){
             return ResponseVO.buildFailure("Do not have the access of inviting user.");
         }
+
         if(invitation.getId()!=0){
             return ResponseVO.buildFailure("The invitation has to be a new one.");
+        }
+        if(groupMemberRepository.findGroupMemberByGroupIdAndUserId(invitation.getGroupId(),invitation.getUserId())!=null){
+            return ResponseVO.buildFailure("This user have been group member.");
         }
         invitation = invitationRepository.save(invitation);
         if(invitation.getId()==0){
