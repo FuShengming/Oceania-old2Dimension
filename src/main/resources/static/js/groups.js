@@ -581,6 +581,33 @@ $(function () {
             error: function (err) {
                 console.log(err);
             }
-        })
+        });
+    });
+
+    $("#quit-btn").on('click', function () {
+        if (confirm("Are you sure to quit this group?")) {
+            $.ajax({
+                type: "post",
+                url: "/group/quitGroup",
+                headers: {"Authorization": $.cookie('token')},
+                dataType: "json",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    groupId: group_id,
+                    userId: userId,
+                }),
+                success: function (data) {
+                    if (data.success) {
+                        console.log("success");
+                        get_group_list();
+                    } else {
+                        console.log(data.message);
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
     });
 });
