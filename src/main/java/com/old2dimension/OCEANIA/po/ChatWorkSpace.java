@@ -1,7 +1,8 @@
 package com.old2dimension.OCEANIA.po;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
+
 @Entity
 @Table(name = "chat_workspace")
 public class ChatWorkSpace {

@@ -118,10 +118,10 @@ public class GroupController {
         return taskBL.getUserTaskList(groupIdAndUserForm.getGroupId(), groupIdAndUserForm.getUserId());
     }
 
-//    @RequestMapping(value = "/deliverTasks",method = RequestMethod.POST)
-//    public ResponseVO deliverTask(@RequestParam HashMap tasksForMember){
-//        return taskBL.deliverTask(tasksForMember);
-//    }
+    @RequestMapping(value = "/getGroupName/{groupId}",method = RequestMethod.GET)
+    public ResponseVO getGroupName(@PathVariable int groupId){
+        return groupBL.getGroupName(groupId);
+    }
 
 
     @RequestMapping(value = "/releaseAnnouncement", method = RequestMethod.POST)

@@ -37,8 +37,8 @@ public class LabelBLImpl implements LabelBL {
 
     public ResponseVO noteVertex(VertexLabelVO vertexLabelVO) {
         try {
-            List<VertexLabel> vertexLabels = vertexLabelRepository.findVertexLabelsByCodeIdAndUserId(
-                    vertexLabelVO.getCodeId(), vertexLabelVO.getUserId());
+            List<VertexLabel> vertexLabels = vertexLabelRepository.findVertexLabelsByCodeId(
+                    vertexLabelVO.getCodeId());
             VertexLabel v = new VertexLabel(
                     vertexLabelVO.getUserId(), vertexLabelVO.getCodeId(), vertexLabelVO.getVertexId(), vertexLabelVO.getTitle(), vertexLabelVO.getContent());
             if (vertexLabels.size() == 0) {
@@ -76,8 +76,8 @@ public class LabelBLImpl implements LabelBL {
 
     public ResponseVO noteEdge(EdgeLabelVO edgeLabelVO) {
         try {
-            List<EdgeLabel> edgeLabels = edgeLabelRepository.findEdgeLabelsByCodeIdAndUserId(
-                    edgeLabelVO.getCodeId(), edgeLabelVO.getUserId());
+            List<EdgeLabel> edgeLabels = edgeLabelRepository.findEdgeLabelsByCodeId(
+                    edgeLabelVO.getCodeId());
             EdgeLabel e = new EdgeLabel(edgeLabelVO.getUserId(), edgeLabelVO.getEdgeId(), edgeLabelVO.getCodeId(), edgeLabelVO.getTitle(), edgeLabelVO.getContent());
             if (edgeLabels.size() == 0) {
                 edgeLabelRepository.save(e);
@@ -115,8 +115,8 @@ public class LabelBLImpl implements LabelBL {
 
     public ResponseVO noteDomain(DomainLabelVO domainLabelVO) {
         try {
-            List<DomainLabel> domainLabels = domainLabelRepository.findDomainLabelsByCodeIdAndUserId(
-                    domainLabelVO.getCodeId(), domainLabelVO.getUserId());
+            List<DomainLabel> domainLabels = domainLabelRepository.findDomainLabelsByCodeId(
+                    domainLabelVO.getCodeId());
             DomainLabel d = new DomainLabel(
                     domainLabelVO.getUserId(), domainLabelVO.getCodeId(), domainLabelVO.getFirstEdgeId(), domainLabelVO.getNumOfVertex(), domainLabelVO.getTitle(), domainLabelVO.getContent());
 
@@ -220,7 +220,7 @@ public class LabelBLImpl implements LabelBL {
 
         try {
             List<VertexLabel> vertexLabels = vertexLabelRepository.
-                    findVertexLabelsByCodeIdAndUserIdAndVertexId(vertexLabelVO.getCodeId(), vertexLabelVO.getUserId(), vertexLabelVO.getVertexId());
+                    findVertexLabelsByCodeIdAndVertexId(vertexLabelVO.getCodeId(), vertexLabelVO.getVertexId());
             return ResponseVO.buildSuccess(vertexLabels);
         } catch (Exception e) {
             e.printStackTrace();
@@ -231,7 +231,7 @@ public class LabelBLImpl implements LabelBL {
     public ResponseVO getOneEdgeLabels(EdgeLabelVO edgeLabelVO) {
         try {
             List<EdgeLabel> edgeLabels = edgeLabelRepository.
-                    findEdgeLabelsByCodeIdAndUserIdAndEdgeId(edgeLabelVO.getCodeId(), edgeLabelVO.getUserId(), edgeLabelVO.getEdgeId());
+                    findEdgeLabelsByCodeIdAndEdgeId(edgeLabelVO.getCodeId(),  edgeLabelVO.getEdgeId());
             return ResponseVO.buildSuccess(edgeLabels);
         } catch (Exception e) {
             e.printStackTrace();
@@ -241,8 +241,8 @@ public class LabelBLImpl implements LabelBL {
 
     public ResponseVO getOneDomainLabels(DomainLabelVO domainLabelVO) {
         try {
-            List<DomainLabel> domainLabel = domainLabelRepository.findDomainLabelsByCodeIdAndUserIdAndFirstEdgeIdAndNumOfVertex(
-                    domainLabelVO.getCodeId(), domainLabelVO.getUserId(), domainLabelVO.getFirstEdgeId(), domainLabelVO.getNumOfVertex());
+            List<DomainLabel> domainLabel = domainLabelRepository.findDomainLabelsByCodeIdAndFirstEdgeIdAndNumOfVertex(
+                    domainLabelVO.getCodeId(), domainLabelVO.getFirstEdgeId(), domainLabelVO.getNumOfVertex());
             return ResponseVO.buildSuccess(domainLabel);
 
         } catch (Exception e) {

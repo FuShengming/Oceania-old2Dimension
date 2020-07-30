@@ -375,6 +375,15 @@ public class GroupBLImpl implements GroupBL {
 
     }
 
+    @Override
+    public ResponseVO getGroupName(int groupId) {
+        Group group = groupRepository.findGroupById(groupId);
+        if(group==null){
+            return ResponseVO.buildFailure("Can not find group.");
+        }
+        return ResponseVO.buildSuccess(group.getName());
+    }
+
 
     @Override
     public ResponseVO readInvitation(int userId, int invitationId) {
