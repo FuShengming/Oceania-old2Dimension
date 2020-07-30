@@ -5,10 +5,7 @@ import com.old2dimension.OCEANIA.MessageServer.InvitationServer;
 import com.old2dimension.OCEANIA.bl.GroupBL;
 import com.old2dimension.OCEANIA.dao.*;
 import com.old2dimension.OCEANIA.po.*;
-import com.old2dimension.OCEANIA.vo.AnnouncementAndUserReadForm;
-import com.old2dimension.OCEANIA.vo.GroupIdAndUserForm;
-import com.old2dimension.OCEANIA.vo.GroupNameAndCreatorIdForm;
-import com.old2dimension.OCEANIA.vo.ResponseVO;
+import com.old2dimension.OCEANIA.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +29,6 @@ public class GroupBLImpl implements GroupBL {
     AnnouncementRepository announcementRepository;
     @Autowired
     AnnouncementReadRepository announcementReadRepository;
-
     @Autowired
     AnnouncementServer announcementServer;
     @Autowired
@@ -64,6 +60,14 @@ public class GroupBLImpl implements GroupBL {
         this.announcementServer = announcementServer;
     }
 
+    public void setInvitationRepository(InvitationRepository invitationRepository) {
+        this.invitationRepository = invitationRepository;
+    }
+
+    public void setInvitationServer(InvitationServer invitationServer) {
+        this.invitationServer = invitationServer;
+    }
+
     @Override
     public ResponseVO findUser(String name) {
         User user = userRepository.findUserByName(name);
@@ -75,22 +79,22 @@ public class GroupBLImpl implements GroupBL {
     }
 
     @Override
-    public ResponseVO createGroup(GroupNameAndCreatorIdForm groupNameAndCreatorIdForm) {
+    public ResponseVO createGroup(CreateGroupForm createGroupForm) {
 
         //------------------检查userId是否存在-----------------
-        if(userRepository.findUserById(groupNameAndCreatorIdForm.getCreatorId())==null){
+        if(userRepository.findUserById(createGroupForm.getCreatorId())==null){
             return ResponseVO.buildFailure("This user does not exist.");
         }
 
 
         List<Integer> memberIds = new ArrayList<Integer>();
 
-        memberIds.add(groupNameAndCreatorIdForm.getCreatorId());
+        memberIds.add(createGroupForm.getCreatorId());
 
-        Group res = new Group(0, groupNameAndCreatorIdForm.getName());
+        Group res = new Group(0, createGroupForm.getName(),createGroupForm.getDescription());
         res = groupRepository.save(res);
         GroupMember leader;
-        leader = new GroupMember(res.getId(),groupNameAndCreatorIdForm.getCreatorId(),1);
+        leader = new GroupMember(res.getId(), createGroupForm.getCreatorId(),1);
         if(res.getId()==0){
             return ResponseVO.buildFailure("creating group failed");
         }
@@ -152,7 +156,7 @@ public class GroupBLImpl implements GroupBL {
         }
         List<Invitation> temp = new ArrayList<>();
         temp.add(invitation);
-        invitationServer.sendInfo(invitation.getUserId(),invitationRepository.findInvitationsByUserIdAndHasRead(invitation.getUserId(),0).size());
+        invitationServer.sendInfo(invitation.getUserId(),invitationRepository.countInvitationsByUserIdAndHasRead(invitation.getUserId(),0));
 
         return ResponseVO.buildSuccess(invitation);
     }
@@ -223,7 +227,7 @@ public class GroupBLImpl implements GroupBL {
         if(oldInvitation.getHasRead()!=1||oldInvitation.getState()!=1){
             return ResponseVO.buildFailure("Setting state of invitation failed.");
         }
-        invitationServer.sendInfo(invitation.getUserId(),invitationRepository.findInvitationsByUserIdAndHasRead(invitation.getUserId(),0).size());
+        invitationServer.sendInfo(invitation.getUserId(),invitationRepository.countInvitationsByUserIdAndHasRead(invitation.getUserId(),0));
         return ResponseVO.buildSuccess(member);
     }
 
@@ -238,8 +242,6 @@ public class GroupBLImpl implements GroupBL {
 
     @Override
     public ResponseVO searchGroupByUser(int userId) {
-
-
         List<GroupMember> groupMembers = groupMemberRepository.findGroupMembersByUserId(userId);
         List<Group> res = new ArrayList<>();
         if(groupMembers==null){
@@ -328,8 +330,13 @@ public class GroupBLImpl implements GroupBL {
 
         List<AnnouncementAndUserReadForm> res = new ArrayList<>();
         for(Announcement a:announcements){
-            AnnouncementAndUserReadForm cur = new AnnouncementAndUserReadForm(a,userId,
-                    announcementReadRepository.findAnnouncementReadByUserIdAndAnnouncementId(userId,a.getId()).getHasRead());
+            AnnouncementRead announcementRead = announcementReadRepository.findAnnouncementReadByUserIdAndAnnouncementId(userId,a.getId());
+            if(announcementRead==null){
+                announcementRead = new AnnouncementRead();
+                announcementRead.setHasRead(1);
+            }
+            AnnouncementAndUserReadForm cur = new AnnouncementAndUserReadForm(a,userId,announcementRead
+                    .getHasRead());
             res.add(cur);
         }
 
@@ -354,6 +361,20 @@ public class GroupBLImpl implements GroupBL {
         return ResponseVO.buildSuccess(announcementRead);
     }
 
+    @Override
+    public ResponseVO updateGroupInfo(GroupAndUserIdForm groupAndUserIdForm) {
+        GroupMember groupMember = groupMemberRepository.findGroupMemberByGroupIdAndUserId(groupAndUserIdForm.getGroup().getId(),
+                groupAndUserIdForm.getUserId());
+
+        if(groupMember==null||groupMember.getIsLeader()!=1){
+            return ResponseVO.buildFailure("Do not have the access of updating group data.");
+        }
+        Group group = groupAndUserIdForm.getGroup();
+        group = groupRepository.save(group);
+        return ResponseVO.buildSuccess(group);
+
+    }
+
 
     @Override
     public ResponseVO readInvitation(int userId, int invitationId) {
@@ -370,7 +391,7 @@ public class GroupBLImpl implements GroupBL {
         if(invitation.getHasRead()!=1){
             return ResponseVO.buildFailure("Setting the has-reading of invitation failed.");
         }
-        invitationServer.sendInfo(userId,invitationRepository.findInvitationsByUserIdAndHasRead(userId,0).size());
+        invitationServer.sendInfo(userId,invitationRepository.countInvitationsByUserIdAndHasRead(userId,0));
         return ResponseVO.buildSuccess(invitation);
     }
 
@@ -390,7 +411,7 @@ public class GroupBLImpl implements GroupBL {
         if(invitation.getState()!=2||invitation.getHasRead()!=1){
             return ResponseVO.buildFailure("Setting the state of invitation failed.");
         }
-        invitationServer.sendInfo(userId,invitationRepository.findInvitationsByUserIdAndHasRead(userId,0).size());
+        invitationServer.sendInfo(userId,invitationRepository.countInvitationsByUserIdAndHasRead(userId,0));
         return ResponseVO.buildSuccess(invitation);
     }
 

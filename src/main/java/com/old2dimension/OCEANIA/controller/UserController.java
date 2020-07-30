@@ -42,10 +42,10 @@ public class UserController {
         return r;
     }
 
-//    @RequestMapping("/getById")
-//    public ResponseVO getById(@RequestParam int[] id) {
-//        return userBL.getNamesByIds(id);
-//    }
+    @RequestMapping("/getById")
+    public ResponseVO getById(@RequestParam int[] id) {
+        return userBL.getNamesByIds(id);
+    }
 
 //    @RequestMapping("/getAll")
 //    public ResponseVO getAll

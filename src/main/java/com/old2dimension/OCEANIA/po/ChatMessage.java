@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 @Entity
 @Table(name = "chat_message")
-public class ChatMessage {
+    public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -15,15 +15,15 @@ public class ChatMessage {
     @Column(name = "send_date")
     private Date sendDate;
     @Column(name = "has_read")
-    private int has_read;
+    private int hasRead;
 
     public ChatMessage(){}
 
-    public ChatMessage(int senderId, int recipientId, Date sendDate, int has_read) {
+    public ChatMessage(int senderId, int recipientId, Date sendDate, int hasRead) {
         this.senderId = senderId;
         this.recipientId = recipientId;
         this.sendDate = sendDate;
-        this.has_read = has_read;
+        this.hasRead = hasRead;
     }
 
     public int getId() {
@@ -58,12 +58,12 @@ public class ChatMessage {
         this.sendDate = sendDate;
     }
 
-    public int getHas_read() {
-        return has_read;
+    public int getHasRead() {
+        return hasRead;
     }
 
-    public void setHas_read(int has_read) {
-        this.has_read = has_read;
+    public void setHasRead(int hasRead) {
+        this.hasRead = hasRead;
     }
 
 }
