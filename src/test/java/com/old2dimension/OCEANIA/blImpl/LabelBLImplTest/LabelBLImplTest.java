@@ -214,7 +214,7 @@ public class LabelBLImplTest {
         VertexLabel vertexLabel = new VertexLabel(1, 1, 1, "title","rua");
         List<VertexLabel> vertexLabels = new ArrayList<VertexLabel>();
         vertexLabels.add(vertexLabel);
-        when(vertexLabelRepository.findVertexLabelsByCodeIdAndUserIdAndVertexId(1, 1,1)).thenReturn(vertexLabels);
+        when(vertexLabelRepository.findVertexLabelsByCodeIdAndVertexId(1, 1)).thenReturn(vertexLabels);
 
         ResponseVO responseVO = labelBL.getOneVertexLabels(vertexLabelVO);
         Assert.assertEquals(((ArrayList<VertexLabel>)responseVO.getContent()).get(0).getContent(), "rua");
@@ -230,7 +230,7 @@ public class LabelBLImplTest {
         EdgeLabel edgeLabel = new EdgeLabel(1, 1, 1, "title","rua");
         List<EdgeLabel> edgeLabels = new ArrayList<EdgeLabel>();
         edgeLabels.add(edgeLabel);
-        when(edgeLabelRepository.findEdgeLabelsByCodeIdAndUserIdAndEdgeId(1, 1,1)).thenReturn(edgeLabels);
+        when(edgeLabelRepository.findEdgeLabelsByCodeIdAndEdgeId(1, 1)).thenReturn(edgeLabels);
 
         ResponseVO responseVO = labelBL.getOneEdgeLabels(edgeLabelVO);
         Assert.assertEquals(((ArrayList<EdgeLabel>)responseVO.getContent()).get(0).getContent(), "rua");
@@ -247,10 +247,10 @@ public class LabelBLImplTest {
         DomainLabel domainLabel = new DomainLabel(1, 1, 1, 1,"title", "rua");
         List<DomainLabel> domainLabels = new ArrayList<DomainLabel>();
         domainLabels.add(domainLabel);
-        when(domainLabelRepository.findDomainLabelsByCodeIdAndUserIdAndFirstEdgeIdAndNumOfVertex(1, 1,1, 1)).thenReturn(domainLabels);
+        when(domainLabelRepository.findDomainLabelsByCodeIdAndFirstEdgeIdAndNumOfVertex(1, 1, 1)).thenReturn(domainLabels);
 
         ResponseVO responseVO = labelBL.getOneDomainLabels(domainLabelVO);
-        Assert.assertEquals(((ArrayList<DomainLabel>)responseVO.getContent()).get(0).getContent(), "rua");
+        Assert.assertEquals(((List<DomainLabel>)responseVO.getContent()).get(0).getContent(), "rua");
     }
 
 //    @Test
