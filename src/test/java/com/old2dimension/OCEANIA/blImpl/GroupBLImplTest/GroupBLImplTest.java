@@ -59,15 +59,15 @@ public class GroupBLImplTest {
         Group group = new Group(1, "testGroup");
         GroupMember leader = new GroupMember(1, 1, 1);
         leader.setId(1);
-        GroupNameAndCreatorIdForm groupNameAndCreatorIdForm = new GroupNameAndCreatorIdForm();
-        groupNameAndCreatorIdForm.setName("testGroup");
-        groupNameAndCreatorIdForm.setCreatorId(1);
+        CreateGroupForm createGroupForm = new CreateGroupForm();
+        createGroupForm.setName("testGroup");
+        createGroupForm.setCreatorId(1);
 
         when(userRepository.findUserById(1)).thenReturn(user);
         when(groupRepository.save(any())).thenReturn(group);
         when(groupMemberRepository.save(any())).thenReturn(leader);
 
-        ResponseVO responseVO = groupBL.createGroup(groupNameAndCreatorIdForm);
+        ResponseVO responseVO = groupBL.createGroup(createGroupForm);
         Assert.assertEquals(((Group) responseVO.getContent()).getId(), 1);
         Assert.assertEquals(((Group) responseVO.getContent()).getName(), "testGroup");
     }
@@ -78,13 +78,13 @@ public class GroupBLImplTest {
         UserRepository userRepository = mock(UserRepository.class);
         groupBL.setUserRepository(userRepository);
 
-        GroupNameAndCreatorIdForm groupNameAndCreatorIdForm = new GroupNameAndCreatorIdForm();
-        groupNameAndCreatorIdForm.setName("testGroup1");
-        groupNameAndCreatorIdForm.setCreatorId(1);
+        CreateGroupForm createGroupForm = new CreateGroupForm();
+        createGroupForm.setName("testGroup1");
+        createGroupForm.setCreatorId(1);
 
         when(userRepository.findUserById(1)).thenReturn(null);
 
-        ResponseVO responseVO = groupBL.createGroup(groupNameAndCreatorIdForm);
+        ResponseVO responseVO = groupBL.createGroup(createGroupForm);
         Assert.assertEquals(responseVO.getMessage(), "This user does not exist.");
     }
 
@@ -98,14 +98,14 @@ public class GroupBLImplTest {
 
         User user = new User(1, "testUser", "testPwd");
         Group group = new Group(0, "testGroup");
-        GroupNameAndCreatorIdForm groupNameAndCreatorIdForm = new GroupNameAndCreatorIdForm();
-        groupNameAndCreatorIdForm.setName("testGroup");
-        groupNameAndCreatorIdForm.setCreatorId(1);
+        CreateGroupForm createGroupForm = new CreateGroupForm();
+        createGroupForm.setName("testGroup");
+        createGroupForm.setCreatorId(1);
 
         when(userRepository.findUserById(1)).thenReturn(user);
         when(groupRepository.save(any())).thenReturn(group);
 
-        ResponseVO responseVO = groupBL.createGroup(groupNameAndCreatorIdForm);
+        ResponseVO responseVO = groupBL.createGroup(createGroupForm);
         Assert.assertEquals(responseVO.getMessage(), "creating group failed");
     }
 
@@ -123,15 +123,15 @@ public class GroupBLImplTest {
         Group group = new Group(1, "testGroup");
         GroupMember leader = new GroupMember(1, 1, 1);
         leader.setId(0);
-        GroupNameAndCreatorIdForm groupNameAndCreatorIdForm = new GroupNameAndCreatorIdForm();
-        groupNameAndCreatorIdForm.setName("testGroup");
-        groupNameAndCreatorIdForm.setCreatorId(1);
+        CreateGroupForm createGroupForm = new CreateGroupForm();
+        createGroupForm.setName("testGroup");
+        createGroupForm.setCreatorId(1);
 
         when(userRepository.findUserById(1)).thenReturn(user);
         when(groupRepository.save(any())).thenReturn(group);
         when(groupMemberRepository.save(any())).thenReturn(leader);
 
-        ResponseVO responseVO = groupBL.createGroup(groupNameAndCreatorIdForm);
+        ResponseVO responseVO = groupBL.createGroup(createGroupForm);
         Assert.assertEquals(responseVO.getMessage(), "creating group failed");
     }
 

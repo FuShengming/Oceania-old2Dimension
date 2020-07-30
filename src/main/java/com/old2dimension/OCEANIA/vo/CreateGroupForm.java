@@ -2,12 +2,23 @@ package com.old2dimension.OCEANIA.vo;
 
 import java.util.List;
 
-public class GroupNameAndCreatorIdForm {
+public class CreateGroupForm {
 
     private String name;
 
     private int creatorId;
 
+    public CreateGroupForm(){}
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    private String description;
     public int getCreatorId() {
         return creatorId;
     }

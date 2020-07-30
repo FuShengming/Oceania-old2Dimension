@@ -1,16 +1,17 @@
 package com.old2dimension.OCEANIA.bl;
 
 import com.old2dimension.OCEANIA.po.Announcement;
+import com.old2dimension.OCEANIA.po.Group;
 import com.old2dimension.OCEANIA.po.Invitation;
+import com.old2dimension.OCEANIA.vo.GroupAndUserIdForm;
 import com.old2dimension.OCEANIA.vo.GroupIdAndUserForm;
-import com.old2dimension.OCEANIA.vo.GroupNameAndCreatorIdForm;
+import com.old2dimension.OCEANIA.vo.CreateGroupForm;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
-import org.springframework.web.bind.annotation.PathVariable;
 
 
 public interface GroupBL {
     public ResponseVO findUser(String name);
-    public ResponseVO createGroup(GroupNameAndCreatorIdForm groupNameAndCreatorIdForm);
+    public ResponseVO createGroup(CreateGroupForm createGroupForm);
     public ResponseVO setGroupLeader(GroupIdAndUserForm groupIdAndLeaderForm);
     public ResponseVO inviteUser(Invitation invitation);
     public ResponseVO readInvitation(int userId,int invitationId);
@@ -25,5 +26,5 @@ public interface GroupBL {
     public ResponseVO getGroupAnnouncements(int groupId,int userId);
     public ResponseVO readAnnouncement(int userId,int announcementId);
 
-
+    public ResponseVO updateGroupInfo(GroupAndUserIdForm groupAndUserIdForm);
 }

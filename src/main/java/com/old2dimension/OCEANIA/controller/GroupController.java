@@ -11,9 +11,6 @@ import com.old2dimension.OCEANIA.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-
 @RestController
 @RequestMapping("/group")
 public class GroupController {
@@ -36,8 +33,8 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/createGroup",method = RequestMethod.POST)
-    public ResponseVO createGroup(@RequestBody GroupNameAndCreatorIdForm groupNameAndCreatorIdForm){
-        return groupBL.createGroup(groupNameAndCreatorIdForm);
+    public ResponseVO createGroup(@RequestBody CreateGroupForm createGroupForm){
+        return groupBL.createGroup(createGroupForm);
     }
 
     @RequestMapping(value = "/setGroupLeader",method = RequestMethod.POST)
@@ -142,10 +139,18 @@ public class GroupController {
         return groupBL.getGroupMembers(groupId);
     }
 
+
+    @RequestMapping(value = "/modifyGroupInfo",method = RequestMethod.POST)
+    public ResponseVO modifyGroupInfo(@RequestBody GroupAndUserIdForm groupAndUserIdForm){
+        return groupBL.updateGroupInfo(groupAndUserIdForm);
+    }
+
     @RequestMapping(value = "/getGroupAnnouncements",method = RequestMethod.POST)
     public ResponseVO getGroupAnnouncements(@RequestBody GroupIdAndUserForm groupIdAndUserForm){
         return groupBL.getGroupAnnouncements(groupIdAndUserForm.getGroupId(),groupIdAndUserForm.getUserId());
     }
+
+
 
     @RequestMapping(value = "/readAnnouncement",method = RequestMethod.POST)
     public ResponseVO readAnnouncement(@RequestBody UserIdAndAnnouncementId userIdAndAnnouncementId){
