@@ -11,5 +11,5 @@ public interface UserBL {
     ResponseVO getAllUser();
     ResponseVO signUp(UserVO userInfo);
     public User findUserById(int userId);
-    ResponseVO getNameById(int userID);
+    ResponseVO getNamesByIds(int[] userIDs);
 }

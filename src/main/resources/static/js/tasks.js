@@ -9,6 +9,7 @@ $(document).ready(function () {
 let getTasksByUserId = function () {
     let userId = localStorage['userId'];
     if (userId === undefined) window.location.href = "/login";
+    let groupId = 1; // todo: groupId
 
     $.ajax({
         type: "post",
@@ -18,7 +19,7 @@ let getTasksByUserId = function () {
         contentType: 'application/json',
         data: JSON.stringify({
             'userId': userId,
-            'groupId': 1 // todo: groupId
+            'groupId': groupId
         }),
         timeout: 100000,
         success: function (data) {
@@ -53,18 +54,28 @@ let getTasksByUserId = function () {
                     $("#modal-start").text(task.startDate === null ? "--" : new Date(Date.parse(task.startDate)).toLocaleString("en"))
                     $("#modal-end").text(task.endDate === null ? "--" : new Date(Date.parse(task.endDate)).toLocaleString("en"))
 
-                    let assignments = data.content['assignments'];
-                    let userIds = []
-                    let usrStr = ""
-                    for (let i = 0; i < assignments.length; i++) {
-                        if (assignments[i].userId != userId && assignments[i].taskId == taskId) {
-                            userIds.push(assignments[i].userId);
-                            usrStr += assignments[i].userId + ", "
-                        }
-                    }
-                    $("#modal-coworkers").text(usrStr.slice(0, -2) === "" ? "--" : usrStr.slice(0, -2)) // todo: username
+                    // let assignments = data.content['assignments'];
+                    // let userIds = []
+                    // let url = ""
+                    // let sp = "?id="
+                    // for (let i = 0; i < assignments.length; i++) {
+                    //     if (assignments[i].userId != userId && assignments[i].taskId == taskId) {
+                    //         userIds.push(assignments[i].userId);
+                    //         url += sp + assignments[i].userId;
+                    //         sp = "&id="
+                    //     }
+                    // }
+                    // console.log(url)
 
-                    console.log(task)
+                    // $.ajax({
+                    //     type: "get",
+                    //     url: "/user/getById",
+                    //     headers: {"Authorization": $.cookie('token')},
+                    // })
+
+                    // $("#modal-coworkers").text(usrStr.slice(0, -2) === "" ? "--" : usrStr.slice(0, -2)) // todo: username
+
+                    // console.log(task)
                 });
 
                 // $(".rmv").on('click', function () {
