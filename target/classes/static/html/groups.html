@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Group</title>
+    <link rel="stylesheet" type="text/css" href="../css/basic.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/dropzone.min.css">
     <link rel="stylesheet" href="https://use.typekit.net/cpy1erx.css">
 
     <link rel="stylesheet" type="text/css" href="webjars/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -23,6 +25,36 @@
             color: #777;
         }
 
+        .btn-setting {
+            height: 2rem;
+            width: 2rem;
+            border-radius: 1rem;
+        }
+
+        .setting-icon {
+            font-size: 1rem;
+        }
+
+        .table td, .table th {
+            padding: .75rem;
+            font-size: 1rem;
+            vertical-align: middle;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .td-btn {
+            text-align: right;
+        }
+
+        .new-btn {
+            font-size: 1.25rem;
+        }
+
+        .dropzone {
+            border: 2px dashed rgba(0, 0, 0, 0.3);
+            border-radius: 1rem;
+        }
+
         .navbar-brand {
             font-family: flood-std, sans-serif;
             font-weight: 400;
@@ -33,29 +65,8 @@
             font-size: 1.2rem;
         }
 
-        #v-pills-tab > .nav-link {
-            color: #05728f;
-        }
-
-        #v-pills-tab > .nav-link > .badge {
-            background-color: #05728f;
-            position: absolute;
-            right: 5%;
-        }
-
-        #v-pills-tab > .nav-link.active {
-            color: #fff;
-            background-color: #05728f;
-        }
-
-        #v-pills-tab > .nav-link.active > .badge {
-            color: #05728f;
-            background-color: #fff;
-        }
-
-        #invitation, #group {
-            width: 60%;
-            margin-left: 20%;
+        .head-card {
+            height: 80px;
         }
 
         .chat_list.active_chat {
@@ -63,11 +74,32 @@
             background-color: #05728f;
         }
 
+        .dropdown-item {
+            color: #05728f;
+        }
+
+        .group-btn {
+            width: 48%;
+        }
+
+        .group-menu > .nav-item > .nav-link {
+            color: #05728f;
+            background-color: #fff;
+        }
+
+        .group-menu > .nav-item > .active {
+            color: #fff;
+            background-color: #05728f;
+        }
+
+        .info-card {
+            width: 32%;
+        }
+
         .msgs {
-            border-left: 1px solid rgba(0, 0, 0, 0.15);
             float: left;
-            height: 100%;
-            width: 60%;
+            height: calc(100% - 120px);
+            position: absolute;
         }
 
         .received_msg {
@@ -146,32 +178,215 @@
             width: 36px;
         }
 
-        .messaging {
-            height: 100%;
-            position: absolute;
-            padding-top: 20px;
-            padding-bottom: 20px;
-        }
-
         .msg_history {
             height: calc(100% - 48px);
             overflow-y: auto;
         }
+
     </style>
 </head>
 <body>
-<script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-<script type="text/javascript" src="webjars/popper.js/1.16.0/dist/umd/popper.min.js"></script>
-<script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
 
-<script type="text/javascript" src="../js/navbar.js"></script>
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New Group</h3>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="name-input">Group Name</label>
+                        <input type="text" class="form-control" id="name-input" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="description-input">Description</label>
+                        <textarea class="form-control" id="description-input" rows="5"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CANCEL</button>
+                <button type="button" class="btn btn-primary m-2" id="create_submit">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-<script>
-    $(function () {
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Group Info</h3>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="edit-name-input">Group Name</label>
+                        <input type="text" class="form-control" id="edit-name-input" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-description-input">Description</label>
+                        <textarea class="form-control" id="edit-description-input" rows="5"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CANCEL</button>
+                <button type="button" class="btn btn-primary m-2" id="edit_submit">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-    });
-</script>
+<div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="inviteModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Invitation</h3>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="username-input">User Name</label>
+                        <input type="text" class="form-control" id="username-input" placeholder="">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CANCEL</button>
+                <button type="button" class="btn btn-primary m-2" id="invite_submit">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="announceModal" tabindex="-1" role="dialog" aria-labelledby="announceModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Publish Announcement</h3>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="a-title-input">Title</label>
+                        <input type="text" class="form-control" id="a-title-input" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="a-content-input">Content</label>
+                        <textarea class="form-control" id="a-content-input" rows="5"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CANCEL</button>
+                <button type="button" class="btn btn-primary m-2" id="a_publish_submit">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="nameModal" tabindex="-1" role="dialog" aria-labelledby="nameModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Modify Name</h3>
+            </div>
+            <div class="modal-body d-flex justify-content-around">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">New Name</span>
+                </div>
+                <input type="text" class="form-control typeahead" data-provide="typeahead" placeholder=""
+                       aria-label="func-name" aria-describedby="basic-addon1" id="code-name-input">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
+                <button type="button" class="btn btn-primary m-2" id="name-submit">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="copyModal" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Personal Projects</h3>
+            </div>
+            <div class="modal-body d-flex justify-content-around">
+                <select class="form-control overflow-auto" id="personal_projects">
+                    <option>Func</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
+                <button type="button" class="btn btn-primary m-2" id="copy-submit">COPY</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form class="modal fade multi-step" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel"
+      aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title step-1" data-step="1">Upload New Project - 1</h3>
+                <h3 class="modal-title step-2" data-step="2">Upload New Project - 2</h3>
+                <h3 class="modal-title step-3" data-step="3">Upload New Project - 3</h3>
+                <h3 class="modal-title step-4" data-step="4">Upload New Project - 4</h3>
+            </div>
+            <div class="modal-body step step-1">
+                <h4>Upload Your Project JAR</h4>
+                <div class="dropzone dz-clickable" id="jar-upload">
+                    <div class="dz-message">
+                        <span>Drop files here or click to upload.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body step step-2">
+                <h4>Upload Your Project Codes</h4>
+                <div class="dropzone dz-clickable" id="codeDrop">
+                    <div class="dz-message" data-dz-message="">
+                        <span>Drop files here or click to upload.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body step step-3">
+                <h4>Analyzing Dependency...</h4>
+                <div id="analyze-state">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <span>Analyzing... Please wait a second.</span>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" id="cancel-btn">CANCEL</button>
+                <button type="button" class="btn btn-primary m-2 step step-1" data-step="1"
+                        id="cont-1" disabled>CONTINUE
+                </button>
+                <button type="button" class="btn btn-primary m-2 step step-2" data-step="2"
+                        id="cont-2" disabled>CONTINUE
+                </button>
+                <button type="button" class="btn btn-primary m-2 step step-3" data-step="3"
+                        id="cont-3" disabled>Finish
+                </button>
+                <!--                <button type="button" class="btn btn-primary m-2 step step-4" data-step="4"-->
+                <!--                        id="cont-4" disabled>Finish-->
+                <!--                </button>-->
+            </div>
+        </div>
+    </div>
+</form>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top p-0">
     <a class="navbar-brand h1 m-0 col-2" href="#">👴 Old2Dimension</a>
     <div class="collapse navbar-collapse col-10 px-0">
@@ -185,12 +400,18 @@
             <li class="nav-item">
                 <a class="nav-link" href="/graph">Graph</a>
             </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Group<span class="sr-only">(current)</span></a>
+            </li>
         </ul>
         <div class="d-flex">
-            <button class="btn mx-2 text-white" id="note">
-                <i class="fa fa-bell-o"></i>
-                <span class="badge badge-light badge-pill">20</span>
-            </button>
+            <a href="/notification">
+                <button class="btn mx-2 text-white" id="note">
+                    <i class="fa fa-bell-o"></i>
+                    <span class="badge badge-light badge-pill" id="n-count"></span>
+                </button>
+            </a>
+
             <button class="btn btn-outline-light mx-2" id="sign-out-btn">Sign Out</button>
         </div>
     </div>
@@ -204,82 +425,166 @@ width: 100%;
 padding-top: 44px;
 height: 100%;
 ">
-    <div class="col-2 nav flex-column nav-pills bg-light" id="v-pills-tab" role="tablist" aria-orientation="vertical"
-    >
-        <a class="h2 mx-auto my-3">NOTIFICATION</a>
-        <a class="nav-link active" id="invitation-tab" data-toggle="pill" href="#invitation" role="tab"
-           aria-controls="v-pills-home" aria-selected="true">● Invitation<span
-                class="badge badge-primary badge-pill">5</span></a>
-        <a class="nav-link" id="group-tab" data-toggle="pill" href="#group" role="tab"
-           aria-controls="v-pills-profile" aria-selected="false">● Group<span
-                class="badge badge-primary badge-pill">5</span></a>
-        <a class="nav-link" id="message-tab" data-toggle="pill" href="#message" role="tab"
-           aria-controls="v-pills-messages" aria-selected="false">● Message<span class="badge badge-primary badge-pill">10</span></a>
+    <div class="group_list col-3">
+        <div class="card head-card m-2">
+            <div class="card-body m-0 h4">
+                Groups
+            </div>
+        </div>
+        <div class="inbox_chat" id="all_groups">
+        </div>
+        <div class="d-flex my-2 justify-content-around" style="position: absolute;bottom: 0;width: 100%;">
+            <button class="btn group-btn btn-primary" data-toggle="modal" data-target="#createModal"><i
+                    class="fa fa-plus-circle"></i> Create
+            </button>
+            <!--            <button class="btn group-btn btn-success"><i class="fa fa-users"></i> Join in</button>-->
+        </div>
     </div>
-    <div class="col-10 tab-content" id="v-pills-tabContent">
-        <div class="tab-pane fade show active" id="invitation" role="tabpanel" aria-labelledby="invitation-tab">
-            <div class="card m-2">
-                <div class="card-body m-0 h4">
-                    Invitation
-                </div>
-            </div>
-            <div class="card m-2">
-                <div class="card-body m-0 h5">
-                    <div>xxx invite you to join in a group.</div>
-                    <div class="my-2" style="text-align: right">
-                        <button class="btn btn-primary">Agree</button>
-                        <button class="btn btn-danger">Reject</button>
-                    </div>
-                </div>
+    <div class="group_content col-9">
+        <div class="card head-card m-2">
+            <div class="card-body m-0 h4">
+                <ul class="nav nav-pills justify-content-center group-menu">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="group-info" data-toggle="pill" href="#info" role="tab"
+                           aria-controls="v-pills-info" aria-selected="true">Info</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="group-announcement" data-toggle="pill" href="#announcement" role="tab"
+                           aria-controls="v-pills-announcement" aria-selected="false">Announcement</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="group-project" data-toggle="pill" href="#project" role="tab"
+                           aria-controls="v-pills-project" aria-selected="false">Project</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="group-task" data-toggle="pill" href="#task" role="tab"
+                           aria-controls="v-pills-project" aria-selected="false">Task</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="group-message" data-toggle="pill" href="#message" role="tab"
+                           aria-controls="v-pills-message" aria-selected="false">Message</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                           aria-haspopup="true" aria-expanded="false">Management</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#inviteModal"
+                               id="invite-btn">Invite</a>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#editModal"
+                               id="edit-btn">Edit Info</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" id="quit-btn">Quit Group</a>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="tab-pane fade" id="group" role="tabpanel" aria-labelledby="group-tab">
-            <div class="card m-2">
-                <div class="card-body m-0 h4">
-                    Group
-                </div>
-            </div>
-            <div class="card m-2">
-                <div class="card-body m-0">
-                    <h5 class="card-title">Announcement</h5>
-                    <h6 class="card-subtitle mb-2">Dec 25</h6>
-                    <p class="card-text">Group xxx has made a new announcement. Click <a href="#">here</a> to view details.</p>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="message" role="tabpanel" aria-labelledby="message-tab">
-            <div class="messaging container-fluid row">
-                <div class="inbox_people col-4">
-                    <div class="card m-2">
-                        <div class="card-body m-0 h4">
-                            Recent
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
+                <div class="d-flex justify-content-between">
+                    <div class="info-card card m-2">
+                        <div class="card-body m-0">
+                            <h4 class="card-title">Group Owner</h4>
+                        </div>
+                        <div class="card-body text-right m-0">
+                            <h5 class="card-title" id="g-owner"></h5>
                         </div>
                     </div>
-                    <div class="inbox_chat">
-                        <div class="chat_list active_chat card m-2">
-                            <div class="card-body">
-                                <h5 class="card-title">Sunil Rajput</h5>
-                                <h6 class="card-subtitle mb-2">Dec 25</h6>
-                                <p class="card-text">Some quick example ...</p>
-                            </div>
+                    <div class="info-card card m-2">
+                        <div class="card-body m-0">
+                            <h4 class="card-title">Group Members</h4>
                         </div>
-                        <div class="chat_list card m-2">
-                            <div class="card-body">
-                                <h5 class="card-title">Sunil Rajput</h5>
-                                <h6 class="card-subtitle mb-2">Dec 25</h6>
-                                <p class="card-text">Some quick example ...</p>
-                            </div>
+                        <div class="card-body text-right m-0">
+                            <h5 class="card-title" id="m-count"></h5>
                         </div>
-                        <div class="chat_list card m-2">
-                            <div class="card-body">
-                                <h5 class="card-title">Sunil Rajput</h5>
-                                <h6 class="card-subtitle mb-2">Dec 25</h6>
-                                <p class="card-text">Some quick example ...</p>
-                            </div>
+                    </div>
+                    <div class="info-card card m-2">
+                        <div class="card-body m-0">
+                            <h4 class="card-title">Group Projects</h4>
+                        </div>
+                        <div class="card-body text-right m-0">
+                            <h5 class="card-title" id="p-count"></h5>
                         </div>
                     </div>
                 </div>
-                <div class="msgs col-8">
+                <div class="card m-2">
+                    <div class="card-body m-0">
+                        <h4 class="card-title">Description</h4>
+                        <p class="card-text" id="g-description"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="announcement" role="tabpanel" aria-labelledby="announcement-tab">
+                <div class="card m-2 btn" role="button" data-toggle="modal" data-target="#announceModal"
+                     id="announce-btn">
+                    <div class="card-body"><span class="fa fa-plus"></span> Publish New Announcement</div>
+                </div>
+                <div id="announcement_list"></div>
+            </div>
+            <div class="tab-pane fade" id="project" role="tabpanel" aria-labelledby="project-tab">
+                <div class="card m-2">
+                    <div class="card-body">
+                        <div class="card-title d-flex justify-content-between">
+                            <h2>Group Projects</h2>
+                            <div>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#copyModal"
+                                        id="copy-btn">
+                                    <span class="fa fa-files-o mr-2"></span>Copy from Personal Project
+                                </button>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#uploadModal"
+                                        id="upload-btn">
+                                    <span class="fa fa-plus-square mr-2"></span>New
+                                </button>
+                            </div>
+
+                        </div>
+                        <div class="card-text">
+                            <table class="table table-hover" id="code-table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Last Update</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody id="code-tb"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="task" role="tabpanel" aria-labelledby="task-tab">
+                <div class="card m-2">
+                    <div class="card-body">
+                        <div class="card-title d-flex justify-content-between">
+                            <h2>My Tasks</h2>
+                            <div style="width: 33%" class="input-group">
+                                <input type="text" class="form-control" placeholder="Task name" aria-label="Task name"
+                                       aria-describedby="basic-addon2">
+                                <div>
+                                    <button class="btn btn-outline-secondary" type="button">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-text">
+                            <table class="table table-hover" id="task-table" style="overflow-x: scroll">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Task Name</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Label</th>
+                                    <th scope="col">Start Time</th>
+                                    <th scope="col">End Time</th>
+                                </tr>
+                                </thead>
+                                <tbody id="task-tb"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="message" role="tabpanel" aria-labelledby="message-tab">
+                <div class="msgs m-2">
                     <div class="msg_history">
                         <div class="incoming_msg">
                             <div class="received_msg">
@@ -333,11 +638,65 @@ height: 100%;
                     </div>
                 </div>
             </div>
+            <div class="tab-pane fade" id="management" role="tabpanel" aria-labelledby="management">
+            </div>
+
+
         </div>
-        <!--    <nav class="col-3 bg-light sidebar sidebar-left overflow-auto" id="nt-type">-->
-        <!--        -->
-        <!--    </nav>-->
+    </div>
+
+</div>
+<div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="task-modal-label"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">Status:</div>
+                    <div style="width: 60%" id="modal-status"></div>
+                </div>
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">Label:</div>
+                    <div style="width: 60%" id="modal-label"></div>
+                </div>
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">Description:</div>
+                    <div style="width: 60%" id="modal-desc"></div>
+                </div>
+                <!--                <div class="d-flex justify-content-flex-start mb-1">-->
+                <!--                    <div style="width: 40%">Coworkers: </div>-->
+                <!--                    <div style="width: 60%" id="modal-coworkers"></div>-->
+                <!--                </div>-->
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">Start time:</div>
+                    <div style="width: 60%" id="modal-start"></div>
+                </div>
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">End time:</div>
+                    <div style="width: 60%" id="modal-end"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Modify</button>
+                <!--                todo: modify-->
+            </div>
+        </div>
     </div>
 </div>
+<script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="webjars/popper.js/1.16.0/dist/umd/popper.min.js"></script>
+<script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/dropzone.min.js"></script>
+<script type="text/javascript" src="../js/multi-step-modal.js"></script>
+<script type="text/javascript" src="../js/navbar.js"></script>
+
+<script type="text/javascript" src="../js/groups.js"></script>
+
+<script type="text/javascript" src="../js/tasks.js"></script>
 </body>
 </html>

@@ -40,7 +40,8 @@ $(function () {
     if (userId === undefined) window.location.href = "/login";
     let url = document.location.toString();
     if (!url.includes("?code=")) window.location.href = "/workspace";
-    let codeId = Number(url.slice(url.indexOf("?code=") + 6));
+    let codeId = Number(url.slice(url.indexOf("code=") + 5, url.indexOf("&")));
+    let isGroupCode = Number(url.slice(url.indexOf("group=") + 6)) === 1;
     // let codeId = localStorage['codeId'];
     // if (codeId === undefined) window.location.href = "/workspace";
 
@@ -52,7 +53,7 @@ $(function () {
             dataType: "json",
             contentType: 'application/json',
             data: JSON.stringify({
-                userId: userId,
+                userId: isGroupCode ? 1 : userId,
                 codeId: codeId,
                 date: new Date(),
                 closeness: $("#range_value").val(),
@@ -710,7 +711,7 @@ $(function () {
             dataType: "json",
             contentType: 'application/json',
             data: JSON.stringify({
-                userId: userId,
+                userId: isGroupCode ? 1 : userId,
                 codeId: codeId,
                 vertexVO: info,
             }),
@@ -747,7 +748,7 @@ $(function () {
         dataType: "json",
         contentType: 'application/json',
         data: JSON.stringify({
-            userId: userId,
+            userId: isGroupCode ? 1 : userId,
             codeId: codeId
         }),
         success: function (data) {
@@ -819,7 +820,7 @@ $(function () {
         dataType: "json",
         contentType: 'application/json',
         data: JSON.stringify({
-            userId: userId,
+            userId: isGroupCode ? 1 : userId,
             codeId: codeId
         }),
         success: function (data) {
@@ -1097,7 +1098,7 @@ $(function () {
             dataType: "json",
             contentType: 'application/json',
             data: JSON.stringify({
-                userId: userId,
+                userId: isGroupCode ? 1 : userId,
                 codeId: codeId
             }),
             timeout: 10000,

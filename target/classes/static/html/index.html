@@ -98,6 +98,7 @@
             $("#sign-in").hide();
             $("#sign-up").hide();
         } else {
+            $("#notification").hide();
             $("#sign-out-btn").hide();
         }
         $("#sign-in").on('click', function () {
@@ -128,6 +129,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="/graph">Graph</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/groups">Group</a>
+            </li>
             <!--            <li class="nav-item dropdown">-->
             <!--                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"-->
             <!--                   aria-haspopup="true" aria-expanded="false">-->
@@ -147,6 +151,13 @@
         <div class="d-flex">
             <button class="btn btn-outline-light mx-2" id="sign-in">Sign In</button>
             <button class="btn btn-outline-light mx-2" id="sign-up">Sign Up</button>
+
+            <a id="notification" href="/notification">
+                <button class="btn mx-2 text-white" id="note">
+                    <i class="fa fa-bell-o"></i>
+                    <span class="badge badge-light badge-pill" id="n-count"></span>
+                </button>
+            </a>
             <button class="btn btn-outline-light mx-2 " id="sign-out-btn">Sign Out</button>
         </div>
 

@@ -102,8 +102,22 @@ public class UserBLImpl implements UserBL, UserDetailsService {
         });
         return user1;
     }
+    
+    @Override
+    public ResponseVO getNamesByIds(int[] userIds) {
+        List<UserVO> result = new ArrayList<>();
+        for (int i = 0; i < userIds.length; i++) {
+            User user = userRepository.findUserById(userIds[i]);
+            if (user != null) {
+                user.setPwd(null);
+                result.add(new UserVO(user));
+            }
+        }
+        return ResponseVO.buildSuccess(result);
+    }
 
     public User findUserById(int id) {
         return userRepository.findUserById(id);
     }
+
 }

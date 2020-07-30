@@ -11,6 +11,7 @@ drop table if exists team;
 drop table if exists code;
 drop table if exists user_authority;
 drop table if exists authority;
+drop table if exists authority;
 drop table if exists `user`;
 
 

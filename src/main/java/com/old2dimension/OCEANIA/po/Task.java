@@ -25,6 +25,8 @@ public class Task {
     @Column(name = "state")
     private int state;
 
+    private Task(){}
+
     public Task(int id, int groupId,String name, String label, String description, Date startDate, Date endDate,int state) {
         this.id = id;
         this.groupId=groupId;
