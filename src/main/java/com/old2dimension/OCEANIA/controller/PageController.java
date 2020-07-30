@@ -50,8 +50,8 @@ public class PageController {
     public String groups() {
         return "/html/groups.html";
     }
-//    @RequestMapping("/cy")
-//    public String cy() {
-//        return "/html/cytotest.html";
-//    }
+    @RequestMapping("/test")
+    public String cy() {
+        return "/html/test.html";
+    }
 }

@@ -10,5 +10,6 @@ public interface InvitationRepository extends JpaRepository<Invitation,Integer> 
     List<Invitation> findInvitationsByUserIdAndHasRead(int userId,int hasRead);
     Invitation findInvitationById(int id);
     List<Invitation> findInvitationsByUserId(int userId);
+    int countInvitationsByUserIdAndHasRead(int userId,int hasRead);
 
 }

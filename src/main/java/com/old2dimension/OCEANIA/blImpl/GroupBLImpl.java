@@ -156,7 +156,7 @@ public class GroupBLImpl implements GroupBL {
         }
         List<Invitation> temp = new ArrayList<>();
         temp.add(invitation);
-        invitationServer.sendInfo(invitation.getUserId(),invitationRepository.findInvitationsByUserIdAndHasRead(invitation.getUserId(),0).size());
+        invitationServer.sendInfo(invitation.getUserId(),invitationRepository.countInvitationsByUserIdAndHasRead(invitation.getUserId(),0));
 
         return ResponseVO.buildSuccess(invitation);
     }
@@ -227,7 +227,7 @@ public class GroupBLImpl implements GroupBL {
         if(oldInvitation.getHasRead()!=1||oldInvitation.getState()!=1){
             return ResponseVO.buildFailure("Setting state of invitation failed.");
         }
-        invitationServer.sendInfo(invitation.getUserId(),invitationRepository.findInvitationsByUserIdAndHasRead(invitation.getUserId(),0).size());
+        invitationServer.sendInfo(invitation.getUserId(),invitationRepository.countInvitationsByUserIdAndHasRead(invitation.getUserId(),0));
         return ResponseVO.buildSuccess(member);
     }
 
@@ -391,7 +391,7 @@ public class GroupBLImpl implements GroupBL {
         if(invitation.getHasRead()!=1){
             return ResponseVO.buildFailure("Setting the has-reading of invitation failed.");
         }
-        invitationServer.sendInfo(userId,invitationRepository.findInvitationsByUserIdAndHasRead(userId,0).size());
+        invitationServer.sendInfo(userId,invitationRepository.countInvitationsByUserIdAndHasRead(userId,0));
         return ResponseVO.buildSuccess(invitation);
     }
 
@@ -411,7 +411,7 @@ public class GroupBLImpl implements GroupBL {
         if(invitation.getState()!=2||invitation.getHasRead()!=1){
             return ResponseVO.buildFailure("Setting the state of invitation failed.");
         }
-        invitationServer.sendInfo(userId,invitationRepository.findInvitationsByUserIdAndHasRead(userId,0).size());
+        invitationServer.sendInfo(userId,invitationRepository.countInvitationsByUserIdAndHasRead(userId,0));
         return ResponseVO.buildSuccess(invitation);
     }
 

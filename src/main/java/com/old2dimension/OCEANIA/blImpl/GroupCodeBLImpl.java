@@ -3,11 +3,9 @@ package com.old2dimension.OCEANIA.blImpl;
 import com.old2dimension.OCEANIA.bl.GroupBL;
 import com.old2dimension.OCEANIA.bl.GroupCodeBL;
 import com.old2dimension.OCEANIA.bl.LabelBL;
-import com.old2dimension.OCEANIA.dao.CodeRepository;
-import com.old2dimension.OCEANIA.dao.GroupCodeRepository;
-import com.old2dimension.OCEANIA.dao.GroupMemberRepository;
-import com.old2dimension.OCEANIA.dao.UserRepository;
+import com.old2dimension.OCEANIA.dao.*;
 import com.old2dimension.OCEANIA.po.*;
+import com.old2dimension.OCEANIA.vo.CodeAndDateForm;
 import com.old2dimension.OCEANIA.vo.GroupIdAndCodeIdForm;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
 import com.old2dimension.OCEANIA.vo.UserAndCodeForm;
@@ -32,6 +30,12 @@ public class GroupCodeBLImpl implements GroupCodeBL {
     GroupMemberRepository groupMemberRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    WorkPlaceRepository workPlaceRepository;
+
+    public void setWorkPlaceRepository(WorkPlaceRepository workPlaceRepository) {
+        this.workPlaceRepository = workPlaceRepository;
+    }
 
     public void setCodeRepository(CodeRepository codeRepository) {
         this.codeRepository = codeRepository;
@@ -136,13 +140,15 @@ public class GroupCodeBLImpl implements GroupCodeBL {
     public ResponseVO getGroupCodeList(int groupId) {
         List<GroupCode> groupCodes = groupCodeRepository.findAllByGroupId(groupId);
         if(groupCodes==null){return ResponseVO.buildFailure("Getting group code list failed.");}
-        List<Code> codes = new ArrayList<>();
+        List<CodeAndDateForm> codes = new ArrayList<>();
         for(GroupCode groupCode:groupCodes){
             Code code = codeRepository.findCodeById(groupCode.getCodeId());
             if(code==null){
                 return ResponseVO.buildFailure("Getting group code info failed.");
             }
-            codes.add(code);
+
+            CodeAndDateForm c = new CodeAndDateForm(code.getId(),code.getName(),workPlaceRepository.findLatestWorkSpace(1,code.getId()).getDate());
+            codes.add(c);
         }
 
         return ResponseVO.buildSuccess(codes);
