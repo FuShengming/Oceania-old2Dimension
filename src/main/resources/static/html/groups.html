@@ -214,6 +214,33 @@
     </div>
 </div>
 
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Group Info</h3>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="edit-name-input">Group Name</label>
+                        <input type="text" class="form-control" id="edit-name-input" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-description-input">Description</label>
+                        <textarea class="form-control" id="edit-description-input" rows="5"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CANCEL</button>
+                <button type="button" class="btn btn-primary m-2" id="edit_submit">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="inviteModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -444,7 +471,8 @@ height: 100%;
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#inviteModal"
                                id="invite-btn">Invite</a>
-                            <a class="dropdown-item" href="#">Edit Info</a>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#editModal"
+                               id="edit-btn">Edit Info</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Quit Group</a>
                         </div>

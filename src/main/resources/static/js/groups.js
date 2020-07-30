@@ -275,6 +275,8 @@ $(function () {
                     data.content.forEach(function (e) {
                         if (e.id === groupId) {
                             $("#g-description").text(e.description);
+                            $("#edit-name-input").val(e.name);
+                            $("#edit-description-input").val(e.description);
                         }
                     });
                 } else {
@@ -543,6 +545,35 @@ $(function () {
                     console.log("success");
                     get_group_list();
                     $("#createModal").modal('hide');
+                } else {
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    });
+    $("#edit_submit").on('click', function () {
+        $.ajax({
+            type: "post",
+            url: "/group/modifyGroupInfo",
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                userId: userId,
+                group: {
+                    id: group_id,
+                    name: $("#edit-name-input").val(),
+                    description: $("#edit-description-input").val()
+                }
+            }),
+            success: function (data) {
+                if (data.success) {
+                    console.log("success");
+                    get_group_list();
+                    $("#editModal").modal('hide');
                 } else {
                     console.log(data.message);
                 }
