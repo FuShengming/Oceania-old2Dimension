@@ -32,7 +32,6 @@ public class GroupBLImpl implements GroupBL {
     AnnouncementRepository announcementRepository;
     @Autowired
     AnnouncementReadRepository announcementReadRepository;
-
     @Autowired
     AnnouncementServer announcementServer;
     @Autowired
@@ -62,6 +61,14 @@ public class GroupBLImpl implements GroupBL {
 
     public void setAnnouncementServer(AnnouncementServer announcementServer) {
         this.announcementServer = announcementServer;
+    }
+
+    public void setInvitationRepository(InvitationRepository invitationRepository) {
+        this.invitationRepository = invitationRepository;
+    }
+
+    public void setInvitationServer(InvitationServer invitationServer) {
+        this.invitationServer = invitationServer;
     }
 
     @Override
