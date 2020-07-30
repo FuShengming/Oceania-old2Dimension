@@ -1,0 +1,580 @@
+<!DOCTYPEhtml>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <!--    <meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://use.typekit.net/cpy1erx.css">
+
+    <link rel="stylesheet" type="text/css" href="webjars/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.4.1-1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/dashboard.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-treeview.css">
+
+    <style>
+
+        /* fonts */
+        body {
+            font-family: fira-sans, sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            font-style: normal;
+        }
+
+        .navbar-brand {
+            font-family: flood-std, sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .card-header, .card-text {
+            font-family: tekton-pro, arial, sans-serif;
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        .code-card > .card-header, .card-text {
+            font-family: fira-sans, sans-serif;
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .nav-link {
+            font-size: 1.2rem;
+        }
+
+        /* cytoscape */
+        #cy_container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            z-index: 1;
+        }
+
+        /* float buttons */
+        #float_container {
+            position: absolute;
+            top: calc(100% - 26rem); /* 100% - n * height - 1rem */
+            left: calc(100% - 5rem); /* 100% - weight - 1rem */
+            z-index: 99;
+            width: 4rem;
+        }
+
+        .btn-float {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 2rem;
+            text-align: center;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            box-shadow: 0.1rem 0.3rem 0.2rem rgba(0, 0, 0, .2);
+        }
+
+        /* cxtmenu */
+        .cxtmenu-disabled {
+            opacity: 0.333;
+        }
+
+        /* loader */
+        .loader {
+            position: absolute;
+            top: calc(40% - 64px);
+            left: calc(50% - 64px);
+            width: 128px;
+            height: 128px;
+            border-radius: 50%;
+            perspective: 1600px;
+        }
+
+        .inner {
+            position: absolute;
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .inner.one {
+            left: 0%;
+            top: 0%;
+            animation: rotate-one 1s linear infinite;
+            border-bottom: 3px solid #9EC9FF;
+        }
+
+        .inner.two {
+            right: 0%;
+            top: 0%;
+            animation: rotate-two 1s linear infinite;
+            border-right: 3px solid #9EC9FF;
+        }
+
+        .inner.three {
+            right: 0%;
+            bottom: 0%;
+            animation: rotate-three 1s linear infinite;
+            border-top: 3px solid #9EC9FF;
+        }
+
+        @keyframes rotate-one {
+            0% {
+                transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
+            }
+            100% {
+                transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
+            }
+        }
+
+        @keyframes rotate-two {
+            0% {
+                transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
+            }
+            100% {
+                transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
+            }
+        }
+
+        @keyframes rotate-three {
+            0% {
+                transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
+            }
+            100% {
+                transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
+            }
+        }
+
+        /*typeahead*/
+        span.twitter-typeahead .tt-menu {
+            cursor: pointer;
+        }
+
+        .input-group > .twitter-typeahead {
+            position: relative;
+            -ms-flex: 1 1 auto;
+            -webkit-box-flex: 1;
+            flex: 1 1 auto;
+            width: 1%;
+            margin-bottom: 0;
+        }
+
+        .input-group > .twitter-typeahead:not(:last-child) {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .input-group > .twitter-typeahead > .tt-input {
+            border-radius: 0 0.25rem 0.25rem 0;
+        }
+
+        .form-control.tt-input:focus {
+            z-index: 3
+        }
+
+        .dropdown-menu, span.twitter-typeahead .tt-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            display: none;
+            float: left;
+            min-width: 160px;
+            padding: 5px 0;
+            margin: 2px 0 0;
+            font-size: 1rem;
+            color: #373a3c;
+            text-align: left;
+            list-style: none;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 0.25rem;
+        }
+
+        span.twitter-typeahead .tt-suggestion {
+            display: block;
+            width: 100%;
+            padding: 3px 20px;
+            clear: both;
+            font-weight: normal;
+            line-height: 1.5;
+            color: #373a3c;
+            text-align: inherit;
+            white-space: nowrap;
+            background: none;
+            border: 0;
+        }
+
+        span.twitter-typeahead .tt-suggestion:focus, .dropdown-item:hover, span.twitter-typeahead .tt-suggestion:hover {
+            color: #2b2d2f;
+            text-decoration: none;
+            background-color: #f5f5f5;
+        }
+
+        span.twitter-typeahead .active.tt-suggestion, span.twitter-typeahead .tt-suggestion.tt-cursor, span.twitter-typeahead .active.tt-suggestion:focus, span.twitter-typeahead .tt-suggestion.tt-cursor:focus, span.twitter-typeahead .active.tt-suggestion:hover, span.twitter-typeahead .tt-suggestion.tt-cursor:hover {
+            color: #fff;
+            text-decoration: none;
+            background-color: #0275d8;
+            outline: 0;
+        }
+
+        span.twitter-typeahead .disabled.tt-suggestion, span.twitter-typeahead .disabled.tt-suggestion:focus, span.twitter-typeahead .disabled.tt-suggestion:hover {
+            color: #818a91;
+        }
+
+        span.twitter-typeahead .disabled.tt-suggestion:focus, span.twitter-typeahead .disabled.tt-suggestion:hover {
+            text-decoration: none;
+            cursor: not-allowed;
+            background-color: transparent;
+            background-image: none;
+            filter: "progid:DXImageTransform.Microsoft.gradient(enabled = false)";
+        }
+
+        span.twitter-typeahead {
+            width: 100%;
+        }
+
+        .input-group span.twitter-typeahead {
+            display: block !important;
+        }
+
+        .input-group span.twitter-typeahead .tt-menu {
+            top: 2.375rem !important;
+        }
+    </style>
+    <title>Call Graph</title>
+</head>
+<body oncontextmenu="return false;">
+<script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="webjars/popper.js/1.16.0/dist/umd/popper.min.js"></script>
+<script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
+<!--    <script type="text/javascript" src="../js/g6.min.js"></script>-->
+<script type="text/javascript" src="../js/bootstrap-treeview.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.14.0/cytoscape.min.js"></script>
+
+<script src="https://unpkg.com/numeric/numeric-1.2.6.js"></script>
+<script src="https://unpkg.com/layout-base/layout-base.js"></script>
+<script src="https://unpkg.com/cose-base/cose-base.js"></script>
+<script src="../js/cytoscape-fcose.js"></script>
+<script src="../js/cytoscape-cose-bilkent.js"></script>
+
+<script src="../js/cytoscape-extmenu.js"></script>
+
+<script src="../js/typeahead.bundle.min.js"></script>
+<script type="text/javascript" src="../js/graphpage.js"></script>
+<script type="text/javascript" src="../js/navbar.js"></script>
+
+<!--LABEL-->
+<div class="modal fade" id="labelModal" tabindex="-1" role="dialog" aria-labelledby="labelModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Label</h3>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="title-input">Title</label>
+                        <input type="email" class="form-control" id="title-input" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="content-input">Content</label>
+                        <textarea class="form-control" id="content-input" rows="5"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
+                <button type="button" class="btn btn-primary m-2" id="label_submit">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--SEARCH-->
+<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <ul class="nav nav-tabs modal-title" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="search-nodes-tab" data-toggle="tab" href="#search-nodes"
+                           role="tab"
+                           aria-controls="search-nodes" aria-selected="true">Search for Nodes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="search-paths-tab" data-toggle="tab" href="#search-paths" role="tab"
+                           aria-controls="search-paths" aria-selected="false">Search for Paths</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="search-nodes" role="tabpanel"
+                         aria-labelledby="search-nodes-tab">
+                        <div class="input-group my-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Function Name</span>
+                            </div>
+                            <input type="text" class="form-control typeahead" data-provide="typeahead" placeholder=""
+                                   aria-label="func-name" aria-describedby="basic-addon1" id="func-name-input">
+                        </div>
+                        <div class="p-0" style="text-align: right">
+                            <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
+                            <button type="button" class="btn btn-primary m-2" id="node-search-btn">SEARCH</button>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="search-paths" role="tabpanel" aria-labelledby="search-paths-tab">
+                        <div class="input-group my-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon2">Start Node</span>
+                            </div>
+                            <input type="text" class="form-control typeahead" data-provide="typeahead" placeholder=""
+                                   aria-label="start-node" aria-describedby="basic-addon2" id="start-node-input">
+                        </div>
+                        <div class="input-group my-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon3">End Node</span>
+                            </div>
+                            <input type="text" class="form-control typeahead" data-provide="typeahead" placeholder=""
+                                   aria-label="end-node" aria-describedby="basic-addon3" id="end-node-input">
+                        </div>
+                        <div class="p-0" style="text-align: right">
+                            <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
+                            <button type="button" class="btn btn-primary m-2" id="path-search-btn">SEARCH</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--ambiguous-->
+<div class="modal fade" id="ambiguousModal1" tabindex="-1" role="dialog" aria-labelledby="ambiguousModalLabel1"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Multiple Functions Found</h3>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="ambiguousFuncSelect1" id="ambiguousLabel1">Ambiguous Select</label>
+                        <select multiple class="form-control overflow-auto" id="ambiguousFuncSelect1">
+                            <option>Func</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
+                <button type="button" class="btn btn-primary m-2" id="ambiguous_submit1">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="ambiguousModal2" tabindex="-1" role="dialog" aria-labelledby="ambiguousModalLabel2"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Multiple Functions Found</h3>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="ambiguousFuncSelect2" id="ambiguousLabel2">Ambiguous Select</label>
+                        <select multiple class="form-control overflow-auto" id="ambiguousFuncSelect2">
+                            <option>Func</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
+                <button type="button" class="btn btn-primary m-2" id="ambiguous_submit2">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--FILTER-->
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Filter</h3>
+            </div>
+            <div class="modal-body">
+                <h4>Edge Attributes</h4>
+                <div class="d-flex justify-content-between">
+                    <label for="ctm-range" class="h5 my-auto">Closeness</label>
+                    <div class="d-flex">
+                        <output class="h5 d-block m-auto text-center" id="range_value">0.15</output>
+                        <button class=" btn fa fa-pencil h5 ml-2 my-auto py-0" data-toggle="collapse"
+                                href="#collapseExample"
+                                role="button" aria-expanded="false" aria-controls="collapseExample"></button>
+                    </div>
+                </div>
+                <div class="collapse card p-2 my-1" id="collapseExample">
+                    <div class="d-flex justify-content-center">
+                        <span class="font-weight-bold h4 mr-3 mb-0">0</span>
+                        <input type="range" class="custom-range align-self-center" min="0" max="1" step="0.01"
+                               value="0.15" id="ctm-range" oninput="range_value.value=value"
+                               onchange="range_value.value=value">
+                        <span class="font-weight-bold h4 ml-3 mb-0">1</span>
+                    </div>
+                </div>
+                <hr style="border-top: 1px dashed #999; width: 100%">
+                <h4>Vertex Attributes</h4>
+                <div class="d-flex justify-content-between">
+                    <label for="ctm-range" class="h5 my-auto">In-degree</label>
+                    <div class="h5 my-auto">To be finished in the next iteration.</div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <label for="ctm-range" class="h5 my-auto">Out-degree</label>
+                    <div class="h5 my-auto">To be finished in the next iteration.</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
+                <button type="button" class="btn btn-primary m-2" id="filter_search">SEARCH</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--INFO-->
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Statistics</h3>
+            </div>
+            <div class="modal-body">
+                <h4>Count</h4>
+                <table class="table table-bordered">
+                    <tbody id="info-table-body">
+                    <tr>
+                        <th scope="row">Vertices</th>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Edges</th>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Domains</th>
+                        <td>0</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top p-0">
+    <a class="navbar-brand h1 m-0 col-2" href="#">👴 Old2Dimension</a>
+
+    <div class="collapse navbar-collapse col-10 px-0">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/index">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/workspace">WorkSpace</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Graph<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/groups">Group</a>
+            </li>
+        </ul>
+        <div class="d-flex">
+            <button class="btn btn-outline-light mx-2" id="save-btn">Save</button>
+            <button class="btn btn-outline-light mx-2" id="export-btn">Export</button>
+
+            <a href="/notification">
+                <button class="btn mx-2 text-white" id="note">
+                    <i class="fa fa-bell-o"></i>
+                    <span class="badge badge-light badge-pill" id="n-count"></span>
+                </button>
+            </a>
+            <button class="btn btn-outline-light mx-2" id="sign-out-btn">Sign Out</button>
+        </div>
+
+    </div>
+</nav>
+
+<div class="container-fluid row px-0 no-gutters" style="
+position: absolute;
+top: 0;
+left: 0;
+padding-top: 40px;
+height: 100%;
+">
+    <nav class="col-2 bg-light sidebar sidebar-left overflow-auto" id="tree">
+
+    </nav>
+    <div class="col-8 bg-white main-graph">
+        <div class="card" id="loading"
+             style="z-index: 2;height: 100%;display: flex;align-items: center;justify-content: center;">
+            <div class="loader">
+                <div class="inner one"></div>
+                <div class="inner two"></div>
+                <div class="inner three"></div>
+            </div>
+            <p class="h4" style="position: absolute;top: calc(40% + 84px);">Loading...</p>
+        </div>
+        <div class="row" id="float_container">
+            <button class="btn btn-success btn-float" id="refresh-btn">
+                <i class="fa fa-refresh"></i></button>
+            <button class="btn btn-danger btn-float" id="layout-btn">
+                <i class="fa fa-arrows"></i></button>
+            <button class="btn btn-info btn-float" data-toggle="modal" data-target="#searchModal">
+                <i class="fa fa-search"></i></button>
+            <button class="btn btn-warning btn-float" data-toggle="modal" data-target="#filterModal">
+                <i class="fa fa-filter"></i></button>
+            <button class="btn btn-primary btn-float" data-toggle="modal" data-target="#infoModal">
+                <i class="fa fa-info"></i></button>
+        </div>
+        <div id="cy_container"></div>
+    </div>
+    <nav class="col-2 bg-light sidebar sidebar-right overflow-auto">
+
+        <div class="card m-2 code-card">
+            <div class="h5 card-header" id="code-header">Code Block</div>
+            <div class="card-body">
+                <pre class="bg-white my-0" id="code-pre"><code>Click a node to get its code block.</code></pre>
+            </div>
+        </div>
+
+        <hr style="border-top: 2px dashed #999; width: 80%">
+
+        <div class="card m-2">
+            <h5 class="card-header">Label</h5>
+            <div class="card-body">
+                <div class="card-text">
+                    <p>Add labels to any nodes, edges or domains in the right-click menu.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="labels-container"></div>
+    </nav>
+</div>
+
+
+</body>
+</html>

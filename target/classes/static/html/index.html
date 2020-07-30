@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Oceania</title>
+    <link rel="stylesheet" href="https://use.typekit.net/cpy1erx.css">
+
+    <link rel="stylesheet" type="text/css" href="webjars/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.4.1-1/css/bootstrap.min.css">
+    <style>
+        html {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: fira-sans, sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            font-style: normal;
+            color: #777;
+        }
+
+        .navbar-brand {
+            font-family: flood-std, sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .nav-link {
+            font-size: 1.2rem;
+        }
+
+        .bgimg-1, .bgimg-2, .bgimg-3 {
+            position: relative;
+            opacity: 0.65;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+        }
+
+        .bgimg-1 {
+            background-image: url("../imgs/head.jpg");
+            min-height: 100%;
+        }
+
+        .bgimg-2 {
+            background-image: url("../imgs/code.png");
+            min-height: 400px;
+        }
+
+        .bgimg-3 {
+            background-image: url("../imgs/graph.jpg");
+            min-height: 400px;
+        }
+
+        .caption {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            text-align: center;
+            color: #000;
+        }
+
+        .caption .title {
+            font-weight: 900;
+            background-color: rgba(17, 17, 17, 0.5);
+            width: 40%;
+            color: #fff;
+            padding: 18px;
+            font-size: 25px;
+            letter-spacing: 3px;
+        }
+
+        /* Turn off parallax scrolling for tablets and phones */
+        @media only screen and (max-device-width: 1024px) {
+            .bgimg-1, .bgimg-2, .bgimg-3 {
+                background-attachment: scroll;
+            }
+        }
+    </style>
+</head>
+<body>
+<script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript" src="webjars/popper.js/1.16.0/dist/umd/popper.min.js"></script>
+<script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/navbar.js"></script>
+<script>
+    $(function () {
+        if (localStorage["userId"] !== undefined) {
+            $("#sign-in").hide();
+            $("#sign-up").hide();
+        } else {
+            $("#notification").hide();
+            $("#sign-out-btn").hide();
+        }
+        $("#sign-in").on('click', function () {
+            window.location.href = "/login";
+        });
+        $("#sign-up").on('click', function () {
+            window.location.href = "/register";
+        });
+
+        $("#start-btn").on('click', function () {
+            // todo: 判断用户登录状态，根据用户角色跳转页面
+            if (localStorage["userId"] !== undefined) window.location.href = "/workspace";
+            else window.location.href = "/login";
+        });
+    });
+</script>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top p-0">
+    <a class="navbar-brand h1 m-0 col-2" href="#">👴 Old2Dimension</a>
+
+    <div class="collapse navbar-collapse col-10 px-0">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/workspace">WorkSpace</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/graph">Graph</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/groups">Group</a>
+            </li>
+            <!--            <li class="nav-item dropdown">-->
+            <!--                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"-->
+            <!--                   aria-haspopup="true" aria-expanded="false">-->
+            <!--                    Dropdown-->
+            <!--                </a>-->
+            <!--                <div class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+            <!--                    <a class="dropdown-item" href="#">Action</a>-->
+            <!--                    <a class="dropdown-item" href="#">Another action</a>-->
+            <!--                    <div class="dropdown-divider"></div>-->
+            <!--                    <a class="dropdown-item" href="#">Something else here</a>-->
+            <!--                </div>-->
+            <!--            </li>-->
+            <!--            <li class="nav-item">-->
+            <!--                <a class="nav-link disabled" href="#">Disabled</a>-->
+            <!--            </li>-->
+        </ul>
+        <div class="d-flex">
+            <button class="btn btn-outline-light mx-2" id="sign-in">Sign In</button>
+            <button class="btn btn-outline-light mx-2" id="sign-up">Sign Up</button>
+
+            <a id="notification" href="/notification">
+                <button class="btn mx-2 text-white" id="note">
+                    <i class="fa fa-bell-o"></i>
+                    <span class="badge badge-light badge-pill" id="n-count"></span>
+                </button>
+            </a>
+            <button class="btn btn-outline-light mx-2 " id="sign-out-btn">Sign Out</button>
+        </div>
+
+    </div>
+</nav>
+
+<div class="bgimg-1">
+    <div class="caption">
+        <div class="title d-block" style="margin-left: 30%;margin-top: -4rem;line-height: 3rem;">
+            OCEANIA：an Online platform for Code dEpendency ANalysis and vIsuAlization
+        </div>
+    </div>
+</div>
+
+<div style="color: #777;background-color:white;text-align:center;padding:50px 80px;">
+    <h3 style="text-align:center;">OCEANIA</h3>
+    <p>The objectives of OCEANIA is to support the understanding of software systems (i.e., its structure) and
+        algorithms (e.g., by animating the behavior of sorting algorithms) as well as the analysis and exploration of
+        software systems and their anomalies (e.g., by showing classes with high coupling) and their development and
+        evolution. One of the strengths of OCEANIA is to combine and relate information of software systems that are not
+        inherently linked, for example by projecting code changes onto software execution traces.</p>
+    <p>OCEANIA can be used as tool and technique to explore and analyze software system information, e.g., to discover
+        anomalies similar to the process of visual data mining. For example, OCEANIA is used to monitoring activities
+        such as for code quality or team activity. OCEANIA can participate to Software Intelligence in allowing to
+        discover and take advantage of mastering inner components of software systems.</p>
+</div>
+
+<div class="bgimg-2">
+    <div class="caption">
+        <span class="title" style="background-color:transparent;font-size:25px;color: #f7f7f7;font-weight: 700;">TO COMPREHEND</span>
+    </div>
+</div>
+
+<div style="position:relative;">
+    <div style="color:#ddd;background-color:#282E34;padding:50px 80px;text-align: center;">
+        <p>Comprehending makes it easier to maintain and iterate your code.</p>
+    </div>
+</div>
+
+<div class="bgimg-3">
+    <div class="caption">
+        <span class="title"
+              style="background-color:transparent;font-size:25px;color: #111;font-weight: 700;">CODE VISUALIZATION</span>
+    </div>
+</div>
+
+<div style="position:relative;">
+    <div style="color:#ddd;background-color:#282E34;padding:50px 80px;text-align: center;">
+        <p>Intuitive, abstract, and readable. Focused on both utility and aesthetics.</p>
+    </div>
+</div>
+
+<div class="bgimg-1">
+    <div class="caption">
+        <button class="btn btn-primary" id="start-btn"
+                style="height: 4rem;font-size: 1.5rem;border: antiquewhite solid 2px;margin-top: -2rem;background-color: #4e9fc1;">
+            START NOW
+        </button>
+    </div>
+</div>
+</body>
+</html>
