@@ -94,26 +94,41 @@ $(function () {
                 }),
                 success: function (data) {
                     if (data.success) {
-
                         $.ajax({
-                            type: "post",
-                            url: "/group/deliverTaskForOneMember",
+                            type: "get",
+                            url: "/user/getByName?name=" + $("#task-create-user-name").val(),
                             headers: {"Authorization": $.cookie('token')},
                             dataType: "json",
-                            contentType: 'application/json',
-                            data: JSON.stringify({
-                                "groupId": group_id,
-                                "taskId": data.content.id,
-                                "userId": 2
-                            }),
                             success: function (data) {
-                                $("#task-modify-modal").modal('hide');
-                                window.location.reload()
-                            },
-                            error: function (err) {
-                                console.log(err);
+                                if (data.success){
+                                    userId = data.content.id;
+                                    $.ajax({
+                                        type: "post",
+                                        url: "/group/deliverTaskForOneMember",
+                                        headers: {"Authorization": $.cookie('token')},
+                                        dataType: "json",
+                                        contentType: 'application/json',
+                                        data: JSON.stringify({
+                                            "groupId": group_id,
+                                            "taskId": data.content.id,
+                                            "userId": userId
+                                        }),
+                                        success: function (data) {
+                                            $("#task-modify-modal").modal('hide');
+                                            window.location.reload()
+                                        },
+                                        error: function (err) {
+                                            console.log(err);
+                                        }
+                                    });
+                                }
+                                else {
+                                    alert("No such user.")
+                                }
                             }
                         });
+
+                        
                     }
                 },
                 error: function (err) {
