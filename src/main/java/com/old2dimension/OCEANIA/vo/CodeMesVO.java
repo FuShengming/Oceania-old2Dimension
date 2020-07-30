@@ -9,7 +9,8 @@ public class CodeMesVO {
     private int numOfEdgeLabel;
     private int numOfDomainLabel;
 
-    public CodeMesVO(){}
+    public CodeMesVO() {
+    }
 
     public CodeMesVO(String codeName, int numOfVertex, int numOfEdge, int numOfDomain, int numOfVertexLabel, int numOfEdgeLabel, int numOfDomainLabel) {
         this.codeName = codeName;

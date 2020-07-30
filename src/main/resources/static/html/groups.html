@@ -163,6 +163,8 @@
 
 <script type="text/javascript" src="../js/groups.js"></script>
 
+<script type="text/javascript" src="../js/tasks.js"></script>
+
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel"
            aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -284,7 +286,8 @@ height: 100%;
                            aria-controls="v-pills-project" aria-selected="false">Project</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Task</a>
+                        <a class="nav-link" id="group-task" data-toggle="pill" href="#task" role="tab"
+                           aria-controls="v-pills-project" aria-selected="false">Task</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="group-message" data-toggle="pill" href="#message" role="tab"
@@ -376,7 +379,33 @@ height: 100%;
                 </div>
             </div>
             <div class="tab-pane fade" id="task" role="tabpanel" aria-labelledby="task-tab">
-
+                <div class="card m-2">
+                    <div class="card-body">
+                        <div class="card-title d-flex justify-content-between">
+                            <h2>My Tasks</h2>
+                            <div style="width: 33%" class="input-group">
+                                <input type="text" class="form-control" placeholder="Task name" aria-label="Task name" aria-describedby="basic-addon2">
+                                <div>
+                                    <button class="btn btn-outline-secondary" type="button">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-text">
+                            <table class="table table-hover" id="task-table" style="overflow-x: scroll">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Task Name</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Label</th>
+                                    <th scope="col">Start Time</th>
+                                    <th scope="col">End Time</th>
+                                </tr>
+                                </thead>
+                                <tbody id="task-tb"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="tab-pane fade" id="message" role="tabpanel" aria-labelledby="message-tab">
                 <div class="msgs m-2">
@@ -441,6 +470,46 @@ height: 100%;
     </div>
 
 </div>
+<div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="task-modal-label"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">Status: </div>
+                    <div style="width: 60%" id="modal-status"></div>
+                </div>
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">Label: </div>
+                    <div style="width: 60%" id="modal-label"></div>
+                </div>
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">Description: </div>
+                    <div style="width: 60%" id="modal-desc"></div>
+                </div>
+<!--                <div class="d-flex justify-content-flex-start mb-1">-->
+<!--                    <div style="width: 40%">Coworkers: </div>-->
+<!--                    <div style="width: 60%" id="modal-coworkers"></div>-->
+<!--                </div>-->
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">Start time: </div>
+                    <div style="width: 60%" id="modal-start"></div>
+                </div>
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">End time: </div>
+                    <div style="width: 60%" id="modal-end"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Modify</button>
+<!--                todo: modify-->
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

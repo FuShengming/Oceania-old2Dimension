@@ -18,48 +18,48 @@ public class LabelController {
         this.labelBL = labelBL;
     }
 
-    @RequestMapping(value = "/noteVertex",method = RequestMethod.POST)
-    public ResponseVO noteVertex(@RequestBody VertexLabelVO vertexLabelVO){
+    @RequestMapping(value = "/noteVertex", method = RequestMethod.POST)
+    public ResponseVO noteVertex(@RequestBody VertexLabelVO vertexLabelVO) {
         return labelBL.noteVertex(vertexLabelVO);
     }
 
-    @RequestMapping(value = "/noteEdge",method = RequestMethod.POST)
-    public ResponseVO noteEdge(@RequestBody EdgeLabelVO edgeLabelVO){
+    @RequestMapping(value = "/noteEdge", method = RequestMethod.POST)
+    public ResponseVO noteEdge(@RequestBody EdgeLabelVO edgeLabelVO) {
         return labelBL.noteEdge(edgeLabelVO);
     }
 
-    @RequestMapping(value = "/noteDomain",method = RequestMethod.POST)
-    public ResponseVO noteDomain(@RequestBody DomainLabelVO domainLabelVO){
+    @RequestMapping(value = "/noteDomain", method = RequestMethod.POST)
+    public ResponseVO noteDomain(@RequestBody DomainLabelVO domainLabelVO) {
         return labelBL.noteDomain(domainLabelVO);
     }
 
-    @RequestMapping(value = "/deleteVertexLabel",method = RequestMethod.POST)
-    public ResponseVO deleteVertexLabel(@RequestBody VertexLabelVO vertexLabelVO){
+    @RequestMapping(value = "/deleteVertexLabel", method = RequestMethod.POST)
+    public ResponseVO deleteVertexLabel(@RequestBody VertexLabelVO vertexLabelVO) {
         return labelBL.deleteVertexLabel(vertexLabelVO);
     }
 
-    @RequestMapping(value = "/deleteEdgeLabel",method = RequestMethod.POST)
-    public ResponseVO deleteEdgeLabel(@RequestBody EdgeLabelVO edgeLabelVO){
+    @RequestMapping(value = "/deleteEdgeLabel", method = RequestMethod.POST)
+    public ResponseVO deleteEdgeLabel(@RequestBody EdgeLabelVO edgeLabelVO) {
         return labelBL.deleteEdgeLabel(edgeLabelVO);
     }
 
-    @RequestMapping(value = "/deleteDomainLabel",method = RequestMethod.POST)
-    public ResponseVO deleteDomainLabel(@RequestBody DomainLabelVO domainLabelVO){
+    @RequestMapping(value = "/deleteDomainLabel", method = RequestMethod.POST)
+    public ResponseVO deleteDomainLabel(@RequestBody DomainLabelVO domainLabelVO) {
         return labelBL.deleteDomainLabel(domainLabelVO);
     }
 
-    @RequestMapping(value = "/getOneVertexLabel",method = RequestMethod.POST)
-    public ResponseVO getOneVertexLabel(@RequestBody VertexLabelVO vertexLabelVO){
+    @RequestMapping(value = "/getOneVertexLabel", method = RequestMethod.POST)
+    public ResponseVO getOneVertexLabel(@RequestBody VertexLabelVO vertexLabelVO) {
         return labelBL.getOneVertexLabels(vertexLabelVO);
     }
 
-    @RequestMapping(value = "/getOneEdgeLabel",method = RequestMethod.POST)
-    public ResponseVO getOneEdgeLabel(@RequestBody EdgeLabelVO edgeLabelVO){
+    @RequestMapping(value = "/getOneEdgeLabel", method = RequestMethod.POST)
+    public ResponseVO getOneEdgeLabel(@RequestBody EdgeLabelVO edgeLabelVO) {
         return labelBL.getOneEdgeLabels(edgeLabelVO);
     }
 
-    @RequestMapping(value = "/getOneDomainLabel",method = RequestMethod.POST)
-    public ResponseVO getOneDomainLabel(@RequestBody DomainLabelVO domainLabelVO){
+    @RequestMapping(value = "/getOneDomainLabel", method = RequestMethod.POST)
+    public ResponseVO getOneDomainLabel(@RequestBody DomainLabelVO domainLabelVO) {
         return labelBL.getOneDomainLabels(domainLabelVO);
     }
 

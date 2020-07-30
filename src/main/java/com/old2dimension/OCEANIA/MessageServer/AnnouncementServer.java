@@ -53,14 +53,16 @@ public class AnnouncementServer {
             }
         }
     }
+    
     //给指定用户发送信息
-    public void sendInfo(int userId, List<Announcement> message){
+    public void sendInfo(int userId, Integer message){
         Session session = sessionPools.get(userId);
         if(session==null){
             return;
         }
 
         try {
+
             sendMessage(session, message);
         }catch (Exception e){
             e.printStackTrace();
@@ -82,11 +84,9 @@ public class AnnouncementServer {
             ids.add(a.getAnnouncementId());
         }
         List<Announcement> message = announcementRepository.findAllById(ids);
-        try {
-            sendMessage(session, message);
-        } catch (IOException | EncodeException e) {
-            e.printStackTrace();
-        }
+
+        sendInfo(userId,message.size());
+
     }
 
     //关闭连接时调用

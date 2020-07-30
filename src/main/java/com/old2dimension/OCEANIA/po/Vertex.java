@@ -66,18 +66,22 @@ public class Vertex {
     }
 
 
-    public String getClassNameAndFunc(){
-        return  getBelongClass()+":"+getFuncName()+"("+getArgsString(args)+")";
+    public String getClassNameAndFunc() {
+        return getBelongClass() + ":" + getFuncName() + "(" + getArgsString(args) + ")";
     }
 
-    public String getFullName(){
-        return belongPackage+"."+getBelongClass()+":"+getFuncName()+"("+getArgsString(args)+")";
+    public String getFullName() {
+        return belongPackage + "." + getBelongClass() + ":" + getFuncName() + "(" + getArgsString(args) + ")";
     }
-    public String getArgsString(String [] args){
-        String res="";
-        for(int i = 0; i<args.length ; i++){
-            if(i!=args.length-1){res += (args[i]+", ");}
-            else{ res += (args[i]);}
+
+    public String getArgsString(String[] args) {
+        String res = "";
+        for (int i = 0; i < args.length; i++) {
+            if (i != args.length - 1) {
+                res += (args[i] + ", ");
+            } else {
+                res += (args[i]);
+            }
         }
         return res;
     }

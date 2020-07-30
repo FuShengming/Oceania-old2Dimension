@@ -16,7 +16,7 @@ public class CodeAndDateForm {
         this.date = date;
     }
 
-    public CodeAndDateForm(Code code, Date date){
+    public CodeAndDateForm(Code code, Date date) {
         this.codeId = code.getId();
         this.codeName = code.getName();
         this.date = date;

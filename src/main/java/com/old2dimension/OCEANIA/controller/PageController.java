@@ -41,6 +41,11 @@ public class PageController {
         return "/html/notification.html";
     }
 
+    @RequestMapping("/tasks")
+    public String tasks() {
+        return "/html/tasks.html";
+    }
+
     @RequestMapping("/groups")
     public String groups() {
         return "/html/groups.html";

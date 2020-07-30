@@ -4,7 +4,8 @@ import java.util.Objects;
 
 public class EdgeLabelVO {
 
-    public EdgeLabelVO(){}
+    public EdgeLabelVO() {
+    }
 
     private int id;
 
@@ -34,7 +35,7 @@ public class EdgeLabelVO {
 
     private String content;
 
-    public EdgeLabelVO(int userId, int edgeId, int codeId,String title, String content) {
+    public EdgeLabelVO(int userId, int edgeId, int codeId, String title, String content) {
         this.userId = userId;
         this.edgeId = edgeId;
         this.codeId = codeId;

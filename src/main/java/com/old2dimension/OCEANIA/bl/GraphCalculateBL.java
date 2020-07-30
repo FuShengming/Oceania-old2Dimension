@@ -11,7 +11,9 @@ public interface GraphCalculateBL {
     //public ResponseVO findPath(FuncInfoForm func1,FuncInfoForm func2);
 //    public ResponseVO getConnectedDomains(ArrayList<WeightForm> weightForms);
     public ResponseVO getAmbiguousFuncInfos(String message);
+
     public ResponseVO getGraph(UserAndCodeForm userAndCodeForm);
+
     public ResponseVO filterByWeightForm(ArrayList<WeightForm> weightForms);
 
 }

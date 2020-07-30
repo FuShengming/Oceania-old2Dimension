@@ -15,6 +15,8 @@ public class TaskAssignment {
     @Column(name = "user_id")
     private int userId;
 
+    private TaskAssignment(){}
+
     public TaskAssignment(int groupId, int taskId, int userId) {
         this.groupId = groupId;
         this.taskId = taskId;

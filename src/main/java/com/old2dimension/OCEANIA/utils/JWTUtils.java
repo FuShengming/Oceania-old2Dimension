@@ -26,14 +26,14 @@ public abstract class JWTUtils {
 
     public static String createToken(String username, String role) {
 
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put(ROLE_CLAIMS, role);
 
         String token = Jwts
                 .builder()
                 .setSubject(username)
                 .setClaims(map)
-                .claim("username",username)
+                .claim("username", username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(SignatureAlgorithm.HS256, APPSECRET_KEY).compact();

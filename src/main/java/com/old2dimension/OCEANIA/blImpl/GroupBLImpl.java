@@ -5,6 +5,7 @@ import com.old2dimension.OCEANIA.MessageServer.InvitationServer;
 import com.old2dimension.OCEANIA.bl.GroupBL;
 import com.old2dimension.OCEANIA.dao.*;
 import com.old2dimension.OCEANIA.po.*;
+import com.old2dimension.OCEANIA.vo.AnnouncementAndUserReadForm;
 import com.old2dimension.OCEANIA.vo.GroupIdAndUserForm;
 import com.old2dimension.OCEANIA.vo.GroupNameAndCreatorIdForm;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
@@ -19,6 +20,8 @@ import java.util.List;
 public class GroupBLImpl implements GroupBL {
 
 
+
+
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -29,12 +32,37 @@ public class GroupBLImpl implements GroupBL {
     AnnouncementRepository announcementRepository;
     @Autowired
     AnnouncementReadRepository announcementReadRepository;
+
     @Autowired
     AnnouncementServer announcementServer;
     @Autowired
     InvitationRepository invitationRepository;
     @Autowired
     InvitationServer invitationServer;
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void setGroupRepository(GroupRepository groupRepository) {
+        this.groupRepository = groupRepository;
+    }
+
+    public void setGroupMemberRepository(GroupMemberRepository groupMemberRepository) {
+        this.groupMemberRepository = groupMemberRepository;
+    }
+
+    public void setAnnouncementRepository(AnnouncementRepository announcementRepository) {
+        this.announcementRepository = announcementRepository;
+    }
+
+    public void setAnnouncementReadRepository(AnnouncementReadRepository announcementReadRepository) {
+        this.announcementReadRepository = announcementReadRepository;
+    }
+
+    public void setAnnouncementServer(AnnouncementServer announcementServer) {
+        this.announcementServer = announcementServer;
+    }
 
     @Override
     public ResponseVO findUser(String name) {
@@ -124,7 +152,7 @@ public class GroupBLImpl implements GroupBL {
         }
         List<Invitation> temp = new ArrayList<>();
         temp.add(invitation);
-        invitationServer.sendInfo(invitation.getUserId(),temp);
+        invitationServer.sendInfo(invitation.getUserId(),invitationRepository.findInvitationsByUserIdAndHasRead(invitation.getUserId(),0).size());
 
         return ResponseVO.buildSuccess(invitation);
     }
@@ -158,6 +186,8 @@ public class GroupBLImpl implements GroupBL {
 
 
     }
+
+
 
     @Override
     public ResponseVO joinGroup(Invitation invitation) {
@@ -193,8 +223,17 @@ public class GroupBLImpl implements GroupBL {
         if(oldInvitation.getHasRead()!=1||oldInvitation.getState()!=1){
             return ResponseVO.buildFailure("Setting state of invitation failed.");
         }
-
+        invitationServer.sendInfo(invitation.getUserId(),invitationRepository.findInvitationsByUserIdAndHasRead(invitation.getUserId(),0).size());
         return ResponseVO.buildSuccess(member);
+    }
+
+    @Override
+    public ResponseVO getUserInvitation(int userId) {
+        List<Invitation> res = invitationRepository.findInvitationsByUserId(userId);
+        if(res==null){
+            return ResponseVO.buildFailure("Getting invitations failed.");
+        }
+        return ResponseVO.buildSuccess(res);
     }
 
     @Override
@@ -264,22 +303,34 @@ public class GroupBLImpl implements GroupBL {
         announcementReadRepository.saveAll(announcementReads);
         List<Announcement> temp = new ArrayList<>();
         temp.add(announcement);
+
         for(Integer id:ids){
-            announcementServer.sendInfo(id,temp);
+            announcementServer.sendInfo(id,announcementReadRepository.findAnnouncementReadsByUserIdAndHasRead(id,0).size());
         }
 
         return ResponseVO.buildSuccess(announcement);
     }
 
     @Override
-    public ResponseVO getGroupAnnouncements(int groupId) {
-        if(groupRepository.findGroupById(groupId)==null){
+    public ResponseVO getGroupAnnouncements(int groupId,int userId) {
+       Group group = groupRepository.findGroupById(groupId);
+        if(group==null){
             return ResponseVO.buildFailure("this group does not exist!");
         }
+        if(groupMemberRepository.findGroupMemberByGroupIdAndUserId(groupId,userId)==null){
+            return ResponseVO.buildFailure("Do not have the access of getting announcements.");
+        }
+        List<Announcement> announcements = announcementRepository.findAnnouncementsByGroupId(groupId);
 
-        List<Announcement> res = announcementRepository.findAllByGroupId(groupId);
-        if(res==null){
+        if(announcements==null){
             return ResponseVO.buildFailure("Getting announcement list failed.");
+        }
+
+        List<AnnouncementAndUserReadForm> res = new ArrayList<>();
+        for(Announcement a:announcements){
+            AnnouncementAndUserReadForm cur = new AnnouncementAndUserReadForm(a,userId,
+                    announcementReadRepository.findAnnouncementReadByUserIdAndAnnouncementId(userId,a.getId()).getHasRead());
+            res.add(cur);
         }
 
         return ResponseVO.buildSuccess(res);
@@ -299,9 +350,9 @@ public class GroupBLImpl implements GroupBL {
             return  ResponseVO.buildFailure("Modifying has_read failed.");
         }
 
+        announcementServer.sendInfo(userId,announcementReadRepository.findAnnouncementReadsByUserIdAndHasRead(userId,0).size());
         return ResponseVO.buildSuccess(announcementRead);
     }
-
 
 
     @Override
@@ -319,7 +370,7 @@ public class GroupBLImpl implements GroupBL {
         if(invitation.getHasRead()!=1){
             return ResponseVO.buildFailure("Setting the has-reading of invitation failed.");
         }
-
+        invitationServer.sendInfo(userId,invitationRepository.findInvitationsByUserIdAndHasRead(userId,0).size());
         return ResponseVO.buildSuccess(invitation);
     }
 
@@ -339,6 +390,8 @@ public class GroupBLImpl implements GroupBL {
         if(invitation.getState()!=2||invitation.getHasRead()!=1){
             return ResponseVO.buildFailure("Setting the state of invitation failed.");
         }
+        invitationServer.sendInfo(userId,invitationRepository.findInvitationsByUserIdAndHasRead(userId,0).size());
         return ResponseVO.buildSuccess(invitation);
     }
+
 }

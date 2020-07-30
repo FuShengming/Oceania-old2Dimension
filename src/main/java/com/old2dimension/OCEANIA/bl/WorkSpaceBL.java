@@ -6,5 +6,6 @@ import com.old2dimension.OCEANIA.vo.WorkSpaceVO;
 
 public interface WorkSpaceBL {
     public ResponseVO save(WorkSpaceVO workSpaceVO);
+
     public ResponseVO recover(UserAndCodeForm userAndCodeForm);
 }

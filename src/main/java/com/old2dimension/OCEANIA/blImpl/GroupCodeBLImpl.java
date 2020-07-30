@@ -33,6 +33,25 @@ public class GroupCodeBLImpl implements GroupCodeBL {
     @Autowired
     UserRepository userRepository;
 
+    public void setCodeRepository(CodeRepository codeRepository) {
+        this.codeRepository = codeRepository;
+    }
+
+    public void setGroupCodeRepository(GroupCodeRepository groupCodeRepository) {
+        this.groupCodeRepository = groupCodeRepository;
+    }
+
+    public void setGroupMemberRepository(GroupMemberRepository groupMemberRepository) {
+        this.groupMemberRepository = groupMemberRepository;
+    }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void setLabelBL(LabelBL labelBL) {
+        this.labelBL = labelBL;
+    }
 
     @Override
     public ResponseVO addCode(GroupIdAndCodeIdForm groupIdAndCodeIdForm) {

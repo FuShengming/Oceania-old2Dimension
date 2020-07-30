@@ -10,6 +10,7 @@ public class DomainVO {
     private ArrayList<VertexVO> vertices;
     private ArrayList<EdgeVO> edgeVOS;
     private int id;
+
     public DomainVO() {
 
     }
@@ -21,7 +22,7 @@ public class DomainVO {
             edgeVOS.add(new EdgeVO(edge));
         }
         this.id = domain.getId();
-        this.vertices=getVertices();
+        this.vertices = getVertices();
     }
 
     public int getVerticesNum() {
@@ -52,14 +53,14 @@ public class DomainVO {
         this.id = id;
     }
 
-    public ArrayList<VertexVO> getVertices(){
-        ArrayList<VertexVO> vertices=new ArrayList<VertexVO>();
-        for(int i=0; i<edgeVOS.size(); i++){
-            EdgeVO curEdge=edgeVOS.get(i);
-            if(!vertices.contains(curEdge.getStart())){
+    public ArrayList<VertexVO> getVertices() {
+        ArrayList<VertexVO> vertices = new ArrayList<VertexVO>();
+        for (int i = 0; i < edgeVOS.size(); i++) {
+            EdgeVO curEdge = edgeVOS.get(i);
+            if (!vertices.contains(curEdge.getStart())) {
                 vertices.add(curEdge.getStart());
             }
-            if(!vertices.contains(curEdge.getEnd())){
+            if (!vertices.contains(curEdge.getEnd())) {
                 vertices.add(curEdge.getEnd());
             }
         }

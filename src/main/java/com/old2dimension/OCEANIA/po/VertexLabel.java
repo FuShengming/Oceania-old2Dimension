@@ -16,6 +16,7 @@ public class VertexLabel {
     public void setId(int id) {
         this.id = id;
     }
+
     @Column(name = "user_id")
     private int userId;
 
@@ -31,7 +32,7 @@ public class VertexLabel {
     @Column(name = "title")
     private String title;
 
-    public VertexLabel(){
+    public VertexLabel() {
 
     }
 
@@ -42,12 +43,13 @@ public class VertexLabel {
     public void setTitle(String title) {
         this.title = title;
     }
-    public VertexLabel(int userId, int codeId, int vertexId,String title, String content) {
+
+    public VertexLabel(int userId, int codeId, int vertexId, String title, String content) {
         this.userId = userId;
         this.codeId = codeId;
         this.vertexId = vertexId;
         this.content = content;
-        this.title=title;
+        this.title = title;
     }
 
     public int getUserId() {

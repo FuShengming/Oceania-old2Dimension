@@ -11,15 +11,21 @@ import java.util.List;
 public interface LabelBL {
 
     ResponseVO noteVertex(VertexLabelVO vertexLabelVO);
+
     ResponseVO noteEdge(EdgeLabelVO edgeLabelVO);
+
     ResponseVO noteDomain(DomainLabelVO domainLabelVO);
 
     ResponseVO deleteVertexLabel(VertexLabelVO vertexLabelVO);
+
     ResponseVO deleteEdgeLabel(EdgeLabelVO edgeLabelVO);
+
     ResponseVO deleteDomainLabel(DomainLabelVO domainLabelVO);
 
     ResponseVO getOneVertexLabels(VertexLabelVO vertexLabelVO);
+
     ResponseVO getOneEdgeLabels(EdgeLabelVO edgeLabelVO);
+
     ResponseVO getOneDomainLabels(DomainLabelVO domainLabelVO);
 
     List<VertexLabel> getAllVertexLabel(UserAndCodeForm userAndCodeForm);

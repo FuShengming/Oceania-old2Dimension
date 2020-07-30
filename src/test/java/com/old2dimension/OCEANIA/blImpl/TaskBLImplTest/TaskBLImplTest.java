@@ -9,7 +9,9 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Date;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -94,22 +96,28 @@ public class TaskBLImplTest {
         TaskBLImpl taskBL = new TaskBLImpl();
         GroupRepository groupRepository = mock(GroupRepository.class);
         TaskRepository taskRepository = mock(TaskRepository.class);
+        TaskAssignmentRepository taskAssignmentRepository = mock(TaskAssignmentRepository.class);
         taskBL.setGroupRepository(groupRepository);
         taskBL.setTaskRepository(taskRepository);
+        taskBL.setTaskAssignmentRepository(taskAssignmentRepository);
 
         ArrayList<Task> tasks = new ArrayList<>();
         Date startDate = new Date(120, 6, 1);
         Date endDate = new Date(120, 6, 31);
-        Task task = new Task(0, 1, "testTask", "testLabel", "testDescription", startDate, endDate, 0);
+        Task task = new Task(1, 1, "testTask", "testLabel", "testDescription", startDate, endDate, 0);
         tasks.add(task);
         Group group = new Group(1, "testGroup");
+        ArrayList<TaskAssignment> taskAssignments = new ArrayList<>();
+        TaskAssignment taskAssignment = new TaskAssignment(1, 1, 1);
+        taskAssignments.add(taskAssignment);
 
         when(groupRepository.findGroupById(1)).thenReturn(group);
         when(taskRepository.findTasksByGroupId(1)).thenReturn(tasks);
+        when(taskAssignmentRepository.findTaskAssignmentsByGroupId(1)).thenReturn(taskAssignments);
 
         ResponseVO responseVO = taskBL.getAllTask(1);
-        Assert.assertEquals(((ArrayList<Task>) responseVO.getContent()).size(), 1);
-        Assert.assertEquals(((ArrayList<Task>) responseVO.getContent()).get(0).getLabel(), "testLabel");
+        Assert.assertEquals(((HashMap<String, List>) responseVO.getContent()).size(), 2);
+        Assert.assertEquals(((HashMap<String, List>) responseVO.getContent()).get("tasks").size(), 1);
     }
 
     @Test
@@ -139,6 +147,31 @@ public class TaskBLImplTest {
 
         ResponseVO responseVO = taskBL.getAllTask(1);
         Assert.assertEquals(responseVO.getMessage(), "Getting task list failed");
+    }
+
+    @Test
+    public void getAllTaskTest4() {
+        TaskBLImpl taskBL = new TaskBLImpl();
+        GroupRepository groupRepository = mock(GroupRepository.class);
+        TaskRepository taskRepository = mock(TaskRepository.class);
+        TaskAssignmentRepository taskAssignmentRepository = mock(TaskAssignmentRepository.class);
+        taskBL.setGroupRepository(groupRepository);
+        taskBL.setTaskRepository(taskRepository);
+        taskBL.setTaskAssignmentRepository(taskAssignmentRepository);
+
+        ArrayList<Task> tasks = new ArrayList<>();
+        Date startDate = new Date(120, 6, 1);
+        Date endDate = new Date(120, 6, 31);
+        Task task = new Task(1, 1, "testTask", "testLabel", "testDescription", startDate, endDate, 0);
+        tasks.add(task);
+        Group group = new Group(1, "testGroup");
+
+        when(groupRepository.findGroupById(1)).thenReturn(group);
+        when(taskRepository.findTasksByGroupId(1)).thenReturn(tasks);
+        when(taskAssignmentRepository.findTaskAssignmentsByGroupId(1)).thenReturn(null);
+
+        ResponseVO responseVO = taskBL.getAllTask(1);
+        Assert.assertEquals(responseVO.getMessage(), "Getting task assignments failed.");
     }
 
     @Test
@@ -418,5 +451,55 @@ public class TaskBLImplTest {
 
         ResponseVO responseVO = taskBL.completeTask(1);
         Assert.assertEquals(responseVO.getMessage(), "This task has already completed.");
+    }
+
+    @Test
+    public void getUserTaskListTest1() {
+        TaskBLImpl taskBL = new TaskBLImpl();
+        TaskRepository taskRepository = mock(TaskRepository.class);
+        TaskAssignmentRepository taskAssignmentRepository = mock(TaskAssignmentRepository.class);
+        taskBL.setTaskRepository(taskRepository);
+        taskBL.setTaskAssignmentRepository(taskAssignmentRepository);
+
+        ArrayList<TaskAssignment> taskAssignments = new ArrayList<>();
+        TaskAssignment taskAssignment1 = new TaskAssignment(1, 1, 1);
+        taskAssignment1.setId(1);
+        TaskAssignment taskAssignment2 = new TaskAssignment(1, 2, 1);
+        taskAssignment2.setId(2);
+        TaskAssignment taskAssignment3 = new TaskAssignment(1, 5, 1);
+        taskAssignment3.setId(3);
+        taskAssignments.add(taskAssignment1);
+        taskAssignments.add(taskAssignment2);
+        taskAssignments.add(taskAssignment3);
+        ArrayList<Integer> ids = new ArrayList<>();
+        ids.add(1);
+        ids.add(2);
+        ids.add(3);
+        Task task1 = new Task(1, 1, "task1", "label1", "description1", new Date(120, 5, 1), new Date(120, 5, 21), 1);
+        Task task2 = new Task(2, 1, "task2", "label2", "description2", new Date(120, 6, 1), new Date(120, 6, 21), 0);
+        Task task3 = new Task(3, 1, "task3", "label3", "description3", new Date(120, 7, 1), new Date(120, 7, 31), 0);
+        ArrayList<Task> tasks = new ArrayList<>();
+        tasks.add(task1);
+        tasks.add(task2);
+        tasks.add(task3);
+
+        when(taskAssignmentRepository.findTaskAssignmentsByGroupIdAndUserId(1, 1)).thenReturn(taskAssignments);
+        when(taskRepository.findAllById(ids)).thenReturn(tasks);
+
+        ResponseVO responseVO = taskBL.getUserTaskList(1, 1);
+        Assert.assertEquals(((HashMap<String, List>) responseVO.getContent()).get("tasks").size(), 3);
+        Assert.assertEquals(((TaskAssignment) (((HashMap<String, List>) responseVO.getContent()).get("assignments").get(2))).getTaskId(), 5);
+    }
+
+    @Test
+    public void getUserTaskListTest2() {
+        TaskBLImpl taskBL = new TaskBLImpl();
+        TaskAssignmentRepository taskAssignmentRepository = mock(TaskAssignmentRepository.class);
+        taskBL.setTaskAssignmentRepository(taskAssignmentRepository);
+
+        when(taskAssignmentRepository.findTaskAssignmentsByGroupIdAndUserId(1, 1)).thenReturn(null);
+
+        ResponseVO responseVO = taskBL.getUserTaskList(1, 1);
+        Assert.assertEquals(responseVO.getMessage(), "getting task list failed.");
     }
 }

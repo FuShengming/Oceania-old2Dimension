@@ -5,19 +5,21 @@ import com.old2dimension.OCEANIA.po.User;
 import java.util.Objects;
 
 public class UserVO {
-    public UserVO(){}
-
-    public UserVO(int id, String name,String pwd){
-        this.id=id;
-        this.name=name;
-        this.pwd=pwd;
+    public UserVO() {
     }
 
-    public UserVO(User u){
-        this.id=u.getId();
-        this.name=u.getName();
-        this.pwd=u.getPwd();
+    public UserVO(int id, String name, String pwd) {
+        this.id = id;
+        this.name = name;
+        this.pwd = pwd;
     }
+
+    public UserVO(User u) {
+        this.id = u.getId();
+        this.name = u.getName();
+        this.pwd = u.getPwd();
+    }
+
     private int id;
 
     private String name;
