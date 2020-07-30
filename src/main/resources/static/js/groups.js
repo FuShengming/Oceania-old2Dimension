@@ -485,7 +485,7 @@ $(function () {
                     let leader_id = 0;
                     member_list.forEach(function (e) {
                         if (e.isLeader) {
-                            isLeader = e.userId === userId;
+                            isLeader = e.userId == userId;
                             leader_id = e.userId;
                         }
                         is_leader = isLeader;
