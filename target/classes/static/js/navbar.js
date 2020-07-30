@@ -1,36 +1,69 @@
 $(document).ready(function () {
     let userId = localStorage['userId'];
+    let iv_count = 0;
+    let m_count = 0;
     if (userId !== undefined && userId !== 1) {
-        let socket = null;
-        let openSocket = function () {
+        let iv_socket = null;
+        let openIVSocket = function () {
             if (typeof (WebSocket) == "undefined") {
                 console.log("Can't Support WebSocket");
             } else {
                 let socketUrl = "ws://localhost:8086/websocket/invitation/" + userId;
-                socket = new WebSocket(socketUrl);
-                socket.onopen = function () {
+                iv_socket = new WebSocket(socketUrl);
+                iv_socket.onopen = function () {
                     console.log("websocket is on.")
                 };
-                socket.onmessage = function (msg) {
-                    $("#n-count").text(msg.data);
-                    if (Number(msg.data) > 0) {
+                iv_socket.onmessage = function (msg) {
+                    iv_count = Number(msg.data);
+                    let sum = iv_count + m_count;
+                    $("#n-count").text(sum);
+                    if (sum > 0) {
                         $("#n-count").show();
                     } else {
                         $("#n-count").hide();
                     }
-                    let serverMsg = "get info：" + JSON.stringify(msg.data);
-                    console.log(serverMsg);
                 };
-                socket.onclose = function () {
+                iv_socket.onclose = function () {
                     console.log("websocket is off.");
                 };
                 //发生了错误事件
-                socket.onerror = function () {
+                iv_socket.onerror = function () {
                     console.log("websocket occurs an error.");
                 }
             }
         };
-        openSocket();
+        openIVSocket();
+
+        let m_socket = null;
+        let openMSocket = function () {
+            if (typeof (WebSocket) == "undefined") {
+                console.log("Can't Support WebSocket");
+            } else {
+                let socketUrl = "ws://localhost:8086/websocket/chat/" + userId;
+                m_socket = new WebSocket(socketUrl);
+                m_socket.onopen = function () {
+                    console.log("websocket is on.")
+                };
+                m_socket.onmessage = function (msg) {
+                    m_count = Number(msg.data);
+                    let sum = iv_count + m_count;
+                    $("#n-count").text(sum);
+                    if (sum > 0) {
+                        $("#n-count").show();
+                    } else {
+                        $("#n-count").hide();
+                    }
+                };
+                m_socket.onclose = function () {
+                    console.log("websocket is off.");
+                };
+                //发生了错误事件
+                m_socket.onerror = function () {
+                    console.log("websocket occurs an error.");
+                }
+            }
+        };
+        openMSocket();
     }
 
     $("#sign-out-btn").on('click', function () {
