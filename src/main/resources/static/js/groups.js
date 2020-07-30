@@ -484,13 +484,34 @@ $(function () {
                     let isLeader = false;
 
                     let leader_id = 0;
+                    let h = "";
                     member_list.forEach(function (e) {
+                        $.ajax({
+                            type: "get",
+                            url: "/user/getById?id=" + e.userId,
+                            headers: {"Authorization": $.cookie('token')},
+                            dataType: "json",
+                            contentType: 'application/json',
+                            success: function (data) {
+                                if (data.success) {
+                                    console.log(data.content);
+                                    h += "<option u_id='" + e.userId + "'>" + data.content[0].name + "</option>";
+                                    $("#task-create-user-name").html(h);
+                                } else {
+                                    console.log(data.message);
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
                         if (e.isLeader) {
                             isLeader = e.userId == userId;
                             leader_id = e.userId;
                         }
                         is_leader = isLeader;
                     });
+
                     console.log(leader_id, userId);
                     if (leader_id != userId) {
                         $("#announce-btn").hide();
@@ -519,8 +540,7 @@ $(function () {
                             <span class="fa fa-plus-square mr-2"></span>New
                         </button>
                     `)
-                    }
-                    else if (!is_leader) {
+                    } else if (!is_leader) {
                         $("#task-create").remove();
                     }
 
@@ -602,7 +622,7 @@ $(function () {
                             if ($("#task-complete").length === 0) {
                                 $("#task-close").after(`<button type="button" class="btn btn-success" id="task-complete">Complete</button>`)
                             }
-                        }else {
+                        } else {
                             $("#task-complete").remove()
                         }
 
