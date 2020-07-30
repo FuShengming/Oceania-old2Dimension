@@ -352,6 +352,7 @@ $(function () {
                         $("#nameModal").modal('show');
                     })
                     $(".code-stats").on('click', function () {
+                        console.log("sssss")
                         let codeId = $(this).attr("code-id");
                         $.ajax({
                             type: "post",
@@ -509,6 +510,20 @@ $(function () {
 
                         }
                     }
+
+                    console.log(is_leader)
+                    if (is_leader && $("#task-create").length === 0) {
+                        $("#task-search-name").before(`
+                        <button class="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#task-modify-modal"
+                                id="task-create">
+                            <span class="fa fa-plus-square mr-2"></span>New
+                        </button>
+                    `)
+                    }
+                    else if (!is_leader) {
+                        $("#task-create").remove();
+                    }
+
                     let leader_name = "";
                     $.ajax({
                         type: "get",
@@ -551,17 +566,6 @@ $(function () {
             }),
             timeout: 100000,
             success: function (data) {
-                if (is_leader && $("#task-create").length === 0) {
-                    $("#task-title-button").prepend(`
-                    <button class="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#task-modify-modal"
-                            id="task-create">
-                        <span class="fa fa-plus-square mr-2"></span>New
-                    </button>
-                `)
-                }
-                else if (!is_leader) {
-                    $("#task-create").remove();
-                }
                 if (data.success) {
                     let h = "";
                     let tasks = data.content['tasks'];
@@ -663,16 +667,6 @@ $(function () {
         });
     };
     get_group_list();
-
-
-    if (is_leader) {
-        $("#task-title-button").prepend(`
-            <button class="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#task-modify-modal"
-                    id="task-create">
-                <span class="fa fa-plus-square mr-2"></span>New
-            </button>
-        `)
-    }
 
     $("#copy-btn").on('click', function () {
         $.ajax({
