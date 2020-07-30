@@ -92,8 +92,8 @@ $(function () {
                     "startDate": $("#task-create-start-time").val(),
                     "endDate": $("#task-create-end-time").val()
                 }),
-                success: function (data) {
-                    if (data.success) {
+                success: function (data1) {
+                    if (data1.success) {
                         $.ajax({
                             type: "get",
                             url: "/user/getByName?name=" + $("#task-create-user-name").val(),
@@ -110,7 +110,7 @@ $(function () {
                                         contentType: 'application/json',
                                         data: JSON.stringify({
                                             "groupId": group_id,
-                                            "taskId": data.content.id,
+                                            "taskId": data1.content.id,
                                             "userId": userId
                                         }),
                                         success: function (data) {
@@ -128,7 +128,7 @@ $(function () {
                             }
                         });
 
-                        
+
                     }
                 },
                 error: function (err) {
