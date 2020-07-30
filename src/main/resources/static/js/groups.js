@@ -377,7 +377,8 @@ $(function () {
                         }
                         is_leader = isLeader;
                     });
-                    if (!leader_id == userId) {
+                    console.log(leader_id, userId);
+                    if (leader_id != userId) {
                         $("#announce-btn").hide();
                         $("#upload-btn").hide();
                         $("#copy-btn").hide();
