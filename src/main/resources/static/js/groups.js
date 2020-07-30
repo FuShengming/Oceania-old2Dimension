@@ -23,6 +23,41 @@ $(function () {
     let userId = localStorage['userId'];
     if (userId === undefined) window.location.href = "/login";
     console.log(userId);
+
+    $("#task-search").on('click', function () {
+        let input = $("#task-search").val()
+
+    })
+
+    $("#task-modify").on('click', function () {
+
+    })
+
+    $("#task-create").on('click', function () {
+        $("#task-modify-modal-label").text("New Task");
+    })
+
+    $("#task-modal-submit").on('click', function () {
+        let str = checkInput();
+        if (str.length !== 0) {
+            $("#task-create-error").text(str + " can't be null!")
+        } else {
+            let upString = "{"
+            $.ajax({
+                type: "post",
+                url: "/group/createTask",
+                headers: {"Authorization": $.cookie('token')},
+                dataType: "json",
+                contentType: 'application/json',
+                data: JSON.stringify()
+            })
+        }
+    })
+
+    $(".form-control").bind('focus', function () {
+        $("#task-create-error").text("")
+    })
+
     let group_id = null;
     let is_leader = false;
 
@@ -307,6 +342,17 @@ $(function () {
                         }
                         is_leader = isLeader;
                     });
+                    if (!isLeader) {
+                        $("#announce-btn").hide();
+                        $("#upload-btn").hide();
+                        $("#copy-btn").hide();
+                        $("#edit-btn").hide();
+                    } else {
+                        $("#announce-btn").show();
+                        $("#upload-btn").show();
+                        $("#copy-btn").show();
+                        $("#edit-btn").show();
+                    }
                     let leader_name = "";
                     $.ajax({
                         type: "get",
@@ -369,6 +415,77 @@ $(function () {
                 console.log(err);
             }
         });
+        $.ajax({
+            type: "post",
+            url: "/group/getUserTask/",
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                'userId': userId,
+                'groupId': groupId
+            }),
+            timeout: 100000,
+            success: function (data) {
+                if (data.success) {
+                    let h = "";
+                    let tasks = data.content['tasks'];
+                    let num = 0;
+                    tasks.forEach(function (task) {
+                        num += 1
+                        h += `<tr class="clickable-row" task-id="${task.id}" data-toggle="modal" data-target="#taskModal" id="task-item-` + task.name + `">
+                            <td>${task.name}</td>
+                            <td>${task.state === 0 ? "unfinished" : "finished"}</td>
+                            <td>${task.label}</td>
+                            <td>${task.startDate === null ? "--" : new Date(Date.parse(task.startDate)).toLocaleString("en")}</td>
+                            <td>${task.endDate === null ? "--" : new Date(Date.parse(task.endDate)).toLocaleString("en")}</td>
+                        </tr>`
+                    });
+                    $("#task-tb").html(h);
+                    $(".clickable-row").on('click', function (e) {
+                        let taskId = e['currentTarget']['attributes'][1]['value']
+                        for (let i = 0; i < tasks.length; i++) {
+                            if (taskId == tasks[i].id) {
+                                var task = tasks[i]
+                                break;
+                            }
+                        }
+                        $("#task-modal-label").text(task.name)
+                        $("#modal-status").text(task.state === 0 ? "unfinished" : "finished")
+                        $("#modal-label").text(task.label)
+                        $("#modal-desc").text(task.description)
+                        $("#modal-start").text(task.startDate === null ? "--" : new Date(Date.parse(task.startDate)).toLocaleString("en"))
+                        $("#modal-end").text(task.endDate === null ? "--" : new Date(Date.parse(task.endDate)).toLocaleString("en"))
+
+
+                        if (is_leader) {
+                            $("#task-button").addClass("justify-content-between").html(`
+                                            <div class="justify-content-flex-start">
+                                                <button type="button" class="btn btn-outline-danger" id="task-delete">Delete</button>
+                                                <button type="button" class="btn btn-outline-primary" id="task-modify">Modify</button>
+                                            </div>
+                                            <div class="justify-content-flex-end">
+                                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-success" id="task-complete">Complete</button>
+                                            </div>
+                                        `)
+                        } else {
+                            $("#task-button").removeClass("justify-content-between").html(`
+                                            <div class="justify-content-flex-end" style="float: right">
+                                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-success" id="task-complete">Complete</button>
+                                            </div>
+                                        `)
+                        }
+                    });
+                } else {
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
         getCodesByGroupId();
     };
     let get_group_list = function () {
@@ -397,9 +514,11 @@ $(function () {
                         $("#all_groups").html(h);
                         $(".chat_list").on('click', view_group);
                         $(".chat_list").first().trigger("click");
+                        $(".group_content").show();
                     } else {
-
+                        $(".group_content").hide();
                     }
+
                 }
             },
             error: function (err) {
@@ -408,6 +527,16 @@ $(function () {
         });
     };
     get_group_list();
+
+
+    if (is_leader) {
+        $("#task-title-button").prepend(`
+            <button class="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#task-modify-modal"
+                    id="task-create">
+                <span class="fa fa-plus-square mr-2"></span>New
+            </button>
+        `)
+    }
 
     $("#copy-btn").on('click', function () {
         $.ajax({
@@ -484,6 +613,7 @@ $(function () {
                                 alert("Send invitation successfully");
                                 $("#inviteModal").modal('hide');
                             } else {
+                                alert(data.message);
                                 console.log(data.message);
                             }
                         },
@@ -538,7 +668,7 @@ $(function () {
             data: JSON.stringify({
                 creatorId: userId,
                 name: $("#name-input").val(),
-                description: $("#description-input").val()
+                // description: $("#description-input").val()
             }),
             success: function (data) {
                 if (data.success) {
@@ -599,7 +729,7 @@ $(function () {
                 success: function (data) {
                     if (data.success) {
                         console.log("success");
-                        get_group_list();
+                        window.location.reload();
                     } else {
                         console.log(data.message);
                     }
@@ -611,3 +741,30 @@ $(function () {
         }
     });
 });
+
+
+let checkInput = function () {
+    let str = ""
+    let sp = ""
+    if ($("#task-create-label").val() === undefined || $("#task-create-label").val().length === 0) {
+        str += sp + "label"
+        sp = ", "
+    }
+    if ($("#task-create-name").val() === undefined || $("#task-create-name").val().length === 0) {
+        str += sp + "name"
+        sp = ", "
+    }
+    if ($("#task-create-desc").val() === undefined || $("#task-create-desc").val().length === 0) {
+        str += sp + "description"
+        sp = ", "
+    }
+    if ($("#task-create-start-time").val() === undefined || $("#task-create-start-time").val().length === 0) {
+        str += sp + "start time"
+        sp = ", "
+    }
+    if ($("#task-create-end-time").val() === undefined || $("#task-create-end-time").val().length === 0) {
+        str += sp + "end time"
+        sp = ", "
+    }
+    return str;
+};

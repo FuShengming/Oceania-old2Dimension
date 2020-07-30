@@ -558,11 +558,10 @@ height: 100%;
                     <div class="card-body">
                         <div class="card-title d-flex justify-content-between">
                             <h2>My Tasks</h2>
-                            <div style="width: 33%" class="input-group">
-                                <input type="text" class="form-control" placeholder="Task name" aria-label="Task name"
-                                       aria-describedby="basic-addon2">
+                            <div style="width: 33%" class="input-group" id="task-title-button">
+                                <input type="text" class="form-control" placeholder="Task name" aria-label="Task name" aria-describedby="basic-addon2">
                                 <div>
-                                    <button class="btn btn-outline-secondary" type="button">Search</button>
+                                    <button class="btn btn-outline-secondary" type="button" id="task-search">Search</button>
                                 </div>
                             </div>
                         </div>
@@ -655,34 +654,83 @@ height: 100%;
             </div>
             <div class="modal-body">
                 <div class="d-flex justify-content-flex-start mb-1">
-                    <div style="width: 40%">Status:</div>
+                    <div style="width: 40%">Status: </div>
                     <div style="width: 60%" id="modal-status"></div>
                 </div>
                 <div class="d-flex justify-content-flex-start mb-1">
-                    <div style="width: 40%">Label:</div>
+                    <div style="width: 40%">Label: </div>
                     <div style="width: 60%" id="modal-label"></div>
                 </div>
                 <div class="d-flex justify-content-flex-start mb-1">
-                    <div style="width: 40%">Description:</div>
+                    <div style="width: 40%">Description: </div>
                     <div style="width: 60%" id="modal-desc"></div>
                 </div>
-                <!--                <div class="d-flex justify-content-flex-start mb-1">-->
-                <!--                    <div style="width: 40%">Coworkers: </div>-->
-                <!--                    <div style="width: 60%" id="modal-coworkers"></div>-->
-                <!--                </div>-->
+<!--                <div class="d-flex justify-content-flex-start mb-1">-->
+<!--                    <div style="width: 40%">Coworkers: </div>-->
+<!--                    <div style="width: 60%" id="modal-coworkers"></div>-->
+<!--                </div>-->
                 <div class="d-flex justify-content-flex-start mb-1">
-                    <div style="width: 40%">Start time:</div>
+                    <div style="width: 40%">Start time: </div>
                     <div style="width: 60%" id="modal-start"></div>
                 </div>
                 <div class="d-flex justify-content-flex-start mb-1">
-                    <div style="width: 40%">End time:</div>
+                    <div style="width: 40%">End time: </div>
                     <div style="width: 60%" id="modal-end"></div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Modify</button>
-                <!--                todo: modify-->
+            <div class="modal-footer justify-content-between" id="task-button">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="task-modify-modal" tabindex="-1" role="dialog" aria-labelledby="task-modify-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="task-modify-modal-label"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default-1">Name</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default-1"
+                    id="task-create-name">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default-2">Label</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default-2"
+                    id="task-create-label">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default-3">Description</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default-3"
+                    id="task-create-desc">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default-4">Start Time</span>
+                    </div>
+                    <input type="datetime-local" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default-4"
+                    id="task-create-start-time">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default-5">Start Time</span>
+                    </div>
+                    <input type="datetime-local" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default-5"
+                           id="task-create-end-time">
+                </div>
+            </div>
+            <div class="ml-2" id="task-create-error" style="color: red"></div>
+            <div class="modal-footer justify-content-between" id="task-modify-button">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="task-modal-submit">Create</button>
             </div>
         </div>
     </div>
