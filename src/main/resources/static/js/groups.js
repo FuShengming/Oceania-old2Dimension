@@ -397,8 +397,9 @@ $(function () {
                         $("#all_groups").html(h);
                         $(".chat_list").on('click', view_group);
                         $(".chat_list").first().trigger("click");
+                        $(".group_content").show();
                     } else {
-
+                        $(".group_content").hide();
                     }
                 }
             },
@@ -599,7 +600,7 @@ $(function () {
                 success: function (data) {
                     if (data.success) {
                         console.log("success");
-                        get_group_list();
+                        window.location.reload();
                     } else {
                         console.log(data.message);
                     }
