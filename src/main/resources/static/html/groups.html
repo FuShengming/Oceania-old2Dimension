@@ -166,7 +166,7 @@
 <script type="text/javascript" src="../js/tasks.js"></script>
 
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel"
-           aria-hidden="true">
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -266,7 +266,7 @@ height: 100%;
             <button class="btn group-btn btn-primary" data-toggle="modal" data-target="#createModal"><i
                     class="fa fa-plus-circle"></i> Create
             </button>
-<!--            <button class="btn group-btn btn-success"><i class="fa fa-users"></i> Join in</button>-->
+            <!--            <button class="btn group-btn btn-success"><i class="fa fa-users"></i> Join in</button>-->
         </div>
     </div>
     <div class="group_content col-9">
@@ -313,7 +313,7 @@ height: 100%;
                             <h4 class="card-title">Group Owner</h4>
                         </div>
                         <div class="card-body text-right m-0">
-                            <h5 class="card-title">XXX</h5>
+                            <h5 class="card-title" id="g-owner">XXX</h5>
                         </div>
                     </div>
                     <div class="info-card card m-2">
@@ -321,7 +321,7 @@ height: 100%;
                             <h4 class="card-title">Group Members</h4>
                         </div>
                         <div class="card-body text-right m-0">
-                            <h5 class="card-title">20</h5>
+                            <h5 class="card-title" id="m-count">20</h5>
                         </div>
                     </div>
                     <div class="info-card card m-2">
@@ -329,16 +329,16 @@ height: 100%;
                             <h4 class="card-title">Group Projects</h4>
                         </div>
                         <div class="card-body text-right m-0">
-                            <h5 class="card-title">2</h5>
+                            <h5 class="card-title" id="p-count">2</h5>
                         </div>
                     </div>
                 </div>
                 <div class="card m-2">
                     <div class="card-body m-0">
                         <h4 class="card-title">Description</h4>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        <p class="card-text" id="g-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                             Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
                             fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
                             culpa qui officia deserunt mollit anim id est laborum.</p>
@@ -384,7 +384,8 @@ height: 100%;
                         <div class="card-title d-flex justify-content-between">
                             <h2>My Tasks</h2>
                             <div style="width: 33%" class="input-group">
-                                <input type="text" class="form-control" placeholder="Task name" aria-label="Task name" aria-describedby="basic-addon2">
+                                <input type="text" class="form-control" placeholder="Task name" aria-label="Task name"
+                                       aria-describedby="basic-addon2">
                                 <div>
                                     <button class="btn btn-outline-secondary" type="button">Search</button>
                                 </div>
@@ -479,34 +480,34 @@ height: 100%;
             </div>
             <div class="modal-body">
                 <div class="d-flex justify-content-flex-start mb-1">
-                    <div style="width: 40%">Status: </div>
+                    <div style="width: 40%">Status:</div>
                     <div style="width: 60%" id="modal-status"></div>
                 </div>
                 <div class="d-flex justify-content-flex-start mb-1">
-                    <div style="width: 40%">Label: </div>
+                    <div style="width: 40%">Label:</div>
                     <div style="width: 60%" id="modal-label"></div>
                 </div>
                 <div class="d-flex justify-content-flex-start mb-1">
-                    <div style="width: 40%">Description: </div>
+                    <div style="width: 40%">Description:</div>
                     <div style="width: 60%" id="modal-desc"></div>
                 </div>
-<!--                <div class="d-flex justify-content-flex-start mb-1">-->
-<!--                    <div style="width: 40%">Coworkers: </div>-->
-<!--                    <div style="width: 60%" id="modal-coworkers"></div>-->
-<!--                </div>-->
+                <!--                <div class="d-flex justify-content-flex-start mb-1">-->
+                <!--                    <div style="width: 40%">Coworkers: </div>-->
+                <!--                    <div style="width: 60%" id="modal-coworkers"></div>-->
+                <!--                </div>-->
                 <div class="d-flex justify-content-flex-start mb-1">
-                    <div style="width: 40%">Start time: </div>
+                    <div style="width: 40%">Start time:</div>
                     <div style="width: 60%" id="modal-start"></div>
                 </div>
                 <div class="d-flex justify-content-flex-start mb-1">
-                    <div style="width: 40%">End time: </div>
+                    <div style="width: 40%">End time:</div>
                     <div style="width: 60%" id="modal-end"></div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary">Modify</button>
-<!--                todo: modify-->
+                <!--                todo: modify-->
             </div>
         </div>
     </div>

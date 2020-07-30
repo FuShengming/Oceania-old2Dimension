@@ -10,10 +10,42 @@ $(function () {
         console.log(group_id);
         $.ajax({
             type: "get",
-            url: "/group/getGroupAnnouncements/" + group_id,
+            url: "/group/getGroupMember/" + group_id,
             headers: {"Authorization": $.cookie('token')},
             dataType: "json",
             contentType: 'application/json',
+            success: function (data) {
+                if (data.success) {
+                    // console.log("success");
+                    let member_list = data.content;
+                    let is_leader = false;
+                    let leader_id = 0;
+                    member_list.forEach(function (e) {
+                        if (e.isLeader) {
+                            is_leader = e.userId === userId;
+                            leader_id = e.userId;
+                        }
+                    });
+                    $("#g-owner").text(leader_id);
+                    $("#m-count").text(member_list.length);
+                } else {
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+        $.ajax({
+            type: "post",
+            url: "/group/getGroupAnnouncements",
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                groupId: group_id,
+                userId: userId,
+            }),
             success: function (data) {
                 if (data.success) {
                     // console.log("success");
@@ -37,25 +69,6 @@ $(function () {
                 console.log(err);
             }
         });
-        $.ajax({
-            type: "get",
-            url: "/group/getGroupMember/" + group_id,
-            headers: {"Authorization": $.cookie('token')},
-            dataType: "json",
-            contentType: 'application/json',
-            success: function (data) {
-                if (data.success) {
-                    // console.log("success");
-                    let member_list = data.content;
-
-                } else {
-                    console.log(data.message);
-                }
-            },
-            error: function (err) {
-                console.log(err);
-            }
-        })
     };
     let get_group_list = function () {
         $.ajax({
