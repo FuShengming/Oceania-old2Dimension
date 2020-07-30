@@ -180,13 +180,14 @@ public class GroupBLImpl implements GroupBL {
         if(groupMember==null){
             return ResponseVO.buildFailure("The group do not have this user.");
         }
-        if(groupMember.getIsLeader()==1){
+        int cnt = groupMemberRepository.countByGroupId(groupIdAndUserForm.getGroupId());
+        if(groupMember.getIsLeader()==1&&cnt!=1){
             return ResponseVO.buildFailure("leader must transfer the possession of leader before quiting group");
         }
 
 
         groupMemberRepository.delete(groupMember);
-        int cnt = groupMemberRepository.countByGroupId(groupIdAndUserForm.getGroupId());
+        cnt = groupMemberRepository.countByGroupId(groupIdAndUserForm.getGroupId());
         if(cnt==0){
             groupRepository.deleteById(groupIdAndUserForm.getGroupId());
         }
