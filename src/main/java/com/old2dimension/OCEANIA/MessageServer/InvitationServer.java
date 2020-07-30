@@ -64,12 +64,10 @@ public class InvitationServer {
         addOnlineCount();
         System.out.println(userId + "加入webSocket！当前人数为" + onlineNum);
 
-        List<Invitation> message = invitationRepository.findInvitationsByUserIdAndHasRead(userId,0);
-        if(message==null){
-            return;
-        }
 
-            sendInfo(userId,message.size());
+
+
+            sendInfo(userId,invitationRepository.countInvitationsByUserIdAndHasRead(userId,0));
 
     }
 

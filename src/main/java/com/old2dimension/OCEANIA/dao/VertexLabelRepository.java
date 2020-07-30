@@ -27,4 +27,6 @@ public interface VertexLabelRepository extends JpaRepository<VertexLabel, Intege
 
 
 
+
+    List<VertexLabel> findVertexLabelsByCodeIdAndVertexId(int codeId, int vertexId);
 }

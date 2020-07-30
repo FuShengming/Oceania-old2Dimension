@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tasks</title>
+    <link rel="stylesheet" type="text/css" href="../css/basic.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/dropzone.min.css">
+    <link rel="stylesheet" href="https://use.typekit.net/cpy1erx.css">
+
+    <link rel="stylesheet" type="text/css" href="webjars/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.4.1-1/css/bootstrap.min.css">
+
+    <script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="webjars/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script type="text/javascript" src="webjars/popper.js/1.16.0/dist/umd/popper.min.js"></script>
+    <script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/dropzone.min.js"></script>
+    <script type="text/javascript" src="../js/multi-step-modal.js"></script>
+    <script type="text/javascript" src="../js/navbar.js"></script>
+    <script type="text/javascript" src="../js/tasks.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top p-0">
+    <a class="navbar-brand h1 m-0 col-2" href="#">👴 Old2Dimension</a>
+    <div class="collapse navbar-collapse col-10 px-0">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/index">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/workspace">WorkSpace<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/graph">Graph</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Tasks</a>
+            </li>
+        </ul>
+        <div class="d-flex">
+            <button class="btn btn-outline-light mx-2" id="sign-out-btn">Sign Out</button>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid row px-0 no-gutters" style="padding-top: 40px">
+    <div class="col-2"></div>
+    <div class="col-8">
+        <div class="card m-2">
+            <div class="card-body">
+                <div class="card-title d-flex justify-content-between">
+                    <h2>My Tasks</h2>
+                    <div style="width: 33%" class="input-group">
+                        <input type="text" class="form-control" placeholder="Task name" aria-label="Task name" aria-describedby="basic-addon2">
+                        <div>
+                            <button class="btn btn-outline-secondary" type="button">Search</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-text">
+                    <table class="table table-hover" id="code-table" style="overflow-x: scroll">
+                        <thead>
+                        <tr>
+                            <th scope="col">Task Name</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Label</th>
+                            <th scope="col">Start Time</th>
+                            <th scope="col">End Time</th>
+                        </tr>
+                        </thead>
+                        <tbody id="code-tb"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-2"></div>
+</div>
+<div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="task-modal-label"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">Status: </div>
+                    <div style="width: 60%" id="modal-status"></div>
+                </div>
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">Label: </div>
+                    <div style="width: 60%" id="modal-label"></div>
+                </div>
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">Description: </div>
+                    <div style="width: 60%" id="modal-desc"></div>
+                </div>
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">Coworkers: </div>
+                    <div style="width: 60%" id="modal-coworkers"></div>
+                </div>
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">Start time: </div>
+                    <div style="width: 60%" id="modal-start"></div>
+                </div>
+                <div class="d-flex justify-content-flex-start mb-1">
+                    <div style="width: 40%">End time: </div>
+                    <div style="width: 60%" id="modal-end"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">提交更改</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

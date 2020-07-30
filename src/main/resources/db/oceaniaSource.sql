@@ -11,6 +11,7 @@ drop table if exists team;
 drop table if exists code;
 drop table if exists user_authority;
 drop table if exists authority;
+drop table if exists authority;
 drop table if exists `user`;
 
 
@@ -150,7 +151,7 @@ create table if not exists work_space
 (
     id              int auto_increment primary key,
     group_name       varchar(255) NOT NULL,
-    description      varchar(8192) DEFAULT ''
+    description      varchar(8192) NOT NULL
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
@@ -258,7 +259,7 @@ create table if not exists chat_workspace(
     user_id int not null,
     chatting_list varchar(12800) not null,
     date timestamp not null,
-    CONSTRAINT chat_workspace_fk_sender_id FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE Cascade,
+    CONSTRAINT chat_workspace_fk_sender_id FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE Cascade
 )ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 

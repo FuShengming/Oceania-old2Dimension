@@ -1141,5 +1141,3 @@ public class GroupBLImplTest {
     }
 
 }
-
-

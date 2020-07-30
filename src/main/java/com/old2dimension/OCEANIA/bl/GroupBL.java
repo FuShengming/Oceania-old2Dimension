@@ -27,4 +27,5 @@ public interface GroupBL {
     public ResponseVO readAnnouncement(int userId,int announcementId);
 
     public ResponseVO updateGroupInfo(GroupAndUserIdForm groupAndUserIdForm);
+    public ResponseVO getGroupName(int groupId);
 }
