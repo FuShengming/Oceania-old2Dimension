@@ -62,12 +62,12 @@ $(function () {
         window.dispatchEvent(sel_event);
         $.ajax({
             type: "post",
-            url: "/upload/analyze",
+            url: "/upload/group/analyze",
             headers: {"Authorization": $.cookie('token')},
             dataType: "json",
             contentType: 'application/json',
             data: JSON.stringify({
-                'userId': userId,
+                'groupId': group_id,
                 'uuid': localStorage["f-uuid"]
             }),
             timeout: 100000,
@@ -88,13 +88,11 @@ $(function () {
         });
 
     });
-
     $("#cont-3").on('click', function () {
         $(window).unbind('beforeunload');
         localStorage.removeItem("f-uuid");
         location.reload();
     });
-
     $("#upload-btn").on("click", function () {
         $(window).bind('beforeunload', function () {
             // localStorage.removeItem("codeId");
@@ -153,12 +151,118 @@ $(function () {
         });
     });
 
+    let getCodesByGroupId = function () {
+        $.ajax({
+            type: "get",
+            url: "/group/getGroupCodeList/" + group_id,
+            headers: {"Authorization": $.cookie('token')},
+            success: function (data) {
+                if (data.success) {
+                    let h = "";
+                    let codes = data.content;
+                    console.log(data);
+                    codes.forEach(function (code) {
+                        console.log(code);
+                        h += `<tr class="clickable-row" code-id="${code.codeId}">
+                                <td>${code.codeName}</td>
+                                <td>${code.date === null ? "Never" : new Date(Date.parse(code.date)).toLocaleString("en")}</td>
+                                <td class="td-btn">
+                                    <button class="btn btn-light btn-setting px-0" type="button" id="dropdownMenuButton"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-ellipsis-h setting-icon"></i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item modify-name" href="#" code-id="${code.codeId}">Modify Name</a>
+                                        <a class="dropdown-item rmv" href="#" code-id="${code.codeId}">Remove</a>
+                                    </div>
+                                </td>
+                            </tr>`
+                    });
+                    $("#code-tb").html(h);
+                    $(".clickable-row").on('click', function (e) {
+                        if (!$(e.target).hasClass("btn-setting") &&
+                            !$(e.target).hasClass("setting-icon") &&
+                            !$(e.target).hasClass("dropdown-menu") &&
+                            !$(e.target).hasClass("dropdown-item")) {
+                            console.log('click', $(this).attr("code-id"));
+                            // localStorage.setItem('codeId', $(this).attr("code-id"));
+                            window.location.href = "/graph?code=" + $(this).attr("code-id");
+                        }
+                    });
+                    $(".rmv").on('click', function () {
+                        let codeId = $(this).attr("code-id");
+                        if (confirm("Sure to remove this project permanently?")) {
+                            $.ajax({
+                                type: "post",
+                                url: "/code/delete",
+                                headers: {"Authorization": $.cookie('token')},
+                                dataType: "json",
+                                contentType: 'application/json',
+                                data: JSON.stringify({
+                                    "userId": userId,
+                                    "codeId": codeId,
+                                }),
+                                success: function (data) {
+                                    if (data.success) {
+                                        getCodesByGroupId();
+                                    } else {
+                                        console.log(data.message);
+                                    }
+                                },
+                                error: function (err) {
+                                    console.log(err);
+                                }
+                            });
+                        }
+                    });
+                    $(".modify-name").on('click', function () {
+                        $("#name-input").val("");
+                        let codeId = $(this).attr("code-id");
+                        $("#name-submit").on('click', function () {
+                            $.ajax({
+                                type: "post",
+                                url: "/code/modifyName",
+                                headers: {"Authorization": $.cookie('token')},
+                                dataType: "json",
+                                contentType: 'application/json',
+                                data: JSON.stringify({
+                                    "userId": userId,
+                                    "codeId": codeId,
+                                    "name": $("#code-name-input").val()
+                                }),
+                                success: function (data) {
+                                    if (data.success) {
+                                        getCodesByGroupId();
+                                        $("#nameModal").modal('hide');
+                                    } else {
+                                        console.log(data.message);
+                                    }
+                                },
+                                error: function (err) {
+                                    console.log(err);
+                                }
+                            });
+                        });
+                        $("#nameModal").modal('show');
+                    })
+                } else {
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    };
+
     let view_group = function (e) {
         // console.log(e);
         $("#all_groups").children().removeClass("active_chat");
         $(e.currentTarget).addClass("active_chat");
-        let group_id = Number($(e.currentTarget).attr("group_id"));
-        console.log(group_id);
+        let groupId = Number($(e.currentTarget).attr("groupId"));
+        group_id = groupId;
+        console.log(groupId);
+
         $.ajax({
             type: "get",
             url: "/group/getAllGroups/" + userId,
@@ -168,7 +272,7 @@ $(function () {
             success: function (data) {
                 if (data.success) {
                     data.content.forEach(function (e) {
-                        if (e.id === group_id) {
+                        if (e.id === groupId) {
                             $("#g-description").text(e.description);
                         }
                     });
@@ -182,7 +286,7 @@ $(function () {
         });
         $.ajax({
             type: "get",
-            url: "/group/getGroupMember/" + group_id,
+            url: "/group/getGroupMember/" + groupId,
             headers: {"Authorization": $.cookie('token')},
             dataType: "json",
             contentType: 'application/json',
@@ -190,13 +294,15 @@ $(function () {
                 if (data.success) {
                     // console.log("success");
                     let member_list = data.content;
-                    let is_leader = false;
+                    let isLeader = false;
+
                     let leader_id = 0;
                     member_list.forEach(function (e) {
                         if (e.isLeader) {
-                            is_leader = e.userId === userId;
+                            isLeader = e.userId === userId;
                             leader_id = e.userId;
                         }
+                        is_leader = isLeader;
                     });
                     let leader_name = "";
                     $.ajax({
@@ -207,6 +313,7 @@ $(function () {
                         contentType: 'application/json',
                         success: function (data) {
                             if (data.success) {
+                                console.log(data.content);
                                 leader_name = data.content[0].name;
                                 $("#g-owner").text(leader_name);
                             } else {
@@ -233,7 +340,7 @@ $(function () {
             dataType: "json",
             contentType: 'application/json',
             data: JSON.stringify({
-                groupId: group_id,
+                groupId: groupId,
                 userId: userId,
             }),
             success: function (data) {
@@ -259,6 +366,7 @@ $(function () {
                 console.log(err);
             }
         });
+        getCodesByGroupId();
     };
     let get_group_list = function () {
         $.ajax({
@@ -275,7 +383,7 @@ $(function () {
                     let h = "";
                     data.content.forEach(function (e) {
                         console.log(e);
-                        h += "<div class=\"chat_list card m-2\" group_id='" + e.id + "'>\n" +
+                        h += "<div class=\"chat_list card m-2\" groupId='" + e.id + "'>\n" +
                             "<div class=\"card-body\">\n" +
                             "<h5 class=\"card-title\">" + e.name + "</h5>\n" +
                             "</div>\n" +

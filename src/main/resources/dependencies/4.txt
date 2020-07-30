@@ -1,0 +1,3 @@
+M:app.MyAnnotationApp:main(java.lang.String[]) (M)soundsystem.CDPlayer:play()
+M:app.MyXmlApp:main(java.lang.String[]) (M)soundsystem.CDPlayer:play()
+M:soundsystem.CDPlayer:play() (I)soundsystem.CompactDisc:play()
