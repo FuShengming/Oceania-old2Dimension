@@ -342,6 +342,17 @@ $(function () {
                         }
                         is_leader = isLeader;
                     });
+                    if (!isLeader) {
+                        $("#announce-btn").hide();
+                        $("#upload-btn").hide();
+                        $("#copy-btn").hide();
+                        $("#edit-btn").hide();
+                    } else {
+                        $("#announce-btn").show();
+                        $("#upload-btn").show();
+                        $("#copy-btn").show();
+                        $("#edit-btn").show();
+                    }
                     let leader_name = "";
                     $.ajax({
                         type: "get",
@@ -602,6 +613,7 @@ $(function () {
                                 alert("Send invitation successfully");
                                 $("#inviteModal").modal('hide');
                             } else {
+                                alert(data.message);
                                 console.log(data.message);
                             }
                         },
