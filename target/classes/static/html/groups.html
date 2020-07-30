@@ -559,7 +559,8 @@ height: 100%;
                         <div class="card-title d-flex justify-content-between">
                             <h2>My Tasks</h2>
                             <div style="width: 33%" class="input-group" id="task-title-button">
-                                <input type="text" class="form-control" placeholder="Task name" aria-label="Task name" aria-describedby="basic-addon2">
+                                <input type="text" class="form-control" placeholder="Task name" aria-label="Task name"
+                                       id="task-search-name" aria-describedby="basic-addon2">
                                 <div>
                                     <button class="btn btn-outline-secondary" type="button" id="task-search">Search</button>
                                 </div>
@@ -679,6 +680,13 @@ height: 100%;
                 </div>
             </div>
             <div class="modal-footer justify-content-between" id="task-button">
+                <div class="justify-content-flex-start" id="task-btn1">
+                    <button type="button" class="btn btn-outline-danger" id="task-delete">Delete</button>
+                </div>
+                <div class="justify-content-flex-end" id="task-btn2">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" id="task-close">Close</button>
+                    <button type="button" class="btn btn-success" id="task-complete">Complete</button>
+                </div>
             </div>
         </div>
     </div>
@@ -687,7 +695,7 @@ height: 100%;
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="task-modify-modal-label"></h4>
+                <h4 class="modal-title" id="task-modify-modal-label">New Task</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <div class="modal-body">
@@ -697,6 +705,13 @@ height: 100%;
                     </div>
                     <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default-1"
                     id="task-create-name">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default-6">UserName</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default-6"
+                           id="task-create-user-name">
                 </div>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
@@ -735,6 +750,40 @@ height: 100%;
         </div>
     </div>
 </div>
+<div class="modal fade" id="statistics-modal" tabindex="-1" role="dialog" aria-labelledby="statistics-modal-label" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 1200px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="statistics-modal-label"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="card m-2">
+                    <div class="card-body">
+                        <div class="card-title h2">Label Statistics</div>
+                        <div class="card-text">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th scope="col">User Id</th>
+                                    <th scope="col">User Name</th>
+                                    <th scope="col">DomainLabel</th>
+                                    <th scope="col">EdgeLabel</th>
+                                    <th scope="col">VertexLabel</th>
+                                </tr>
+                                </thead>
+                                <tbody id="statistics-info"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script type="text/javascript" src="webjars/popper.js/1.16.0/dist/umd/popper.min.js"></script>
@@ -744,7 +793,5 @@ height: 100%;
 <script type="text/javascript" src="../js/navbar.js"></script>
 
 <script type="text/javascript" src="../js/groups.js"></script>
-
-<script type="text/javascript" src="../js/tasks.js"></script>
 </body>
 </html>
