@@ -24,4 +24,5 @@ public interface DomainLabelRepository extends JpaRepository<DomainLabel, Intege
 
     int countByUserIdAndCodeId(int userId,int codeId);
 
+    List<DomainLabel> findDomainLabelsByCodeIdAndFirstEdgeIdAndNumOfVertex(int codeId, int firstEdgeId, int numOfVertex);
 }
