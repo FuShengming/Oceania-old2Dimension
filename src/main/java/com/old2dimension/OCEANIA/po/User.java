@@ -15,18 +15,20 @@ public class User {
     private String name;
     @Column(name = "pwd")
     private String pwd;
+
     public User() {
     }
+
     public User(int id, String name, String pwd) {
         this.id = id;
-       this.name=name;
-       this.pwd=pwd;
+        this.name = name;
+        this.pwd = pwd;
     }
 
     public User(UserVO u) {
         this.id = u.getId();
-        this.name=u.getName();
-        this.pwd=u.getPwd();
+        this.name = u.getName();
+        this.pwd = u.getPwd();
     }
 
     public int getId() {

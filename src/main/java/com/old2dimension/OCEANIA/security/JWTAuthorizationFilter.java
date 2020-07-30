@@ -41,7 +41,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         String token = tokenHeader;
         String username = JWTUtils.getUserName(token);
         String role = JWTUtils.getUserRole(token);
-        if (username != null){
+        if (username != null) {
             return new UsernamePasswordAuthenticationToken(username, null,
                     Collections.singleton(new SimpleGrantedAuthority(role))
             );

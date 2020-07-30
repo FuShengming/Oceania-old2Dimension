@@ -13,7 +13,8 @@ public class CodeIdAndUserIdAndNameForm {
         this.name = name;
     }
 
-    public CodeIdAndUserIdAndNameForm(){}
+    public CodeIdAndUserIdAndNameForm() {
+    }
 
     public int getCodeId() {
         return codeId;

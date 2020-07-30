@@ -40,15 +40,16 @@ public class EdgeLabel {
     @Column(name = "content")
     private String content;
 
-    public EdgeLabel(int userId, int edgeId, int codeId, String title,String content) {
+    public EdgeLabel(int userId, int edgeId, int codeId, String title, String content) {
         this.userId = userId;
         this.edgeId = edgeId;
         this.codeId = codeId;
-        this.title=title;
+        this.title = title;
         this.content = content;
     }
 
-    public EdgeLabel(){}
+    public EdgeLabel() {
+    }
 
     public int getUserId() {
         return userId;

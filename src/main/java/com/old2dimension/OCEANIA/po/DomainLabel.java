@@ -51,16 +51,17 @@ public class DomainLabel {
     @Column(name = "content")
     private String content;
 
-    public DomainLabel(int userId, int codeId, int firstEdgeId, int numOfVertex, String title,String content) {
+    public DomainLabel(int userId, int codeId, int firstEdgeId, int numOfVertex, String title, String content) {
         this.userId = userId;
         this.codeId = codeId;
         this.firstEdgeId = firstEdgeId;
         this.numOfVertex = numOfVertex;
-        this.title=title;
+        this.title = title;
         this.content = content;
     }
 
-    public DomainLabel(){}
+    public DomainLabel() {
+    }
 
     public String getTitle() {
         return title;

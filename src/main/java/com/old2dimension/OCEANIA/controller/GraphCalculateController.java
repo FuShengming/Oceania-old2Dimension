@@ -24,29 +24,27 @@ public class GraphCalculateController {
     PathBL pathBL;
 
 
-    @RequestMapping(value = "/getGraph" ,method = RequestMethod.POST)
-    public ResponseVO getGraphByUserIdAndCodeId(@RequestBody UserAndCodeForm userAndCodeForm){
+    @RequestMapping(value = "/getGraph", method = RequestMethod.POST)
+    public ResponseVO getGraphByUserIdAndCodeId(@RequestBody UserAndCodeForm userAndCodeForm) {
         return graphCalculateBL.getGraph(userAndCodeForm);
     }
 
-    @RequestMapping(value = "/filter" ,method = RequestMethod.POST)
-    public ResponseVO filterByCloseness(@RequestBody ArrayList<WeightForm> weightForms){
+    @RequestMapping(value = "/filter", method = RequestMethod.POST)
+    public ResponseVO filterByCloseness(@RequestBody ArrayList<WeightForm> weightForms) {
         return graphCalculateBL.filterByWeightForm(weightForms);
     }
 
-    @RequestMapping(value ="/findVertex/{functionName}" ,method = RequestMethod.GET)
-    public ResponseVO findVertex(@PathVariable("functionName") String functionName){
+    @RequestMapping(value = "/findVertex/{functionName}", method = RequestMethod.GET)
+    public ResponseVO findVertex(@PathVariable("functionName") String functionName) {
         return graphCalculateBL.getAmbiguousFuncInfos(functionName);
     }
 
-    @RequestMapping(value = "/findPath",method = RequestMethod.POST)
-    public ResponseVO findPath(@RequestBody List<VertexVO> vertexVOs){
+    @RequestMapping(value = "/findPath", method = RequestMethod.POST)
+    public ResponseVO findPath(@RequestBody List<VertexVO> vertexVOs) {
         pathBL = new PathBLImpl((GraphCalculateImpl) graphCalculateBL);
-       return pathBL.findPath(vertexVOs.get(0),vertexVOs.get(1));
+        return pathBL.findPath(vertexVOs.get(0), vertexVOs.get(1));
 
     }
-
-
 
 
 }
