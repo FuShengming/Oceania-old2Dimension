@@ -19,10 +19,10 @@ public class EdgeVO {
 
     public EdgeVO(Edge edge) {
         this.id = edge.getId();
-        this.start=new VertexVO(edge.getStart());
-        this.end=new VertexVO(edge.getEnd());
+        this.start = new VertexVO(edge.getStart());
+        this.end = new VertexVO(edge.getEnd());
         this.weights = new ArrayList<>();
-        for(Weight w:edge.getWeights()){
+        for (Weight w : edge.getWeights()) {
             this.weights.add(new WeightForm(w));
         }
     }
@@ -59,9 +59,9 @@ public class EdgeVO {
         this.id = id;
     }
 
-    public String getEdgeString(){
-        BigDecimal bd=new BigDecimal(weights.get(0).getWeightValue()+"");
+    public String getEdgeString() {
+        BigDecimal bd = new BigDecimal(weights.get(0).getWeightValue() + "");
 
-        return start.getClassNameAndFunc()+" -- " + (bd.setScale(4,BigDecimal.ROUND_DOWN))+" --> "+end.getClassNameAndFunc();
+        return start.getClassNameAndFunc() + " -- " + (bd.setScale(4, BigDecimal.ROUND_DOWN)) + " --> " + end.getClassNameAndFunc();
     }
 }

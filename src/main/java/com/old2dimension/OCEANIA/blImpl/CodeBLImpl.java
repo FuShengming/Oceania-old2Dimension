@@ -56,38 +56,37 @@ public class CodeBLImpl implements CodeBL {
         }
     }
 
-    public ResponseVO delete(UserAndCodeForm userAndCodeForm){
-        Code code = codeRepository.findCodeByIdAndUserId(userAndCodeForm.getCodeId(),userAndCodeForm.getUserId());
-        if(code == null){
+    public ResponseVO delete(UserAndCodeForm userAndCodeForm) {
+        Code code = codeRepository.findCodeByIdAndUserId(userAndCodeForm.getCodeId(), userAndCodeForm.getUserId());
+        if (code == null) {
             return ResponseVO.buildFailure("code does not exist");
         }
-        if(code.getIs_default()==0){
-            File javaDir = new File("src/main/resources/analyzeCode/src/"+code.getId());
-            File jarFile = new File("src/main/resources/jars/"+code.getId()+".jar");
-            File dependenciesFile = new File("src/main//resources/dependencies/"+code.getId()+".txt");
-            if(javaDir.exists()){
+        if (code.getIs_default() == 0) {
+            File javaDir = new File("src/main/resources/analyzeCode/src/" + code.getId());
+            File jarFile = new File("src/main/resources/jars/" + code.getId() + ".jar");
+            File dependenciesFile = new File("src/main//resources/dependencies/" + code.getId() + ".txt");
+            if (javaDir.exists()) {
                 boolean isSuccess = deleteFile(javaDir);
-                if(!isSuccess){
+                if (!isSuccess) {
                     return ResponseVO.buildFailure("delete java files fail");
                 }
             }
-            if(jarFile.exists()){
+            if (jarFile.exists()) {
                 boolean isSuccess = deleteFile(jarFile);
-                if(!isSuccess){
+                if (!isSuccess) {
                     return ResponseVO.buildFailure("delete jar file fail");
                 }
             }
-            if(dependenciesFile.exists()){
+            if (dependenciesFile.exists()) {
                 boolean isSuccess = deleteFile(dependenciesFile);
-                if(!isSuccess){
+                if (!isSuccess) {
                     return ResponseVO.buildFailure("delete dependencies file fail");
                 }
             }
         }
-        try{
-        codeRepository.delete(code);
-        }
-        catch (Exception e){
+        try {
+            codeRepository.delete(code);
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseVO.buildFailure("jpa exception");
         }
@@ -212,10 +211,9 @@ public class CodeBLImpl implements CodeBL {
             return ResponseVO.buildFailure("io exception 2");
         }
         String content = fileContentBuffer.toString();
-        try{
-        fr.close();
-        }
-        catch (IOException e){
+        try {
+            fr.close();
+        } catch (IOException e) {
             e.printStackTrace();
             return ResponseVO.buildFailure("close fileReader exception ");
         }
@@ -744,9 +742,8 @@ public class CodeBLImpl implements CodeBL {
         for (File cur : files) {
             if (cur.isDirectory()) {
                 res = res & deleteFile(cur);
-            }
-            else{
-               res = res& deleteFile(cur);
+            } else {
+                res = res & deleteFile(cur);
             }
         }
         res = res & file.delete();

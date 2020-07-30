@@ -32,7 +32,7 @@ public class StatisticsController {
 //    }
 
     @RequestMapping("/getCodeMesVO/{codeId}")
-    public int[] getCodeMes(@PathVariable("codeId") int codeId){
+    public int[] getCodeMes(@PathVariable("codeId") int codeId) {
         return statisticsBL.getCodeMes(codeId);
     }
 

@@ -16,13 +16,13 @@ public class WorkSpaceController {
     @Autowired
     WorkSpaceBL workSpaceBL;
 
-    @RequestMapping(value = "/save",method = RequestMethod.POST)
-    public ResponseVO save(@RequestBody WorkSpaceVO workSpaceVO){
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public ResponseVO save(@RequestBody WorkSpaceVO workSpaceVO) {
         return workSpaceBL.save(workSpaceVO);
     }
 
-    @RequestMapping(value = "/recover",method = RequestMethod.POST)
-    public ResponseVO recover(@RequestBody UserAndCodeForm userAndCodeForm){
+    @RequestMapping(value = "/recover", method = RequestMethod.POST)
+    public ResponseVO recover(@RequestBody UserAndCodeForm userAndCodeForm) {
 
         return workSpaceBL.recover(userAndCodeForm);
     }

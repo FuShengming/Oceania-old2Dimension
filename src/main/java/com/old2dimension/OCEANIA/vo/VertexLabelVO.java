@@ -3,7 +3,8 @@ package com.old2dimension.OCEANIA.vo;
 import java.util.Objects;
 
 public class VertexLabelVO {
-    public VertexLabelVO(){}
+    public VertexLabelVO() {
+    }
 
     private int id;
 

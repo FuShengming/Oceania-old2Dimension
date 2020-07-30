@@ -6,7 +6,8 @@ public class StatisticsContentVO {
     private int numOfUser;
     private ArrayList<UserIdAndCodeMesVOs> content;
 
-    public StatisticsContentVO(){}
+    public StatisticsContentVO() {
+    }
 
     public StatisticsContentVO(int numOfUser, ArrayList<UserIdAndCodeMesVOs> content) {
         this.numOfUser = numOfUser;

@@ -7,7 +7,8 @@ public class UserIdAndCodeMesVOs {
 
     private ArrayList<CodeMesVO> codeMesVOs;
 
-    public UserIdAndCodeMesVOs(){}
+    public UserIdAndCodeMesVOs() {
+    }
 
     public UserIdAndCodeMesVOs(int userId, ArrayList<CodeMesVO> codeMesVOs) {
         this.userId = userId;

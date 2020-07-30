@@ -28,7 +28,7 @@ public class UploadController {
                                 @RequestParam("uuid") String uuid,
                                 @RequestParam("file") MultipartFile file) throws IOException {
 
-        return uploadBL.uploadJar(uuid,file);
+        return uploadBL.uploadJar(uuid, file);
     }
 
     @RequestMapping(value = "/group/analyze", method = RequestMethod.POST)
@@ -40,7 +40,9 @@ public class UploadController {
 
     @RequestMapping(value = "/analyze", method = RequestMethod.POST)
     public ResponseVO analyzeJar(@RequestBody UniqueIdentificationVO ui) throws IOException, InterruptedException {
+
         return uploadBL.analyzeJar(ui.getUserId(),ui.getUuid());
+
     }
 
     @RequestMapping(value = "/cancel", method = RequestMethod.POST)

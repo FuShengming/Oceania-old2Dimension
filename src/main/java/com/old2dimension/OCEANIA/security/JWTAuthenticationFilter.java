@@ -62,7 +62,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         List<String> role = Lists.newArrayList();
         Collection<? extends GrantedAuthority> authorities = jwtUser.getAuthorities();
-        for (GrantedAuthority authority : authorities){
+        for (GrantedAuthority authority : authorities) {
             role.add(authority.getAuthority());
         }
 
