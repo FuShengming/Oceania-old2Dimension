@@ -42,6 +42,10 @@
             background-color: #05728f;
         }
 
+        .dropdown-item {
+            color: #05728f;
+        }
+
         .group-btn {
             width: 48%;
         }
@@ -160,7 +164,7 @@
 <script type="text/javascript" src="../js/groups.js"></script>
 
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel"
-     aria-hidden="true">
+           aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -170,7 +174,7 @@
                 <form>
                     <div class="form-group">
                         <label for="name-input">Group Name</label>
-                        <input type="email" class="form-control" id="name-input" placeholder="">
+                        <input type="text" class="form-control" id="name-input" placeholder="">
                     </div>
                     <div class="form-group">
                         <label for="description-input">Description</label>
@@ -181,6 +185,29 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CANCEL</button>
                 <button type="button" class="btn btn-primary m-2" id="create_submit">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="inviteModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Invitation</h3>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="username-input">User Name</label>
+                        <input type="text" class="form-control" id="username-input" placeholder="">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CANCEL</button>
+                <button type="button" class="btn btn-primary m-2" id="invite_submit">CONFIRM</button>
             </div>
         </div>
     </div>
@@ -237,7 +264,7 @@ height: 100%;
             <button class="btn group-btn btn-primary" data-toggle="modal" data-target="#createModal"><i
                     class="fa fa-plus-circle"></i> Create
             </button>
-            <button class="btn group-btn btn-success"><i class="fa fa-users"></i> Join in</button>
+<!--            <button class="btn group-btn btn-success"><i class="fa fa-users"></i> Join in</button>-->
         </div>
     </div>
     <div class="group_content col-9">
@@ -263,8 +290,14 @@ height: 100%;
                         <a class="nav-link" id="group-message" data-toggle="pill" href="#message" role="tab"
                            aria-controls="v-pills-message" aria-selected="false">Message</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Management</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                           aria-haspopup="true" aria-expanded="false">Management</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Invite</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Quit Group</a>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -290,7 +323,7 @@ height: 100%;
                     </div>
                     <div class="info-card card m-2">
                         <div class="card-body m-0">
-                            <h4 class="card-title">Group Graphs</h4>
+                            <h4 class="card-title">Group Projects</h4>
                         </div>
                         <div class="card-body text-right m-0">
                             <h5 class="card-title">2</h5>
@@ -309,20 +342,7 @@ height: 100%;
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="announcement" role="tabpanel" aria-labelledby="announcement-tab">
-                <div class="card m-2">
-                    <div class="card-body m-0">
-                        <h4 class="card-title">Title</h4>
-                        <h5 class="card-subtitle">Dec 25</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                            fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                            culpa qui officia deserunt mollit anim id est laborum.</p>
-                    </div>
-                </div>
-            </div>
+            <div class="tab-pane fade" id="announcement" role="tabpanel" aria-labelledby="announcement-tab"></div>
             <div class="tab-pane fade" id="project" role="tabpanel" aria-labelledby="project-tab">
                 <div class="card m-2">
                     <div class="card-body">

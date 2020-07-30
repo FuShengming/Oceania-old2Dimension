@@ -2,6 +2,61 @@ $(function () {
     let userId = localStorage['userId'];
     if (userId === undefined) window.location.href = "/login";
     console.log(userId);
+    let view_group = function (e) {
+        // console.log(e);
+        $("#all_groups").children().removeClass("active_chat");
+        $(e.currentTarget).addClass("active_chat");
+        let group_id = $(e.currentTarget).attr("group_id");
+        console.log(group_id);
+        $.ajax({
+            type: "get",
+            url: "/group/getGroupAnnouncements/" + group_id,
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            success: function (data) {
+                if (data.success) {
+                    // console.log("success");
+                    let h = "";
+                    data.content.forEach(function (e) {
+                        // console.log(e);
+                        h += "<div class=\"card m-2\">\n" +
+                            "<div class=\"card-body m-0\">\n" +
+                            "<h4 class=\"card-title\">" + e.title + "</h4>\n" +
+                            "<h5 class=\"card-subtitle\">" + new Date(Date.parse(e.releaseDate)).toLocaleString("en") + "</h5>\n" +
+                            "<p class=\"card-text\">" + e.content + "</p>\n" +
+                            "</div>\n" +
+                            "</div>\n";
+                    });
+                    $("#announcement").html(h);
+                } else {
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+        $.ajax({
+            type: "get",
+            url: "/group/getGroupMember/" + group_id,
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            success: function (data) {
+                if (data.success) {
+                    // console.log("success");
+                    let member_list = data.content;
+
+                } else {
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    };
     let get_group_list = function () {
         $.ajax({
             type: "get",
@@ -23,11 +78,7 @@ $(function () {
                     });
                     console.log(h);
                     $("#all_groups").html(h);
-                    $(".chat_list").on('click', function (e) {
-                        console.log(e);
-                        $("#all_groups").children().removeClass("active_chat");
-                        $(e.currentTarget).addClass("active_chat");
-                    });
+                    $(".chat_list").on('click', view_group);
                 } else {
                     console.log(data.message);
                 }
