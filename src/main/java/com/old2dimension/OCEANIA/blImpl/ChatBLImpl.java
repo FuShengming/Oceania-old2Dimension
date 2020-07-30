@@ -27,6 +27,22 @@ public class ChatBLImpl implements ChatBL {
     ChatServer chatServer;
 
 
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void setChatMessageRepository(ChatMessageRepository chatMessageRepository) {
+        this.chatMessageRepository = chatMessageRepository;
+    }
+
+    public void setChatServer(ChatServer chatServer) {
+        this.chatServer = chatServer;
+    }
+
+    public void setChatWorkSpaceRepository(ChatWorkSpaceRepository chatWorkSpaceRepository) {
+        this.chatWorkSpaceRepository = chatWorkSpaceRepository;
+    }
+
     @Override
     public ResponseVO sendMessage(ChatMessage chatMessage) {
         if(chatMessage.getId()!=0){

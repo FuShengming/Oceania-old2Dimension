@@ -146,8 +146,15 @@ public class GroupCodeBLImpl implements GroupCodeBL {
             if(code==null){
                 return ResponseVO.buildFailure("Getting group code info failed.");
             }
+            WorkSpace ws = workPlaceRepository.findLatestWorkSpace(1,code.getId());
+            CodeAndDateForm c = null;
+            if(ws!=null){
+               c =  new CodeAndDateForm(code.getId(),code.getName(),ws.getDate());
+            }
+            else{
+                c =  new CodeAndDateForm(code.getId(),code.getName(),null);
+            }
 
-            CodeAndDateForm c = new CodeAndDateForm(code.getId(),code.getName(),workPlaceRepository.findLatestWorkSpace(1,code.getId()).getDate());
             codes.add(c);
         }
 
