@@ -1,16 +1,12 @@
 $(document).ready(function () {
     let userId = localStorage['userId'];
     if (userId !== undefined && userId !== 1) {
-        let socket;
+        let socket = null;
         let openSocket = function () {
             if (typeof (WebSocket) == "undefined") {
                 console.log("Can't Support WebSocket");
             } else {
                 let socketUrl = "ws://localhost:8086/websocket/invitation/" + userId;
-                if (socket != null) {
-                    socket.close();
-                    socket = null;
-                }
                 socket = new WebSocket(socketUrl);
                 socket.onopen = function () {
                     console.log("websocket is on.")
