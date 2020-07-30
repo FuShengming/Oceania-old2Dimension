@@ -7,6 +7,6 @@ public class ChatBLImplTest {
 
     @Test
     void SendMessageTest1(){
-        ChatBL chatBL =
+ 
     }
 }
