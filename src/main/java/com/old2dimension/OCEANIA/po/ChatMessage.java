@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 @Entity
 @Table(name = "chat_message")
-public class ChatMessage {
+    public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
