@@ -52,7 +52,8 @@ COMMIT;
   create table if not exists team
 (
     id              int auto_increment primary key,
-    group_name       varchar(255) NOT NULL
+    group_name       varchar(255) NOT NULL,
+    description      varchar(8192) NOT NULL
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
@@ -146,13 +147,7 @@ create table if not exists work_space
   DEFAULT CHARSET = utf8;
 
 
-  create table if not exists team
-(
-    id              int auto_increment primary key,
-    group_name       varchar(255) NOT NULL,
-    description      varchar(8192) NOT NULL
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
+
 
 create table if not exists team_member
 (
@@ -166,17 +161,7 @@ create table if not exists team_member
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-create table if not exists team_code
-(
 
-    id              int auto_increment primary key,
-    group_id        int  NOT NULL,
-    code_id         int  NOT NULL,
-    CONSTRAINT group_code_fk_code_identity FOREIGN KEY (code_id) REFERENCES code (id) ON DELETE Cascade,
-    CONSTRAINT group_code_fk_group_id FOREIGN KEY (group_id) REFERENCES team (id) ON DELETE Cascade
-
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
 
 
 create table if not exists team_task
