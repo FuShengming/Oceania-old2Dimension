@@ -98,6 +98,7 @@
             $("#sign-in").hide();
             $("#sign-up").hide();
         } else {
+            $("#notification").hide();
             $("#sign-out-btn").hide();
         }
         $("#sign-in").on('click', function () {
@@ -151,6 +152,12 @@
             <button class="btn btn-outline-light mx-2" id="sign-in">Sign In</button>
             <button class="btn btn-outline-light mx-2" id="sign-up">Sign Up</button>
 
+            <a id="notification" href="/notification">
+                <button class="btn mx-2 text-white" id="note">
+                    <i class="fa fa-bell-o"></i>
+                    <span class="badge badge-light badge-pill" id="n-count"></span>
+                </button>
+            </a>
             <button class="btn btn-outline-light mx-2 " id="sign-out-btn">Sign Out</button>
         </div>
 
