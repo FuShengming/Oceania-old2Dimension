@@ -187,7 +187,7 @@ $(function () {
                             !$(e.target).hasClass("dropdown-item")) {
                             console.log('click', $(this).attr("code-id"));
                             // localStorage.setItem('codeId', $(this).attr("code-id"));
-                            window.location.href = "/graph?code=" + $(this).attr("code-id");
+                            window.location.href = "/graph?code=" + $(this).attr("code-id") + "&group=1";
                         }
                     });
                     $(".rmv").on('click', function () {
@@ -406,6 +406,56 @@ $(function () {
         });
     };
     get_group_list();
+
+    $("#copy-btn").on('click', function () {
+        $.ajax({
+            type: "get",
+            url: "/code/getCodesByUserId/" + userId.toString(),
+            headers: {"Authorization": $.cookie('token')},
+            success: function (data) {
+                if (data.success) {
+                    let h = "";
+                    let codes = data.content;
+                    codes.forEach(function (code) {
+                        console.log(code);
+                        h += `<option codeId="${code.codeId}">${code.codeName}</option>`
+                    });
+                    $("#personal_projects").html(h);
+                } else {
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    });
+
+    $("#copy-submit").on('click', function () {
+        $.ajax({
+            type: "post",
+            url: "/group/addCode",
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                groupId: group_id,
+                codeId: $("#personal_projects").find("option:selected").attr("codeId")
+            }),
+            success: function (data) {
+                if (data.success) {
+                    getCodesByGroupId();
+                    $("#copyModal").modal('hide');
+                } else {
+                    console.log(data.message);
+                }
+            }
+            ,
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    });
 
     $("#a_publish_submit").on('click', function () {
         $.ajax({

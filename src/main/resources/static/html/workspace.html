@@ -396,7 +396,7 @@
                                 !$(e.target).hasClass("dropdown-item")) {
                                 console.log('click', $(this).attr("code-id"));
                                 // localStorage.setItem('codeId', $(this).attr("code-id"));
-                                window.location.href = "/graph?code=" + $(this).attr("code-id");
+                                window.location.href = "/graph?code=" + $(this).attr("code-id") + "&group=0";
                             }
                         });
                         $(".rmv").on('click', function () {
