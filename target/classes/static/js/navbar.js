@@ -8,7 +8,7 @@ $(document).ready(function () {
             if (typeof (WebSocket) == "undefined") {
                 console.log("Can't Support WebSocket");
             } else {
-                let socketUrl = "ws://212.64.93.130:8086/websocket/invitation/" + userId;
+                let socketUrl = "wss://212.64.93.130:8086/websocket/invitation/" + userId;
                 iv_socket = new WebSocket(socketUrl);
                 iv_socket.onopen = function () {
                     console.log("websocket is on.")
