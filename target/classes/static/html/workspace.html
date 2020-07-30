@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>My Workspaces</title>
+    <link rel="stylesheet" type="text/css" href="../css/basic.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/dropzone.min.css">
+    <link rel="stylesheet" href="https://use.typekit.net/cpy1erx.css">
+
+    <link rel="stylesheet" type="text/css" href="webjars/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.4.1-1/css/bootstrap.min.css">
+</head>
+<style>
+    html {
+        height: 100%;
+        margin: 0;
+    }
+
+    body {
+        height: 100%;
+        margin: 0;
+        font-family: fira-sans, sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        font-style: normal;
+        color: #777;
+    }
+
+    .navbar-brand {
+        font-family: flood-std, sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    .nav-link {
+        font-size: 1.2rem;
+    }
+
+    .btn-setting {
+        height: 2rem;
+        width: 2rem;
+        border-radius: 1rem;
+    }
+
+    .setting-icon {
+        font-size: 1rem;
+    }
+
+    .table td, .table th {
+        padding: .75rem;
+        font-size: 1rem;
+        vertical-align: middle;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .td-btn {
+        text-align: right;
+    }
+
+    .new-btn {
+        font-size: 1.25rem;
+    }
+
+    .dropzone {
+        border: 2px dashed rgba(0, 0, 0, 0.3);
+        border-radius: 1rem;
+    }
+</style>
+<body>
+<div class="modal fade" id="nameModal" tabindex="-1" role="dialog" aria-labelledby="nameModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Modify Name</h3>
+            </div>
+            <div class="modal-body d-flex justify-content-around">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">New Name</span>
+                </div>
+                <input type="text" class="form-control typeahead" data-provide="typeahead" placeholder=""
+                       aria-label="func-name" aria-describedby="basic-addon1" id="name-input">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CLOSE</button>
+                <button type="button" class="btn btn-primary m-2" id="name-submit">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form class="modal fade multi-step" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel"
+      aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title step-1" data-step="1">Upload New Project - 1</h3>
+                <h3 class="modal-title step-2" data-step="2">Upload New Project - 2</h3>
+                <h3 class="modal-title step-3" data-step="3">Upload New Project - 3</h3>
+                <h3 class="modal-title step-4" data-step="4">Upload New Project - 4</h3>
+            </div>
+            <div class="modal-body step step-1">
+                <h4>Upload Your Project JAR</h4>
+                <div class="dropzone dz-clickable" id="jar-upload">
+                    <div class="dz-message">
+                        <span>Drop files here or click to upload.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body step step-2">
+                <h4>Upload Your Project Codes</h4>
+                <div class="dropzone dz-clickable" id="codeDrop">
+                    <div class="dz-message" data-dz-message="">
+                        <span>Drop files here or click to upload.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body step step-3">
+                <h4>Analyzing Dependency...</h4>
+                <div id="analyze-state">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <span>Analyzing... Please wait a second.</span>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" id="cancel-btn">CANCEL</button>
+                <button type="button" class="btn btn-primary m-2 step step-1" data-step="1"
+                        id="cont-1" disabled>CONTINUE
+                </button>
+                <button type="button" class="btn btn-primary m-2 step step-2" data-step="2"
+                        id="cont-2" disabled>CONTINUE
+                </button>
+                <button type="button" class="btn btn-primary m-2 step step-3" data-step="3"
+                        id="cont-3" disabled>Finish
+                </button>
+                <!--                <button type="button" class="btn btn-primary m-2 step step-4" data-step="4"-->
+                <!--                        id="cont-4" disabled>Finish-->
+                <!--                </button>-->
+            </div>
+        </div>
+    </div>
+</form>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top p-0">
+    <a class="navbar-brand h1 m-0 col-2" href="#">👴 Old2Dimension</a>
+    <div class="collapse navbar-collapse col-10 px-0">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/index">Home</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">WorkSpace<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/graph">Graph</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/groups">Group</a>
+            </li>
+        </ul>
+        <div class="d-flex">
+            <a href="/notification">
+                <button class="btn mx-2 text-white" id="note">
+                    <i class="fa fa-bell-o"></i>
+                    <span class="badge badge-light badge-pill" id="n-count"></span>
+                </button>
+            </a>
+
+            <button class="btn btn-outline-light mx-2" id="sign-out-btn">Sign Out</button>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid row px-0 no-gutters" style="padding-top: 44px">
+    <div class="col-3"></div>
+    <div class="col-6">
+        <div class="alert alert-warning alert-dismissible fade show m-2" role="alert">
+            You have to choose a project before getting a call graph.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="card m-2">
+            <div class="card-body">
+                <div class="card-title d-flex justify-content-between">
+                    <h2>My Projects</h2>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#uploadModal" id="upload-btn">
+                        <span class="fa fa-plus-square mr-2"></span>New
+                    </button>
+                </div>
+                <div class="card-text">
+                    <table class="table table-hover" id="code-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Last Update</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="code-tb"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3"></div>
+</div>
+
+
+<script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript" src="webjars/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script type="text/javascript" src="webjars/popper.js/1.16.0/dist/umd/popper.min.js"></script>
+<script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/dropzone.min.js"></script>
+<script type="text/javascript" src="../js/multi-step-modal.js"></script>
+<script type="text/javascript" src="../js/navbar.js"></script>
+<script>
+    let uuid = function () {
+        let s = [];
+        let hexDigits = "0123456789abcdef";
+        for (let i = 0; i < 36; i++) {
+            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+        }
+        s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+        s[8] = s[13] = s[18] = s[23] = "-";
+
+        return s.join("");
+    };
+    Dropzone.autoDiscover = false;
+    Dropzone.prototype._getParamName = function (n) {
+        if (typeof this.options.paramName === "function") {
+            return this.options.paramName(n);
+        } else {
+            return "" + this.options.paramName;
+        }
+    };
+    $(function () {
+        let userId = localStorage['userId'];
+        if (userId === undefined) window.location.href = "/login";
+
+        $("#cancel-btn").on('click', function () {
+            if (confirm("Are you sure to cancel uploading? Your files will not be saved.")) {
+                $.ajax({
+                    type: "post",
+                    url: "/upload/cancel",
+                    headers: {"Authorization": $.cookie('token')},
+                    dataType: "json",
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        'userId': userId,
+                        'uuid': localStorage["f-uuid"]
+                    }),
+                    success: function (data) {
+                        if (data.success) {
+                            $("#uploadModal").modal('hide');
+                            localStorage.removeItem("f-uuid");
+                        } else {
+                            console.log(data.message);
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }
+        });
+        $("#cont-1").on('click', function () {
+            let sel_event = new CustomEvent('next.m.2', {detail: {step: 2}});
+            window.dispatchEvent(sel_event);
+        });
+        $("#cont-2").on('click', function () {
+            let sel_event = new CustomEvent('next.m.3', {detail: {step: 3}});
+            window.dispatchEvent(sel_event);
+            $.ajax({
+                type: "post",
+                url: "/upload/analyze",
+                headers: {"Authorization": $.cookie('token')},
+                dataType: "json",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    'userId': userId,
+                    'uuid': localStorage["f-uuid"]
+                }),
+                timeout: 100000,
+                success: function (data) {
+                    if (data.success) {
+                        $("#analyze-state").html("<i class=\"fa fa-check-circle fa-3x fa-fw\"></i>\n" +
+                            "<span>Success!</span>");
+                        $("#cont-3").prop('disabled', false);
+                    } else {
+                        $("#analyze-state").html("<i class=\"fa fa-times-circle fa-3x fa-fw\"></i>\n" +
+                            "<span>Analyze failed. Please try again Later.</span>\n" +
+                            "<span>Error: " + data.message + "</span>");
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+
+        });
+
+        $("#cont-3").on('click', function () {
+            $(window).unbind('beforeunload');
+            localStorage.removeItem("f-uuid");
+            location.reload();
+        });
+
+        $("#upload-btn").on("click", function () {
+            $(window).bind('beforeunload', function () {
+                // localStorage.removeItem("codeId");
+                return true;
+            });
+
+            if (localStorage["f-uuid"] === undefined)
+                localStorage.setItem("f-uuid", uuid());
+
+            let jarDz = new Dropzone("div#jar-upload", {
+                url: '/upload/jar',
+                method: 'post',
+                acceptedFiles: ".jar",
+                params: {
+                    'userId': userId,
+                    'uuid': localStorage["f-uuid"]
+                },
+                headers: {"Authorization": $.cookie('token')},
+                maxFiles: 1,
+                init: function () {
+                    this.on("success", function () {
+                        $("#cont-1").prop('disabled', false);
+                    })
+                }
+            });
+
+            let codeDZ = new Dropzone("div#codeDrop", {
+                url: '/upload/code',
+                method: "post",
+                maxFilesize: 1,
+                addRemoveLinks: true,
+                acceptedFiles: ".java",
+                createImageThumbnails: false,
+                timeout: 0,
+                uploadMultiple: true,
+                parallelUploads: 500,
+                params: {
+                    'userId': userId,
+                    'uuid': localStorage["f-uuid"]
+                },
+                renameFile: function (file) {
+                    // console.log(file, file.webkitRelativePath);
+                    return file.webkitRelativePath;
+                },
+                init: function () {
+                    this.hiddenFileInput.setAttribute("type", "file");
+                    this.hiddenFileInput.setAttribute("webkitdirectory", true);
+                    this.on("success", function () {
+                        $("#cont-2").prop('disabled', false);
+                    })
+                }
+                // accept: function (file, done) {
+                //     console.log(file);
+                //     if (file.type === '.java') done();
+                // }
+            });
+        });
+
+
+        let getCodesByUserId = function () {
+            $.ajax({
+                type: "get",
+                url: "/code/getCodesByUserId/" + userId.toString(),
+                headers: {"Authorization": $.cookie('token')},
+                // beforeSend: function (xhr) {
+                //     xhr.setRequestHeader("Authorization", $.cookie('token'));
+                // },
+                success: function (data) {
+                    if (data.success) {
+                        let h = "";
+                        let codes = data.content;
+                        codes.forEach(function (code) {
+                            console.log(code);
+                            h += `<tr class="clickable-row" code-id="${code.codeId}">
+                                <td>${code.codeName}</td>
+                                <td>${code.date === null ? "Never" : new Date(Date.parse(code.date)).toLocaleString("en")}</td>
+                                <td class="td-btn">
+                                    <button class="btn btn-light btn-setting px-0" type="button" id="dropdownMenuButton"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-ellipsis-h setting-icon"></i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item modify-name" href="#" code-id="${code.codeId}">Modify Name</a>
+                                        <a class="dropdown-item rmv" href="#" code-id="${code.codeId}">Remove</a>
+                                    </div>
+                                </td>
+                            </tr>`
+                        });
+                        $("#code-tb").html(h);
+                        $(".clickable-row").on('click', function (e) {
+                            if (!$(e.target).hasClass("btn-setting") &&
+                                !$(e.target).hasClass("setting-icon") &&
+                                !$(e.target).hasClass("dropdown-menu") &&
+                                !$(e.target).hasClass("dropdown-item")) {
+                                console.log('click', $(this).attr("code-id"));
+                                // localStorage.setItem('codeId', $(this).attr("code-id"));
+                                window.location.href = "/graph?code=" + $(this).attr("code-id") + "&group=0";
+                            }
+                        });
+                        $(".rmv").on('click', function () {
+                            let codeId = $(this).attr("code-id");
+                            if (confirm("Sure to remove this project permanently?")) {
+                                $.ajax({
+                                    type: "post",
+                                    url: "/code/delete",
+                                    headers: {"Authorization": $.cookie('token')},
+                                    dataType: "json",
+                                    contentType: 'application/json',
+                                    data: JSON.stringify({
+                                        "userId": userId,
+                                        "codeId": codeId,
+                                    }),
+                                    success: function (data) {
+                                        if (data.success) {
+                                            getCodesByUserId();
+                                        } else {
+                                            console.log(data.message);
+                                        }
+                                    },
+                                    error: function (err) {
+                                        console.log(err);
+                                    }
+                                });
+                            }
+                        });
+                        $(".modify-name").on('click', function () {
+                            $("#name-input").val("");
+                            let codeId = $(this).attr("code-id");
+                            $("#name-submit").on('click', function () {
+                                $.ajax({
+                                    type: "post",
+                                    url: "/code/modifyName",
+                                    headers: {"Authorization": $.cookie('token')},
+                                    dataType: "json",
+                                    contentType: 'application/json',
+                                    data: JSON.stringify({
+                                        "userId": userId,
+                                        "codeId": codeId,
+                                        "name": $("#name-input").val()
+                                    }),
+                                    success: function (data) {
+                                        if (data.success) {
+                                            getCodesByUserId();
+                                            $("#nameModal").modal('hide');
+                                        } else {
+                                            console.log(data.message);
+                                        }
+                                    },
+                                    error: function (err) {
+                                        console.log(err);
+                                    }
+                                });
+                            });
+                            $("#nameModal").modal('show');
+                        })
+                    } else {
+                        console.log(data.message);
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        };
+
+        getCodesByUserId();
+
+    });
+</script>
+</body>
+</html>

@@ -332,7 +332,7 @@ $(function () {
                                 dataType: "json",
                                 contentType: 'application/json',
                                 data: JSON.stringify({
-                                    "userId": userId,
+                                    "userId": 1,
                                     "codeId": codeId,
                                     "name": $("#code-name-input").val()
                                 }),
@@ -350,7 +350,7 @@ $(function () {
                             });
                         });
                         $("#nameModal").modal('show');
-                    });
+                    })
                     $(".code-stats").on('click', function () {
                         let codeId = $(this).attr("code-id");
                         $.ajax({
@@ -392,6 +392,43 @@ $(function () {
                         });
                         $("#statistics-modal").modal('show');
                     })
+                } else {
+                    console.log(data.message);
+                }
+            },
+
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    };
+
+    let getAnnouncement = function () {
+        $.ajax({
+            type: "post",
+            url: "/group/getGroupAnnouncements",
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                groupId: group_id,
+                userId: userId,
+            }),
+            success: function (data) {
+                if (data.success) {
+                    // console.log("success");
+                    let h = "";
+                    data.content.forEach(function (e) {
+                        // console.log(e);
+                        h += "<div class=\"card m-2\">\n" +
+                            "<div class=\"card-body m-0\">\n" +
+                            "<h4 class=\"card-title\">" + e.announcement.title + "</h4>\n" +
+                            "<h5 class=\"card-subtitle\">" + new Date(Date.parse(e.announcement.releaseDate)).toLocaleString("en") + "</h5>\n" +
+                            "<p class=\"card-text\">" + e.announcement.content + "</p>\n" +
+                            "</div>\n" +
+                            "</div>\n";
+                    });
+                    $("#announcement_list").html(h);
                 } else {
                     console.log(data.message);
                 }
@@ -448,12 +485,13 @@ $(function () {
                     let leader_id = 0;
                     member_list.forEach(function (e) {
                         if (e.isLeader) {
-                            isLeader = e.userId == userId;
+                            isLeader = e.userId === userId;
                             leader_id = e.userId;
                         }
                         is_leader = isLeader;
                     });
-                    if (!isLeader) {
+                    console.log(leader_id, userId);
+                    if (leader_id != userId) {
                         $("#announce-btn").hide();
                         $("#upload-btn").hide();
                         $("#copy-btn").hide();
@@ -500,39 +538,7 @@ $(function () {
                 console.log(err);
             }
         });
-        $.ajax({
-            type: "post",
-            url: "/group/getGroupAnnouncements",
-            headers: {"Authorization": $.cookie('token')},
-            dataType: "json",
-            contentType: 'application/json',
-            data: JSON.stringify({
-                groupId: groupId,
-                userId: userId,
-            }),
-            success: function (data) {
-                if (data.success) {
-                    // console.log("success");
-                    let h = "";
-                    data.content.forEach(function (e) {
-                        // console.log(e);
-                        h += "<div class=\"card m-2\">\n" +
-                            "<div class=\"card-body m-0\">\n" +
-                            "<h4 class=\"card-title\">" + e.announcement.title + "</h4>\n" +
-                            "<h5 class=\"card-subtitle\">" + new Date(Date.parse(e.announcement.releaseDate)).toLocaleString("en") + "</h5>\n" +
-                            "<p class=\"card-text\">" + e.announcement.content + "</p>\n" +
-                            "</div>\n" +
-                            "</div>\n";
-                    });
-                    $("#announcement_list").html(h);
-                } else {
-                    console.log(data.message);
-                }
-            },
-            error: function (err) {
-                console.log(err);
-            }
-        });
+        getAnnouncement();
         $.ajax({
             type: "post",
             url: "/group/getUserTask/",
@@ -616,8 +622,6 @@ $(function () {
                 console.log(err);
             }
         });
-
-
         getCodesByGroupId();
     };
     let get_group_list = function () {
@@ -660,6 +664,15 @@ $(function () {
     };
     get_group_list();
 
+
+    if (is_leader) {
+        $("#task-title-button").prepend(`
+            <button class="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#task-modify-modal"
+                    id="task-create">
+                <span class="fa fa-plus-square mr-2"></span>New
+            </button>
+        `)
+    }
 
     $("#copy-btn").on('click', function () {
         $.ajax({
@@ -771,6 +784,7 @@ $(function () {
             success: function (data) {
                 if (data.success) {
                     console.log("success");
+                    getAnnouncement();
                     $("#announceModal").modal('hide');
                 } else {
                     console.log(data.message);
@@ -891,4 +905,3 @@ let checkInput = function () {
     }
     return str;
 };
-

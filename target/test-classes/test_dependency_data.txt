@@ -1,0 +1,7 @@
+M:edu.ncsu.csc.itrust.risk.factors.AgeFactorTest:testRegularAge() (S)edu.ncsu.csc.itrust.risk.factors.AgeFactorTest:assertFalse(boolean)
+M:edu.ncsu.csc.itrust.risk.factors.AgeFactorTest:testRegularAge() (S)edu.ncsu.csc.itrust.DateUtil:yearsAgo(long)
+M:edu.ncsu.csc.itrust.risk.factors.AgeFactorTest:testRegularAge() (M)edu.ncsu.csc.itrust.beans.PatientBean:setDateOfBirthStr(java.lang.String)
+M:edu.ncsu.csc.itrust.risk.factors.AgeFactorTest:testRegularAge() (O)edu.ncsu.csc.itrust.risk.factors.AgeFactor:<init>(edu.ncsu.csc.itrust.beans.PatientBean,int)
+M:edu.ncsu.csc.itrust.risk.factors.AgeFactorTest:testRegularAge() (M)edu.ncsu.csc.itrust.risk.factors.PatientRiskFactor:hasRiskFactor()
+M:edu.ncsu.csc.itrust.serverutils.ProductionConnectionDriverTest:testProductionConnnectionDriver() (M)edu.ncsu.csc.itrust.dao.ProductionConnectionDriver:getConnection()
+M:edu.ncsu.csc.itrust.serverutils.ProductionConnectionDriverTest:testProductionConnnectionDriver() (S)edu.ncsu.csc.itrust.serverutils.ProductionConnectionDriverTest:assertSame(java.lang.Object,java.lang.Object)

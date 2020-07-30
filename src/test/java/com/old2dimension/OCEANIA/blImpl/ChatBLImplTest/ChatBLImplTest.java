@@ -341,7 +341,7 @@ public class ChatBLImplTest {
         ChatBLImpl chatBL= new ChatBLImpl();
         ChatWorkSpaceRepository chatWorkSpaceRepository = mock(ChatWorkSpaceRepository.class);
         chatBL.setChatWorkSpaceRepository(chatWorkSpaceRepository);
-        when(chatWorkSpaceRepository.findChatWorkSpaceByUserId(-1)).thenReturn(null);
+        when(chatWorkSpaceRepository.findChatWorkSpacesByUserId(-1)).thenReturn(null);
 
         ResponseVO res = chatBL.getWorkSpace(-1);
 
@@ -356,8 +356,10 @@ public class ChatBLImplTest {
         ChatWorkSpaceRepository chatWorkSpaceRepository = mock(ChatWorkSpaceRepository.class);
         chatBL.setChatWorkSpaceRepository(chatWorkSpaceRepository);
         ChatWorkSpace chatWorkSpace = new ChatWorkSpace();
+        List<ChatWorkSpace> l = new ArrayList<>();
+        l.add(chatWorkSpace);
         chatWorkSpace.setId(-1);
-        when(chatWorkSpaceRepository.findChatWorkSpaceByUserId(-1)).thenReturn(chatWorkSpace);
+        when(chatWorkSpaceRepository.findChatWorkSpacesByUserId(-1)).thenReturn(l);
 
         ResponseVO res = chatBL.getWorkSpace(-1);
 
