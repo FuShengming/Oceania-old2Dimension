@@ -1141,7 +1141,7 @@ public class GroupBLImplTest {
     }
 
     @Test
-    public void getUserInvitation1() {
+    public void getUserInvitationTest1() {
         GroupBLImpl groupBL = new GroupBLImpl();
         InvitationRepository invitationRepository = mock(InvitationRepository.class);
         groupBL.setInvitationRepository(invitationRepository);
@@ -1158,7 +1158,7 @@ public class GroupBLImplTest {
     }
 
     @Test
-    public void getUserInvitation2() {
+    public void getUserInvitationTest2() {
         GroupBLImpl groupBL = new GroupBLImpl();
         InvitationRepository invitationRepository = mock(InvitationRepository.class);
         groupBL.setInvitationRepository(invitationRepository);
