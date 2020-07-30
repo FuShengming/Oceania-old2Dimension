@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface ChatWorkSpaceRepository extends JpaRepository<ChatWorkSpace,Integer> {
     ChatWorkSpace findChatWorkSpaceByUserId(int userId);
+
+    List<ChatWorkSpace> findChatWorkSpacesByUserId(int userId);
 }
