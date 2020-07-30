@@ -668,7 +668,7 @@ $(function () {
             data: JSON.stringify({
                 creatorId: userId,
                 name: $("#name-input").val(),
-                // description: $("#description-input").val()
+                description: $("#description-input").val()
             }),
             success: function (data) {
                 if (data.success) {
