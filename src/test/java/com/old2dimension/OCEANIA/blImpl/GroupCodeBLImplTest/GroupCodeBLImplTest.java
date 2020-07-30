@@ -289,7 +289,7 @@ public class GroupCodeBLImplTest {
         groupCodeBL.setGroupCodeRepository(groupCodeRepository);
         WorkPlaceRepository workPlaceRepository = mock(WorkPlaceRepository.class);
         groupCodeBL.setWorkPlaceRepository(workPlaceRepository);
-        
+
         WorkSpace ws = new WorkSpace();
         ws.setDate(new Date());
         ArrayList<GroupCode> groupCodes = new ArrayList<>();
