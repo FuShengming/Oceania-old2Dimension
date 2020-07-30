@@ -208,7 +208,8 @@ $(function () {
                                         <i class="fa fa-ellipsis-h setting-icon"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item modify-name" href="#" code-id="${code.codeId}">Modify Name</a>
+                                        <a class="dropdown-item code-stats" href="#" code-id="${code.codeId}" id="project-statistics">Statistics</a>
+                                        <a class="dropdown-item modify-name" href="#" code-id="${code.codeId}" id="project-modify">Modify Name</a>
                                         <a class="dropdown-item rmv" href="#" code-id="${code.codeId}">Remove</a>
                                     </div>
                                 </td>
@@ -262,7 +263,7 @@ $(function () {
                                 dataType: "json",
                                 contentType: 'application/json',
                                 data: JSON.stringify({
-                                    "userId": 1,
+                                    "userId": userId,
                                     "codeId": codeId,
                                     "name": $("#code-name-input").val()
                                 }),
@@ -280,6 +281,47 @@ $(function () {
                             });
                         });
                         $("#nameModal").modal('show');
+                    });
+                    $(".code-stats").on('click', function () {
+                        let codeId = $(this).attr("code-id");
+                        $.ajax({
+                            type: "post",
+                            url: "/group/getCodeStatistics",
+                            headers: {"Authorization": $.cookie('token')},
+                            dataType: "json",
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                "groupId": group_id,
+                                "codeId": codeId
+                            }),
+                            success: function (data) {
+                                if (data.success) {
+                                    let h = "";
+                                    let domainLabel = data.content['domainLabel'];
+                                    let edgeLabel = data.content['edgeLabel'];
+                                    let vertexLabel = data.content['vertexLabel'];
+                                    for (let ditem in domainLabel) {
+                                        let uid = ditem.split(" ")[0];
+                                        let uname = ditem.split(" ")[1];
+
+                                        h += `<tr>
+                                                <td>${uid}</td>
+                                                <td>${uname}</td>
+                                                <td>${domainLabel[ditem]}</td>
+                                                <td>${edgeLabel[ditem]}</td>
+                                                <td>${vertexLabel[ditem]}</td>
+                                            </tr>`
+                                    }
+                                    $("#statistics-info").html(h);
+                                } else {
+                                    console.log(data.message);
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                        $("#statistics-modal").modal('show');
                     })
                 } else {
                     console.log(data.message);
@@ -337,7 +379,7 @@ $(function () {
                     let leader_id = 0;
                     member_list.forEach(function (e) {
                         if (e.isLeader) {
-                            isLeader = e.userId === userId;
+                            isLeader = e.userId == userId;
                             leader_id = e.userId;
                         }
                         is_leader = isLeader;
@@ -347,11 +389,18 @@ $(function () {
                         $("#upload-btn").hide();
                         $("#copy-btn").hide();
                         $("#edit-btn").hide();
+                        $("#project-statistics").remove();
                     } else {
                         $("#announce-btn").show();
                         $("#upload-btn").show();
                         $("#copy-btn").show();
                         $("#edit-btn").show();
+                        if (!$("#project-statistics").length) {
+                            $("#project-modify").before(`
+                                        <a class="dropdown-item code-stats" href="#" code-id="${code.codeId}" id="project-statistics">Statistics</a>`
+                            );
+
+                        }
                     }
                     let leader_name = "";
                     $.ajax({
@@ -427,6 +476,17 @@ $(function () {
             }),
             timeout: 100000,
             success: function (data) {
+                if (is_leader) {
+                    $("#task-title-button").prepend(`
+                    <button class="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#task-modify-modal"
+                            id="task-create">
+                        <span class="fa fa-plus-square mr-2"></span>New
+                    </button>
+                `)
+                }
+                else {
+                    $("#task-create").remove();
+                }
                 if (data.success) {
                     let h = "";
                     let tasks = data.content['tasks'];
@@ -486,6 +546,8 @@ $(function () {
                 console.log(err);
             }
         });
+
+
         getCodesByGroupId();
     };
     let get_group_list = function () {
@@ -528,15 +590,6 @@ $(function () {
     };
     get_group_list();
 
-
-    if (is_leader) {
-        $("#task-title-button").prepend(`
-            <button class="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#task-modify-modal"
-                    id="task-create">
-                <span class="fa fa-plus-square mr-2"></span>New
-            </button>
-        `)
-    }
 
     $("#copy-btn").on('click', function () {
         $.ajax({
@@ -668,7 +721,7 @@ $(function () {
             data: JSON.stringify({
                 creatorId: userId,
                 name: $("#name-input").val(),
-                // description: $("#description-input").val()
+                description: $("#description-input").val()
             }),
             success: function (data) {
                 if (data.success) {
@@ -768,3 +821,4 @@ let checkInput = function () {
     }
     return str;
 };
+

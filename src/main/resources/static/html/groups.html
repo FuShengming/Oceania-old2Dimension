@@ -735,6 +735,40 @@ height: 100%;
         </div>
     </div>
 </div>
+<div class="modal fade" id="statistics-modal" tabindex="-1" role="dialog" aria-labelledby="statistics-modal-label" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 1200px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="statistics-modal-label"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="card m-2">
+                    <div class="card-body">
+                        <div class="card-title h2">Label Statistics</div>
+                        <div class="card-text">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th scope="col">User Id</th>
+                                    <th scope="col">User Name</th>
+                                    <th scope="col">DomainLabel</th>
+                                    <th scope="col">EdgeLabel</th>
+                                    <th scope="col">VertexLabel</th>
+                                </tr>
+                                </thead>
+                                <tbody id="statistics-info"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script type="text/javascript" src="webjars/popper.js/1.16.0/dist/umd/popper.min.js"></script>
