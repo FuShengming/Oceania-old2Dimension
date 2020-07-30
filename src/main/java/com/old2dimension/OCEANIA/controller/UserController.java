@@ -47,6 +47,10 @@ public class UserController {
         return userBL.getNamesByIds(id);
     }
 
+    @RequestMapping("/getByName")
+    public ResponseVO getByName(@RequestParam String name) {
+        return userBL.getUserByName(name);
+    }
 //    @RequestMapping("/getAll")
 //    public ResponseVO getAll
 
