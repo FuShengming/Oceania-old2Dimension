@@ -41,8 +41,7 @@ $(function () {
         let str = checkInput();
         if (str.length !== 0) {
             $("#task-create-error").text(str + " can't be null!")
-        }
-        else {
+        } else {
             let upString = "{"
             $.ajax({
                 type: "post",
@@ -385,12 +384,23 @@ $(function () {
                         }
                         is_leader = isLeader;
                     });
-                    if (!is_leader) {
+                    if (!isLeader) {
+                        $("#announce-btn").hide();
+                        $("#upload-btn").hide();
+                        $("#copy-btn").hide();
+                        $("#edit-btn").hide();
                         $("#project-statistics").remove();
-                    }
-                    else if (is_leader && !$("#project-statistics").length) {
-                        $("#project-modify").before(`
-                                        <a class="dropdown-item code-stats" href="#" code-id="${code.codeId}" id="project-statistics">Statistics</a>`);
+                    } else {
+                        $("#announce-btn").show();
+                        $("#upload-btn").show();
+                        $("#copy-btn").show();
+                        $("#edit-btn").show();
+                        if (!$("#project-statistics").length) {
+                            $("#project-modify").before(`
+                                        <a class="dropdown-item code-stats" href="#" code-id="${code.codeId}" id="project-statistics">Statistics</a>`
+                            );
+
+                        }
                     }
                     let leader_name = "";
                     $.ajax({
@@ -519,8 +529,7 @@ $(function () {
                                                 <button type="button" class="btn btn-success" id="task-complete">Complete</button>
                                             </div>
                                         `)
-                        }
-                        else {
+                        } else {
                             $("#task-button").removeClass("justify-content-between").html(`
                                             <div class="justify-content-flex-end" style="float: right">
                                                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
@@ -567,8 +576,9 @@ $(function () {
                         $("#all_groups").html(h);
                         $(".chat_list").on('click', view_group);
                         $(".chat_list").first().trigger("click");
+                        $(".group_content").show();
                     } else {
-
+                        $(".group_content").hide();
                     }
 
                 }
@@ -656,6 +666,7 @@ $(function () {
                                 alert("Send invitation successfully");
                                 $("#inviteModal").modal('hide');
                             } else {
+                                alert(data.message);
                                 console.log(data.message);
                             }
                         },
@@ -771,7 +782,7 @@ $(function () {
                 success: function (data) {
                     if (data.success) {
                         console.log("success");
-                        get_group_list();
+                        window.location.reload();
                     } else {
                         console.log(data.message);
                     }
@@ -783,6 +794,7 @@ $(function () {
         }
     });
 });
+
 
 let checkInput = function () {
     let str = ""
@@ -808,4 +820,5 @@ let checkInput = function () {
         sp = ", "
     }
     return str;
-}
+};
+
