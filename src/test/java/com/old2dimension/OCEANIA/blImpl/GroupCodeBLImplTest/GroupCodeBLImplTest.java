@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import static org.mockito.Mockito.*;
@@ -239,26 +240,32 @@ public class GroupCodeBLImplTest {
         GroupCodeBLImpl groupCodeBL = new GroupCodeBLImpl();
         CodeRepository codeRepository = mock(CodeRepository.class);
         GroupCodeRepository groupCodeRepository = mock(GroupCodeRepository.class);
+        WorkPlaceRepository workPlaceRepository = mock(WorkPlaceRepository.class);
         groupCodeBL.setCodeRepository(codeRepository);
         groupCodeBL.setGroupCodeRepository(groupCodeRepository);
+        groupCodeBL.setWorkPlaceRepository(workPlaceRepository);
 
         ArrayList<GroupCode> groupCodes = new ArrayList<>();
-        GroupCode groupCode1 = new GroupCode(1, 1);
-        GroupCode groupCode2 = new GroupCode(1, 2);
-        groupCodes.add(groupCode1);
+
+        GroupCode groupCode = new GroupCode(1,1);
+        GroupCode groupCode2 = new GroupCode(1,2);
+        groupCodes.add(groupCode);
         groupCodes.add(groupCode2);
+
         Code code1 = new Code(1, "testCode1", 100, 10, 1, 1);
         Code code2 = new Code(1, "testCode2", 150, 12, 5, 0);
         code1.setId(1);
         code2.setId(2);
-
+        WorkSpace ws = new WorkSpace();
+        ws.setDate(new Date());
         when(groupCodeRepository.findAllByGroupId(1)).thenReturn(groupCodes);
         when(codeRepository.findCodeById(1)).thenReturn(code1);
         when(codeRepository.findCodeById(2)).thenReturn(code2);
-
+        when(workPlaceRepository.findLatestWorkSpace(1,1)).thenReturn(ws);
+        when(workPlaceRepository.findLatestWorkSpace(1,2)).thenReturn(ws);
         ResponseVO responseVO = groupCodeBL.getGroupCodeList(1);
-        Assert.assertEquals(((ArrayList<Code>) responseVO.getContent()).size(), 2);
-        Assert.assertEquals(((ArrayList<Code>) responseVO.getContent()).get(0).getNumOfEdges(), 10);
+        Assert.assertEquals(((ArrayList<CodeAndDateForm>) responseVO.getContent()).size(), 2);
+        Assert.assertEquals(((ArrayList<CodeAndDateForm>) responseVO.getContent()).get(0).getCodeName(), "testCode1");
     }
 
     @Test
@@ -280,7 +287,11 @@ public class GroupCodeBLImplTest {
         GroupCodeRepository groupCodeRepository = mock(GroupCodeRepository.class);
         groupCodeBL.setCodeRepository(codeRepository);
         groupCodeBL.setGroupCodeRepository(groupCodeRepository);
-
+        WorkPlaceRepository workPlaceRepository = mock(WorkPlaceRepository.class);
+        groupCodeBL.setWorkPlaceRepository(workPlaceRepository);
+        
+        WorkSpace ws = new WorkSpace();
+        ws.setDate(new Date());
         ArrayList<GroupCode> groupCodes = new ArrayList<>();
         GroupCode groupCode1 = new GroupCode(1, 1);
         GroupCode groupCode2 = new GroupCode(1, 2);
@@ -292,6 +303,9 @@ public class GroupCodeBLImplTest {
         when(groupCodeRepository.findAllByGroupId(1)).thenReturn(groupCodes);
         when(codeRepository.findCodeById(1)).thenReturn(code1);
         when(codeRepository.findCodeById(2)).thenReturn(null);
+
+        when(workPlaceRepository.findLatestWorkSpace(1,1)).thenReturn(ws);
+        when(workPlaceRepository.findLatestWorkSpace(1,2)).thenReturn(ws);
 
         ResponseVO responseVO = groupCodeBL.getGroupCodeList(1);
         Assert.assertEquals(responseVO.getMessage(), "Getting group code info failed.");

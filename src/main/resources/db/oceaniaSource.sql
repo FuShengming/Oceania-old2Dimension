@@ -258,7 +258,7 @@ create table if not exists chat_workspace(
     user_id int not null,
     chatting_list varchar(12800) not null,
     date timestamp not null,
-    CONSTRAINT chat_workspace_fk_sender_id FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE Cascade,
+    CONSTRAINT chat_workspace_fk_sender_id FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE Cascade
 )ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 

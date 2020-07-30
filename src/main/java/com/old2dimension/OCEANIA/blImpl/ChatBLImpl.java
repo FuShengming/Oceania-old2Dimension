@@ -25,6 +25,8 @@ public class ChatBLImpl implements ChatBL {
     UserRepository userRepository;
     @Autowired
     ChatServer chatServer;
+
+
     @Override
     public ResponseVO sendMessage(ChatMessage chatMessage) {
         if(chatMessage.getId()!=0){
