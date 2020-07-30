@@ -11,9 +11,11 @@ import com.old2dimension.OCEANIA.po.ChatWorkSpace;
 import com.old2dimension.OCEANIA.po.User;
 import com.old2dimension.OCEANIA.po.WorkSpace;
 import com.old2dimension.OCEANIA.vo.ResponseVO;
+import com.old2dimension.OCEANIA.vo.UserIdAndMessageIdsForm;
 import org.junit.jupiter.api.Test;
 import org.junit.Assert;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -288,6 +290,150 @@ public class ChatBLImplTest {
     @Test
     void getChattingRecordsTest1(){
         ChatBLImpl chatBL = new ChatBLImpl();
+
+        ChatMessageRepository chatMessageRepository = mock(ChatMessageRepository.class);
+        chatBL.setChatMessageRepository(chatMessageRepository);
+
+        List<Integer> arr = new ArrayList<>();
+
+        ResponseVO res = chatBL.getChattingRecords(arr);
+        Assert.assertEquals(res.getMessage(),"The format of userIds error.");
     }
 
+    @Test
+    void getChattingRecordsTest2(){
+        ChatBLImpl chatBL = new ChatBLImpl();
+
+        ChatMessageRepository chatMessageRepository = mock(ChatMessageRepository.class);
+        chatBL.setChatMessageRepository(chatMessageRepository);
+
+        List<Integer> arr = new ArrayList<>();
+        arr.add(-1);
+        arr.add(-2);
+
+        when(chatMessageRepository.findChatMessagesBySenderIdAndRecipientId(-1,-2)).thenReturn(null);
+
+        ResponseVO res = chatBL.getChattingRecords(arr);
+        Assert.assertEquals(res.getMessage(),"Finding chatting record failed.");
+    }
+
+    @Test
+    void getChattingRecordsTest3(){
+        ChatBLImpl chatBL = new ChatBLImpl();
+
+        ChatMessageRepository chatMessageRepository = mock(ChatMessageRepository.class);
+        chatBL.setChatMessageRepository(chatMessageRepository);
+
+        List<Integer> arr = new ArrayList<>();
+        arr.add(-1);
+        arr.add(-2);
+        List<ChatMessage> chatMessages = new ArrayList<>();
+        chatMessages.add(new ChatMessage());
+        when(chatMessageRepository.findChatMessagesBySenderIdAndRecipientId(-1,-2)).thenReturn(chatMessages);
+
+
+        ResponseVO res = chatBL.getChattingRecords(arr);
+        Assert.assertEquals(((List<ChatMessage>)res.getContent()).size(),1);
+    }
+
+    @Test
+    void getWorkSpaceTest1(){
+        ChatBLImpl chatBL= new ChatBLImpl();
+        ChatWorkSpaceRepository chatWorkSpaceRepository = mock(ChatWorkSpaceRepository.class);
+        chatBL.setChatWorkSpaceRepository(chatWorkSpaceRepository);
+        when(chatWorkSpaceRepository.findChatWorkSpaceByUserId(-1)).thenReturn(null);
+
+        ResponseVO res = chatBL.getWorkSpace(-1);
+
+        Assert.assertEquals(res.getMessage(),"Getting workspace failed.");
+
+    }
+
+
+    @Test
+    void getWorkSpaceTest2(){
+        ChatBLImpl chatBL= new ChatBLImpl();
+        ChatWorkSpaceRepository chatWorkSpaceRepository = mock(ChatWorkSpaceRepository.class);
+        chatBL.setChatWorkSpaceRepository(chatWorkSpaceRepository);
+        ChatWorkSpace chatWorkSpace = new ChatWorkSpace();
+        chatWorkSpace.setId(-1);
+        when(chatWorkSpaceRepository.findChatWorkSpaceByUserId(-1)).thenReturn(chatWorkSpace);
+
+        ResponseVO res = chatBL.getWorkSpace(-1);
+
+        Assert.assertEquals(((ChatWorkSpace)res.getContent()).getId(),-1);
+
+    }
+
+    @Test
+    void readMessagesTest1(){
+        ChatBLImpl chatBL = new ChatBLImpl();
+
+        ChatMessageRepository chatMessageRepository = mock(ChatMessageRepository.class);
+        ChatServer chatServer = mock(ChatServer.class);
+        chatBL.setChatMessageRepository(chatMessageRepository);
+        chatBL.setChatServer(chatServer);
+
+        UserIdAndMessageIdsForm userIdAndMessageIdsForm = new UserIdAndMessageIdsForm();
+        userIdAndMessageIdsForm.setMessageIds(null);
+
+        ResponseVO res = chatBL.readMessages(userIdAndMessageIdsForm);
+
+        Assert.assertEquals(res.getContent(),"No message to be read.");
+
+    }
+
+    @Test
+    void readMessagesTest2(){
+        ChatBLImpl chatBL = new ChatBLImpl();
+
+        ChatMessageRepository chatMessageRepository = mock(ChatMessageRepository.class);
+        ChatServer chatServer = mock(ChatServer.class);
+        chatBL.setChatMessageRepository(chatMessageRepository);
+        chatBL.setChatServer(chatServer);
+
+
+        UserIdAndMessageIdsForm userIdAndMessageIdsForm = new UserIdAndMessageIdsForm();
+
+        ArrayList<Integer> ids = new ArrayList<>();
+        ids.add(-1);
+        userIdAndMessageIdsForm.setMessageIds(ids);
+    userIdAndMessageIdsForm.setUserId(-1);
+        when(chatMessageRepository.findChatMessagesByRecipientIdAndId(-1,-1)).thenReturn(null);
+
+
+        ResponseVO res = chatBL.readMessages(userIdAndMessageIdsForm);
+
+        Assert.assertEquals(res.getMessage(),"This message does not match user.");
+
+    }
+
+    @Test
+    void readMessagesTest3(){
+        ChatBLImpl chatBL = new ChatBLImpl();
+
+        ChatMessageRepository chatMessageRepository = mock(ChatMessageRepository.class);
+        ChatServer chatServer = mock(ChatServer.class);
+        chatBL.setChatMessageRepository(chatMessageRepository);
+        chatBL.setChatServer(chatServer);
+
+
+        UserIdAndMessageIdsForm userIdAndMessageIdsForm = new UserIdAndMessageIdsForm();
+
+        ArrayList<Integer> ids = new ArrayList<>();
+        ids.add(-1);
+        userIdAndMessageIdsForm.setMessageIds(ids);
+        userIdAndMessageIdsForm.setUserId(-1);
+
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setHasRead(0);
+
+        when(chatMessageRepository.findChatMessagesByRecipientIdAndId(-1,-1)).thenReturn(chatMessage);
+        when(chatMessageRepository.saveAll(any())).thenReturn(null);
+
+        ResponseVO res = chatBL.readMessages(userIdAndMessageIdsForm);
+
+        Assert.assertEquals(((List<Integer>)res.getContent()).size(),1);
+        Assert.assertEquals((int)((ArrayList<Integer>) res.getContent()).get(0),-1);
+    }
 }

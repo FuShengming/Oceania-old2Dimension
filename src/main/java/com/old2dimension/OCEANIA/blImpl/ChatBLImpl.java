@@ -108,7 +108,7 @@ public class ChatBLImpl implements ChatBL {
         List<ChatMessage> chatMessages = chatMessageRepository.
                 findChatMessagesBySenderIdAndRecipientId(userIds.get(0),userIds.get(1));
         if(chatMessages==null){
-            ResponseVO.buildFailure("Finding chatting record failed.");
+            return ResponseVO.buildFailure("Finding chatting record failed.");
         }
         return ResponseVO.buildSuccess(chatMessages);
     }
