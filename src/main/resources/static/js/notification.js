@@ -8,7 +8,7 @@ $(function () {
         if (typeof (WebSocket) == "undefined") {
             console.log("Can't Support WebSocket");
         } else {
-            let socketUrl = "ws://localhost:8086/websocket/invitation/" + userId;
+            let socketUrl = "ws://old2dimension.cn/websocket/invitation/" + userId;
             iv_socket = new WebSocket(socketUrl);
             iv_socket.onopen = function () {
                 console.log("websocket is on.")
@@ -37,7 +37,7 @@ $(function () {
         if (typeof (WebSocket) == "undefined") {
             console.log("Can't Support WebSocket");
         } else {
-            let socketUrl = "ws://localhost:8086/websocket/chat/" + userId;
+            let socketUrl = "ws://old2dimension.cn/websocket/chat/" + userId;
             m_socket = new WebSocket(socketUrl);
             m_socket.onopen = function () {
                 console.log("websocket is on.")
