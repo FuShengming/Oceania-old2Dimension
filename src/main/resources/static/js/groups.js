@@ -1,9 +1,158 @@
+let uuid = function () {
+    let s = [];
+    let hexDigits = "0123456789abcdef";
+    for (let i = 0; i < 36; i++) {
+        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+    }
+    s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+    s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+    s[8] = s[13] = s[18] = s[23] = "-";
+
+    return s.join("");
+};
+Dropzone.autoDiscover = false;
+Dropzone.prototype._getParamName = function (n) {
+    if (typeof this.options.paramName === "function") {
+        return this.options.paramName(n);
+    } else {
+        return "" + this.options.paramName;
+    }
+};
+
 $(function () {
     let userId = localStorage['userId'];
     if (userId === undefined) window.location.href = "/login";
     console.log(userId);
     let group_id = null;
     let is_leader = false;
+
+
+    $("#cancel-btn").on('click', function () {
+        if (confirm("Are you sure to cancel uploading? Your files will not be saved.")) {
+            $.ajax({
+                type: "post",
+                url: "/upload/cancel",
+                headers: {"Authorization": $.cookie('token')},
+                dataType: "json",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    'userId': userId,
+                    'uuid': localStorage["f-uuid"]
+                }),
+                success: function (data) {
+                    if (data.success) {
+                        $("#uploadModal").modal('hide');
+                        localStorage.removeItem("f-uuid");
+                    } else {
+                        console.log(data.message);
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
+    });
+    $("#cont-1").on('click', function () {
+        let sel_event = new CustomEvent('next.m.2', {detail: {step: 2}});
+        window.dispatchEvent(sel_event);
+    });
+    $("#cont-2").on('click', function () {
+        let sel_event = new CustomEvent('next.m.3', {detail: {step: 3}});
+        window.dispatchEvent(sel_event);
+        $.ajax({
+            type: "post",
+            url: "/upload/analyze",
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                'userId': userId,
+                'uuid': localStorage["f-uuid"]
+            }),
+            timeout: 100000,
+            success: function (data) {
+                if (data.success) {
+                    $("#analyze-state").html("<i class=\"fa fa-check-circle fa-3x fa-fw\"></i>\n" +
+                        "<span>Success!</span>");
+                    $("#cont-3").prop('disabled', false);
+                } else {
+                    $("#analyze-state").html("<i class=\"fa fa-times-circle fa-3x fa-fw\"></i>\n" +
+                        "<span>Analyze failed. Please try again Later.</span>\n" +
+                        "<span>Error: " + data.message + "</span>");
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+
+    });
+
+    $("#cont-3").on('click', function () {
+        $(window).unbind('beforeunload');
+        localStorage.removeItem("f-uuid");
+        location.reload();
+    });
+
+    $("#upload-btn").on("click", function () {
+        $(window).bind('beforeunload', function () {
+            // localStorage.removeItem("codeId");
+            return true;
+        });
+
+        if (localStorage["f-uuid"] === undefined)
+            localStorage.setItem("f-uuid", uuid());
+
+        let jarDz = new Dropzone("div#jar-upload", {
+            url: '/upload/jar',
+            method: 'post',
+            acceptedFiles: ".jar",
+            params: {
+                'userId': userId,
+                'uuid': localStorage["f-uuid"]
+            },
+            headers: {"Authorization": $.cookie('token')},
+            maxFiles: 1,
+            init: function () {
+                this.on("success", function () {
+                    $("#cont-1").prop('disabled', false);
+                })
+            }
+        });
+
+        let codeDZ = new Dropzone("div#codeDrop", {
+            url: '/upload/code',
+            method: "post",
+            maxFilesize: 1,
+            addRemoveLinks: true,
+            acceptedFiles: ".java",
+            createImageThumbnails: false,
+            timeout: 0,
+            uploadMultiple: true,
+            parallelUploads: 500,
+            params: {
+                'userId': userId,
+                'uuid': localStorage["f-uuid"]
+            },
+            renameFile: function (file) {
+                // console.log(file, file.webkitRelativePath);
+                return file.webkitRelativePath;
+            },
+            init: function () {
+                this.hiddenFileInput.setAttribute("type", "file");
+                this.hiddenFileInput.setAttribute("webkitdirectory", true);
+                this.on("success", function () {
+                    $("#cont-2").prop('disabled', false);
+                })
+            }
+            // accept: function (file, done) {
+            //     console.log(file);
+            //     if (file.type === '.java') done();
+            // }
+        });
+    });
+
     let view_group = function (e) {
         // console.log(e);
         $("#all_groups").children().removeClass("active_chat");
@@ -49,7 +198,25 @@ $(function () {
                             leader_id = e.userId;
                         }
                     });
-                    $("#g-owner").text(leader_id);
+                    let leader_name = "";
+                    $.ajax({
+                        type: "get",
+                        url: "/user/getById?id=" + leader_id,
+                        headers: {"Authorization": $.cookie('token')},
+                        dataType: "json",
+                        contentType: 'application/json',
+                        success: function (data) {
+                            if (data.success) {
+                                leader_name = data.content[0].name;
+                                $("#g-owner").text(leader_name);
+                            } else {
+                                console.log(data.message);
+                            }
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    });
                     $("#m-count").text(member_list.length);
                 } else {
                     console.log(data.message);
@@ -101,7 +268,9 @@ $(function () {
             dataType: "json",
             contentType: 'application/json',
             success: function (data) {
-                if (data.success) {
+                if (!data.success) {
+                    console.log(data.message);
+                } else {
                     // console.log("success");
                     let h = "";
                     data.content.forEach(function (e) {
@@ -113,10 +282,13 @@ $(function () {
                             "</div>\n";
                     });
                     console.log(h);
-                    $("#all_groups").html(h);
-                    $(".chat_list").on('click', view_group);
-                } else {
-                    console.log(data.message);
+                    if (h.length > 0) {
+                        $("#all_groups").html(h);
+                        $(".chat_list").on('click', view_group);
+                        $(".chat_list").first().trigger("click");
+                    } else {
+
+                    }
                 }
             },
             error: function (err) {
@@ -162,6 +334,7 @@ $(function () {
             data: JSON.stringify({
                 creatorId: userId,
                 name: $("#name-input").val(),
+                description: $("#description-input").val()
             }),
             success: function (data) {
                 if (data.success) {

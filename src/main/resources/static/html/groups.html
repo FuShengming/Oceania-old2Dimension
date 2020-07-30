@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Group</title>
+    <link rel="stylesheet" type="text/css" href="../css/basic.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/dropzone.min.css">
     <link rel="stylesheet" href="https://use.typekit.net/cpy1erx.css">
 
     <link rel="stylesheet" type="text/css" href="webjars/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -21,6 +23,11 @@
             font-size: 14px;
             font-style: normal;
             color: #777;
+        }
+
+        .dropzone {
+            border: 2px dashed rgba(0, 0, 0, 0.3);
+            border-radius: 1rem;
         }
 
         .navbar-brand {
@@ -154,16 +161,6 @@
     </style>
 </head>
 <body>
-<script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-<script type="text/javascript" src="webjars/popper.js/1.16.0/dist/umd/popper.min.js"></script>
-<script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
-
-<script type="text/javascript" src="../js/navbar.js"></script>
-
-<script type="text/javascript" src="../js/groups.js"></script>
-
-<script type="text/javascript" src="../js/tasks.js"></script>
 
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel"
      aria-hidden="true">
@@ -241,6 +238,61 @@
         </div>
     </div>
 </div>
+
+<form class="modal fade multi-step" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel"
+      aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title step-1" data-step="1">Upload New Project - 1</h3>
+                <h3 class="modal-title step-2" data-step="2">Upload New Project - 2</h3>
+                <h3 class="modal-title step-3" data-step="3">Upload New Project - 3</h3>
+                <h3 class="modal-title step-4" data-step="4">Upload New Project - 4</h3>
+            </div>
+            <div class="modal-body step step-1">
+                <h4>Upload Your Project JAR</h4>
+                <div class="dropzone dz-clickable" id="jar-upload">
+                    <div class="dz-message">
+                        <span>Drop files here or click to upload.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body step step-2">
+                <h4>Upload Your Project Codes</h4>
+                <div class="dropzone dz-clickable" id="codeDrop">
+                    <div class="dz-message" data-dz-message="">
+                        <span>Drop files here or click to upload.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body step step-3">
+                <h4>Analyzing Dependency...</h4>
+                <div id="analyze-state">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                    <span>Analyzing... Please wait a second.</span>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" id="cancel-btn">CANCEL</button>
+                <button type="button" class="btn btn-primary m-2 step step-1" data-step="1"
+                        id="cont-1" disabled>CONTINUE
+                </button>
+                <button type="button" class="btn btn-primary m-2 step step-2" data-step="2"
+                        id="cont-2" disabled>CONTINUE
+                </button>
+                <button type="button" class="btn btn-primary m-2 step step-3" data-step="3"
+                        id="cont-3" disabled>Finish
+                </button>
+                <!--                <button type="button" class="btn btn-primary m-2 step step-4" data-step="4"-->
+                <!--                        id="cont-4" disabled>Finish-->
+                <!--                </button>-->
+            </div>
+        </div>
+    </div>
+</form>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top p-0">
     <a class="navbar-brand h1 m-0 col-2" href="#">👴 Old2Dimension</a>
     <div class="collapse navbar-collapse col-10 px-0">
@@ -324,6 +376,7 @@ height: 100%;
                            aria-haspopup="true" aria-expanded="false">Management</a>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="#">Invite</a>
+                            <a class="dropdown-item" href="#">Edit Info</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Quit Group</a>
                         </div>
@@ -539,5 +592,16 @@ height: 100%;
         </div>
     </div>
 </div>
+<script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="webjars/popper.js/1.16.0/dist/umd/popper.min.js"></script>
+<script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/dropzone.min.js"></script>
+<script type="text/javascript" src="../js/multi-step-modal.js"></script>
+<script type="text/javascript" src="../js/navbar.js"></script>
+
+<script type="text/javascript" src="../js/groups.js"></script>
+
+<script type="text/javascript" src="../js/tasks.js"></script>
 </body>
 </html>
