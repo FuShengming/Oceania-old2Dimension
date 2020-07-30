@@ -398,7 +398,7 @@ public class ChatBLImplTest {
         ArrayList<Integer> ids = new ArrayList<>();
         ids.add(-1);
         userIdAndMessageIdsForm.setMessageIds(ids);
-    userIdAndMessageIdsForm.setUserId(-1);
+        userIdAndMessageIdsForm.setUserId(-1);
         when(chatMessageRepository.findChatMessagesByRecipientIdAndId(-1,-1)).thenReturn(null);
 
 

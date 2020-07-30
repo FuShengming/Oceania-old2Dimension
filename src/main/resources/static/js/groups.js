@@ -209,7 +209,8 @@ $(function () {
                                         <i class="fa fa-ellipsis-h setting-icon"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item modify-name" href="#" code-id="${code.codeId}">Modify Name</a>
+                                        <a class="dropdown-item code-stats" href="#" code-id="${code.codeId}" id="project-statistics">Statistics</a>
+                                        <a class="dropdown-item modify-name" href="#" code-id="${code.codeId}" id="project-modify">Modify Name</a>
                                         <a class="dropdown-item rmv" href="#" code-id="${code.codeId}">Remove</a>
                                     </div>
                                 </td>
@@ -263,7 +264,7 @@ $(function () {
                                 dataType: "json",
                                 contentType: 'application/json',
                                 data: JSON.stringify({
-                                    "userId": 1,
+                                    "userId": userId,
                                     "codeId": codeId,
                                     "name": $("#code-name-input").val()
                                 }),
@@ -281,6 +282,47 @@ $(function () {
                             });
                         });
                         $("#nameModal").modal('show');
+                    });
+                    $(".code-stats").on('click', function () {
+                        let codeId = $(this).attr("code-id");
+                        $.ajax({
+                            type: "post",
+                            url: "/group/getCodeStatistics",
+                            headers: {"Authorization": $.cookie('token')},
+                            dataType: "json",
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                "groupId": group_id,
+                                "codeId": codeId
+                            }),
+                            success: function (data) {
+                                if (data.success) {
+                                    let h = "";
+                                    let domainLabel = data.content['domainLabel'];
+                                    let edgeLabel = data.content['edgeLabel'];
+                                    let vertexLabel = data.content['vertexLabel'];
+                                    for (let ditem in domainLabel) {
+                                        let uid = ditem.split(" ")[0];
+                                        let uname = ditem.split(" ")[1];
+
+                                        h += `<tr>
+                                                <td>${uid}</td>
+                                                <td>${uname}</td>
+                                                <td>${domainLabel[ditem]}</td>
+                                                <td>${edgeLabel[ditem]}</td>
+                                                <td>${vertexLabel[ditem]}</td>
+                                            </tr>`
+                                    }
+                                    $("#statistics-info").html(h);
+                                } else {
+                                    console.log(data.message);
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                        $("#statistics-modal").modal('show');
                     })
                 } else {
                     console.log(data.message);
@@ -311,6 +353,8 @@ $(function () {
                     data.content.forEach(function (e) {
                         if (e.id === groupId) {
                             $("#g-description").text(e.description);
+                            $("#edit-name-input").val(e.name);
+                            $("#edit-description-input").val(e.description);
                         }
                     });
                 } else {
@@ -336,11 +380,18 @@ $(function () {
                     let leader_id = 0;
                     member_list.forEach(function (e) {
                         if (e.isLeader) {
-                            isLeader = e.userId === userId;
+                            isLeader = e.userId == userId;
                             leader_id = e.userId;
                         }
                         is_leader = isLeader;
                     });
+                    if (!is_leader) {
+                        $("#project-statistics").remove();
+                    }
+                    else if (is_leader && !$("#project-statistics").length) {
+                        $("#project-modify").before(`
+                                        <a class="dropdown-item code-stats" href="#" code-id="${code.codeId}" id="project-statistics">Statistics</a>`);
+                    }
                     let leader_name = "";
                     $.ajax({
                         type: "get",
@@ -415,6 +466,17 @@ $(function () {
             }),
             timeout: 100000,
             success: function (data) {
+                if (is_leader) {
+                    $("#task-title-button").prepend(`
+                    <button class="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#task-modify-modal"
+                            id="task-create">
+                        <span class="fa fa-plus-square mr-2"></span>New
+                    </button>
+                `)
+                }
+                else {
+                    $("#task-create").remove();
+                }
                 if (data.success) {
                     let h = "";
                     let tasks = data.content['tasks'];
@@ -475,6 +537,8 @@ $(function () {
                 console.log(err);
             }
         });
+
+
         getCodesByGroupId();
     };
     let get_group_list = function () {
@@ -516,15 +580,6 @@ $(function () {
     };
     get_group_list();
 
-
-    if (is_leader) {
-        $("#task-title-button").prepend(`
-            <button class="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#task-modify-modal"
-                    id="task-create">
-                <span class="fa fa-plus-square mr-2"></span>New
-            </button>
-        `)
-    }
 
     $("#copy-btn").on('click', function () {
         $.ajax({
@@ -576,6 +631,49 @@ $(function () {
         })
     });
 
+    $("#invite_submit").on('click', function () {
+        $.ajax({
+            type: "get",
+            url: "/group/findUser/" + $("#username-input").val(),
+            headers: {"Authorization": $.cookie('token')},
+            success: function (data) {
+                if (data.success) {
+                    let id = data.content.id;
+                    $.ajax({
+                        type: "post",
+                        url: "/group/inviteUser",
+                        headers: {"Authorization": $.cookie('token')},
+                        dataType: "json",
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            groupId: group_id,
+                            userId: id,
+                            inviterId: userId
+                        }),
+                        success: function (data) {
+                            if (data.success) {
+                                console.log("success");
+                                alert("Send invitation successfully");
+                                $("#inviteModal").modal('hide');
+                            } else {
+                                console.log(data.message);
+                            }
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    });
+                } else {
+                    alert("Can't find such user.")
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    });
+
     $("#a_publish_submit").on('click', function () {
         $.ajax({
             type: "post",
@@ -586,7 +684,7 @@ $(function () {
             data: JSON.stringify({
                 title: $("#a-title-input").val(),
                 content: $("#a-content-input").val(),
-                groupId: 1,
+                groupId: group_id,
                 releaseDate: new Date()
             }),
             success: function (data) {
@@ -600,7 +698,7 @@ $(function () {
             error: function (err) {
                 console.log(err);
             }
-        })
+        });
     });
     $("#create_submit").on('click', function () {
         $.ajax({
@@ -612,11 +710,12 @@ $(function () {
             data: JSON.stringify({
                 creatorId: userId,
                 name: $("#name-input").val(),
-                // description: $("#description-input").val()
+                description: $("#description-input").val()
             }),
             success: function (data) {
                 if (data.success) {
                     console.log("success");
+                    get_group_list();
                     $("#createModal").modal('hide');
                 } else {
                     console.log(data.message);
@@ -626,6 +725,62 @@ $(function () {
                 console.log(err);
             }
         })
+    });
+    $("#edit_submit").on('click', function () {
+        $.ajax({
+            type: "post",
+            url: "/group/modifyGroupInfo",
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                userId: userId,
+                group: {
+                    id: group_id,
+                    name: $("#edit-name-input").val(),
+                    description: $("#edit-description-input").val()
+                }
+            }),
+            success: function (data) {
+                if (data.success) {
+                    console.log("success");
+                    get_group_list();
+                    $("#editModal").modal('hide');
+                } else {
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    });
+
+    $("#quit-btn").on('click', function () {
+        if (confirm("Are you sure to quit this group?")) {
+            $.ajax({
+                type: "post",
+                url: "/group/quitGroup",
+                headers: {"Authorization": $.cookie('token')},
+                dataType: "json",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    groupId: group_id,
+                    userId: userId,
+                }),
+                success: function (data) {
+                    if (data.success) {
+                        console.log("success");
+                        get_group_list();
+                    } else {
+                        console.log(data.message);
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
     });
 });
 

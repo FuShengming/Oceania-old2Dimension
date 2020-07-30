@@ -167,6 +167,8 @@
 
 <script type="text/javascript" src="../js/navbar.js"></script>
 
+<script type="text/javascript" src="../js/notification.js"></script>
+
 <script>
     $(function () {
 
@@ -190,10 +192,12 @@
             </li>
         </ul>
         <div class="d-flex">
-            <button class="btn mx-2 text-white" id="note">
-                <i class="fa fa-bell-o"></i>
-                <span class="badge badge-light badge-pill">20</span>
-            </button>
+            <a href="#">
+                <button class="btn mx-2 text-white" id="note">
+                    <i class="fa fa-bell-o"></i>
+                    <span class="badge badge-light badge-pill" id="n-count"></span>
+                </button>
+            </a>
             <button class="btn btn-outline-light mx-2" id="sign-out-btn">Sign Out</button>
         </div>
     </div>
@@ -226,15 +230,7 @@ height: 100%;
                     Invitation
                 </div>
             </div>
-            <div class="card m-2">
-                <div class="card-body m-0 h5">
-                    <div>xxx invite you to join in a group.</div>
-                    <div class="my-2" style="text-align: right">
-                        <button class="btn btn-primary">Agree</button>
-                        <button class="btn btn-danger">Reject</button>
-                    </div>
-                </div>
-            </div>
+            <div id="invitation-container"></div>
         </div>
         <div class="tab-pane fade" id="group" role="tabpanel" aria-labelledby="group-tab">
             <div class="card m-2">
@@ -246,7 +242,8 @@ height: 100%;
                 <div class="card-body m-0">
                     <h5 class="card-title">Announcement</h5>
                     <h6 class="card-subtitle mb-2">Dec 25</h6>
-                    <p class="card-text">Group xxx has made a new announcement. Click <a href="#">here</a> to view details.</p>
+                    <p class="card-text">Group xxx has made a new announcement. Click <a href="#">here</a> to view
+                        details.</p>
                 </div>
             </div>
         </div>

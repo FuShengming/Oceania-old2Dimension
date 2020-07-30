@@ -214,6 +214,33 @@
     </div>
 </div>
 
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Group Info</h3>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="edit-name-input">Group Name</label>
+                        <input type="text" class="form-control" id="edit-name-input" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-description-input">Description</label>
+                        <textarea class="form-control" id="edit-description-input" rows="5"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CANCEL</button>
+                <button type="button" class="btn btn-primary m-2" id="edit_submit">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="inviteModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -381,9 +408,8 @@
             <a href="/notification">
                 <button class="btn mx-2 text-white" id="note">
                     <i class="fa fa-bell-o"></i>
-                    <span class="badge badge-light badge-pill">20</span>
+                    <span class="badge badge-light badge-pill" id="n-count"></span>
                 </button>
-
             </a>
 
             <button class="btn btn-outline-light mx-2" id="sign-out-btn">Sign Out</button>
@@ -442,10 +468,12 @@ height: 100%;
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                            aria-haspopup="true" aria-expanded="false">Management</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Invite</a>
-                            <a class="dropdown-item" href="#">Edit Info</a>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#inviteModal"
+                               id="invite-btn">Invite</a>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#editModal"
+                               id="edit-btn">Edit Info</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Quit Group</a>
+                            <a class="dropdown-item" href="#" id="quit-btn">Quit Group</a>
                         </div>
                     </li>
                 </ul>
@@ -703,6 +731,40 @@ height: 100%;
             <div class="modal-footer justify-content-between" id="task-modify-button">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="task-modal-submit">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="statistics-modal" tabindex="-1" role="dialog" aria-labelledby="statistics-modal-label" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 1200px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="statistics-modal-label"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="card m-2">
+                    <div class="card-body">
+                        <div class="card-title h2">Label Statistics</div>
+                        <div class="card-text">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th scope="col">User Id</th>
+                                    <th scope="col">User Name</th>
+                                    <th scope="col">DomainLabel</th>
+                                    <th scope="col">EdgeLabel</th>
+                                    <th scope="col">VertexLabel</th>
+                                </tr>
+                                </thead>
+                                <tbody id="statistics-info"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
