@@ -115,12 +115,14 @@ public class ChatBLImpl implements ChatBL {
 
     @Override
     public ResponseVO getWorkSpace(int userId) {
-        ChatWorkSpace chatWorkSpace = chatWorkSpaceRepository.findChatWorkSpaceByUserId(userId);
+        List<ChatWorkSpace> chatWorkSpace = chatWorkSpaceRepository.findChatWorkSpacesByUserId(userId);
         if(chatWorkSpace==null){
             return ResponseVO.buildFailure("Getting workspace failed.");
         }
-
-        return ResponseVO.buildSuccess(chatWorkSpace);
+        if(chatWorkSpace.size()==0){
+            return ResponseVO.buildSuccess("no workspace");
+        }
+        return ResponseVO.buildSuccess(chatWorkSpace.get(0));
     }
 
     @Override
