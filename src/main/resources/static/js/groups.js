@@ -2,6 +2,8 @@ $(function () {
     let userId = localStorage['userId'];
     if (userId === undefined) window.location.href = "/login";
     console.log(userId);
+    let group_id = null;
+    let is_leader = false;
     let view_group = function (e) {
         // console.log(e);
         $("#all_groups").children().removeClass("active_chat");
@@ -54,13 +56,13 @@ $(function () {
                         // console.log(e);
                         h += "<div class=\"card m-2\">\n" +
                             "<div class=\"card-body m-0\">\n" +
-                            "<h4 class=\"card-title\">" + e.title + "</h4>\n" +
-                            "<h5 class=\"card-subtitle\">" + new Date(Date.parse(e.releaseDate)).toLocaleString("en") + "</h5>\n" +
-                            "<p class=\"card-text\">" + e.content + "</p>\n" +
+                            "<h4 class=\"card-title\">" + e.announcement.title + "</h4>\n" +
+                            "<h5 class=\"card-subtitle\">" + new Date(Date.parse(e.announcement.releaseDate)).toLocaleString("en") + "</h5>\n" +
+                            "<p class=\"card-text\">" + e.announcement.content + "</p>\n" +
                             "</div>\n" +
                             "</div>\n";
                     });
-                    $("#announcement").html(h);
+                    $("#announcement_list").html(h);
                 } else {
                     console.log(data.message);
                 }
@@ -103,6 +105,32 @@ $(function () {
     };
     get_group_list();
 
+    $("#a_publish_submit").on('click', function () {
+        $.ajax({
+            type: "post",
+            url: "/group/releaseAnnouncement",
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                title: $("#a-title-input").val(),
+                content: $("#a-content-input").val(),
+                groupId: 1,
+                releaseDate: new Date()
+            }),
+            success: function (data) {
+                if (data.success) {
+                    console.log("success");
+                    $("#announceModal").modal('hide');
+                } else {
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    });
     $("#create_submit").on('click', function () {
         $.ajax({
             type: "post",

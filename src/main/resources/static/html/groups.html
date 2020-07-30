@@ -215,6 +215,32 @@
     </div>
 </div>
 
+<div class="modal fade" id="announceModal" tabindex="-1" role="dialog" aria-labelledby="announceModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Publish Announcement</h3>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="a-title-input">Title</label>
+                        <input type="text" class="form-control" id="a-title-input" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="a-content-input">Content</label>
+                        <textarea class="form-control" id="a-content-input" rows="5"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">CANCEL</button>
+                <button type="button" class="btn btn-primary m-2" id="a_publish_submit">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+</div>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top p-0">
     <a class="navbar-brand h1 m-0 col-2" href="#">👴 Old2Dimension</a>
     <div class="collapse navbar-collapse col-10 px-0">
@@ -345,7 +371,13 @@ height: 100%;
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="announcement" role="tabpanel" aria-labelledby="announcement-tab"></div>
+            <div class="tab-pane fade" id="announcement" role="tabpanel" aria-labelledby="announcement-tab">
+                <div class="card m-2 btn" role="button" data-toggle="modal" data-target="#announceModal"
+                     id="announce-btn">
+                    <div class="card-body"><span class="fa fa-plus"></span> Publish New Announcement</div>
+                </div>
+                <div id="announcement_list"></div>
+            </div>
             <div class="tab-pane fade" id="project" role="tabpanel" aria-labelledby="project-tab">
                 <div class="card m-2">
                     <div class="card-body">
