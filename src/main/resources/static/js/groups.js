@@ -8,8 +8,29 @@ $(function () {
         // console.log(e);
         $("#all_groups").children().removeClass("active_chat");
         $(e.currentTarget).addClass("active_chat");
-        let group_id = $(e.currentTarget).attr("group_id");
+        let group_id = Number($(e.currentTarget).attr("group_id"));
         console.log(group_id);
+        $.ajax({
+            type: "get",
+            url: "/group/getAllGroups/" + userId,
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            success: function (data) {
+                if (data.success) {
+                    data.content.forEach(function (e) {
+                        if (e.id === group_id) {
+                            $("#g-description").text(e.description);
+                        }
+                    });
+                } else {
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
         $.ajax({
             type: "get",
             url: "/group/getGroupMember/" + group_id,
@@ -101,7 +122,7 @@ $(function () {
             error: function (err) {
                 console.log(err);
             }
-        })
+        });
     };
     get_group_list();
 
