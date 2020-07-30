@@ -1,10 +1,8 @@
 package com.old2dimension.OCEANIA.MessageServer;
 
-
 import com.old2dimension.OCEANIA.Encoder.InvitationListEncoder;
-
+import com.old2dimension.OCEANIA.dao.ChatMessageRepository;
 import com.old2dimension.OCEANIA.dao.InvitationRepository;
-
 import com.old2dimension.OCEANIA.po.Invitation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,19 +11,17 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@ServerEndpoint(value = "/websocket/invitation/{userId}",encoders = {InvitationListEncoder.class})
+@ServerEndpoint(value = "/websocket/chat/{userId}",encoders = {})
 @Component
-public class InvitationServer {
-
-    private static InvitationRepository invitationRepository;
+public class ChatServer {
+    private static ChatMessageRepository chatMessageRepository;
     @Autowired
-    public void setAnnouncementRepository(InvitationRepository invitationRepository){
-       InvitationServer.invitationRepository=invitationRepository;
+    public void setChatMessageRepository(ChatMessageRepository chatMessageRepository){
+        ChatServer.chatMessageRepository = chatMessageRepository;
     }
 
 
@@ -65,9 +61,7 @@ public class InvitationServer {
         System.out.println(userId + "加入webSocket！当前人数为" + onlineNum);
 
 
-
-
-            sendInfo(userId,invitationRepository.countInvitationsByUserIdAndHasRead(userId,0));
+        sendInfo(userId,chatMessageRepository.countChatMessagesByRecipientIdAndHasRead(userId,0));
 
     }
 
