@@ -467,7 +467,7 @@ $(function () {
             data: "[" + id2 + "," + userId + "]",
             success: function (data) {
                 data.content.forEach(function (m) {
-                    msg.push({in: true, content: m.content, date: m.sendDate});
+                    msg.push({in: true, content: m.content, date: m.sendDate, msg_id: m.id});
                 });
                 $.ajax({
                     type: "post",
@@ -496,6 +496,7 @@ $(function () {
 
     let render_msg = function (msgs) {
         let h = "";
+        let read_msg = [];
         msgs.sort(function (a, b) {
             return a.date < b.date ? -1 : 1;
         });
@@ -510,6 +511,7 @@ $(function () {
                         </div>
                     </div>
                 </div>`;
+                read_msg.push(msg.msg_id);
             } else {
                 h += `
                 <div class="outgoing_msg">
@@ -518,6 +520,23 @@ $(function () {
                         <span class="time_date">${new Date(Date.parse(msg.date)).toLocaleString("en")}</span>
                     </div>
                 </div>`;
+            }
+        });
+        $.ajax({
+            type: "post",
+            url: "/chat/readMessages",
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                userId: userId,
+                messageIds: read_msg
+            }),
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (err) {
+                console.log(err);
             }
         });
         $("#msg-list").html(h);
@@ -1044,7 +1063,7 @@ $(function () {
         if (typeof (WebSocket) == "undefined") {
             console.log("Can't Support WebSocket");
         } else {
-            let socketUrl = "ws://localhost:8086/websocket/chat/" + userId;
+            let socketUrl = "ws://old2dimension.cn/websocket/chat/" + userId;
             m_socket = new WebSocket(socketUrl);
             m_socket.onopen = function () {
                 console.log("websocket is on.")
