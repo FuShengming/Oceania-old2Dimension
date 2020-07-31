@@ -96,10 +96,16 @@
             width: 32%;
         }
 
+        .member_list.active_chat {
+            color: #fff;
+            background-color: #05728f;
+        }
+
         .msgs {
+            border-left: 1px solid rgba(0, 0, 0, 0.15);
             float: left;
-            height: calc(100% - 120px);
-            position: absolute;
+            height: 100%;
+            width: 60%;
         }
 
         .received_msg {
@@ -176,6 +182,11 @@
             right: 0;
             top: 6px;
             width: 36px;
+        }
+
+        .messaging {
+            height: calc(100% - 100px);
+            position: absolute;
         }
 
         .msg_history {
@@ -460,10 +471,10 @@ height: 100%;
                         <a class="nav-link" id="group-task" data-toggle="pill" href="#task" role="tab"
                            aria-controls="v-pills-project" aria-selected="false">Task</a>
                     </li>
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link" id="group-message" data-toggle="pill" href="#message" role="tab"-->
-<!--                           aria-controls="v-pills-message" aria-selected="false">Message</a>-->
-<!--                    </li>-->
+                    <li class="nav-item">
+                        <a class="nav-link" id="group-message" data-toggle="pill" href="#message" role="tab"
+                           aria-controls="v-pills-message" aria-selected="false">Message</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                            aria-haspopup="true" aria-expanded="false">Management</a>
@@ -562,7 +573,8 @@ height: 100%;
                                 <input type="text" class="form-control" placeholder="Task name" aria-label="Task name"
                                        id="task-search-name" aria-describedby="basic-addon2">
                                 <div>
-                                    <button class="btn btn-outline-secondary" type="button" id="task-search">Search</button>
+                                    <button class="btn btn-outline-secondary" type="button" id="task-search">Search
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -584,56 +596,74 @@ height: 100%;
                 </div>
             </div>
             <div class="tab-pane fade" id="message" role="tabpanel" aria-labelledby="message-tab">
-                <div class="msgs m-2">
-                    <div class="msg_history">
-                        <div class="incoming_msg">
-                            <div class="received_msg">
-                                <div class="received_withd_msg">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua.</p>
+                <div class="messaging container-fluid row">
+                    <div class="inbox_people col-4 p-0">
+                        <div class="card m-2">
+                            <div class="card-body m-0 h4">
+                                Teammates
+                            </div>
+                        </div>
+                        <div class="inbox_chat" id="m-list"></div>
+                    </div>
+                    <div class="msgs col-8">
+                        <div class="msg_history">
+                            <div class="incoming_msg">
+                                <div class="received_msg">
+                                    <div class="received_withd_msg">
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                            tempor
+                                            incididunt ut labore et dolore magna aliqua.</p>
+                                        <span class="time_date"> 11:01 AM    |    June 9</span></div>
+                                </div>
+                            </div>
+                            <div class="outgoing_msg">
+                                <div class="sent_msg">
+                                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                        aliquip ex
+                                        ea commodo consequat.</p>
                                     <span class="time_date"> 11:01 AM    |    June 9</span></div>
                             </div>
-                        </div>
-                        <div class="outgoing_msg">
-                            <div class="sent_msg">
-                                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-                                    ea commodo consequat.</p>
-                                <span class="time_date"> 11:01 AM    |    June 9</span></div>
-                        </div>
-                        <div class="incoming_msg">
-                            <div class="received_msg">
-                                <div class="received_withd_msg">
-                                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                                        fugiat nulla pariatur.</p>
-                                    <span class="time_date"> 11:01 AM    |    Yesterday</span></div>
+                            <div class="incoming_msg">
+                                <div class="received_msg">
+                                    <div class="received_withd_msg">
+                                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+                                            eu
+                                            fugiat nulla pariatur.</p>
+                                        <span class="time_date"> 11:01 AM    |    Yesterday</span></div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="outgoing_msg">
-                            <div class="sent_msg">
-                                <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-                                    mollit anim id est laborum.</p>
-                                <span class="time_date"> 11:01 AM    |    Today</span></div>
-                        </div>
-                        <div class="incoming_msg">
-                            <div class="received_msg">
-                                <div class="received_withd_msg">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                                        culpa qui officia deserunt mollit anim id est laborum.</p>
+                            <div class="outgoing_msg">
+                                <div class="sent_msg">
+                                    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                                        deserunt
+                                        mollit anim id est laborum.</p>
                                     <span class="time_date"> 11:01 AM    |    Today</span></div>
                             </div>
+                            <div class="incoming_msg">
+                                <div class="received_msg">
+                                    <div class="received_withd_msg">
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                            tempor
+                                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                                            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                            consequat.
+                                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+                                            eu
+                                            fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
+                                            in
+                                            culpa qui officia deserunt mollit anim id est laborum.</p>
+                                        <span class="time_date"> 11:01 AM    |    Today</span></div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="type_msg">
-                        <div class="input_msg_write">
-                            <input type="text" class="write_msg" placeholder="Type a message"/>
-                            <button class="msg_send_btn btn" type="button">
-                                <i class="fa fa-paper-plane-o"
-                                   aria-hidden="true"></i>
-                            </button>
+                        <div class="type_msg">
+                            <div class="input_msg_write">
+                                <input type="text" class="write_msg" id="msg-input" placeholder="Type a message"/>
+                                <button class="msg_send_btn btn" type="button" id="send-btn">
+                                    <i class="fa fa-paper-plane-o"
+                                       aria-hidden="true"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -655,27 +685,27 @@ height: 100%;
             </div>
             <div class="modal-body">
                 <div class="d-flex justify-content-flex-start mb-1">
-                    <div style="width: 40%">Status: </div>
+                    <div style="width: 40%">Status:</div>
                     <div style="width: 60%" id="modal-status"></div>
                 </div>
                 <div class="d-flex justify-content-flex-start mb-1">
-                    <div style="width: 40%">Label: </div>
+                    <div style="width: 40%">Label:</div>
                     <div style="width: 60%" id="modal-label"></div>
                 </div>
                 <div class="d-flex justify-content-flex-start mb-1">
-                    <div style="width: 40%">Description: </div>
+                    <div style="width: 40%">Description:</div>
                     <div style="width: 60%" id="modal-desc"></div>
                 </div>
-<!--                <div class="d-flex justify-content-flex-start mb-1">-->
-<!--                    <div style="width: 40%">Coworkers: </div>-->
-<!--                    <div style="width: 60%" id="modal-coworkers"></div>-->
-<!--                </div>-->
+                <!--                <div class="d-flex justify-content-flex-start mb-1">-->
+                <!--                    <div style="width: 40%">Coworkers: </div>-->
+                <!--                    <div style="width: 60%" id="modal-coworkers"></div>-->
+                <!--                </div>-->
                 <div class="d-flex justify-content-flex-start mb-1">
-                    <div style="width: 40%">Start time: </div>
+                    <div style="width: 40%">Start time:</div>
                     <div style="width: 60%" id="modal-start"></div>
                 </div>
                 <div class="d-flex justify-content-flex-start mb-1">
-                    <div style="width: 40%">End time: </div>
+                    <div style="width: 40%">End time:</div>
                     <div style="width: 60%" id="modal-end"></div>
                 </div>
             </div>
@@ -684,14 +714,16 @@ height: 100%;
                     <button type="button" class="btn btn-outline-danger" id="task-delete">Delete</button>
                 </div>
                 <div class="justify-content-flex-end" id="task-btn2">
-                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" id="task-close">Close</button>
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" id="task-close">Close
+                    </button>
                     <button type="button" class="btn btn-success" id="task-complete">Complete</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="modal fade" id="task-modify-modal" tabindex="-1" role="dialog" aria-labelledby="task-modify-modal-label" aria-hidden="true">
+<div class="modal fade" id="task-modify-modal" tabindex="-1" role="dialog" aria-labelledby="task-modify-modal-label"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -703,14 +735,16 @@ height: 100%;
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroup-sizing-default-1">Name</span>
                     </div>
-                    <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default-1"
-                    id="task-create-name">
+                    <input type="text" class="form-control" aria-label="Default"
+                           aria-describedby="inputGroup-sizing-default-1"
+                           id="task-create-name">
                 </div>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroup-sizing-default-6">UserName</span>
                     </div>
-                    <select class="form-control overflow-auto" ria-label="Default" aria-describedby="inputGroup-sizing-default-6"
+                    <select class="form-control overflow-auto" ria-label="Default"
+                            aria-describedby="inputGroup-sizing-default-6"
                             id="task-create-user-name">
                     </select>
                 </div>
@@ -718,28 +752,32 @@ height: 100%;
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroup-sizing-default-2">Label</span>
                     </div>
-                    <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default-2"
-                    id="task-create-label">
+                    <input type="text" class="form-control" aria-label="Default"
+                           aria-describedby="inputGroup-sizing-default-2"
+                           id="task-create-label">
                 </div>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroup-sizing-default-3">Description</span>
                     </div>
-                    <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default-3"
-                    id="task-create-desc">
+                    <input type="text" class="form-control" aria-label="Default"
+                           aria-describedby="inputGroup-sizing-default-3"
+                           id="task-create-desc">
                 </div>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroup-sizing-default-4">Start Time</span>
                     </div>
-                    <input type="datetime-local" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default-4"
-                    id="task-create-start-time">
+                    <input type="datetime-local" class="form-control" aria-label="Default"
+                           aria-describedby="inputGroup-sizing-default-4"
+                           id="task-create-start-time">
                 </div>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroup-sizing-default-5">Start Time</span>
                     </div>
-                    <input type="datetime-local" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default-5"
+                    <input type="datetime-local" class="form-control" aria-label="Default"
+                           aria-describedby="inputGroup-sizing-default-5"
                            id="task-create-end-time">
                 </div>
             </div>
@@ -751,7 +789,8 @@ height: 100%;
         </div>
     </div>
 </div>
-<div class="modal fade" id="statistics-modal" tabindex="-1" role="dialog" aria-labelledby="statistics-modal-label" aria-hidden="true">
+<div class="modal fade" id="statistics-modal" tabindex="-1" role="dialog" aria-labelledby="statistics-modal-label"
+     aria-hidden="true">
     <div class="modal-dialog" style="max-width: 1200px">
         <div class="modal-content">
             <div class="modal-header">

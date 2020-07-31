@@ -100,7 +100,7 @@ $(function () {
                             headers: {"Authorization": $.cookie('token')},
                             dataType: "json",
                             success: function (data) {
-                                if (data.success){
+                                if (data.success) {
                                     userId = data.content.id;
                                     $.ajax({
                                         type: "post",
@@ -121,14 +121,13 @@ $(function () {
                                             console.log(err);
                                         }
                                     });
-                                }
-                                else {
+                                } else {
                                     alert("No such user.")
                                 }
                             }
                         });
 
-                        
+
                     }
                 },
                 error: function (err) {
@@ -499,27 +498,39 @@ $(function () {
                     let isLeader = false;
 
                     let leader_id = 0;
+                    $("#m-list").html("");
                     let h = "";
                     member_list.forEach(function (e) {
-                        $.ajax({
-                            type: "get",
-                            url: "/user/getById?id=" + e.userId,
-                            headers: {"Authorization": $.cookie('token')},
-                            dataType: "json",
-                            contentType: 'application/json',
-                            success: function (data) {
-                                if (data.success) {
-                                    console.log(data.content);
-                                    h += "<option u_id='" + e.userId + "'>" + data.content[0].name + "</option>";
-                                    $("#task-create-user-name").html(h);
-                                } else {
-                                    console.log(data.message);
+                        if (e.userId !== Number(userId)) {
+                            console.log(e.userId, userId);
+                            $.ajax({
+                                type: "get",
+                                url: "/user/getById?id=" + e.userId,
+                                headers: {"Authorization": $.cookie('token')},
+                                dataType: "json",
+                                contentType: 'application/json',
+                                success: function (data) {
+                                    if (data.success) {
+                                        console.log(data.content);
+                                        h += `
+                            <div class="member_list card m-2" u_id="${e.userId}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${data.content[0].name}</h5>
+                                    <h6 class="card-subtitle mb-2"></h6>
+                                    <p class="card-text"></p>
+                                </div>
+                            </div>`;
+                                        $("#m-list").html(h);
+                                    } else {
+                                        console.log(data.message);
+                                    }
+                                },
+                                error: function (err) {
+                                    console.log(err);
                                 }
-                            },
-                            error: function (err) {
-                                console.log(err);
-                            }
-                        });
+                            });
+                        }
+
                         if (e.isLeader) {
                             isLeader = e.userId == userId;
                             leader_id = e.userId;
@@ -871,6 +882,34 @@ $(function () {
                     get_group_list();
                     $("#editModal").modal('hide');
                 } else {
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    });
+
+    $("#send-btn").on('click', function () {
+        $.ajax({
+            type: "post",
+            url: "/chat/sendMessage",
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                senderId: userId,
+                recipientId: 2,//TODO
+                sendDate: new Date(),
+                content: $("#msg-input").val()
+            }),
+            success: function (data) {
+                if (data.success) {
+                    console.log("success");
+                    console.log(data);
+                } else {
+                    alert(data.message);
                     console.log(data.message);
                 }
             },

@@ -17,6 +17,17 @@ import java.util.Date;
     @Column(name = "has_read")
     private int hasRead;
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    @Column(name = "content")
+    private String content;
+
     public ChatMessage(){}
 
     public ChatMessage(int senderId, int recipientId, Date sendDate, int hasRead) {
