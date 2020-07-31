@@ -144,6 +144,8 @@ $(function () {
     let group_id = null;
     let is_leader = false;
 
+    let chat_with_id = userId;
+
 
     $("#cancel-btn").on('click', function () {
         if (confirm("Are you sure to cancel uploading? Your files will not be saved.")) {
@@ -454,6 +456,84 @@ $(function () {
         });
     };
 
+    let get_msg = function (id2) {
+        let msg = [];
+        $.ajax({
+            type: "post",
+            url: "/chat/getChattingRecords",
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            data: "[" + id2 + "," + userId + "]",
+            success: function (data) {
+                data.content.forEach(function (m) {
+                    msg.push({in: true, content: m.content, date: m.sendDate});
+                });
+                $.ajax({
+                    type: "post",
+                    url: "/chat/getChattingRecords",
+                    headers: {"Authorization": $.cookie('token')},
+                    dataType: "json",
+                    contentType: 'application/json',
+                    data: "[" + userId + "," + id2 + "]",
+                    success: function (data) {
+                        data.content.forEach(function (m) {
+                            msg.push({in: false, content: m.content, date: m.sendDate});
+                        });
+                        console.log(msg);
+                        render_msg(msg);
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    };
+
+    let render_msg = function (msgs) {
+        let h = "";
+        msgs.sort(function (a, b) {
+            return a.date < b.date ? -1 : 1;
+        });
+        msgs.forEach(function (msg) {
+            if (msg.in) {
+                h += `
+                <div class="incoming_msg">
+                    <div class="received_msg">
+                        <div class="received_withd_msg">
+                            <p>${msg.content}</p>
+                            <span class="time_date">${new Date(Date.parse(msg.date)).toLocaleString("en")}</span>
+                        </div>
+                    </div>
+                </div>`;
+            } else {
+                h += `
+                <div class="outgoing_msg">
+                    <div class="sent_msg">
+                        <p>${msg.content}</p>
+                        <span class="time_date">${new Date(Date.parse(msg.date)).toLocaleString("en")}</span>
+                    </div>
+                </div>`;
+            }
+        });
+        $("#msg-list").html(h);
+        $("#msg-list").scrollTop($("#msg-list")[0].scrollHeight);
+    };
+
+    let click_chat = function (e) {
+        $("#m-list").children().removeClass("active_chat");
+        $(e.currentTarget).addClass("active_chat");
+        chat_with_id = Number($(e.currentTarget).attr("u_id"));
+        get_msg(chat_with_id);
+        $("#no_chat").hide();
+        $("#with_chat").show();
+        //todo
+    };
+
     let view_group = function (e) {
         // console.log(e);
         $("#all_groups").children().removeClass("active_chat");
@@ -461,6 +541,10 @@ $(function () {
         let groupId = Number($(e.currentTarget).attr("groupId"));
         group_id = groupId;
         console.log(groupId);
+
+        chat_with_id = userId;
+        $("#no_chat").show();
+        $("#with_chat").hide();
 
         $.ajax({
             type: "get",
@@ -521,6 +605,7 @@ $(function () {
                                 </div>
                             </div>`;
                                         $("#m-list").html(h);
+                                        $(".member_list").on('click', click_chat);
                                     } else {
                                         console.log(data.message);
                                     }
@@ -900,7 +985,7 @@ $(function () {
             contentType: 'application/json',
             data: JSON.stringify({
                 senderId: userId,
-                recipientId: 2,//TODO
+                recipientId: chat_with_id,
                 sendDate: new Date(),
                 content: $("#msg-input").val()
             }),
@@ -908,6 +993,8 @@ $(function () {
                 if (data.success) {
                     console.log("success");
                     console.log(data);
+                    $("#msg-input").val("");
+                    get_msg(chat_with_id);
                 } else {
                     alert(data.message);
                     console.log(data.message);
@@ -917,6 +1004,12 @@ $(function () {
                 console.log(err);
             }
         });
+    });
+
+    $("#msg-input").bind('keypress', function (e) {
+        if (e.keyCode === 13) {
+            $("#send-btn").trigger('click');
+        }
     });
 
     $("#quit-btn").on('click', function () {
@@ -945,6 +1038,34 @@ $(function () {
             });
         }
     });
+
+    let m_socket = null;
+    let openMSocket = function () {
+        if (typeof (WebSocket) == "undefined") {
+            console.log("Can't Support WebSocket");
+        } else {
+            let socketUrl = "ws://localhost:8086/websocket/chat/" + userId;
+            m_socket = new WebSocket(socketUrl);
+            m_socket.onopen = function () {
+                console.log("websocket is on.")
+            };
+            m_socket.onmessage = function (msg) {
+                console.log(msg.data, chat_with_id, userId);
+                if (chat_with_id != userId) {
+                    get_msg(chat_with_id);
+                }
+            };
+            m_socket.onclose = function () {
+                console.log("websocket is off.");
+            };
+            //发生了错误事件
+            m_socket.onerror = function () {
+                console.log("websocket occurs an error.");
+            }
+        }
+    };
+    openMSocket();
+
 });
 
 
