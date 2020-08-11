@@ -100,7 +100,7 @@ $(function () {
                             headers: {"Authorization": $.cookie('token')},
                             dataType: "json",
                             success: function (data) {
-                                if (data.success){
+                                if (data.success) {
                                     userId = data.content.id;
                                     $.ajax({
                                         type: "post",
@@ -121,8 +121,7 @@ $(function () {
                                             console.log(err);
                                         }
                                     });
-                                }
-                                else {
+                                } else {
                                     alert("No such user.")
                                 }
                             }
@@ -144,6 +143,8 @@ $(function () {
 
     let group_id = null;
     let is_leader = false;
+
+    let chat_with_id = userId;
 
 
     $("#cancel-btn").on('click', function () {
@@ -455,6 +456,103 @@ $(function () {
         });
     };
 
+    let get_msg = function (id2) {
+        let msg = [];
+        $.ajax({
+            type: "post",
+            url: "/chat/getChattingRecords",
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            data: "[" + id2 + "," + userId + "]",
+            success: function (data) {
+                data.content.forEach(function (m) {
+                    msg.push({in: true, content: m.content, date: m.sendDate, msg_id: m.id});
+                });
+                $.ajax({
+                    type: "post",
+                    url: "/chat/getChattingRecords",
+                    headers: {"Authorization": $.cookie('token')},
+                    dataType: "json",
+                    contentType: 'application/json',
+                    data: "[" + userId + "," + id2 + "]",
+                    success: function (data) {
+                        data.content.forEach(function (m) {
+                            msg.push({in: false, content: m.content, date: m.sendDate});
+                        });
+                        console.log(msg);
+                        render_msg(msg);
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    };
+
+    let render_msg = function (msgs) {
+        let h = "";
+        let read_msg = [];
+        msgs.sort(function (a, b) {
+            return a.date < b.date ? -1 : 1;
+        });
+        msgs.forEach(function (msg) {
+            if (msg.in) {
+                h += `
+                <div class="incoming_msg">
+                    <div class="received_msg">
+                        <div class="received_withd_msg">
+                            <p>${msg.content}</p>
+                            <span class="time_date">${new Date(Date.parse(msg.date)).toLocaleString("en")}</span>
+                        </div>
+                    </div>
+                </div>`;
+                read_msg.push(msg.msg_id);
+            } else {
+                h += `
+                <div class="outgoing_msg">
+                    <div class="sent_msg">
+                        <p>${msg.content}</p>
+                        <span class="time_date">${new Date(Date.parse(msg.date)).toLocaleString("en")}</span>
+                    </div>
+                </div>`;
+            }
+        });
+        $.ajax({
+            type: "post",
+            url: "/chat/readMessages",
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                userId: userId,
+                messageIds: read_msg
+            }),
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+        $("#msg-list").html(h);
+        $("#msg-list").scrollTop($("#msg-list")[0].scrollHeight);
+    };
+
+    let click_chat = function (e) {
+        $("#m-list").children().removeClass("active_chat");
+        $(e.currentTarget).addClass("active_chat");
+        chat_with_id = Number($(e.currentTarget).attr("u_id"));
+        get_msg(chat_with_id);
+        $("#no_chat").hide();
+        $("#with_chat").show();
+        //todo
+    };
+
     let view_group = function (e) {
         // console.log(e);
         $("#all_groups").children().removeClass("active_chat");
@@ -462,6 +560,10 @@ $(function () {
         let groupId = Number($(e.currentTarget).attr("groupId"));
         group_id = groupId;
         console.log(groupId);
+
+        chat_with_id = userId;
+        $("#no_chat").show();
+        $("#with_chat").hide();
 
         $.ajax({
             type: "get",
@@ -499,13 +601,47 @@ $(function () {
                     let isLeader = false;
 
                     let leader_id = 0;
+                    $("#m-list").html("");
+                    let h = "";
                     member_list.forEach(function (e) {
+                        if (e.userId !== Number(userId)) {
+                            console.log(e.userId, userId);
+                            $.ajax({
+                                type: "get",
+                                url: "/user/getById?id=" + e.userId,
+                                headers: {"Authorization": $.cookie('token')},
+                                dataType: "json",
+                                contentType: 'application/json',
+                                success: function (data) {
+                                    if (data.success) {
+                                        console.log(data.content);
+                                        h += `
+                            <div class="member_list card m-2" u_id="${e.userId}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${data.content[0].name}</h5>
+                                    <h6 class="card-subtitle mb-2"></h6>
+                                    <p class="card-text"></p>
+                                </div>
+                            </div>`;
+                                        $("#m-list").html(h);
+                                        $(".member_list").on('click', click_chat);
+                                    } else {
+                                        console.log(data.message);
+                                    }
+                                },
+                                error: function (err) {
+                                    console.log(err);
+                                }
+                            });
+                        }
+
                         if (e.isLeader) {
                             isLeader = e.userId == userId;
                             leader_id = e.userId;
                         }
                         is_leader = isLeader;
                     });
+
                     console.log(leader_id, userId);
                     if (leader_id != userId) {
                         $("#announce-btn").hide();
@@ -534,8 +670,7 @@ $(function () {
                             <span class="fa fa-plus-square mr-2"></span>New
                         </button>
                     `)
-                    }
-                    else if (!is_leader) {
+                    } else if (!is_leader) {
                         $("#task-create").remove();
                     }
 
@@ -617,7 +752,7 @@ $(function () {
                             if ($("#task-complete").length === 0) {
                                 $("#task-close").after(`<button type="button" class="btn btn-success" id="task-complete">Complete</button>`)
                             }
-                        }else {
+                        } else {
                             $("#task-complete").remove()
                         }
 
@@ -860,6 +995,42 @@ $(function () {
         });
     });
 
+    $("#send-btn").on('click', function () {
+        $.ajax({
+            type: "post",
+            url: "/chat/sendMessage",
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                senderId: userId,
+                recipientId: chat_with_id,
+                sendDate: new Date(),
+                content: $("#msg-input").val()
+            }),
+            success: function (data) {
+                if (data.success) {
+                    console.log("success");
+                    console.log(data);
+                    $("#msg-input").val("");
+                    get_msg(chat_with_id);
+                } else {
+                    alert(data.message);
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    });
+
+    $("#msg-input").bind('keypress', function (e) {
+        if (e.keyCode === 13) {
+            $("#send-btn").trigger('click');
+        }
+    });
+
     $("#quit-btn").on('click', function () {
         if (confirm("Are you sure to quit this group?")) {
             $.ajax({
@@ -886,6 +1057,34 @@ $(function () {
             });
         }
     });
+
+    let m_socket = null;
+    let openMSocket = function () {
+        if (typeof (WebSocket) == "undefined") {
+            console.log("Can't Support WebSocket");
+        } else {
+            let socketUrl = "ws://old2dimension.cn/websocket/chat/" + userId;
+            m_socket = new WebSocket(socketUrl);
+            m_socket.onopen = function () {
+                console.log("websocket is on.")
+            };
+            m_socket.onmessage = function (msg) {
+                console.log(msg.data, chat_with_id, userId);
+                if (chat_with_id != userId) {
+                    get_msg(chat_with_id);
+                }
+            };
+            m_socket.onclose = function () {
+                console.log("websocket is off.");
+            };
+            //发生了错误事件
+            m_socket.onerror = function () {
+                console.log("websocket occurs an error.");
+            }
+        }
+    };
+    openMSocket();
+
 });
 
 
