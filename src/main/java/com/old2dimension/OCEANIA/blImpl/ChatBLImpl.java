@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class ChatBLImpl implements ChatBL {
@@ -149,12 +151,12 @@ public class ChatBLImpl implements ChatBL {
 
     @Override
     public ResponseVO getUnreadUsers(int userId) {
-        List<Integer> res =new ArrayList<>();
-        List<ChatMessage> chatMessages = chatMessageRepository.findChatMessagesByRecipientIdAndHasRead(userId,0);
-        if(chatMessages==null){
+        Set<Integer> res = new HashSet<>();
+        List<ChatMessage> chatMessages = chatMessageRepository.findChatMessagesByRecipientIdAndHasRead(userId, 0);
+        if (chatMessages == null) {
             return ResponseVO.buildFailure("getting messages failed");
         }
-        for(ChatMessage chatMessage : chatMessages){
+        for (ChatMessage chatMessage : chatMessages) {
             res.add(chatMessage.getSenderId());
         }
         return ResponseVO.buildSuccess(res);

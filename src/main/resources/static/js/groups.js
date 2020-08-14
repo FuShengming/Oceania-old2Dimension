@@ -437,13 +437,13 @@ $(function () {
                     let h = "";
                     data.content.forEach(function (e) {
                         // console.log(e);
-                        h += "<div class=\"card m-2\">\n" +
+                        h = "<div class=\"card m-2\">\n" +
                             "<div class=\"card-body m-0\">\n" +
                             "<h4 class=\"card-title\">" + e.announcement.title + "</h4>\n" +
                             "<h5 class=\"card-subtitle\">" + new Date(Date.parse(e.announcement.releaseDate)).toLocaleString("en") + "</h5>\n" +
                             "<p class=\"card-text\">" + e.announcement.content + "</p>\n" +
                             "</div>\n" +
-                            "</div>\n";
+                            "</div>\n" + h;
                     });
                     $("#announcement_list").html(h);
                 } else {

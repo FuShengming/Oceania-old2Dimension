@@ -81,7 +81,7 @@ $(document).ready(function () {
     }
 
     let show_cnt = function () {
-        let sum = iv_count + m_count;
+        let sum = iv_count + anc_count + m_count;
         $("#n-count").text(sum);
         if (sum > 0) {
             $("#n-count").show();

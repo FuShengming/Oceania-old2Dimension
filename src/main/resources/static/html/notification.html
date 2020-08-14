@@ -29,6 +29,11 @@
             font-style: normal;
         }
 
+        .member_list.active_chat {
+            color: #fff;
+            background-color: #05728f;
+        }
+
         .nav-link {
             font-size: 1.2rem;
         }
@@ -244,6 +249,9 @@ height: 100%;
                         </div>
                     </div>
                     <div class="inbox_chat" id="m-list"></div>
+                </div>
+                <div class="msgs col-8 text-center pt-5" id="no_chat">
+                    <span>Please select a chat to start messaging.</span>
                 </div>
                 <div class="msgs col-8" id="with_chat">
                     <div class="msg_history" id="msg-list"></div>

@@ -92,6 +92,8 @@ $(function () {
     };
     openMSocket();
 
+    $("#with_chat").hide();
+
     let set_invitation_btn = function () {
         $(".iv-refuse").on('click', function (e) {
             console.log("iv-refuse");
@@ -230,7 +232,7 @@ $(function () {
                 if (data.success) {
                     let h = "";
                     data.content.forEach(function (e) {
-                        h += `
+                        h = `
             <div class="card m-2">
                 <div class="card-header m-0">
                     ${e.groupName}
@@ -240,7 +242,7 @@ $(function () {
                     <h6 class="card-subtitle mb-2">${new Date(Date.parse(e.announcement.releaseDate)).toLocaleString("en")}</h6>
                     <p class="card-text">${e.announcement.content}</p>
                 </div>
-            </div>`;
+            </div>` + h;
                         $.ajax({
                             type: "post",
                             url: "/group/readAnnouncement",
@@ -440,4 +442,42 @@ $(function () {
 
     });
     get_message();
+
+    $("#send-btn").on('click', function () {
+        $.ajax({
+            type: "post",
+            url: "/chat/sendMessage",
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                senderId: userId,
+                recipientId: chat_with_id,
+                sendDate: new Date(),
+                content: $("#msg-input").val()
+            }),
+            success: function (data) {
+                if (data.success) {
+                    console.log("success");
+                    console.log(data);
+                    $("#msg-input").val("");
+                    get_msg(chat_with_id);
+                } else {
+                    alert(data.message);
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    });
+
+    $("#msg-input").bind('keypress', function (e) {
+        if (e.keyCode === 13) {
+            $("#send-btn").trigger('click');
+        }
+    });
+
+
 });
