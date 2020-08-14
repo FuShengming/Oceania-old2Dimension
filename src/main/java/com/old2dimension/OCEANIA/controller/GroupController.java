@@ -139,6 +139,11 @@ public class GroupController {
         return groupBL.getGroupMembers(groupId);
     }
 
+    @RequestMapping(value = "/getGroupMemberNames/{groupId}", method = RequestMethod.GET)
+    public ResponseVO getGroupMemberNames(@PathVariable int groupId) {
+        return groupBL.getGroupMemberNames(groupId);
+    }
+
 
     @RequestMapping(value = "/modifyGroupInfo", method = RequestMethod.POST)
     public ResponseVO modifyGroupInfo(@RequestBody GroupAndUserIdForm groupAndUserIdForm) {

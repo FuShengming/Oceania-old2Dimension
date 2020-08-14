@@ -24,15 +24,6 @@ $(function () {
     if (userId === undefined) window.location.href = "/login";
     console.log(userId);
 
-    $("#task-search").on('click', function () {
-        let input = $("#task-search").val()
-
-    })
-
-    $("#task-modify").on('click', function () {
-
-    })
-
     $("#task-delete").on('click', function () {
         let taskId = $("#task-delete").attr("task-id")
         $.ajax({
@@ -42,7 +33,7 @@ $(function () {
             dataType: "json",
             success: function (data) {
                 $("#taskModal").modal("hide")
-                window.location.reload()
+                getUserTasks()
             },
             error: function (err) {
                 console.log(err);
@@ -50,9 +41,30 @@ $(function () {
         })
     })
 
-    $("#task-create").on('click', function () {
-        $("#task-modify-modal-label").text("New Task");
-    });
+    let taskInit = function () {
+        $("#task-create").on('click', function () {
+            $("#task-create-user-name").html("");
+            $.ajax({
+                type: "get",
+                url: "/group/getGroupMemberNames/" + group_id,
+                headers: {"Authorization": $.cookie('token')},
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                        let users = data.content;
+                        let h = ""
+                        for (let i = 0; i < users.length; i++) {
+                            h += `<option value ="${users[i].name}" id="${"user-" + users[i].id}">${users[i].name}</option>`
+                        }
+                        $("#task-create-user-name").html(h);
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        });
+    }
 
     $("#task-complete").on('click', function (e) {
         let taskId = $("#task-complete").attr("task-id")
@@ -64,7 +76,7 @@ $(function () {
 
             success: function (data) {
                 $("#taskModal").modal("hide")
-                window.location.reload()
+                getUserTasks()
             },
             error: function (err) {
                 console.log(err);
@@ -92,42 +104,27 @@ $(function () {
                     "startDate": $("#task-create-start-time").val(),
                     "endDate": $("#task-create-end-time").val()
                 }),
-                success: function (data) {
-                    if (data.success) {
+                success: function (data1) {
+                    if (data1.success) {
                         $.ajax({
-                            type: "get",
-                            url: "/user/getByName?name=" + $("#task-create-user-name").val(),
+                            type: "post",
+                            url: "/group/deliverTaskForOneMember",
                             headers: {"Authorization": $.cookie('token')},
                             dataType: "json",
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                "groupId": group_id,
+                                "taskId": data1.content.id,
+                                "userId": $("#task-create-user-name option:selected").attr("id").split("-")[1]
+                            }),
                             success: function (data) {
-                                if (data.success) {
-                                    userId = data.content.id;
-                                    $.ajax({
-                                        type: "post",
-                                        url: "/group/deliverTaskForOneMember",
-                                        headers: {"Authorization": $.cookie('token')},
-                                        dataType: "json",
-                                        contentType: 'application/json',
-                                        data: JSON.stringify({
-                                            "groupId": group_id,
-                                            "taskId": data.content.id,
-                                            "userId": userId
-                                        }),
-                                        success: function (data) {
-                                            $("#task-modify-modal").modal('hide');
-                                            window.location.reload()
-                                        },
-                                        error: function (err) {
-                                            console.log(err);
-                                        }
-                                    });
-                                } else {
-                                    alert("No such user.")
-                                }
+                                $("#task-modify-modal").modal('hide');
+                                getUserTasks();
+                            },
+                            error: function (err) {
+                                console.log(err);
                             }
                         });
-
-
                     }
                 },
                 error: function (err) {
@@ -140,11 +137,6 @@ $(function () {
     $(".form-control").bind('focus', function () {
         $("#task-create-error").text("")
     });
-
-    let group_id = null;
-    let is_leader = false;
-
-    let chat_with_id = userId;
 
 
     $("#cancel-btn").on('click', function () {
@@ -477,6 +469,81 @@ $(function () {
         });
     };
 
+    let getUserTasks = function () {
+        $.ajax({
+            type: "post",
+            url: "/group/getUserTask/",
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                'userId': parseInt(userId),
+                'groupId': group_id
+            }),
+            timeout: 100000,
+            success: function (data) {
+                if (data.success) {
+                    let h = "";
+                    let tasks = data.content['tasks'];
+                    let num = 0;
+                    tasks.forEach(function (task) {
+                        num += 1
+                        h += `<tr class="task-clickable-row" task-id="${task.id}" data-toggle="modal" data-target="#taskModal" id="task-item-` + task.name + `">
+                            <td>${task.name}</td>
+                            <td>${task.state === 0 ? "unfinished" : "finished"}</td>
+                            <td>${task.label}</td>
+                            <td>${task.startDate === null ? "--" : new Date(Date.parse(task.startDate)).toLocaleString("en")}</td>
+                            <td>${task.endDate === null ? "--" : new Date(Date.parse(task.endDate)).toLocaleString("en")}</td>
+                        </tr>`
+                    });
+                    $("#task-tb").html("").html(h);
+                    $(".task-clickable-row").on('click', function (e) {
+                        let taskId = e['currentTarget']['attributes'][1]['value']
+                        for (let i = 0; i < tasks.length; i++) {
+                            if (taskId == tasks[i].id) {
+                                var task = tasks[i]
+                                break;
+                            }
+                        }
+                        $("#task-complete").attr("task-id", taskId)
+                        $("#task-delete").attr("task-id", taskId)
+                        $("#task-modal-label").text(task.name)
+                        $("#modal-status").text(task.state === 0 ? "unfinished" : "finished")
+                        $("#modal-label").text(task.label)
+                        $("#modal-desc").text(task.description)
+                        $("#modal-start").text(task.startDate === null ? "--" : new Date(Date.parse(task.startDate)).toLocaleString("en"))
+                        $("#modal-end").text(task.endDate === null ? "--" : new Date(Date.parse(task.endDate)).toLocaleString("en"))
+
+                        if (task.state === 0) {
+                            if ($("#task-complete").length === 0) {
+                                $("#task-close").after(`<button type="button" class="btn btn-success" id="task-complete">Complete</button>`)
+                            }
+                        } else {
+                            $("#task-complete").remove()
+                        }
+
+                        if (is_leader) {
+                            $("#task-button").addClass("justify-content-between");
+                            if ($("#task-btn1").length === 0) {
+                                $("#task-btn2").before(`<div class="justify-content-flex-start">
+                                                <button type="button" class="btn btn-outline-danger" id="task-delete">Delete</button>
+                                            </div>`)
+                            }
+                        } else {
+                            $("#task-button").removeClass("justify-content-between");
+                            $("#task-btn1").remove()
+                        }
+                    });
+                } else {
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+
     let get_msg = function (id2) {
         let msg = [];
         $.ajax({
@@ -684,12 +751,13 @@ $(function () {
 
                     console.log(is_leader)
                     if (is_leader && $("#task-create").length === 0) {
-                        $("#task-search-name").before(`
-                        <button class="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#task-modify-modal"
+                        $("#task-title-button").html(`
+                        <button class="btn btn-primary mb-2" data-toggle="modal" data-target="#task-modify-modal"
                                 id="task-create">
                             <span class="fa fa-plus-square mr-2"></span>New
                         </button>
                     `)
+                        taskInit();
                     } else if (!is_leader) {
                         $("#task-create").remove();
                     }
@@ -724,78 +792,7 @@ $(function () {
             }
         });
         getAnnouncement();
-        $.ajax({
-            type: "post",
-            url: "/group/getUserTask/",
-            headers: {"Authorization": $.cookie('token')},
-            dataType: "json",
-            contentType: 'application/json',
-            data: JSON.stringify({
-                'userId': userId,
-                'groupId': groupId
-            }),
-            timeout: 100000,
-            success: function (data) {
-                if (data.success) {
-                    let h = "";
-                    let tasks = data.content['tasks'];
-                    let num = 0;
-                    tasks.forEach(function (task) {
-                        num += 1
-                        h += `<tr class="clickable-row" task-id="${task.id}" data-toggle="modal" data-target="#taskModal" id="task-item-` + task.name + `">
-                            <td>${task.name}</td>
-                            <td>${task.state === 0 ? "unfinished" : "finished"}</td>
-                            <td>${task.label}</td>
-                            <td>${task.startDate === null ? "--" : new Date(Date.parse(task.startDate)).toLocaleString("en")}</td>
-                            <td>${task.endDate === null ? "--" : new Date(Date.parse(task.endDate)).toLocaleString("en")}</td>
-                        </tr>`
-                    });
-                    $("#task-tb").html(h);
-                    $(".clickable-row").on('click', function (e) {
-                        let taskId = e['currentTarget']['attributes'][1]['value']
-                        for (let i = 0; i < tasks.length; i++) {
-                            if (taskId == tasks[i].id) {
-                                var task = tasks[i]
-                                break;
-                            }
-                        }
-                        $("#task-complete").attr("task-id", taskId)
-                        $("#task-delete").attr("task-id", taskId)
-                        $("#task-modal-label").text(task.name)
-                        $("#modal-status").text(task.state === 0 ? "unfinished" : "finished")
-                        $("#modal-label").text(task.label)
-                        $("#modal-desc").text(task.description)
-                        $("#modal-start").text(task.startDate === null ? "--" : new Date(Date.parse(task.startDate)).toLocaleString("en"))
-                        $("#modal-end").text(task.endDate === null ? "--" : new Date(Date.parse(task.endDate)).toLocaleString("en"))
-
-                        if (task.state === 0) {
-                            if ($("#task-complete").length === 0) {
-                                $("#task-close").after(`<button type="button" class="btn btn-success" id="task-complete">Complete</button>`)
-                            }
-                        } else {
-                            $("#task-complete").remove()
-                        }
-
-                        if (is_leader) {
-                            $("#task-button").addClass("justify-content-between");
-                            if ($("#task-btn1").length === 0) {
-                                $("#task-btn2").before(`<div class="justify-content-flex-start">
-                                                <button type="button" class="btn btn-outline-danger" id="task-delete">Delete</button>
-                                            </div>`)
-                            }
-                        } else {
-                            $("#task-button").removeClass("justify-content-between");
-                            $("#task-btn1").remove()
-                        }
-                    });
-                } else {
-                    console.log(data.message);
-                }
-            },
-            error: function (err) {
-                console.log(err);
-            }
-        });
+        getUserTasks();
         getCodesByGroupId();
     };
     let get_group_list = function () {
