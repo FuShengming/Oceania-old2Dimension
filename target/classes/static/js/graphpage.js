@@ -97,18 +97,32 @@ $(function () {
                     let labels = data.content;
                     let h = "";
                     labels.forEach(function (label) {
-                        h += "<div class=\"card m-2\">\n" +
-                            "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
-                            "<div class=\"card-body\">\n" +
-                            "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
-                            htmlEncodeByRegExp(label.content).replace(/\n/g, "<br>") +
-                            "</div>\n" +
-                            "<div class=\"mt-3\" style=\"text-align: right\">\n" +
-                            "<button class=\"btn btn-info label-edit\" " + " labelId=" + label.id + ">Edit</button>\n" +
-                            "<button class=\"btn btn-danger label-del\" " + " labelId=" + label.id + ">Delete</button>\n" +
-                            "</div>\n" +
-                            "</div>\n" +
-                            "</div>";
+                        if (userId == label.userId) {
+                            h += "<div class=\"card m-2\">\n" +
+                                "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
+                                "<div class=\"card-body\">\n" +
+                                "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
+                                htmlEncodeByRegExp(label.content).replace(/\n/g, "<br>") +
+                                "</div>\n" +
+                                "<div class=\"mt-3\" style=\"text-align: right\">\n" +
+                                "<button class=\"btn btn-info label-edit\" " + " labelId=" + label.id + ">Edit</button>\n" +
+                                "<button class=\"btn btn-danger label-del\" " + " labelId=" + label.id + ">Delete</button>\n" +
+                                "</div>\n" +
+                                "</div>\n" +
+                                "</div>";
+                        } else {
+                            h += "<div class=\"card m-2\">\n" +
+                                "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
+                                "<div class=\"card-body\">\n" +
+                                "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
+                                htmlEncodeByRegExp(label.content).replace(/\n/g, "<br>") +
+                                "</div>\n" +
+                                "<div class=\"mt-3\" style=\"text-align: right\">\n" +
+                                "<div>This label is created by others.</div>\n" +
+                                "</div>\n" +
+                                "</div>\n" +
+                                "</div>";
+                        }
                     });
                     $("#labels-container").html(h);
                     $(".label-edit").on('click', function (event) {
@@ -172,18 +186,32 @@ $(function () {
                     let labels = data.content;
                     let h = "";
                     labels.forEach(function (label) {
-                        h += "<div class=\"card m-2\">\n" +
-                            "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
-                            "<div class=\"card-body\">\n" +
-                            "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
-                            htmlEncodeByRegExp(label.content).replace(/\n/g, "<br>") +
-                            "</div>\n" +
-                            "<div class=\"mt-3\" style=\"text-align: right\">\n" +
-                            "<button class=\"btn btn-info label-edit\" " + " labelId=" + label.id + ">Edit</button>\n" +
-                            "<button class=\"btn btn-danger label-del\" " + " labelId=" + label.id + ">Delete</button>\n" +
-                            "</div>\n" +
-                            "</div>\n" +
-                            "</div>";
+                        if (userId == label.userId) {
+                            h += "<div class=\"card m-2\">\n" +
+                                "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
+                                "<div class=\"card-body\">\n" +
+                                "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
+                                htmlEncodeByRegExp(label.content).replace(/\n/g, "<br>") +
+                                "</div>\n" +
+                                "<div class=\"mt-3\" style=\"text-align: right\">\n" +
+                                "<button class=\"btn btn-info label-edit\" " + " labelId=" + label.id + ">Edit</button>\n" +
+                                "<button class=\"btn btn-danger label-del\" " + " labelId=" + label.id + ">Delete</button>\n" +
+                                "</div>\n" +
+                                "</div>\n" +
+                                "</div>";
+                        } else {
+                            h += "<div class=\"card m-2\">\n" +
+                                "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
+                                "<div class=\"card-body\">\n" +
+                                "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
+                                htmlEncodeByRegExp(label.content).replace(/\n/g, "<br>") +
+                                "</div>\n" +
+                                "<div class=\"mt-3\" style=\"text-align: right\">\n" +
+                                "<div>This label is created by others.</div>\n" +
+                                "</div>\n" +
+                                "</div>\n" +
+                                "</div>";
+                        }
                     });
                     $("#labels-container").html(h);
                     $(".label-edit").on('click', function (event) {
@@ -248,18 +276,32 @@ $(function () {
                     let labels = data.content;
                     let h = "";
                     labels.forEach(function (label) {
-                        h += "<div class=\"card m-2\">\n" +
-                            "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
-                            "<div class=\"card-body\">\n" +
-                            "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
-                            htmlEncodeByRegExp(label.content).replace(/\n/g, "<br>") +
-                            "</div>\n" +
-                            "<div class=\"mt-3\" style=\"text-align: right\">\n" +
-                            "<button class=\"btn btn-info label-edit\" " + " labelId=" + label.id + ">Edit</button>\n" +
-                            "<button class=\"btn btn-danger label-del\" " + " labelId=" + label.id + ">Delete</button>\n" +
-                            "</div>\n" +
-                            "</div>\n" +
-                            "</div>";
+                        if (userId == label.userId) {
+                            h += "<div class=\"card m-2\">\n" +
+                                "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
+                                "<div class=\"card-body\">\n" +
+                                "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
+                                htmlEncodeByRegExp(label.content).replace(/\n/g, "<br>") +
+                                "</div>\n" +
+                                "<div class=\"mt-3\" style=\"text-align: right\">\n" +
+                                "<button class=\"btn btn-info label-edit\" " + " labelId=" + label.id + ">Edit</button>\n" +
+                                "<button class=\"btn btn-danger label-del\" " + " labelId=" + label.id + ">Delete</button>\n" +
+                                "</div>\n" +
+                                "</div>\n" +
+                                "</div>";
+                        } else {
+                            h += "<div class=\"card m-2\">\n" +
+                                "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
+                                "<div class=\"card-body\">\n" +
+                                "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
+                                htmlEncodeByRegExp(label.content).replace(/\n/g, "<br>") +
+                                "</div>\n" +
+                                "<div class=\"mt-3\" style=\"text-align: right\">\n" +
+                                "<div>This label is created by others.</div>\n" +
+                                "</div>\n" +
+                                "</div>\n" +
+                                "</div>";
+                        }
                     });
                     $("#labels-container").html(h);
                     $(".label-edit").on('click', function (event) {
