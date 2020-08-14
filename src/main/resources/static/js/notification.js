@@ -32,34 +32,63 @@ $(function () {
     };
     openIVSocket();
 
-    let m_socket = null;
-    let openMSocket = function () {
+    let anc_socket = null;
+    let openAncSocket = function () {
         if (typeof (WebSocket) == "undefined") {
             console.log("Can't Support WebSocket");
         } else {
-            let socketUrl = "ws://old2dimension.cn/websocket/chat/" + userId;
-            m_socket = new WebSocket(socketUrl);
-            m_socket.onopen = function () {
+            let socketUrl = "ws://old2dimension.cn/websocket/announcement/" + userId;
+            anc_socket = new WebSocket(socketUrl);
+            anc_socket.onopen = function () {
                 console.log("websocket is on.")
             };
-            m_socket.onmessage = function (msg) {
-                $("#m-count").text(msg.data);
+            anc_socket.onmessage = function (msg) {
+                $("#anc-count").text(msg.data);
                 if (Number(msg.data) > 0) {
-                    $("#m-count").show();
+                    $("#anc-count").show();
                 } else {
-                    $("#m-count").hide();
+                    $("#anc-count").hide();
                 }
             };
-            m_socket.onclose = function () {
+            anc_socket.onclose = function () {
                 console.log("websocket is off.");
             };
             //发生了错误事件
-            m_socket.onerror = function () {
+            anc_socket.onerror = function () {
                 console.log("websocket occurs an error.");
             }
         }
     };
-    openMSocket();
+    openAncSocket();
+
+    // let m_socket = null;
+    // let openMSocket = function () {
+    //     if (typeof (WebSocket) == "undefined") {
+    //         console.log("Can't Support WebSocket");
+    //     } else {
+    //         let socketUrl = "ws://old2dimension.cn/websocket/chat/" + userId;
+    //         m_socket = new WebSocket(socketUrl);
+    //         m_socket.onopen = function () {
+    //             console.log("websocket is on.")
+    //         };
+    //         m_socket.onmessage = function (msg) {
+    //             $("#m-count").text(msg.data);
+    //             if (Number(msg.data) > 0) {
+    //                 $("#m-count").show();
+    //             } else {
+    //                 $("#m-count").hide();
+    //             }
+    //         };
+    //         m_socket.onclose = function () {
+    //             console.log("websocket is off.");
+    //         };
+    //         //发生了错误事件
+    //         m_socket.onerror = function () {
+    //             console.log("websocket occurs an error.");
+    //         }
+    //     }
+    // };
+    // openMSocket();
 
     let set_invitation_btn = function () {
         $(".iv-refuse").on('click', function (e) {
@@ -187,4 +216,68 @@ $(function () {
     };
 
     get_invitation();
+
+    let get_announcement = function () {
+        $.ajax({
+            type: "get",
+            url: "/group/getUnreadAnnouncements/" + userId,
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            contentType: 'application/json',
+            success: function (data) {
+                if (data.success) {
+                    let h = "";
+                    data.content.forEach(function (e) {
+                        h += `
+            <div class="card m-2">
+                <div class="card-header m-0">
+                    ${e.groupName}
+                </div>
+                <div class="card-body m-0">
+                    <h5 class="card-title">${e.announcement.title}</h5>
+                    <h6 class="card-subtitle mb-2">${new Date(Date.parse(e.announcement.releaseDate)).toLocaleString("en")}</h6>
+                    <p class="card-text">${e.announcement.content}</p>
+                </div>
+            </div>`;
+                        $.ajax({
+                            type: "post",
+                            url: "/group/readAnnouncement",
+                            headers: {"Authorization": $.cookie('token')},
+                            dataType: "json",
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                userId: userId,
+                                announcementId: e.announcement.id
+                            }),
+                            success: function (data) {
+                                if (data.success) {
+                                    console.log("success");
+                                } else {
+                                    console.log(data.message);
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    });
+                    $("#announcement-container").html(h);
+
+                } else {
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    };
+
+    $("#invitation-tab").on('click', function () {
+        get_invitation();
+    });
+
+    $("#announcement-tab").on('click', function () {
+        get_announcement();
+    });
 });

@@ -150,7 +150,7 @@ public class GroupController {
         return groupBL.getGroupAnnouncements(groupIdAndUserForm.getGroupId(), groupIdAndUserForm.getUserId());
     }
 
-    @RequestMapping(value = "/getUnreadAnnouncements/{userId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/getUnreadAnnouncements/{userId}", method = RequestMethod.GET)
     public ResponseVO getUnreadAnnouncements(@PathVariable int userId) {
         return groupBL.getUnreadAnnouncements(userId);
     }
