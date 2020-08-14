@@ -129,6 +129,7 @@ public class ChatBLImpl implements ChatBL {
     @Override
     public ResponseVO readMessages(UserIdAndMessageIdsForm userIdAndMessageIdsForm) {
         List<Integer> ids = userIdAndMessageIdsForm.getMessageIds();
+        boolean hasRead = false;
         System.out.println(userIdAndMessageIdsForm.getUserId());
         if (ids == null || ids.size() == 0) {
             return ResponseVO.buildSuccess("No message to be read.");
@@ -141,11 +142,18 @@ public class ChatBLImpl implements ChatBL {
             if (message == null) {
                 return ResponseVO.buildFailure("This message does not match user.");
             }
-            message.setHasRead(1);
+            if(message.getHasRead()==0){
+                message.setHasRead(1);
+                hasRead=true;
+            }
+
             chatMessages.add(message);
         }
         chatMessageRepository.saveAll(chatMessages);
-        chatServer.sendInfo(userId, chatMessageRepository.countChatMessagesByRecipientIdAndHasRead(userId, 0));
+        if(hasRead){
+            chatServer.sendInfo(userId, chatMessageRepository.countChatMessagesByRecipientIdAndHasRead(userId, 0));
+
+        }
         return ResponseVO.buildSuccess(ids);
     }
 
