@@ -33,7 +33,7 @@ $(function () {
             dataType: "json",
             success: function (data) {
                 $("#taskModal").modal("hide")
-                window.location.reload()
+                getUserTasks()
             },
             error: function (err) {
                 console.log(err);
@@ -119,7 +119,7 @@ $(function () {
                             }),
                             success: function (data) {
                                 $("#task-modify-modal").modal('hide');
-                                window.location.reload()
+                                getUserTasks();
                             },
                             error: function (err) {
                                 console.log(err);
@@ -456,7 +456,7 @@ $(function () {
             dataType: "json",
             contentType: 'application/json',
             data: JSON.stringify({
-                'userId': userId,
+                'userId': parseInt(userId),
                 'groupId': group_id
             }),
             timeout: 100000,

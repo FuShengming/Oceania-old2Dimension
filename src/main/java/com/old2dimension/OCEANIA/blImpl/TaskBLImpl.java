@@ -150,7 +150,7 @@ public class TaskBLImpl implements TaskBL {
 
         List<Integer> ids = new ArrayList<>();
         for(TaskAssignment a:taskAssignments){
-            ids.add(a.getId());
+            ids.add(a.getTaskId());
         }
         List<Task> res = taskRepository.findAllById(ids);
         HashMap<String,List> map = new HashMap<>();
