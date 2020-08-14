@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -388,6 +389,31 @@ public class GroupBLImpl implements GroupBL {
             return ResponseVO.buildFailure("Can not find group.");
         }
         return ResponseVO.buildSuccess(group.getName());
+    }
+
+    @Override
+    public ResponseVO getUnreadAnnouncements(int userId) {
+        List<AnnouncementRead> announcementReads = announcementReadRepository.findAnnouncementReadsByUserIdAndHasRead(userId,0);
+        HashMap<String,List<Announcement>> res = new HashMap<>();
+        for(AnnouncementRead a:announcementReads){
+            Announcement announcement = announcementRepository.findAnnouncementById(a.getAnnouncementId());
+            if(announcement==null){return ResponseVO.buildFailure("find announcements failed.");}
+            Group group = groupRepository.findGroupById(announcement.getGroupId());
+            if(group==null){return ResponseVO.buildFailure("find group failed.");}
+            String key = group.getId()+" "+group.getName();
+            if(res.containsKey(key)){
+                res.get(key).add(announcement);
+            }
+            else{
+                List<Announcement> list = new ArrayList<>();
+                list.add(announcement);
+                res.put(key,list);
+            }
+
+
+
+        }
+        return ResponseVO.buildSuccess(res);
     }
 
 

@@ -28,4 +28,5 @@ public interface GroupBL {
 
     public ResponseVO updateGroupInfo(GroupAndUserIdForm groupAndUserIdForm);
     public ResponseVO getGroupName(int groupId);
+    public ResponseVO getUnreadAnnouncements(int userId);
 }

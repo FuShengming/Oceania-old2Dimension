@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface AnnouncementRepository extends JpaRepository<Announcement,Integer> {
     List<Announcement> findAnnouncementsByGroupId(int groupId);
-
+    Announcement findAnnouncementById(int id);
 }
