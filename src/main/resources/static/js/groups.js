@@ -139,7 +139,7 @@ $(function () {
 
     $(".form-control").bind('focus', function () {
         $("#task-create-error").text("")
-    })
+    });
 
     let group_id = null;
     let is_leader = false;
@@ -550,7 +550,6 @@ $(function () {
         get_msg(chat_with_id);
         $("#no_chat").hide();
         $("#with_chat").show();
-        //todo
     };
 
     let view_group = function (e) {

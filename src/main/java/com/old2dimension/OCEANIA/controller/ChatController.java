@@ -41,11 +41,11 @@ public class ChatController {
         return chatBL.getWorkSpace(userId);
     }
 
-
-    @RequestMapping(value = "/getUnreadUsers/{userId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/getUnreadUsers/{userId}", method = RequestMethod.GET)
     public ResponseVO getUnreadUsers(@PathVariable int userId) {
         return chatBL.getUnreadUsers(userId);
     }
+
     @RequestMapping(value = "/readMessages", method = RequestMethod.POST)
     public ResponseVO readMessages(@RequestBody UserIdAndMessageIdsForm userIdAndMessageIdsForm) {
         return chatBL.readMessages(userIdAndMessageIdsForm);
