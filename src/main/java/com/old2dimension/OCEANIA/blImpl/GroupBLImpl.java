@@ -294,6 +294,22 @@ public class GroupBLImpl implements GroupBL {
     }
 
     @Override
+    public ResponseVO getGroupMemberNames(int groupId) {
+        if(groupRepository.findGroupById(groupId)==null){
+            return ResponseVO.buildFailure("this group does not exist!");
+        }
+
+        List<User> members = userRepository.findUserByGroupId(groupId);
+        if(members==null){
+            return ResponseVO.buildFailure("Getting member list failed.");
+        }
+        for (int i = 0; i < members.size(); i++) {
+            members.get(i).setPwd(null);
+        }
+        return ResponseVO.buildSuccess(members);
+    }
+
+    @Override
     public ResponseVO releaseAnnouncement(Announcement announcement) {
         announcement = announcementRepository.save(announcement);
         int groupId = announcement.getGroupId();

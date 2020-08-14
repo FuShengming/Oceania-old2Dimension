@@ -1,8 +1,11 @@
 package com.old2dimension.OCEANIA.dao;
 
+import com.old2dimension.OCEANIA.po.Authority;
 import com.old2dimension.OCEANIA.po.Group;
 import com.old2dimension.OCEANIA.po.GroupMember;
+import com.old2dimension.OCEANIA.po.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
