@@ -444,6 +444,27 @@ $(function () {
                             "<p class=\"card-text\">" + e.announcement.content + "</p>\n" +
                             "</div>\n" +
                             "</div>\n" + h;
+                        $.ajax({
+                            type: "post",
+                            url: "/group/readAnnouncement",
+                            headers: {"Authorization": $.cookie('token')},
+                            dataType: "json",
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                userId: userId,
+                                announcementId: e.announcement.id
+                            }),
+                            success: function (data) {
+                                if (data.success) {
+                                    console.log("success");
+                                } else {
+                                    console.log(data.message);
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
                     });
                     $("#announcement_list").html(h);
                 } else {

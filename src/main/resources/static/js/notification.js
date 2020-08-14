@@ -4,6 +4,7 @@ $(function () {
     console.log(userId);
 
     let chat_with_id = userId;
+    let anc_list = [];
 
     let iv_socket = null;
     let openIVSocket = function () {
@@ -221,6 +222,32 @@ $(function () {
 
     get_invitation();
 
+    let read_announcement = function () {
+        anc_list.forEach(function (id) {
+            $.ajax({
+                type: "post",
+                url: "/group/readAnnouncement",
+                headers: {"Authorization": $.cookie('token')},
+                dataType: "json",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    userId: userId,
+                    announcementId: id
+                }),
+                success: function (data) {
+                    if (data.success) {
+                        console.log("success");
+                    } else {
+                        console.log(data.message);
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        });
+    };
+
     let get_announcement = function () {
         $.ajax({
             type: "get",
@@ -231,6 +258,7 @@ $(function () {
             success: function (data) {
                 if (data.success) {
                     let h = "";
+                    anc_list = [];
                     data.content.forEach(function (e) {
                         h = `
             <div class="card m-2">
@@ -243,27 +271,7 @@ $(function () {
                     <p class="card-text">${e.announcement.content}</p>
                 </div>
             </div>` + h;
-                        $.ajax({
-                            type: "post",
-                            url: "/group/readAnnouncement",
-                            headers: {"Authorization": $.cookie('token')},
-                            dataType: "json",
-                            contentType: 'application/json',
-                            data: JSON.stringify({
-                                userId: userId,
-                                announcementId: e.announcement.id
-                            }),
-                            success: function (data) {
-                                if (data.success) {
-                                    console.log("success");
-                                } else {
-                                    console.log(data.message);
-                                }
-                            },
-                            error: function (err) {
-                                console.log(err);
-                            }
-                        });
+                        anc_list.push(e.announcement.id);
                     });
                     $("#announcement-container").html(h);
 
@@ -434,7 +442,7 @@ $(function () {
     });
 
     $("#announcement-tab").on('click', function () {
-
+        read_announcement();
     });
     get_announcement();
 

@@ -111,17 +111,35 @@ $(function () {
                                 "</div>\n" +
                                 "</div>";
                         } else {
-                            h += "<div class=\"card m-2\">\n" +
-                                "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
-                                "<div class=\"card-body\">\n" +
-                                "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
-                                htmlEncodeByRegExp(label.content).replace(/\n/g, "<br>") +
-                                "</div>\n" +
-                                "<div class=\"mt-3\" style=\"text-align: right\">\n" +
-                                "<div>This label is created by others.</div>\n" +
-                                "</div>\n" +
-                                "</div>\n" +
-                                "</div>";
+                            $.ajax({
+                                type: "get",
+                                url: "/user/getById?id=" + label.userId,
+                                headers: {"Authorization": $.cookie('token')},
+                                dataType: "json",
+                                contentType: 'application/json',
+                                success: function (data) {
+                                    if (data.success) {
+                                        console.log(data.content);
+                                        h += "<div class=\"card m-2\">\n" +
+                                            "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
+                                            "<div class=\"card-body\">\n" +
+                                            "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
+                                            htmlEncodeByRegExp(label.content).replace(/\n/g, "<br>") +
+                                            "</div>\n" +
+                                            "<div class=\"mt-3\" style=\"text-align: right\">\n" +
+                                            "<div>This label is created by " + data.content[0].name + ".</div>\n" +
+                                            "</div>\n" +
+                                            "</div>\n" +
+                                            "</div>";
+                                        $("#labels-container").html(h);
+                                    } else {
+                                        console.log(data.message);
+                                    }
+                                },
+                                error: function (err) {
+                                    console.log(err);
+                                }
+                            });
                         }
                     });
                     $("#labels-container").html(h);
@@ -200,17 +218,35 @@ $(function () {
                                 "</div>\n" +
                                 "</div>";
                         } else {
-                            h += "<div class=\"card m-2\">\n" +
-                                "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
-                                "<div class=\"card-body\">\n" +
-                                "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
-                                htmlEncodeByRegExp(label.content).replace(/\n/g, "<br>") +
-                                "</div>\n" +
-                                "<div class=\"mt-3\" style=\"text-align: right\">\n" +
-                                "<div>This label is created by others.</div>\n" +
-                                "</div>\n" +
-                                "</div>\n" +
-                                "</div>";
+                            $.ajax({
+                                type: "get",
+                                url: "/user/getById?id=" + label.userId,
+                                headers: {"Authorization": $.cookie('token')},
+                                dataType: "json",
+                                contentType: 'application/json',
+                                success: function (data) {
+                                    if (data.success) {
+                                        console.log(data.content);
+                                        h += "<div class=\"card m-2\">\n" +
+                                            "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
+                                            "<div class=\"card-body\">\n" +
+                                            "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
+                                            htmlEncodeByRegExp(label.content).replace(/\n/g, "<br>") +
+                                            "</div>\n" +
+                                            "<div class=\"mt-3\" style=\"text-align: right\">\n" +
+                                            "<div>This label is created by " + data.content[0].name + ".</div>\n" +
+                                            "</div>\n" +
+                                            "</div>\n" +
+                                            "</div>";
+                                        $("#labels-container").html(h);
+                                    } else {
+                                        console.log(data.message);
+                                    }
+                                },
+                                error: function (err) {
+                                    console.log(err);
+                                }
+                            });
                         }
                     });
                     $("#labels-container").html(h);
@@ -290,17 +326,35 @@ $(function () {
                                 "</div>\n" +
                                 "</div>";
                         } else {
-                            h += "<div class=\"card m-2\">\n" +
-                                "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
-                                "<div class=\"card-body\">\n" +
-                                "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
-                                htmlEncodeByRegExp(label.content).replace(/\n/g, "<br>") +
-                                "</div>\n" +
-                                "<div class=\"mt-3\" style=\"text-align: right\">\n" +
-                                "<div>This label is created by others.</div>\n" +
-                                "</div>\n" +
-                                "</div>\n" +
-                                "</div>";
+                            $.ajax({
+                                type: "get",
+                                url: "/user/getById?id=" + label.userId,
+                                headers: {"Authorization": $.cookie('token')},
+                                dataType: "json",
+                                contentType: 'application/json',
+                                success: function (data) {
+                                    if (data.success) {
+                                        console.log(data.content);
+                                        h += "<div class=\"card m-2\">\n" +
+                                            "<h5 class=\"card-header\" id=\"lt-" + label.id + "\">" + label.title + "</h5>\n" +
+                                            "<div class=\"card-body\">\n" +
+                                            "<div class=\"card-text\" id=\"lc-" + label.id + "\">" +
+                                            htmlEncodeByRegExp(label.content).replace(/\n/g, "<br>") +
+                                            "</div>\n" +
+                                            "<div class=\"mt-3\" style=\"text-align: right\">\n" +
+                                            "<div>This label is created by " + data.content[0].name + ".</div>\n" +
+                                            "</div>\n" +
+                                            "</div>\n" +
+                                            "</div>";
+                                        $("#labels-container").html(h);
+                                    } else {
+                                        console.log(data.message);
+                                    }
+                                },
+                                error: function (err) {
+                                    console.log(err);
+                                }
+                            });
                         }
                     });
                     $("#labels-container").html(h);
