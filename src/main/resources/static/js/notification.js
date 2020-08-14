@@ -63,34 +63,34 @@ $(function () {
     };
     openAncSocket();
 
-    // let m_socket = null;
-    // let openMSocket = function () {
-    //     if (typeof (WebSocket) == "undefined") {
-    //         console.log("Can't Support WebSocket");
-    //     } else {
-    //         let socketUrl = "ws://old2dimension.cn/websocket/chat/" + userId;
-    //         m_socket = new WebSocket(socketUrl);
-    //         m_socket.onopen = function () {
-    //             console.log("websocket is on.")
-    //         };
-    //         m_socket.onmessage = function (msg) {
-    //             $("#m-count").text(msg.data);
-    //             if (Number(msg.data) > 0) {
-    //                 $("#m-count").show();
-    //             } else {
-    //                 $("#m-count").hide();
-    //             }
-    //         };
-    //         m_socket.onclose = function () {
-    //             console.log("websocket is off.");
-    //         };
-    //         //发生了错误事件
-    //         m_socket.onerror = function () {
-    //             console.log("websocket occurs an error.");
-    //         }
-    //     }
-    // };
-    // openMSocket();
+    let m_socket = null;
+    let openMSocket = function () {
+        if (typeof (WebSocket) == "undefined") {
+            console.log("Can't Support WebSocket");
+        } else {
+            let socketUrl = "ws://old2dimension.cn/websocket/chat/" + userId;
+            m_socket = new WebSocket(socketUrl);
+            m_socket.onopen = function () {
+                console.log("websocket is on.")
+            };
+            m_socket.onmessage = function (msg) {
+                $("#m-count").text(msg.data);
+                if (Number(msg.data) > 0) {
+                    $("#m-count").show();
+                } else {
+                    $("#m-count").hide();
+                }
+            };
+            m_socket.onclose = function () {
+                console.log("websocket is off.");
+            };
+            //发生了错误事件
+            m_socket.onerror = function () {
+                console.log("websocket occurs an error.");
+            }
+        }
+    };
+    openMSocket();
 
     let set_invitation_btn = function () {
         $(".iv-refuse").on('click', function (e) {
