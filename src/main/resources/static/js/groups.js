@@ -24,6 +24,8 @@ $(function () {
     if (userId === undefined) window.location.href = "/login";
     console.log(userId);
 
+    let chat_with_id = userId;
+
     $("#task-delete").on('click', function () {
         let taskId = $("#task-delete").attr("task-id")
         $.ajax({
