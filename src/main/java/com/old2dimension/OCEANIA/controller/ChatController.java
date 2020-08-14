@@ -42,6 +42,10 @@ public class ChatController {
     }
 
 
+    @RequestMapping(value = "/getUnreadUsers/{userId}", method = RequestMethod.POST)
+    public ResponseVO getUnreadUsers(@PathVariable int userId) {
+        return chatBL.getUnreadUsers(userId);
+    }
     @RequestMapping(value = "/readMessages", method = RequestMethod.POST)
     public ResponseVO readMessages(@RequestBody UserIdAndMessageIdsForm userIdAndMessageIdsForm) {
         return chatBL.readMessages(userIdAndMessageIdsForm);

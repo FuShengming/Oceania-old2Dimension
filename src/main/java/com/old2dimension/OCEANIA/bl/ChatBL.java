@@ -29,4 +29,6 @@ public interface ChatBL {
     public ResponseVO getWorkSpace(int userId);
 
     public ResponseVO readMessages(UserIdAndMessageIdsForm userIdAndMessageIdsForm);
+
+    public ResponseVO getUnreadUsers(int userId);
 }

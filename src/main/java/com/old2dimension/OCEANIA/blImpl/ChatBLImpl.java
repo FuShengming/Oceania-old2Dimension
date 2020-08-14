@@ -146,4 +146,17 @@ public class ChatBLImpl implements ChatBL {
         chatServer.sendInfo(userId, chatMessageRepository.countChatMessagesByRecipientIdAndHasRead(userId, 0));
         return ResponseVO.buildSuccess(ids);
     }
+
+    @Override
+    public ResponseVO getUnreadUsers(int userId) {
+        List<Integer> res =new ArrayList<>();
+        List<ChatMessage> chatMessages = chatMessageRepository.findChatMessagesByRecipientIdAndHasRead(userId,0);
+        if(chatMessages==null){
+            return ResponseVO.buildFailure("getting messages failed");
+        }
+        for(ChatMessage chatMessage : chatMessages){
+            res.add(chatMessage.getSenderId());
+        }
+        return ResponseVO.buildSuccess(res);
+    }
 }
