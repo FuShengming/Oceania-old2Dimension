@@ -6,7 +6,9 @@ public class UserIdAndMessageIdsForm {
     private int userId;
 
     private List<Integer> messageIds;
-    public UserIdAndMessageIdsForm(){}
+
+    public UserIdAndMessageIdsForm() {
+    }
 
     public int getUserId() {
         return userId;

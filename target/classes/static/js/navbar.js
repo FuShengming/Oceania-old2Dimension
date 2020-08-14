@@ -1,6 +1,7 @@
 $(document).ready(function () {
     let userId = localStorage['userId'];
     let iv_count = 0;
+    let anc_count = 0;
     let m_count = 0;
     if (userId !== undefined && userId !== 1) {
         let iv_socket = null;
@@ -15,13 +16,7 @@ $(document).ready(function () {
                 };
                 iv_socket.onmessage = function (msg) {
                     iv_count = Number(msg.data);
-                    let sum = iv_count + m_count;
-                    $("#n-count").text(sum);
-                    if (sum > 0) {
-                        $("#n-count").show();
-                    } else {
-                        $("#n-count").hide();
-                    }
+                    show_cnt();
                 };
                 iv_socket.onclose = function () {
                     console.log("websocket is off.");
@@ -33,6 +28,31 @@ $(document).ready(function () {
             }
         };
         openIVSocket();
+
+        let anc_socket = null;
+        let openAncSocket = function () {
+            if (typeof (WebSocket) == "undefined") {
+                console.log("Can't Support WebSocket");
+            } else {
+                let socketUrl = "ws://old2dimension.cn/websocket/announcement/" + userId;
+                anc_socket = new WebSocket(socketUrl);
+                anc_socket.onopen = function () {
+                    console.log("websocket is on.")
+                };
+                anc_socket.onmessage = function (msg) {
+                    anc_count = Number(msg.data);
+                    show_cnt();
+                };
+                anc_socket.onclose = function () {
+                    console.log("websocket is off.");
+                };
+                //发生了错误事件
+                anc_socket.onerror = function () {
+                    console.log("websocket occurs an error.");
+                }
+            }
+        };
+        openAncSocket();
 
         let m_socket = null;
         let openMSocket = function () {
@@ -46,13 +66,7 @@ $(document).ready(function () {
                 };
                 m_socket.onmessage = function (msg) {
                     m_count = Number(msg.data);
-                    let sum = iv_count + m_count;
-                    $("#n-count").text(sum);
-                    if (sum > 0) {
-                        $("#n-count").show();
-                    } else {
-                        $("#n-count").hide();
-                    }
+                    show_cnt();
                 };
                 m_socket.onclose = function () {
                     console.log("websocket is off.");
@@ -65,6 +79,16 @@ $(document).ready(function () {
         };
         openMSocket();
     }
+
+    let show_cnt = function () {
+        let sum = iv_count + anc_count + m_count;
+        $("#n-count").text(sum);
+        if (sum > 0) {
+            $("#n-count").show();
+        } else {
+            $("#n-count").hide();
+        }
+    };
 
     $("#sign-out-btn").on('click', function () {
         if (confirm("是否要退出登录？")) {

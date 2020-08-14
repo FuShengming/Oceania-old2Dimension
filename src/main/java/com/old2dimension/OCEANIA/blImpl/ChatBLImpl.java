@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class ChatBLImpl implements ChatBL {
@@ -45,26 +47,26 @@ public class ChatBLImpl implements ChatBL {
 
     @Override
     public ResponseVO sendMessage(ChatMessage chatMessage) {
-        if(chatMessage.getId()!=0){
+        if (chatMessage.getId() != 0) {
             return ResponseVO.buildFailure("Chatting message has to be new.");
         }
-        if(userRepository.findUserById(chatMessage.getSenderId())==null||
-                userRepository.findUserById(chatMessage.getRecipientId())==null){
+        if (userRepository.findUserById(chatMessage.getSenderId()) == null ||
+                userRepository.findUserById(chatMessage.getRecipientId()) == null) {
             return ResponseVO.buildFailure("user does not exist.");
         }
         chatMessage = chatMessageRepository.save(chatMessage);
-        if(chatMessage.getId()==0){
+        if (chatMessage.getId() == 0) {
             return ResponseVO.buildFailure("Sending message failed.");
         }
         int re = chatMessage.getRecipientId();
-        chatServer.sendInfo(re,chatMessageRepository.countChatMessagesByRecipientIdAndHasRead(re,0));
+        chatServer.sendInfo(re, chatMessageRepository.countChatMessagesByRecipientIdAndHasRead(re, 0));
         return ResponseVO.buildSuccess(chatMessage);
     }
 
     @Override
     public ResponseVO getUnreadMessage(int userId) {
-        List<ChatMessage> chatMessages = chatMessageRepository.findChatMessagesByRecipientIdAndHasRead(userId,0);
-        if(chatMessages==null){
+        List<ChatMessage> chatMessages = chatMessageRepository.findChatMessagesByRecipientIdAndHasRead(userId, 0);
+        if (chatMessages == null) {
             return ResponseVO.buildFailure("Getting unread messages failed.");
         }
 
@@ -75,25 +77,24 @@ public class ChatBLImpl implements ChatBL {
     public ResponseVO saveWorkSpace(ChatWorkSpace chatWorkSpace) {
         int userId = chatWorkSpace.getUserId();
         ChatWorkSpace cur = chatWorkSpaceRepository.findChatWorkSpaceByUserId(userId);
-        if(chatWorkSpace.getId()!=0){
-           if(cur==null){
-               return  ResponseVO.buildFailure("Workspace does not exist.");
-           }
-            if(cur.getId()!=chatWorkSpace.getId()){
+        if (chatWorkSpace.getId() != 0) {
+            if (cur == null) {
+                return ResponseVO.buildFailure("Workspace does not exist.");
+            }
+            if (cur.getId() != chatWorkSpace.getId()) {
                 return ResponseVO.buildFailure("Workspace doesn't match user.");
             }
-            if(chatWorkSpace.getDate().compareTo(cur.getDate())<0){
+            if (chatWorkSpace.getDate().compareTo(cur.getDate()) < 0) {
                 return ResponseVO.buildFailure("Date of workspace has to be after the existed one.");
             }
             chatWorkSpaceRepository.save(chatWorkSpace);
-        }
-        else{
-            if(cur!=null){
-                return  ResponseVO.buildFailure("Workspace has to be only one.");
+        } else {
+            if (cur != null) {
+                return ResponseVO.buildFailure("Workspace has to be only one.");
             }
 
             chatWorkSpace = chatWorkSpaceRepository.save(chatWorkSpace);
-            if(chatWorkSpace.getId()==0){
+            if (chatWorkSpace.getId() == 0) {
                 return ResponseVO.buildFailure("Saving workspace failed.");
             }
         }
@@ -102,12 +103,12 @@ public class ChatBLImpl implements ChatBL {
 
     @Override
     public ResponseVO getChattingRecords(List<Integer> userIds) {
-        if(userIds==null||userIds.size()!=2){
+        if (userIds == null || userIds.size() != 2) {
             return ResponseVO.buildFailure("The format of userIds error.");
         }
         List<ChatMessage> chatMessages = chatMessageRepository.
-                findChatMessagesBySenderIdAndRecipientId(userIds.get(0),userIds.get(1));
-        if(chatMessages==null){
+                findChatMessagesBySenderIdAndRecipientId(userIds.get(0), userIds.get(1));
+        if (chatMessages == null) {
             return ResponseVO.buildFailure("Finding chatting record failed.");
         }
         return ResponseVO.buildSuccess(chatMessages);
@@ -116,10 +117,10 @@ public class ChatBLImpl implements ChatBL {
     @Override
     public ResponseVO getWorkSpace(int userId) {
         List<ChatWorkSpace> chatWorkSpace = chatWorkSpaceRepository.findChatWorkSpacesByUserId(userId);
-        if(chatWorkSpace==null){
+        if (chatWorkSpace == null) {
             return ResponseVO.buildFailure("Getting workspace failed.");
         }
-        if(chatWorkSpace.size()==0){
+        if (chatWorkSpace.size() == 0) {
             return ResponseVO.buildSuccess("no workspace");
         }
         return ResponseVO.buildSuccess(chatWorkSpace.get(0));
@@ -128,22 +129,36 @@ public class ChatBLImpl implements ChatBL {
     @Override
     public ResponseVO readMessages(UserIdAndMessageIdsForm userIdAndMessageIdsForm) {
         List<Integer> ids = userIdAndMessageIdsForm.getMessageIds();
-        if(ids==null||ids.size()==0){
+        System.out.println(userIdAndMessageIdsForm.getUserId());
+        if (ids == null || ids.size() == 0) {
             return ResponseVO.buildSuccess("No message to be read.");
         }
         int userId = userIdAndMessageIdsForm.getUserId();
         List<ChatMessage> chatMessages = new ArrayList<>();
-        for(int id:ids){
-            ChatMessage message = chatMessageRepository.findChatMessagesByRecipientIdAndId(userId,id);
+        for (int id : ids) {
+            ChatMessage message = chatMessageRepository.findChatMessagesByRecipientIdAndId(userId, id);
 
-            if(message==null){
+            if (message == null) {
                 return ResponseVO.buildFailure("This message does not match user.");
             }
             message.setHasRead(1);
             chatMessages.add(message);
         }
         chatMessageRepository.saveAll(chatMessages);
-        chatServer.sendInfo(userId,chatMessageRepository.countChatMessagesByRecipientIdAndHasRead(userId,0));
+        chatServer.sendInfo(userId, chatMessageRepository.countChatMessagesByRecipientIdAndHasRead(userId, 0));
         return ResponseVO.buildSuccess(ids);
+    }
+
+    @Override
+    public ResponseVO getUnreadUsers(int userId) {
+        Set<Integer> res = new HashSet<>();
+        List<ChatMessage> chatMessages = chatMessageRepository.findChatMessagesByRecipientIdAndHasRead(userId, 0);
+        if (chatMessages == null) {
+            return ResponseVO.buildFailure("getting messages failed");
+        }
+        for (ChatMessage chatMessage : chatMessages) {
+            res.add(chatMessage.getSenderId());
+        }
+        return ResponseVO.buildSuccess(res);
     }
 }

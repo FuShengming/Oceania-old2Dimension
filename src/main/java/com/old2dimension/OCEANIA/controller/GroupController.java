@@ -155,6 +155,11 @@ public class GroupController {
         return groupBL.getGroupAnnouncements(groupIdAndUserForm.getGroupId(), groupIdAndUserForm.getUserId());
     }
 
+    @RequestMapping(value = "/getUnreadAnnouncements/{userId}", method = RequestMethod.GET)
+    public ResponseVO getUnreadAnnouncements(@PathVariable int userId) {
+        return groupBL.getUnreadAnnouncements(userId);
+    }
+
 
     @RequestMapping(value = "/readAnnouncement", method = RequestMethod.POST)
     public ResponseVO readAnnouncement(@RequestBody UserIdAndAnnouncementId userIdAndAnnouncementId) {
@@ -170,5 +175,7 @@ public class GroupController {
     public ResponseVO ignoreInvitation(@RequestBody UserIdAndInvitationIdForm userIdAndInvitationIdForm) {
         return groupBL.ignoreInvitation(userIdAndInvitationIdForm.getUserId(), userIdAndInvitationIdForm.getInvitationId());
     }
+
+
 
 }
