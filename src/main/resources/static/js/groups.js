@@ -472,6 +472,7 @@ $(function () {
     };
 
     let getUserTasks = function () {
+        $("#task-my-tasks").tab("show");
         $.ajax({
             type: "post",
             url: "/group/getUserTask/",
@@ -566,7 +567,6 @@ $(function () {
                                 break;
                             }
                         }
-                        console.log(c_id)
                         if (!is_valid) {
                             continue;
                         }
