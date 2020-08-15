@@ -22,7 +22,7 @@ Dropzone.prototype._getParamName = function (n) {
 $(function () {
     let userId = localStorage['userId'];
     if (userId === undefined) window.location.href = "/login";
-    console.log(userId);
+    let group_members = [];
 
     let chat_with_id = userId;
 
@@ -546,6 +546,106 @@ $(function () {
         });
     }
 
+    let getAllTasks = function () {
+        $.ajax({
+            type: "get",
+            url: "/group/getAllTask/" + group_id,
+            headers: {"Authorization": $.cookie('token')},
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    let h = "";
+                    let tasks = data.content['tasks'];
+                    let assignment = data.content['assignments'];
+                    let is_valid = false;
+                    for (let i = 0; i < tasks.length; i++) {
+                        for (let j = 0; j < assignment.length; j++) {
+                            if (assignment[j]["taskId"] === tasks[i]["id"]) {
+                                var c_id = assignment[j]["userId"];
+                                is_valid = true;
+                                break;
+                            }
+                        }
+                        console.log(c_id)
+                        if (!is_valid) {
+                            continue;
+                        }
+                        for (let j = 0; j < group_members.length; j++) {
+                            if (group_members[j]["id"] == c_id) {
+                                var c_name = group_members[j]["name"];
+                                break;
+                            }
+                            else if (group_members[j]["id"] == userId) {
+                                is_valid = false;
+                                break;
+                            }
+                        }
+                        if (!is_valid) {
+                            continue;
+                        }
+                        h += `<tr class="task-clickable-row" task-id="${tasks[i].id}" data-toggle="modal" data-target="#taskModal" id="all-task-item-${tasks[i].name}">
+                            <td>${tasks[i].name}</td>
+                            <td>${c_name}</td>
+                            <td>${tasks[i].state === 0 ? "unfinished" : "finished"}</td>
+                            <td>${tasks[i].label}</td>
+                            <td>${tasks[i].startDate === null ? "--" : new Date(Date.parse(tasks[i].startDate)).toLocaleString("en")}</td>
+                            <td>${tasks[i].endDate === null ? "--" : new Date(Date.parse(tasks[i].endDate)).toLocaleString("en")}</td>
+                        </tr>`;
+                    }
+                    $("#all-task-tb").html("").html(h);
+                    $(".task-clickable-row").on('click', function (e) {
+                        let taskId = e['currentTarget']['attributes'][1]['value']
+                        for (let i = 0; i < tasks.length; i++) {
+                            if (taskId == tasks[i].id) {
+                                var task = tasks[i]
+                                break;
+                            }
+                        }
+                        $("#task-complete").attr("task-id", taskId)
+                        $("#task-delete").attr("task-id", taskId)
+                        $("#task-modal-label").text(task.name)
+                        $("#modal-status").text(task.state === 0 ? "unfinished" : "finished")
+                        $("#modal-label").text(task.label)
+                        $("#modal-desc").text(task.description)
+                        $("#modal-start").text(task.startDate === null ? "--" : new Date(Date.parse(task.startDate)).toLocaleString("en"))
+                        $("#modal-end").text(task.endDate === null ? "--" : new Date(Date.parse(task.endDate)).toLocaleString("en"))
+
+                        if (task.state === 0 ) {
+                            if ($("#task-complete").length === 0) {
+                                $("#task-close").after(`<button type="button" class="btn btn-success" id="task-complete">Complete</button>`)
+                            }
+                        } else {
+                            $("#task-complete").remove()
+                        }
+
+                        if (is_leader) {
+                            $("#task-button").addClass("justify-content-between");
+                            if ($("#task-btn1").length === 0) {
+                                $("#task-btn2").before(`<div class="justify-content-flex-start">
+                                                <button type="button" class="btn btn-outline-danger" id="task-delete">Delete</button>
+                                            </div>`)
+                            }
+                        } else {
+                            $("#task-button").removeClass("justify-content-between");
+                            $("#task-btn1").remove()
+                        }
+                    });
+                } else {
+                    console.log(data.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+
+    let initAllTasks = function () {
+        $("#task-all-tasks").on('click', function () {
+            getAllTasks();
+        });
+    }
+
     let get_msg = function (id2) {
         let msg = [];
         $.ajax({
@@ -645,9 +745,11 @@ $(function () {
     let view_group = function (e) {
         // console.log(e);
         $("#all_groups").children().removeClass("active_chat");
+        $("#all-task-tb").html("");
         $(e.currentTarget).addClass("active_chat");
         let groupId = Number($(e.currentTarget).attr("groupId"));
         group_id = groupId;
+        group_members = [];
         console.log(groupId);
 
         chat_with_id = userId;
@@ -704,6 +806,7 @@ $(function () {
                                 success: function (data) {
                                     if (data.success) {
                                         console.log(data.content);
+                                        group_members.push({"id": e["userId"], "name": data.content[0].name});
                                         h += `
                             <div class="member_list card m-2" u_id="${e.userId}">
                                 <div class="card-body">
@@ -723,6 +826,25 @@ $(function () {
                                 }
                             });
                         }
+                        else {
+                            $.ajax({
+                                type: "get",
+                                url: "/user/getById?id=" + e.userId,
+                                headers: {"Authorization": $.cookie('token')},
+                                dataType: "json",
+                                contentType: 'application/json',
+                                success: function (data) {
+                                    if (data.success) {
+                                        group_members.push({"id": e["userId"], "name": data.content[0].name});
+                                    } else {
+                                        console.log(data.message);
+                                    }
+                                },
+                                error: function (err) {
+                                    console.log(err);
+                                }
+                            });
+                        }
 
                         if (e.isLeader) {
                             isLeader = e.userId == userId;
@@ -730,6 +852,7 @@ $(function () {
                         }
                         is_leader = isLeader;
                     });
+                    // console.log(group_members)
 
                     console.log(leader_id, userId);
                     if (leader_id != userId) {
@@ -762,6 +885,16 @@ $(function () {
                         taskInit();
                     } else if (!is_leader) {
                         $("#task-create").remove();
+                    }
+
+                    if (is_leader && $("#task-all-tasks").length === 0) {
+                        $("#all-task-title").html(`<a class="nav-link" id="task-all-tasks" data-toggle="pill" href="#all-task" role="tab"
+                                           aria-controls="v-pills-all-task" aria-selected="false">All Tasks</a>
+                        `)
+                        initAllTasks();
+                    }
+                    else if (!is_leader) {
+                        $("#task-all-tasks").remove();
                     }
 
                     let leader_name = "";

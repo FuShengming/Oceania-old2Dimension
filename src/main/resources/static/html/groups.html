@@ -92,6 +92,11 @@
             background-color: #05728f;
         }
 
+        .task-menu > .nav-item > .active {
+            color: #fff;
+            background-color: #39c5bb;
+        }
+
         .info-card {
             width: 32%;
         }
@@ -566,27 +571,55 @@ height: 100%;
             </div>
             <div class="tab-pane fade" id="task" role="tabpanel" aria-labelledby="task-tab">
                 <div class="card m-2">
-                    <div class="card-body">
+                    <div class="card-body tab-content">
                         <div class="card-title d-flex justify-content-between">
-                            <h2>My Tasks</h2>
+                            <div class="d-flex justify-content-start" style="width:66%" id="task-title">
+                                <ul class="nav nav-pills task-menu">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="task-my-tasks" data-toggle="pill" href="#my-task" role="tab"
+                                           aria-controls="v-pills-my-task" aria-selected="true">My Tasks</a>
+                                    </li>
+                                    <li class="nav-item" id="all-task-title">
+                                    </li>
+                                </ul>
+                            </div>
                             <div style="width: 33%; justify-content: flex-end" class="input-group" id="task-title-button">
                             </div>
                         </div>
-                        <div class="card-text">
-                            <table class="table table-hover" id="task-table" style="overflow-x: scroll">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Task Name</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Label</th>
-                                    <th scope="col">Start Time</th>
-                                    <th scope="col">End Time</th>
-                                </tr>
-                                </thead>
-                                <tbody id="task-tb"></tbody>
-                            </table>
+                        <div class="tab-pane fade show active" id="my-task" role="tabpanel" aria-labelledby="my-task-tab">
+                            <div class="card-text">
+                                <table class="table table-hover" id="task-table" style="overflow-x: scroll">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Task Name</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Label</th>
+                                        <th scope="col">Start Time</th>
+                                        <th scope="col">End Time</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="task-tb"></tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
+                        <div class="tab-pane fade" id="all-task" role="tabpanel" aria-labelledby="all-task-tab">
+                            <div class="card-text">
+                                <table class="table table-hover" id="all-task-table" style="overflow-x: scroll">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Task Name</th>
+                                        <th scope="col">User name</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Label</th>
+                                        <th scope="col">Start Time</th>
+                                        <th scope="col">End Time</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="all-task-tb"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        </div>
                 </div>
             </div>
             <div class="tab-pane fade" id="message" role="tabpanel" aria-labelledby="message-tab">
