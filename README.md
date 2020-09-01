@@ -1,16 +1,7 @@
-# Group_old2Dimension Project Oceania iteration 3
-
-本项目为南京大学2020年春软件工程与计算三课程项目
-
-## 小组成员
-
-171250640 付圣铭
-171250532 苗朗宁
-171250559 王煜霄
-171250638 葛闰
+# Group_old2Dimension Project Oceania
 
 ## 项目说明
-
+本项目为gitlab迁移项目
 ### 开发框架
 
 后端使用了Spring boot，Spring Data框架，Spring MVC模型，前端使用了jQuery，Bootstrap框架，使用jwt进行身份安全认证，cytoscape.js用于图形展示。后端推送消息使用WebSocket技术。
